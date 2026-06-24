@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Operasi Hitung Campuran Ceria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Azeret+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-pastel: #f0fdf4;
+            --primary: #4ade80;
+            --secondary: #60a5fa;
+            --accent-yellow: #fef08a;
+            --accent-pink: #fbcfe8;
+            --text-dark: #1e293b;
+            --correct-green: #22c55e;
+            --wrong-red: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: #e2e8f0; 
+            display: grid; 
+            place-items: center; 
+            min-height: 100vh; 
+            font-family: 'Fredoka', sans-serif; 
+            color: var(--text-dark);
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--bg-pastel);
+            border: 8px solid #cbd5e1;
+            border-radius: 24px;
+            position: relative;
+            display: none;
+            padding: 30px 50px;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .slide-container.active { display: flex; }
+
+        h1 { font-size: 48px; color: #1e3a8a; text-align: center; text-shadow: 2px 2px 0px var(--accent-yellow); margin-bottom: 10px; }
+        h2 { font-size: 32px; color: #0f172a; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        h3 { font-size: 22px; margin-bottom: 10px; }
+        p, li { font-size: 20px; line-height: 1.5; color: #334155; }
+
+        .content-area { flex-grow: 1; width: 100%; overflow-y: auto; padding-right: 5px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; }
+        
+        .kids-card { background: white; border: 4px solid #e2e8f0; padding: 20px; border-radius: 18px; position: relative; box-shadow: 0 8px 0px #cbd5e1; transition: all 0.2s; }
+        .kids-card.yellow { border-color: #fde047; box-shadow: 0 8px 0px #fef08a; }
+        .kids-card.blue { border-color: #93c5fd; box-shadow: 0 8px 0px #bfdbfe; }
+        .kids-card.pink { border-color: #fbcfe8; box-shadow: 0 8px 0px #fce7f3; }
+
+        .btn-ceria {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; border: none; padding: 10px 24px;
+            border-radius: 12px; cursor: pointer; font-family: 'Fredoka'; font-weight: 600; font-size: 18px;
+            box-shadow: 0 4px 0px #b45309; transition: all 0.1s active; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-ceria:active { transform: translateY(4px); box-shadow: none; }
+        .btn-ceria-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 4px 0px #1e3a8a; }
+        .btn-ceria-pink { background: linear-gradient(135deg, #ec4899, #be185d); box-shadow: 0 4px 0px #9d174d; }
+        .btn-ceria-gray { background: #94a3b8; box-shadow: 0 4px 0px #475569; }
+
+        input {
+            background: #f8fafc; border: 3px solid #cbd5e1; border-radius: 10px; color: var(--text-dark); padding: 8px 12px; font-family: 'Fredoka'; font-size: 18px; text-align: center; outline: none;
+        }
+        input:focus { border-color: var(--secondary); }
+        
+        .correct { border-color: var(--correct-green) !important; background-color: #f0fdf4 !important; color: var(--correct-green) !important; font-weight: bold; border-width: 4px !important; }
+        .wrong { border-color: var(--wrong-red) !important; background-color: #fef2f2 !important; color: var(--wrong-red) !important; border-width: 4px !important; }
+
+        .nav-controls { position: fixed; bottom: 20px; right: 50px; display: flex; gap: 15px; z-index: 1000; }
+        .nav-btn { background: white; color: var(--text-dark); border: 3px solid #cbd5e1; width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; box-shadow: 0 4px 0 #cbd5e1; }
+        .nav-btn:active { transform: translateY(4px); box-shadow: none; }
+        .slide-num { position: absolute; bottom: 20px; left: 50px; font-size: 16px; font-weight: bold; color: #64748b; }
+
+        .expl-box { display: none; margin-top: 15px; padding: 15px; background: #fffbeb; border: 3px dashed #f59e0b; border-radius: 12px; font-size: 18px; }
+
+        /* TOMBOL OPERATOR CEPAT SLIDE 8 */
+        .op-btn-group { display: flex; gap: 8px; margin-top: 5px; margin-bottom: 10px; }
+        .btn-op-helper { background: #e2e8f0; border: 2px solid #cbd5e1; font-family: 'Azeret Mono'; font-weight: bold; font-size: 18px; padding: 4px 12px; border-radius: 6px; cursor: pointer; color: var(--text-dark); }
+        .btn-op-helper:hover { background: #cbd5e1; }
+
+        /* REVISI TOTAL BINGO STYLES */
+        .bingo-layout { display: grid; grid-template-columns: 620px 1fr; gap: 15px; height: 440px; }
+        .bingo-table { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #cbd5e1; padding: 6px; border-radius: 12px; height: 100%; }
+        .bingo-cell { background: white; border: 2px solid #94a3b8; border-radius: 8px; padding: 3px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow: hidden; }
+        .bingo-cell.p1-win { background-color: #fee2e2 !important; border-color: var(--wrong-red) !important; }
+        .bingo-cell.p2-win { background-color: #dbeafe !important; border-color: var(--secondary) !important; }
+        .bingo-cell span { font-weight: 700; font-size: 11px; color: #475569; }
+        .bingo-cell input { width: 100%; font-size: 11px; padding: 2px; margin: 2px 0; height: 22px; text-align: center; border-width: 2px; border-radius: 6px; }
+        .bingo-btn-grp { display: flex; width: 100%; gap: 3px; }
+        .bingo-btn-grp button { flex: 1; font-size: 10px; font-weight: bold; padding: 3px 0; border: none; border-radius: 4px; color: white; cursor: pointer; font-family: 'Fredoka'; }
+        .bingo-q-list { height: 100%; overflow-y: auto; background: white; border-radius: 12px; padding: 12px; border: 3px solid #cbd5e1; }
+        .bingo-q-item { font-size: 13px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px dashed #e2e8f0; font-family: 'Azeret Mono'; line-height: 1.3; }
+
+        /* BATTLE SLIDE STYLES */
+        .battle-grid { display: grid; grid-template-columns: 360px 1fr 300px; gap: 20px; height: 100%; }
+        .card-deck { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+        .battle-card { height: 65px; background: linear-gradient(135deg, #ffedd5, #fed7aa); border: 3px solid #f97316; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; color: #c2410c; cursor: pointer; box-shadow: 0 4px 0 #ea580c; }
+        .battle-card.opened { background: #e2e8f0; border-color: #94a3b8; color: #64748b; box-shadow: none; transform: translateY(4px); }
+        .timer-container { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .timer-box { font-size: 32px; font-weight: bold; text-align: center; color: var(--wrong-red); background: white; border-radius: 12px; padding: 4px 10px; border: 3px solid var(--wrong-red); line-height: 1.2; }
+        .score-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+
+        /* Pembungkus Tombol Soal Berbanyak */
+        .problem-tabs-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; max-height: 110px; overflow-y: auto; padding: 5px; background: #fff; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .btn-tab { font-size: 13px; padding: 6px 12px; border-radius: 8px; box-shadow: 0 3px 0px #b45309; }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide-container active" id="slide1" style="background: linear-gradient(#ecfdf5, #dcfce7); justify-content: center; align-items: center; text-align: center;">
+        <div style="font-size: 80px; margin-bottom: 10px;">🎒➕✖️</div>
+        <h1>Petualangan Seru<br><span style="color:#2563eb; font-size: 55px;">Operasi Hitung Campuran!</span></h1>
+        <p style="font-size:24px; margin-top:20px; font-weight: 600; color: #475569;">Pecahkan Tantangannya, Raih BINGO, dan Jadilah Juara Matematika!</p>
+    </div>
+
+    <!-- SLIDE 2: TUJUAN -->
+    <div class="slide-container" id="slide2">
+        <h2><i class="fa-solid fa-star" style="color: #eab308;"></i> Peta Misi Belajar Kita</h2>
+        <div class="content-area" style="display: flex; align-items: center; justify-content: center; height: 80%;">
+            <div class="kids-card yellow" style="width: 800px; padding: 30px;">
+                <h3 style="color:#c2410c; font-size: 26px; margin-bottom: 15px;"><i class="fa-solid fa-flag"></i> Setelah misi ini selesai, kamu akan bisa:</h3>
+                <ul style="display: grid; gap: 20px; list-style-type: none;">
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--correct-green); font-size: 24px;"></i> Memahami urutan kekuatan rahasia lambang matematika <b>KABATAKU</b>.</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--correct-green); font-size: 24px;"></i> Menghitung gabungan tambah, kurang, kali, dan bagi dengan super teliti.</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--correct-green); font-size: 24px;"></i> Membantu teman menyelesaikan masalah matematika lewat cerita kehidupan sehari-hari.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: PEMANASAN PENJUMLAHAN -->
+    <div class="slide-container" id="slide3">
+        <h2><i class="fa-solid fa-heart" style="color: var(--wrong-red);"></i> Pemanasan 1: Operasi Penjumlahan Ratusan</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 20px;">Ayo hitung penjumlahan bilangan ratusan di bawah ini dengan tepat!</p>
+            <div class="kids-card blue" style="max-width: 600px; margin: 30px auto; text-align: center; padding: 40px;">
+                <h1 id="s3_soal" style="font-size: 60px; color: #1e3a8a; margin-bottom: 30px;">--- + ---</h1>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                    <input id="s3_ans" placeholder="Ketik Jawaban" style="width: 180px; font-size: 24px; height: 50px;">
+                    <button class="btn-ceria" onclick="checkS3()">Cek Hasil</button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button class="btn-ceria btn-ceria-blue" onclick="genS3()"><i class="fa-solid fa-rotate"></i> Ganti Soal Baru</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: PEMANASAN PENGURANGAN -->
+    <div class="slide-container" id="slide4">
+        <h2><i class="fa-solid fa-bolt" style="color: #eab308;"></i> Pemanasan 2: Operasi Pengurangan Ratusan</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 20px;">Jangan sampai keliru ya, kurangi bilangan ratusan berikut!</p>
+            <div class="kids-card pink" style="max-width: 600px; margin: 30px auto; text-align: center; padding: 40px;">
+                <h1 id="s4_soal" style="font-size: 60px; color: #9d174d; margin-bottom: 30px;">--- - ---</h1>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                    <input id="s4_ans" placeholder="Ketik Jawaban" style="width: 180px; font-size: 24px; height: 50px;">
+                    <button class="btn-ceria btn-ceria-pink" onclick="checkS4()">Cek Hasil</button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button class="btn-ceria" onclick="genS4()"><i class="fa-solid fa-rotate"></i> Ganti Soal Baru</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: PEMANASAN PERKALIAN -->
+    <div class="slide-container" id="slide5">
+        <h2><i class="fa-solid fa-cloud" style="color: var(--secondary);"></i> Pemanasan 3: Operasi Perkalian Seru</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 20px;">Ayo kalikan bilangan puluhan dengan satuan atau puluhan dengan puluhan!</p>
+            <div class="kids-card yellow" style="max-width: 600px; margin: 30px auto; text-align: center; padding: 40px;">
+                <h1 id="s5_soal" style="font-size: 60px; color: #b45309; margin-bottom: 30px;">--- × ---</h1>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                    <input id="s5_ans" placeholder="Ketik Jawaban" style="width: 180px; font-size: 24px; height: 50px;">
+                    <button class="btn-ceria" onclick="checkS5()">Cek Hasil</button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button class="btn-ceria btn-ceria-blue" onclick="genS5()"><i class="fa-solid fa-rotate"></i> Ganti Soal Baru</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: PEMANASAN PEMBAGIAN -->
+    <div class="slide-container" id="slide6">
+        <h2><i class="fa-solid fa-cake-candles" style="color: #ec4899;"></i> Pemanasan 4: Operasi Pembagian Adil</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 20px;">Bagi bilangan puluhan/ratusan ini dengan bilangan satuan tanpa sisa!</p>
+            <div class="kids-card blue" style="max-width: 600px; margin: 30px auto; text-align: center; padding: 40px;">
+                <h1 id="s6_soal" style="font-size: 60px; color: #1e3a8a; margin-bottom: 30px;">--- ÷ ---</h1>
+                <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                    <input id="s6_ans" placeholder="Ketik Jawaban" style="width: 180px; font-size: 24px; height: 50px;">
+                    <button class="btn-ceria btn-ceria-blue" onclick="checkS6()">Cek Hasil</button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button class="btn-ceria btn-ceria-pink" onclick="genS6()"><i class="fa-solid fa-rotate"></i> Ganti Soal Baru</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: MATERI KABATAKU -->
+    <div class="slide-container" id="slide7">
+        <h2><i class="fa-solid fa-crown" style="color: #eab308;"></i> Aturan Mahkota: Hierarki KABATAKU</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 15px;">Jika semua simbol operasi berkumpul dalam satu soal, siapa yang harus diselesaikan duluan? Ini dia urutan kekuatannya:</p>
+            <div class="grid-3" style="margin-top: 25px;">
+                <div class="kids-card pink" style="text-align: center; border-width: 4px;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🥇</div>
+                    <h3 style="color:#be185d;">1. Tanda Kurung ( )</h3>
+                    <p style="font-size: 16px;">Operasi di dalam tanda kurung terdalam adalah raja! Harus dihitung paling pertama tanpa kecuali.</p>
+                </div>
+                <div class="kids-card yellow" style="text-align: center; border-width: 4px;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🥈</div>
+                    <h3 style="color:#b45309;">2. Kali (×) & Bagi (÷)</h3>
+                    <p style="font-size: 16px;">Sama-sama kuat! Jika muncul bersamaan, kerjakan urut dari yang berada di sebelah <b>KIRI</b> terlebih dahulu.</p>
+                </div>
+                <div class="kids-card blue" style="text-align: center; border-width: 4px;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🥉</div>
+                    <h3 style="color:#1d4ed8;">3. Tambah (+) & Kurang (-)</h3>
+                    <p style="font-size: 16px;">Tingkat paling dasar. Kerjakan paling akhir, berurutan mulai dari yang paling <b>KIRI</b>.</p>
+                </div>
+            </div>
+            <div style="margin-top: 30px; text-align: center; background: white; padding: 15px; border-radius: 12px; border: 3px dashed var(--primary);">
+                <p style="font-size: 22px; font-weight: bold; color: var(--correct-green);">Singkatan Ajaib: Kurung ➔ Ka (Kali) ➔ Ba (Bagi) ➔ Ta (Tambah) ➔ Ku (Kurang)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: 20 SOAL OPERASI CAMPURAN DENGAN TOMBOL OPERATOR CEPAT -->
+    <div class="slide-container" id="slide8">
+        <h2><i class="fa-solid fa-gamepad" style="color: var(--primary);"></i> Latihan 20 Langkah Berurutan</h2>
+        <div class="content-area">
+            <div class="problem-tabs-container" id="s8_tabs">
+                <!-- Generator 20 Tombol via JS -->
+            </div>
+            <div class="kids-card yellow" style="padding: 20px;">
+                <h2 id="s8_expr" style="font-family:'Azeret Mono'; font-size:28px; color:#1e3a8a;">Loading Soal...</h2>
+                <div class="grid-2" style="margin-top:15px;">
+                    <div>
+                        <p style="font-size:16px; font-weight:bold; margin-bottom:5px;">Langkah 1: Operasi mana yang dikerjakan dulu?</p>
+                        <input id="s8_step1" placeholder="Klik tombol di bawah atau ketik langsung" style="width:100%; text-align:left; margin-bottom:5px;">
+                        
+                        <!-- Tombol Cepat Operator untuk Siswa -->
+                        <div class="op-btn-group">
+                            <button type="button" class="btn-op-helper" onclick="insertOp('+')">+</button>
+                            <button type="button" class="btn-op-helper" onclick="insertOp('-')">-</button>
+                            <button type="button" class="btn-op-helper" onclick="insertOp('×')">×</button>
+                            <button type="button" class="btn-op-helper" onclick="insertOp('÷')">÷</button>
+                        </div>
+
+                        <p style="font-size:16px; font-weight:bold; margin-bottom:5px;">Langkah 2: Tulis hasil dari langkah 1 tersebut</p>
+                        <input id="s8_step2" placeholder="Misal: 30" style="width:100%; text-align:left; margin-bottom:10px;">
+                        <p style="font-size:16px; font-weight:bold; margin-bottom:5px;">Langkah Final: Berapa Hasil Akhir Seluruhnya?</p>
+                        <input id="s8_final" placeholder="Hasil Akhir Angka" style="width:100%; text-align:left;">
+                    </div>
+                    <div style="display:flex; flex-direction:column; justify-content:center; gap:15px; align-items:center;">
+                        <button class="btn-ceria btn-ceria-blue" style="width:220px;" onclick="checkS8()">Cek Jawaban Langkah</button>
+                        <button class="btn-ceria btn-ceria-pink" style="width:220px;" onclick="toggleS8Expl()">Buka Pembahasan</button>
+                    </div>
+                </div>
+                <div id="s8_expl" class="expl-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: SOAL CERITA CAMPURAN -->
+    <div class="slide-container" id="slide9">
+        <h2><i class="fa-solid fa-book-open" style="color: #a855f7;"></i> Detektif Cerita Matematika</h2>
+        <div class="content-area">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <p style="font-weight:bold; color:var(--secondary);">Selesaikan teka-teki cerita di bawah ini!</p>
+                <button class="btn-ceria" onclick="genS9()"><i class="fa-solid fa-rotate"></i> Ganti Soal Cerita (10 Variasi)</button>
+            </div>
+            <div class="kids-card blue" style="padding:25px;">
+                <p id="s9_story" style="font-size:22px; font-weight:600; margin-bottom:20px; line-height:1.6; min-height:80px;">Loading cerita...</p>
+                <div style="display:flex; gap:15px; align-items:center; margin-bottom:15px;">
+                    <input id="s9_ans" placeholder="Masukkan angka jawaban" style="width:250px; height:45px;">
+                    <button class="btn-ceria" onclick="checkS9()">Cek Jawaban</button>
+                    <button class="btn-ceria btn-ceria-pink" onclick="toggleS9Expl()">Lihat Tips & Pembahasan</button>
+                </div>
+                <div id="s9_expl" class="expl-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: BINGO MATEMATIKA -->
+    <div class="slide-container" id="slide10">
+        <h2><i class="fa-solid fa-table-cells" style="color: var(--primary);"></i> Arena Bingo 5x5 Campuran</h2>
+        <div class="content-area" style="overflow:hidden;">
+            <div style="display:flex; gap:20px; align-items:center; margin-bottom:10px; background:white; padding:8px; border-radius:12px; border:2px solid #e2e8f0;">
+                <div style="font-size:16px;">🔴 P1: <input id="s10_p1" value="Pemain 1" style="width:110px; font-size:13px; padding:2px 5px; height:28px;"> Skor: <b id="s10_s1" style="color:var(--wrong-red)">0</b></div>
+                <div style="font-size:16px;">🔵 P2: <input id="s10_p2" value="Pemain 2" style="width:110px; font-size:13px; padding:2px 5px; height:28px;"> Skor: <b id="s10_s2" style="color:var(--secondary)">0</b></div>
+                <button class="btn-ceria btn-ceria-pink" style="padding:4px 12px; font-size:13px; box-shadow:0 2px 0 #9d174d;" onclick="announceBingoWinner()">🏆 Umumkan Pemenang Bingo</button>
+            </div>
+            <div class="bingo-layout">
+                <div class="bingo-table" id="bingo_matrix">
+                    <!-- Dinamis via JS -->
+                </div>
+                <div class="bingo-q-list" id="bingo_questions">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: BATTLE CARD DENGAN FITUR +1 MENIT UNTUK OVER JAWABAN -->
+    <div class="slide-container" id="slide11">
+        <h2><i class="fa-solid fa-burst" style="color: #f97316;"></i> Battle Card Soal Cerita (Timer 3 Menit)</h2>
+        <div class="content-area" style="overflow:hidden;">
+            <div class="battle-grid">
+                <div>
+                    <h3 style="font-size:15px; margin-bottom:5px;"><i class="fa-solid fa-id-card"></i> Kartu Misi (1-20):</h3>
+                    <div class="card-deck" id="battle_cards_grid">
+                        <!-- 20 Kartu dibuat via JS -->
+                    </div>
+                </div>
+                <div class="kids-card yellow" style="display:flex; flex-direction:column; justify-content:space-between; padding:15px;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap: 10px;">
+                            <span style="font-weight:bold; color:#c2410c; font-size:18px;" id="battle_card_title">Pilih nomor kartu!</span>
+                            <!-- Pembungkus Timer Baru dengan Tombol Tambah Waktu -->
+                            <div class="timer-container">
+                                <div class="timer-box" id="battle_timer">03:00</div>
+                                <button class="btn-ceria" style="font-size:11px; padding:2px 8px; border-radius:6px; box-shadow:0 2px 0 #b45309; margin-top:2px;" onclick="addOneMinute()"><i class="fa-solid fa-plus"></i> 1 Menit (Over)</button>
+                            </div>
+                        </div>
+                        <p id="battle_question_text" style="font-size:17px; line-height:1.4; margin-top:10px; min-height:100px; background:#fff; padding:10px; border-radius:8px; border:2px dashed #f97316;">Silakan klik salah satu dari 20 kartu misi di sebelah kiri untuk memunculkan tantangan duel matematika.</p>
+                    </div>
+                    <div>
+                        <div style="display:flex; gap:8px; align-items:center; margin-top:10px;">
+                            <input id="battle_input_ans" placeholder="Jawaban" style="width:110px; height:40px; font-size:16px;">
+                            <button class="btn-ceria" style="font-size:14px; padding:8px 12px;" onclick="checkBattleAnswer()">Cek Jawaban</button>
+                            <button class="btn-ceria btn-ceria-pink" style="font-size:14px; padding:8px 12px;" onclick="toggleBattleExpl()">Solusi</button>
+                        </div>
+                        <div id="battle_expl_box" class="expl-box" style="font-size:15px; padding:8px; margin-top:5px;"></div>
+                    </div>
+                </div>
+                <div class="kids-card blue" style="padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <h3 style="font-size:16px; margin-bottom:8px; text-align:center;">Papan Duel (Input Nama)</h3>
+                        <div id="battle_scoreboard">
+                            <div class="score-row">
+                                <input id="b_p1_name" value="Siswa A" style="width:110px; font-size:14px; padding:4px; text-align:left;">
+                                <span>Skor: <b id="b_p1_sc" style="color:var(--wrong-red); font-size:20px;">0</b></span>
+                                <button class="btn-ceria" style="padding:4px 8px; font-size:12px;" onclick="addBattleScore(1)">+1</button>
+                            </div>
+                            <div class="score-row" style="margin-top:10px;">
+                                <input id="b_p2_name" value="Siswa B" style="width:110px; font-size:14px; padding:4px; text-align:left;">
+                                <span>Skor: <b id="b_p2_sc" style="color:var(--secondary); font-size:20px;">0</b></span>
+                                <button class="btn-ceria btn-ceria-blue" style="padding:4px 8px; font-size:12px;" onclick="addBattleScore(2)">+1</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-ceria btn-ceria-pink" style="width:100%; font-size:15px; padding:8px;" onclick="announceBattleWinner()">🏆 Hubungi Juara Battle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: KESIMPULAN & REFLEKSI -->
+    <div class="slide-container" id="slide12">
+        <h2><i class="fa-solid fa-square-poll-horizontal" style="color: var(--primary);"></i> Ingat Kembali & Refleksi Tempur</h2>
+        <div class="content-area">
+            <div class="grid-2" style="margin-top: 15px;">
+                <div class="kids-card blue">
+                    <h3 style="color:#1d4ed8;"><i class="fa-solid fa-key"></i> Kunci Utama Sukses:</h3>
+                    <ul style="display: grid; gap: 12px; list-style: none; font-size: 18px; margin-top: 10px;">
+                        <li><i class="fa-solid fa-check" style="color:var(--correct-green)"></i> Dahulukan hitung angka yang ada di dalam kurung **( )**.</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--correct-green)"></i> Operasi perkalian dan pembagian sama kuat, kerjakan dari kiri.</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--correct-green)"></i> Operasi penjumlahan dan pengurangan dikerjakan paling akhir dari kiri.</li>
+                    </ul>
+                </div>
+                <div class="kids-card pink">
+                    <h3><i class="fa-solid fa-pen-line"></i> Kotak Refleksi Siswa:</h3>
+                    <p style="font-size:16px; margin-bottom: 10px;">Bagian mana dari operasi campuran hari ini yang menurutmu paling menantang dan seru? Yuk tulis di bawah!</p>
+                    <textarea style="width:100%; height:120px; border:3px solid #cbd5e1; border-radius:12px; padding:10px; font-family:inherit; font-size:16px; outline:none;" placeholder="Tuliskan pengalaman belajarmu hari ini di sini ya..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: THANK YOU -->
+    <div class="slide-container" id="slide13" style="background: linear-gradient(#fdf2f8, #fbcfe8); justify-content: center; align-items: center; text-align: center;">
+        <div style="font-size: 90px; margin-bottom: 10px;">🎉🥳🎈</div>
+        <h1 style="font-size: 70px; color: #be185d;">THANK YOU FOR TODAY!</h1>
+        <p style="font-size: 26px; font-weight: 600; color: #475569; margin-top: 10px;">Kamu Telah Menyelesaikan Misi Operasi Hitung dengan Hebat!</p>
+        <p style="font-size: 18px; color: #94a3b8; margin-top: 20px;">Sampai jumpa di petualangan matematika ceria berikutnya!</p>
+    </div>
+
+    <!-- NAVIGASI GLOBAL -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-btn" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="slide-num" id="global_slide_num">Slide 1 / 13</div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 13;
+
+        function showSlide(n) {
+            document.querySelectorAll('.slide-container').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+            currentSlide = n;
+            document.getElementById('global_slide_num').innerText = `Slide ${n} / ${totalSlides}`;
+            if(n !== 11) stopBattleTimer();
+        }
+        function nextSlide() { if(currentSlide < totalSlides) showSlide(currentSlide + 1); }
+        function prevSlide() { if(currentSlide > 1) showSlide(currentSlide - 1); }
+
+        function speakText(txt) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let u = new SpeechSynthesisUtterance(txt);
+                u.lang = 'id-ID';
+                window.speechSynthesis.speak(u);
+            }
+        }
+
+        // FUNGSI MEMBANTU INPUT OPERATOR SLIDE 8
+        function insertOp(op) {
+            let inputField = document.getElementById('s8_step1');
+            inputField.value += op;
+            inputField.focus();
+        }
+
+        // SLIDE 3: PENJUMLAHAN
+        const bankS3 = [
+            {q: "125 + 243", a: 368}, {q: "342 + 156", a: 498}, {q: "271 + 418", a: 689},
+            {q: "513 + 264", a: 777}, {q: "108 + 671", a: 779}, {q: "435 + 242", a: 677},
+            {q: "622 + 155", a: 777}, {q: "316 + 542", a: 858}, {q: "184 + 213", a: 397}, {q: "704 + 182", a: 886}
+        ];
+        let idxS3 = 0;
+        function genS3() {
+            idxS3 = (idxS3 + 1) % bankS3.length;
+            document.getElementById('s3_soal').innerText = bankS3[idxS3].q;
+            document.getElementById('s3_ans').value = '';
+            document.getElementById('s3_ans').className = '';
+        }
+        function checkS3() {
+            let val = parseInt(document.getElementById('s3_ans').value);
+            if(val === bankS3[idxS3].a) { document.getElementById('s3_ans').className = 'correct'; speakText("Hebat, jawabanmu benar!"); }
+            else { document.getElementById('s3_ans').className = 'wrong'; speakText("Ayo coba lagi!"); }
+        }
+
+        // SLIDE 4: PENGURANGAN
+        const bankS4 = [
+            {q: "587 - 243", a: 344}, {q: "495 - 132", a: 363}, {q: "768 - 425", a: 343},
+            {q: "854 - 312", a: 542}, {q: "976 - 543", a: 433}, {q: "659 - 217", a: 442},
+            {q: "384 - 152", a: 232}, {q: "899 - 476", a: 423}, {q: "543 - 212", a: 331}, {q: "775 - 341", a: 434}
+        ];
+        let idxS4 = 0;
+        function genS4() {
+            idxS4 = (idxS4 + 1) % bankS4.length;
+            document.getElementById('s4_soal').innerText = bankS4[idxS4].q;
+            document.getElementById('s4_ans').value = '';
+            document.getElementById('s4_ans').className = '';
+        }
+        function checkS4() {
+            let val = parseInt(document.getElementById('s4_ans').value);
+            if(val === bankS4[idxS4].a) { document.getElementById('s4_ans').className = 'correct'; speakText("Luar biasa, benar!"); }
+            else { document.getElementById('s4_ans').className = 'wrong'; speakText("Ayo hitung kembali!"); }
+        }
+
+        // SLIDE 5: PERKALIAN
+        const bankS5 = [
+            {q: "24 × 3", a: 72}, {q: "15 × 5", a: 75}, {q: "42 × 2", a: 84},
+            {q: "12 × 11", a: 132}, {q: "35 × 4", a: 140}, {q: "16 × 6", a: 96},
+            {q: "21 × 5", a: 105}, {q: "13 × 7", a: 91}, {q: "50 × 6", a: 300}, {q: "25 × 5", a: 125}
+        ];
+        let idxS5 = 0;
+        function genS5() {
+            idxS5 = (idxS5 + 1) % bankS5.length;
+            document.getElementById('s5_soal').innerText = bankS5[idxS5].q;
+            document.getElementById('s5_ans').value = '';
+            document.getElementById('s5_ans').className = '';
+        }
+        function checkS5() {
+            let val = parseInt(document.getElementById('s5_ans').value);
+            if(val === bankS5[idxS5].a) { document.getElementById('s5_ans').className = 'correct'; speakText("Wow pintar, benar!"); }
+            else { document.getElementById('s5_ans').className = 'wrong'; speakText("Periksa perkalianmu!"); }
+        }
+
+        // SLIDE 6: PEMBAGIAN
+        const bankS6 = [
+            {q: "96 ÷ 3", a: 32}, {q: "85 ÷ 5", a: 17}, {q: "144 ÷ 6", a: 24},
+            {q: "120 ÷ 4", a: 30}, {q: "250 ÷ 5", a: 50}, {q: "72 ÷ 4", a: 18},
+            {q: "180 ÷ 9", a: 20}, {q: "360 ÷ 6", a: 60}, {q: "84 ÷ 7", a: 12}, {q: "150 ÷ 3", a: 50}
+        ];
+        let idxS6 = 0;
+        function genS6() {
+            idxS6 = (idxS6 + 1) % bankS6.length;
+            document.getElementById('s6_soal').innerText = bankS6[idxS6].q;
+            document.getElementById('s6_ans').value = '';
+            document.getElementById('s6_ans').className = '';
+        }
+        function checkS6() {
+            let val = parseInt(document.getElementById('s6_ans').value);
+            if(val === bankS6[idxS6].a) { document.getElementById('s6_ans').className = 'correct'; speakText("Tepat sekali!"); }
+            else { document.getElementById('s6_ans').className = 'wrong'; speakText("Bagi dengan adil ya!"); }
+        }
+
+        // SLIDE 8: BANK DATA 20 SOAL BERTAHAP
+        const bankS8 = [
+            {expr: "40 + 5 × 6", s1: "5×6", s2: "30", f: 70, ex: "Hitung perkalian dulu: 5 × 6 = 30. Lalu jumlahkan: 40 + 30 = 70."},
+            {expr: "75 - 24 ÷ 3", s1: "24÷3", s2: "8", f: 67, ex: "Pembagian dulu: 24 ÷ 3 = 8. Lalu kurangi: 75 - 8 = 67."},
+            {expr: "(12 + 8) × 5", s1: "12+8", s2: "20", f: 100, ex: "Hitung di dalam kurung dulu: 12 + 8 = 20. Lalu kalikan: 20 × 5 = 100."},
+            {expr: "50 ÷ 5 × 4", s1: "50÷5", s2: "10", f: 40, ex: "Bagi dan kali sama kuat, kerjakan dari kiri: 50 ÷ 5 = 10. Lalu kalikan 4 = 40."},
+            {expr: "90 - 20 + 15", s1: "90-20", s2: "70", f: 85, ex: "Kurang dan tambah sama kuat, kerjakan dari kiri: 90 - 20 = 70. Lalu tambah 15 = 85."},
+            {expr: "100 - 4 × 15", s1: "4×15", s2: "60", f: 40, ex: "Kalikan dulu: 4 × 15 = 60. Baru dikurangi: 100 - 60 = 40."},
+            {expr: "60 ÷ 2 + 35", s1: "60÷2", s2: "30", f: 65, ex: "Pembagian dahulu: 60 ÷ 2 = 30. Baru dijumlahkan: 30 + 35 = 65."},
+            {expr: "8 × (25 - 15)", s1: "25-15", s2: "10", f: 80, ex: "Dahulukan operasi tanda kurung: 25 - 15 = 10. Kalikan dengan 8: 8 × 10 = 80."},
+            {expr: "45 + 54 ÷ 6", s1: "54÷6", s2: "9", f: 54, ex: "Hitung pembagian dulu: 54 ÷ 6 = 9. Lalu jumlahkan: 45 + 9 = 54."},
+            {expr: "70 ÷ 7 - 3", s1: "70÷7", s2: "10", f: 7, ex: "Selesaikan pembagian dahulu: 70 ÷ 7 = 10. Lalu kurangkan: 10 - 3 = 7."},
+            {expr: "80 - 40 ÷ 5", s1: "40÷5", s2: "8", f: 72, ex: "Dahulukan pembagian: 40 ÷ 5 = 8. Lakukan pengurangan: 80 - 8 = 72."},
+            {expr: "12 × 4 + 12", s1: "12×4", s2: "48", f: 60, ex: "Hitung perkalian dulu: 12 × 4 = 48. Ditambah 12: 48 + 12 = 60."},
+            {expr: "90 ÷ (5 + 4)", s1: "5+4", s2: "9", f: 10, ex: "Hitung di dalam kurung dulu: 5 + 4 = 9. Baru bagi: 90 ÷ 9 = 10."},
+            {expr: "15 × 3 - 20", s1: "15×3", s2: "45", f: 25, ex: "Dahulukan perkalian: 15 × 3 = 45. Kurangi dengan 20: 45 - 20 = 25."},
+            {expr: "33 + 7 × 4", s1: "7×4", s2: "28", f: 61, ex: "Lakukan perkalian dulu: 7 × 4 = 28. Tambahkan: 33 + 28 = 61."},
+            {expr: "50 - 5 × 5", s1: "5×5", s2: "25", f: 25, ex: "Kerjakan perkalian dulu: 5 × 5 = 25. Kurangkan: 50 - 25 = 25."},
+            {expr: "(60 - 20) ÷ 8", s1: "60-20", s2: "40", f: 5, ex: "Kerjakan di dalam kurung dulu: 60 - 20 = 40. Bagi dengan 8: 40 ÷ 8 = 5."},
+            {expr: "7 × 8 ÷ 2", s1: "7×8", s2: "56", f: 28, ex: "Kali dan bagi sama kuat, mulai dari kiri: 7 × 8 = 56. Baru bagi 2 = 28."},
+            {expr: "100 ÷ 10 + 90", s1: "100÷10", s2: "10", f: 100, ex: "Bagi dulu: 100 ÷ 10 = 10. Tambah 90 = 100."},
+            {expr: "88 - 8 × 9", s1: "8×9", s2: "72", f: 16, ex: "Kalikan dulu: 8 × 9 = 72. Kurangkan: 88 - 72 = 16."}
+        ];
+        let idxS8 = 0;
+        function initS8Tabs() {
+            let container = document.getElementById('s8_tabs');
+            let html = "";
+            for(let i=0; i<20; i++) {
+                html += `<button class="btn-ceria btn-tab" onclick="showS8Problem(${i})">Soal ${i+1}</button>`;
+            }
+            container.innerHTML = html;
+        }
+        function showS8Problem(idx) {
+            idxS8 = idx;
+            document.getElementById('s8_expr').innerText = `Misi Soal ${idx+1}:  ${bankS8[idx].expr}`;
+            document.getElementById('s8_step1').value = ''; document.getElementById('s8_step1').className = '';
+            document.getElementById('s8_step2').value = ''; document.getElementById('s8_step2').className = '';
+            document.getElementById('s8_final').value = ''; document.getElementById('s8_final').className = '';
+            document.getElementById('s8_expl').style.display = 'none';
+        }
+        function checkS8() {
+            let item = bankS8[idxS8];
+            let st1 = document.getElementById('s8_step1').value.trim().replace(/\s+/g, '').replace(/x/g, '×').replace(/:/g, '÷');
+            let st2 = document.getElementById('s8_step2').value.trim();
+            let fn = parseInt(document.getElementById('s8_final').value);
+            
+            let cleanTarget = item.s1.replace(/\s+/g, '');
+
+            document.getElementById('s8_step1').className = (st1 === cleanTarget) ? 'correct' : 'wrong';
+            document.getElementById('s8_step2').className = (st2 === item.s2) ? 'correct' : 'wrong';
+            document.getElementById('s8_final').className = (fn === item.f) ? 'correct' : 'wrong';
+        }
+        function toggleS8Expl() {
+            let box = document.getElementById('s8_expl');
+            box.innerText = bankS8[idxS8].ex;
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // SLIDE 9: SOAL CERITA
+        const bankS9 = [
+            {q: "Budi membeli 4 kantong kelereng. Setiap kantong berisi 15 kelereng. Di rumah, Budi memberikan 10 kelereng kepada adiknya. Berapa sisa kelereng Budi?", a: 50, ex: "(4 × 15) - 10 = 50 kelereng."},
+            {q: "Ibu membeli 3 pak telur di supermarket. Setiap pak berisi 10 butir telur. Di rumah, Ibu menggunakan 8 butir telur untuk membuat kue bolu. Berapakah sisa telur Ibu sekarang?", a: 22, ex: "(3 × 10) - 8 = 22 butir."},
+            {q: "Di sebuah toko terdapat 50 buah balon. Sebanyak 15 buah balon laku terjual. Sisa balon di toko tersebut kemudian diikat ke dalam 5 kelompok sama banyak untuk dijadikan hiasan. Berapa banyak balon di setiap ikat hiasan tersebut?", a: 7, ex: "(50 - 5) ÷ 7"},
+            {q: "Pak Budi memiliki 4 karung beras di gudangnya. Setiap karung memiliki berat 25kg. Ia menyumbangkan 30kg beras kepada tetangganya, lalu membeli lagi 15kg beras untuk persediaan tambahan. Berapa kg beras Pak Budi sekarang?", a: 85, ex:"4 × 25 - 30 + 15 = 85kg"}
+        ];
+        let idxS9 = 0;
+        function genS9() {
+            idxS9 = (idxS9 + 1) % bankS9.length;
+            document.getElementById('s9_story').innerText = bankS9[idxS9].q;
+            document.getElementById('s9_ans').value = ''; document.getElementById('s9_ans').className = '';
+            document.getElementById('s9_expl').style.display = 'none';
+        }
+        function checkS9() {
+            let val = parseInt(document.getElementById('s9_ans').value);
+            if(val === bankS9[idxS9].a) { document.getElementById('s9_ans').className = 'correct'; speakText("Jawaban tepat!"); }
+            else { document.getElementById('s9_ans').className = 'wrong'; speakText("Coba lagi!"); }
+        }
+        function toggleS9Expl() {
+            let box = document.getElementById('s9_expl'); box.innerText = bankS9[idxS9].ex;
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // SLIDE 10: BINGO MATEMATIKA
+        const bingoData = [
+            {id: 1, q: "1. 20 + 5 × 2", a: 30}, {id: 2, q: "2. (15 + 5) ÷ 4", a: 5}, {id: 3, q: "3. 50 - 10 × 3", a: 20}, {id: 4, q: "4. 24 ÷ 6 + 10", a: 14}, {id: 5, q: "5. 8 × 5 - 15", a: 25},
+            {id: 6, q: "6. 30 ÷ (2 + 3)", a: 6}, {id: 7, q: "7. 100 - 40 ÷ 2", a: 80}, {id: 8, q: "8. 7 × 6 + 8", a: 50}, {id: 9, q: "9. 45 - 5 + 20", a: 60}, {id: 10, q: "10. 12 × 3 ÷ 4", a: 9},
+            {id: 11, q: "11. (40 - 10) × 2", a: 60}, {id: 12, q: "12. 18 + 12 ÷ 3", a: 22}, {id: 13, q: "13. 70 - 5 × 8", a: 30}, {id: 14, q: "14. 32 ÷ 4 × 2", a: 16}, {id: 15, q: "15. 9 × 9 - 1", a: 80},
+            {id: 16, q: "16. 15 + 25 - 10", a: 30}, {id: 17, q: "17. 60 ÷ (15 - 5)", a: 6}, {id: 18, q: "18. 4 × 25 - 30", a: 70}, {id: 19, q: "19. 85 - 20 ÷ 4", a: 80}, {id: 20, q: "20. (8 + 12) × 4", a: 80},
+            {id: 21, q: "21. 50 + 50 ÷ 2", a: 75}, {id: 22, q: "22. 90 - 30 × 2", a: 30}, {id: 23, q: "23. 7 × 7 - 9", a: 40}, {id: 24, q: "24. 120 ÷ 10 + 5", a: 17}, {id: 25, q: "25. 16 + 4 × 6", a: 40}
+        ];
+        let p1Score = 0, p2Score = 0;
+        function initBingo() {
+            let matrixHtml = ""; let qHtml = "";
+            bingoData.forEach((b) => {
+                matrixHtml += `
+                    <div class="bingo-cell" id="bcell_${b.id}">
+                        <span>Soal ${b.id}</span>
+                        <input id="binp_${b.id}" type="text" placeholder="Hasil">
+                        <div class="bingo-btn-grp">
+                            <button class="btn-ceria-pink" onclick="claimBingo(${id=b.id}, 1)">P1</button>
+                            <button class="btn-ceria-blue" onclick="claimBingo(${id=b.id}, 2)">P2</button>
+                        </div>
+                    </div>
+                `;
+                qHtml += `<div class="bingo-q-item">${b.q}</div>`;
+            });
+            document.getElementById('bingo_matrix').innerHTML = matrixHtml;
+            document.getElementById('bingo_questions').innerHTML = qHtml;
+        }
+        function claimBingo(id, playerNum) {
+            let inpEl = document.getElementById(`binp_${id}`);
+            let val = parseInt(inpEl.value);
+            let item = bingoData.find(x => x.id === id);
+            if(val === item.a) {
+                inpEl.className = "correct";
+                let cell = document.getElementById(`bcell_${id}`);
+                if(playerNum === 1) { cell.className = "bingo-cell p1-win"; p1Score++; } 
+                else { cell.className = "bingo-cell p2-win"; p2Score++; }
+                document.getElementById('s10_s1').innerText = p1Score;
+                document.getElementById('s10_s2').innerText = p2Score;
+            } else { inpEl.className = "wrong"; }
+        }
+        function announceBingoWinner() {
+            let n1 = document.getElementById('s10_p1').value;
+            let n2 = document.getElementById('s10_p2').value;
+            let winner = p1Score > p2Score ? n1 : n2;
+            if(p1Score === p2Score) speakText("Pertandingan seri!");
+            else speakText(`Selamat ${winner} kamu menang Bingo Matematika!`);
+        }
+
+        // SLIDE 11: BATTLE CARDS
+        const battleCardsData = [
+            {id: 1, q: "Andi punya 3 kotak mainan, tiap kotak berisi 12 lego. Dia memberikan 6 lego ke adiknya. Sisa lego?", a: 30, ex: "3 × 12 - 6 = 36 - 6 = 30 lego."},
+            {id: 2, q: "Susi membagikan 40 permen ke 4 anaknya. Anak sulung mendapat tambahan 5 permen lagi. Total permen si sulung?", a: 15, ex: "40 ÷ 4 + 5 = 10 + 5 = 15 permen."},
+            {id: 3, q: "Roni membeli 5 pensil seharga Rp 2.000 per batang. Ia membayar dengan selembar uang Rp 20.000. Kembaliannya?", a: 10000, ex: "20.000 - (5 × 2.000) = 10.000."},
+            {id: 4, q: "Sebuah kelompok mengumpulkan 4 kantong donat berisi masing-masing 10 buah, ditambah 5 buah donat. Semua donat dibagikan ke 9 orang sama banyak. Berapa per orang?", a: 5, ex: "(4 × 10 + 5) ÷ 9 = 5 buah."},
+            {id: 5, q: "Pak Tani memanen 50 kg beras. Dijual 20 kg. Sisanya dikemas ke dalam 6 kantong plastik sama berat. Berapa kg isi tiap kantong?", a: 5, ex: "(50 - 20) ÷ 6 = 5 kg."},
+            {id: 6, q: "Di perpustakaan ada 2 rak, masing-masing berisi 30 buku. Datang sumbangan buku baru sebanyak 15 buku. Berapa total buku?", a: 75, ex: "2 × 30 + 15 = 75 buku."},
+            {id: 7, q: "Ada 3 mobil, masing-masing membawa 5 orang penumpang. Di tengah jalan, 4 orang turun. Berapa sisa total penumpang?", a: 11, ex: "3 × 5 - 4 = 11 orang."},
+            {id: 8, q: "Ibu membeli 60 butir telur. Sebanyak 12 butir telur pecah. Sisa telur yang utuh digoreng merata selama 8 hari. Berapa butir telur per hari?", a: 6, ex: "(60 - 12) ÷ 8 = 6 butir."},
+            {id: 9, q: "Toko baju punya 5 lusin kaos (1 lusin = 12 buah). Laku terjual sebanyak 40 buah. Berapa sisa kaos di toko?", a: 20, ex: "5 × 12 - 40 = 20 buah."},
+            {id: 10, q: "Sebuah wadah berisi 100 permen. Diambil oleh 4 anak masing-masing 15 permen. Berapa sisa permen di wadah?", a: 40, ex: "100 - (4 × 15) = 40 permen."},
+            {id: 11, q: "Dina membeli 8 bungkus biskuit. Setiap bungkus berisi 6 biskuit. Kakak memakan 10 biskuit tersebut. Berapa biskuit yang tersisa?", a: 38, ex: "8 × 6 - 10 = 48 - 10 = 38 biskuit."},
+            {id: 12, q: "Sebuah toko memiliki 90 botol sirup. Sebanyak 10 botol disimpan, sisanya dimasukkan ke dalam 8 kardus sama banyak. Berapa botol isi tiap kardus?", a: 10, ex: "(90 - 10) ÷ 8 = 80 ÷ 8 = 10 botol."},
+            {id: 13, q: "Fajar memiliki 4 lembar uang Rp 10.000. Dia membeli mainan seharga Rp 25.000. Berapa sisa uang Fajar?", a: 15000, ex: "4 × 10.000 - 25.000 = 15.000."},
+            {id: 14, q: "Nenek membuat 36 kue lapis dan 24 kue sus. Semua kue ditaruh sama rata di atas 5 piring besar. Berapa jumlah kue di setiap piring?", a: 12, ex: "(36 + 24) ÷ 5 = 60 ÷ 5 = 12 kue."},
+            {id: 15, q: "Roni mengendarai sepeda dengan kecepatan konstan. Di jam pertama ia menempuh 15 km, lalu selama 2 jam berikutnya ia menempuh 10 km setiap jam. Berapa total jaraknya?", a: 35, ex: "15 + (2 × 10) = 15 + 20 = 35 km."},
+            {id: 16, q: "Pak guru membawa 3 pak pensil, masing-masing berisi 12 pensil. Sebanyak 6 pensil dibagikan ke siswa teladan. Sisanya dibagikan rata ke 5 siswa lain. Berapa pensil per anak?", a: 6, ex: "(3 × 12 - 6) ÷ 5 = 30 ÷ 5 = 6 pensil."},
+            {id: 17, q: "Kakek memelihara 8 kandang ayam, masing-masing berisi 10 ekor. Karena diganti kandang baru, kakek menjual 30 ekor ayam. Berapa sisa ayam kakek?", a: 50, ex: "8 × 10 - 30 = 80 - 30 = 50 ekor."},
+            {id: 18, q: "Tita membeli 2 botol susu berukuran 500 ml. Dia meminum susu tersebut sebanyak 300 ml. Berapa sisa susu Tita dalam ml?", a: 700, ex: "2 × 500 - 300 = 1000 - 300 = 700 ml."},
+            {id: 19, q: "Di taman terdapat 4 baris kursi, masing-masing baris ada 12 kursi. Petugas menambahkan 12 kursi lagi di bagian belakang. Berapa total kursi sekarang?", a: 60, ex: "4 × 12 + 12 = 48 + 12 = 60 kursi."},
+            {id: 20, q: "Sebuah truk mengangkut 5 karung semen yang masing-masing beratnya 20 kg. Di toko A, semen diturunkan sebanyak 40 kg. Berapa kg semen yang tersisa di truk?", a: 60, ex: "5 × 20 - 40 = 100 - 40 = 60 kg."}
+        ];
+        let selectedBattleIdx = -1;
+        let bScores = { p1: 0, p2: 0 };
+        let battleCountdown;
+        let timeLeft = 180;
+
+        function initBattle() {
+            let gridHtml = "";
+            battleCardsData.forEach((c, i) => {
+                gridHtml += `<div class="battle-card" id="bcard_${i}" onclick="openBattleCard(${i})">${i+1}</div>`;
+            });
+            document.getElementById('battle_cards_grid').innerHTML = gridHtml;
+        }
+        function openBattleCard(idx) {
+            if(document.getElementById(`bcard_${idx}`).classList.contains('opened')) return;
+            selectedBattleIdx = idx;
+            document.getElementById('battle_card_title').innerText = `Misi Kartu Nomor ${idx+1}`;
+            document.getElementById('battle_question_text').innerText = battleCardsData[idx].q;
+            document.getElementById('battle_input_ans').value = ''; document.getElementById('battle_input_ans').className = '';
+            document.getElementById('battle_expl_box').style.display = 'none';
+            clearInterval(battleCountdown); timeLeft = 180; startBattleTimer();
+        }
+        function startBattleTimer() {
+            updateTimerDisplay();
+            battleCountdown = setInterval(() => {
+                if(timeLeft <= 0) { clearInterval(battleCountdown); document.getElementById('battle_timer').innerText = "00:00"; speakText("Waktu habis!"); } 
+                else {
+                    timeLeft--;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+        // FUNGSI BARU: MENAMBAHKAN 1 MENIT (60 DETIK) SAAT LEMPAR SOAL
+        function addOneMinute() {
+            if(selectedBattleIdx === -1) return; // Hanya berfungsi jika kartu sudah dipilih
+            timeLeft += 60;
+            updateTimerDisplay();
+            speakText("Waktu ditambah satu menit!");
+        }
+        function updateTimerDisplay() {
+            let min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            let sec = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('battle_timer').innerText = `${min}:${sec}`;
+        }
+        function stopBattleTimer() { clearInterval(battleCountdown); }
+        function checkBattleAnswer() {
+            if(selectedBattleIdx === -1) return;
+            let val = parseInt(document.getElementById('battle_input_ans').value);
+            if(val === battleCardsData[selectedBattleIdx].a) {
+                document.getElementById('battle_input_ans').className = 'correct';
+                document.getElementById(`bcard_${selectedBattleIdx}`).classList.add('opened');
+                speakText("Benar sekali!"); clearInterval(battleCountdown);
+            } else { document.getElementById('battle_input_ans').className = 'wrong'; speakText("Salah, pertanyaan dilempar!"); }
+        }
+        function toggleBattleExpl() {
+            if(selectedBattleIdx === -1) return;
+            let box = document.getElementById('battle_expl_box'); box.innerText = battleCardsData[selectedBattleIdx].ex;
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+        function addBattleScore(pNum) {
+            if(pNum === 1) { bScores.p1++; document.getElementById('b_p1_sc').innerText = bScores.p1; } 
+            else { bScores.p2++; document.getElementById('b_p2_sc').innerText = bScores.p2; }
+        }
+        function announceBattleWinner() {
+            let n1 = document.getElementById('b_p1_name').value;
+            let n2 = document.getElementById('b_p2_name').value;
+            let winner = bScores.p1 > bScores.p2 ? n1 : n2;
+            if(bScores.p1 === bScores.p2) speakText("Hasil battle seimbang!");
+            else speakText(`Selamat kepada ${winner} yang telah memenangkan battle matematika kali ini!`);
+        }
+
+        window.onload = () => {
+            genS3(); genS4(); genS5(); genS6();
+            initS8Tabs(); showS8Problem(0);
+            genS9(); initBingo(); initBattle();
+        }
+    </script>
+</body>
+</html>
