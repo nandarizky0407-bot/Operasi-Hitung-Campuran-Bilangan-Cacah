@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operasi Hitung Campuran - Bilangan Cacah</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #e0f2fe;
+            --slide-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --primary: #0284c7;
+            --accent: #bae6fd;
+            --border: #cbd5e1;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --highlight: #f8fafc;
+            --sb-yellow: #facc15;
+            --sb-brown: #78350f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-main);
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* Deck & Slide Settings */
+        .presentation-deck {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+        }
+        .slide {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--slide-bg);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            border-radius: 24px;
+            display: none;
+            flex-direction: column;
+            padding: 50px 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: 6px solid var(--primary);
+        }
+        .slide.active { display: flex; }
+
+        /* Typography */
+        h1, h2, h3, .font-fun { font-family: 'Fredoka', sans-serif; color: var(--text-dark); }
+        h1 { font-size: 52px; color: var(--primary); }
+        .slide-title { font-size: 36px; margin-bottom: 25px; border-bottom: 5px dashed var(--primary); padding-bottom: 10px; width: fit-content; }
+        p, li { font-size: 20px; color: var(--text-muted); line-height: 1.6; }
+
+        /* General Layout Components */
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .card { background: white; padding: 30px; border-radius: 20px; border: 2px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+
+        /* UI Elements */
+        .input-box { padding: 14px 18px; border: 3px solid var(--border); border-radius: 12px; font-size: 20px; width: 100%; outline: none; font-weight: 600; text-align: center; font-family: 'Fredoka', sans-serif; }
+        .input-box:focus { border-color: var(--primary); }
+        .btn-check { background: var(--primary); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; font-family: 'Fredoka', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* Global Navigation */
+        .global-nav {
+            position: fixed;
+            bottom: 25px;
+            right: 50%;
+            transform: translateX(50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 9999;
+            background: rgba(255,255,255,0.95);
+            padding: 10px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary);
+        }
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: #0369a1; transform: scale(1.1); }
+
+        /* Slide 3 Specific: KABATAKU Ladder */
+        .ladder-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .ladder-step { display: flex; align-items: center; gap: 20px; padding: 15px 25px; border-radius: 15px; color: white; font-weight: bold; font-size: 22px; }
+
+        /* Slide 4 Specific: Operator Buttons */
+        .op-btn-group { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+        .op-btn { background: #f1f5f9; border: 3px solid var(--border); border-radius: 12px; width: 70px; height: 70px; font-size: 28px; font-weight: bold; cursor: pointer; transition: 0.2s; display: grid; place-items: center; color: var(--text-dark); }
+        .op-btn:hover { border-color: var(--primary); background: var(--accent); }
+        .op-btn.selected-correct { background: var(--success) !important; color: white !important; border-color: #16a34a !important; }
+        .op-btn.selected-wrong { background: var(--danger) !important; color: white !important; border-color: #dc2626 !important; }
+
+        /* Slide 6 Specific: SpongeBob Theme */
+        .sb-slide { border-color: var(--sb-yellow) !important; background-color: #fffbeb; }
+        .sb-story-box { max-height: 480px; overflow-y: auto; padding: 30px; background: white; border-radius: 16px; border: 3px solid var(--sb-yellow); box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); }
+        .sb-paragraph { margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px dashed #fef08a; text-align: justify; }
+        .sb-question-inline { background: #fef9c3; padding: 15px; border-radius: 12px; border: 2px solid var(--sb-yellow); margin: 10px 0; display: flex; align-items: center; gap: 15px; }
+
+        /* Audio Control Panel */
+        .audio-panel { background: var(--sb-yellow); padding: 12px 20px; border-radius: 15px; display: inline-flex; align-items: center; gap: 15px; border: 2px solid var(--sb-brown); margin-bottom: 15px; }
+        .volume-slider { width: 120px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="presentation-deck">
+    
+    <div class="slide active" id="slide1">
+        <div class="content-area" style="text-align: center;">
+            <p style="text-transform: uppercase; letter-spacing: 4px; font-weight: 700; color: var(--primary); margin-bottom: 15px;">Matematika Sekolah Dasar</p>
+            <h1 style="font-size: 58px; margin-bottom: 15px;">Operasi Hitung Campuran</h1>
+            <p style="font-size: 26px; font-weight: 600; color: var(--text-muted); margin-bottom: 45px;">Bilangan Cacah (Kurung, Kali, Bagi, Tambah, Kurang)</p>
+            
+            <div class="card" style="display: inline-block; padding: 40px; width: 650px; text-align: left; background: var(--highlight);">
+                <h3 style="margin-bottom: 20px; text-align: center; color: var(--primary);"><i class="fa-solid fa-users"></i> Input Nama Anggota Grup</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px;">NAMA SISWA 1 :</label>
+                        <input type="text" id="nameSiswa1" class="input-box" placeholder="Ketik nama...">
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px;">NAMA SISWA 2 :</label>
+                        <input type="text" id="nameSiswa2" class="input-box" placeholder="Ketik nama...">
+                    </div>
+                </div>
+                <button class="btn-check" style="width: 100%;" onclick="saveStudentsData()">MULAI BELAJAR <i class="fa-solid fa-play"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2 class="slide-title">Tujuan Pembelajaran</h2>
+        <div class="content-area">
+            <div class="grid-2">
+                <div class="card" style="border-left: 8px solid var(--primary); background: var(--highlight);">
+                    <h3 style="margin-bottom: 20px; color: var(--primary);"><i class="fa-solid fa-bullseye"></i> Apa yang Akan Kita Capai?</h3>
+                    <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 15px;">
+                        <li>Siswa dapat memahami kedudukan tingkat kekuatan tanda operasi hitung campuran bilangan cacah.</li>
+                        <li>Siswa mampu menentukan operasi hitung yang wajib dikerjakan terlebih dahulu dengan tepat.</li>
+                        <li>Siswa mampu menyelesaikan perhitungan campuran dan memecahkan soal cerita kontekstual dalam kehidupan sehari-hari.</li>
+                    </ul>
+                </div>
+                <div class="card" style="text-align: center; background: #f0f9ff; border-color: var(--accent);">
+                    <i class="fa-solid fa-calculator" style="font-size: 120px; color: var(--primary); margin-bottom: 20px;"></i>
+                    <p style="font-weight: 600; color: var(--text-dark);">Bekerjasamalah dalam grup untuk menaklukkan semua tantangan hitung!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2 class="slide-title">Aturan Urutan Operasi Hitung</h2>
+        <div class="content-area">
+            <p style="margin-bottom: 20px;">Jika menemukan beberapa operasi hitung yang berkumpul dalam satu soal, wajib mengikuti urutan kasta kekuatan berikut ini:</p>
+            <div class="ladder-container">
+                <div class="ladder-step" style="background: #ef4444; width: 100%;">
+                    <span style="width: 50px; text-align: center; font-size: 28px;">1</span>
+                    <i class="fa-solid fa-parentheses"></i> Tanda Kurung ( ... ) &mdash; Kasta Tertinggi & Paling Kuat! Wajib Dihitung Pertama.
+                </div>
+                <div class="ladder-step" style="background: #f59e0b; width: 85%;">
+                    <span style="width: 50px; text-align: center; font-size: 28px;">2</span>
+                    <i class="fa-solid fa-times-divide"></i> KALI (&times;) dan BAGI (&div;) &mdash; Sama Kuat. Kerjakan Berurutan dari Sebelah Kiri.
+                </div>
+                <div class="ladder-step" style="background: #10b981; width: 70%;">
+                    <span style="width: 50px; text-align: center; font-size: 28px;">3</span>
+                    <i class="fa-solid fa-plus-minus"></i> TAMBAH (+) dan KURANG (-) &mdash; Kasta Terendah. Kerjakan Berurutan dari Sebelah Kiri.
+                </div>
+            </div>
+            <div class="card" style="margin-top: 25px; background: #fffbeb; border-color: #fef08a;">
+                <p style="font-size: 18px; font-weight: 600; color: #b45309;"><i class="fa-solid fa-lightbulb"></i> Jembatan Keledai: <strong>KURUNG -> KA-BA-TA-KU</strong> (Kurung, Kali, Bagi, Tambah, Kurang)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <h2 class="slide-title">Misi 1: Tentukan Dahulu Operasinya!</h2>
+        <div class="content-area">
+            <div class="grid-2">
+                <div class="card" id="m1Card" style="text-align: center; padding: 40px 20px;">
+                    <p style="font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: 2px;">SOAL AKTIF</p>
+                    <h1 id="m1Equation" style="font-size: 44px; margin: 25px 0; letter-spacing: 1px;">--</h1>
+                    
+                    <p style="font-size: 18px; font-weight: 600;">Langkah 1: Operasi mana yang harus dikerjakan duluan?</p>
+                    <div class="op-btn-group">
+                        <button class="op-btn" id="opBtn_kurung" onclick="checkM1Op('kurung')">( )</button>
+                        <button class="op-btn" id="opBtn_kali" onclick="checkM1Op('kali')">&times;</button>
+                        <button class="op-btn" id="opBtn_bagi" onclick="checkM1Op('bagi')">&div;</button>
+                        <button class="op-btn" id="opBtn_tambah" onclick="checkM1Op('tambah')">+</button>
+                        <button class="op-btn" id="opBtn_kurang" onclick="checkM1Op('kurang')">-</button>
+                    </div>
+
+                    <div id="m1FinalStep" style="display: none; margin-top: 25px; padding-top: 20px; border-top: 2px dashed var(--border);">
+                        <p style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">Langkah 2: Hitunglah hasil akhir total dari soal di atas!</p>
+                        <div style="display: flex; gap: 10px; max-width: 300px; margin: 0 auto;">
+                            <input type="number" id="m1AnswInput" class="input-box" placeholder="Hasil...">
+                            <button class="btn-check" onclick="checkM1FinalAnswer()">CEK</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="background: var(--highlight); display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-gamepad"></i> Aturan Main</h3>
+                        <p style="font-size: 16px; margin-bottom: 10px;">1. Analisis soal lalu klik tombol simbol operasi yang harus didahulukan.</p>
+                        <p style="font-size: 16px; margin-bottom: 10px;">2. Jika pilihan benar, kolom jawaban akhir akan terbuka otomatis.</p>
+                        <p style="font-size: 16px;">3. Selesaikan total 20 variasi kombinasi soal acak.</p>
+                    </div>
+                    <div style="margin-top: 20px; border-top: 2px dashed var(--border); padding-top: 15px; text-align: center;">
+                        <p style="font-weight: bold; margin-bottom: 10px;">Nomor Soal: <span id="m1Count">1</span> / 20</p>
+                        <button class="btn-check" style="background: #4b5563;" onclick="nextM1Question()">GANTI SOAL <i class="fa-solid fa-rotate"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <h2 class="slide-title">Misi 2: Analisis Soal Cerita</h2>
+        <div class="content-area">
+            <div class="grid-2">
+                <div class="card" id="m2Card" style="min-height: 380px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span style="background: #e0f2fe; color: var(--primary); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px;">SOAL KONTEKSTUAL</span>
+                        <p id="m2QuestionText" style="font-size: 22px; font-weight: 600; margin-top: 15px; color: var(--text-dark);"></p>
+                    </div>
+                    
+                    <div style="margin-top: 25px;">
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <input type="number" id="m2Input" class="input-box" placeholder="Ketik jawaban angka akhir...">
+                            <button class="btn-check" onclick="checkM2Answer()">CEK JAWABAN</button>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-check" style="background: #6b7280; flex: 1;" onclick="toggleM2Solution()">LIHAT PEMBAHASAN</button>
+                            <button class="btn-check" style="background: #4b5563; flex: 1;" onclick="nextM2Question()">GANTI SOAL <i class="fa-solid fa-shuffle"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="background: var(--highlight); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-chalkboard-user"></i> Pojok Solusi</h3>
+                        <div id="m2SolutionBox" style="display: none; padding: 20px; background: #fffbeb; border: 2px dashed #fef08a; border-radius: 12px; font-size: 18px; line-height: 1.6;">
+                        </div>
+                    </div>
+                    <div style="text-align: center; border-top: 2px dashed var(--border); padding-top: 15px;">
+                        <p style="font-weight: bold;">Progress Soal Cerita: <span id="m2Count">1</span> / 20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide sb-slide" id="slide6">
+        <h2 class="slide-title" style="color: var(--sb-brown); border-bottom-color: var(--sb-yellow);">Misi 3: Petualangan Dongeng Bikini Bottom</h2>
+        
+        <div class="audio-panel">
+            <button class="btn-check" style="background: var(--sb-brown);" onclick="toggleSpongeBobMusic()"><i class="fa-solid fa-music"></i> Musik Latar</button>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--sb-brown); font-size: 14px;">
+                <i class="fa-solid fa-volume-high"></i>
+                <input type="range" class="volume-slider" id="bgVolume" min="0" max="1" step="0.1" value="0.5" oninput="changeVolume(this.value)">
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="sb-story-box">
+                <div class="sb-paragraph">
+                    <p>Suatu pagi yang cerah di bawah laut, SpongeBob SquarePants terbangun dengan penuh semangat karena hari ini adalah hari festival Krabby Patty sedunia. Dia melompat dari tempat tidurnya yang empuk lalu langsung memakai celana kotak kesayangannya dengan rapi. Di dapur, Gary si siput sudah menunggu makanan paginya sambil mengeong dengan sangat manja sekali. SpongeBob membuka lemari persediaan dan mengambil beberapa kaleng makanan siput premium rasa rumput laut. Di dalam lemari tersebut, mula-mula terdapat <b>60 kaleng</b> makanan siput Gary yang tersusun rapi. Kemudian, SpongeBob membeli lagi sebanyak <b>4 pak</b> persediaan tambahan baru, di mana setiap pak tersebut berisi tepat <b>15 kaleng</b> makanan. Seluruh makanan tersebut dikumpulkan menjadi satu di atas meja dapur yang luas. Gary tampak sangat senang melihat tumpukan kaleng yang sangat banyak itu. SpongeBob kemudian menghitung kembali semua kaleng tersebut agar tidak ada yang terlewatkan. Berapakah total jumlah persediaan kaleng makanan Gary saat ini?</p>
+                    <div class="sb-question-inline" id="sbCard_1">
+                        <span class="font-fun">Soal 1: Berapakah total jumlah persediaan kaleng makanan Gary saat ini? </span>
+                        <input type="number" id="sbIn_1" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(1, 120)">Cek</button>
+                    </div>
+                    <p>Setelah kenyang, Gary pun tidur kembali di atas karpet ruang tamu nanas SpongeBob yang sangat nyaman. SpongeBob harus segera bersiap-siap karena dia tidak ingin terlambat datang ke tempat kerja terbaik di dunia. Dia menyusun <b>100 buah spatula emas</b> miliknya ke dalam kotak peralatan masak koki. Ternyata, ada <b>20 spatula</b> yang patah karena terlalu sering digunakan untuk berlatih memasak setiap hari. SpongeBob memutuskan untuk membagi spatula yang masih bagus itu ke dalam <b>4 laci meja</b> dapur Krusty Krab.</p>
+                    <div class="sb-question-inline" id="sbCard_2">
+                        <span class="font-fun">Soal 2: Berapakah banyak spatula yang berada pada setiap laci? </span>
+                        <input type="number" id="sbIn_2" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(2, 20)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>SpongeBob berlari keluar rumah menuju Jellyfish Fields untuk mencari Patrick Star yang sudah menunggunya di sana. Patrick sedang asyik membawa keranjang besar berisi jaring ubur-ubur yang sangat panjang dan berkilauan. Mereka berdua berencana menangkap ubur-ubur langka untuk dilepaskan kembali ke alam liar Bikini Bottom. Awalnya Patrick sudah membawa <b>15 jaring</b> jaring ubur-ubur dari gudang bawah tanah rumah batunya. Di lapangan, mereka bertemu Sandy Cheeks yang membawa tambahan <b>5 kotak</b> berisi masing-masing <b>8 jaring</b> jaring ubur-ubur baru. Semua jaring tersebut dikumpulkan Patrick agar mereka bisa menangkap ubur-ubur lebih cepat dan efisien. Patrick berteriak kegirangan karena memiliki jaring yang sangat banyak untuk petualangan mereka pagi ini. Matahari pagi mulai menyinari seluruh padang ubur-ubur dengan cahaya keemasan yang sangat indah. Berapakah total jaring ubur-ubur yang mereka bawa sekarang?</p>
+                    <div class="sb-question-inline" id="sbCard_3">
+                        <span class="font-fun">Soal 3: Berapakah total jaring ubur-ubur yang mereka bawa sekarang? </span>
+                        <input type="number" id="sbIn_3" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(3, 55)">Cek</button>
+                    </div>
+                    <p>Sambil berlari mengejar ubur-ubur, Patrick tanpa sengaja menabrak gundukan pasir yang cukup tinggi dan licin. Patrick membawa <b>200 bungkus selai ubur-ubur</b> merah di dalam tas kecil yang ia kalungkan di lehernya. Akibat terjatuh, sebanyak <b>50 bungkus selai</b> tumpah ke tanah dan tidak bisa lagi digunakan untuk sarapan. Sisa selai yang masih bersih akan dibagikan rata kepada <b>5 ekor ubur-ubur</b> kecil yang sedang lapar. Ubur-ubur tersebut langsung mendekati Patrick dengan wajah yang sangat menggemaskan dan lucu. SpongeBob membantu Patrick merapikan tasnya agar selai yang tersisa tidak tumpah lagi ke pasir.</p>
+                    <div class="sb-question-inline" id="sbCard_4">
+                        <span class="font-fun">Soal 4: Berapa banyak bungkus selai yang didapatkan setiap ubur-ubur? </span>
+                        <input type="number" id="sbIn_4" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(4, 30)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Sesampainya di depan pintu masuk Krusty Krab, suasana sudah sangat ramai dipadati oleh pelanggan lapar. Tuan Krab berdiri di depan mesin kasir sambil menghitung persediaan bahan baku burger yang baru datang. Hari ini ada kiriman <b>12 keranjang daging</b> kepiting segar yang dikirim langsung dari pelabuhan utama. Setiap keranjang besar tersebut ternyata berisi <b>20 potong daging</b> siap saji yang berkualitas tinggi. Tuan Krab juga menemukan ada stok cadangan di gudang belakang sebanyak <b>30 potong daging</b> kepiting. Semua daging tersebut akan segera dimasak oleh SpongeBob dengan teknik koki profesional andalannya. Tuan Krab tersenyum lebar karena membayangkan keuntungan besar yang akan ia dapatkan dari penjualan hari ini. Squidward hanya bisa menghela napas panjang melihat semangat kerja SpongeBob yang sangat luar biasa berlebihan. Berapakah total daging kepiting yang tersedia di dapur pagi ini?</p>
+                    <div class="sb-question-inline" id="sbCard_5">
+                        <span class="font-fun">Soal 5: Berapakah total daging kepiting yang tersedia di dapur pagi ini? </span>
+                        <input type="number" id="sbIn_5" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(5, 270)">Cek</button>
+                    </div>
+                    <p>Selain daging, Tuan Krab juga membeli <b>300 lembar keju</b> premium dari distributor langganannya di kota sebelah. Sebanyak <b>60 lembar keju</b> ternyata sudah kadaluwarsa dan harus segera dibuang ke tempat sampah rahasia. Sisa keju yang masih segar akan dibagi rata ke dalam <b>8 buah wadah</b> pendingin di dapur koki. SpongeBob bertugas memindahkan semua keju tersebut dengan sangat hati-hati agar tidak rusak atau kotor. Wadah pendingin tersebut harus selalu tertutup rapat agar suhu keju tetap terjaga dengan sangat baik.</p>
+                    <div class="sb-question-inline" id="sbCard_6">
+                        <span class="font-fun">Soal 6: Berapa banyak keju yang ada di setiap wadah? </span>
+                        <input type="number" id="sbIn_6" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(6, 30)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Waktu makan siang telah tiba dan pesanan Krabby Patty mulai mengalir masuk tanpa henti ke mesin kasir. SpongeBob harus menyiapkan <b>15 porsi burger</b> pesanan khusus untuk rombongan turis yang datang bersama-sama. Setiap porsi burger tersebut ternyata membutuhkan <b>4 iris tomat</b> segar dan <b>2 iris bawang</b> bombay. Secara tidak sengaja, SpongeBob menjatuhkan <b>10 iris tomat</b> ke lantai dapur yang sedang dibersihkan oleh Squidward. Dia pun harus mengambil tomat baru agar jumlah irisan tomat dalam burger tetap sesuai resep rahasia. SpongeBob bekerja dengan sangat cepat seolah-olah dia memiliki banyak tangan untuk memasak semua burger. Dia bersiul riang sambil membalikkan daging di atas panggangan panas yang mengeluarkan aroma sangat sedap. Berapa jumlah irisan tomat yang berhasil SpongeBob susun dengan benar di piring pelanggan?</p>
+                    <div class="sb-question-inline" id="sbCard_7">
+                        <span class="font-fun">Soal 7: Berapa jumlah irisan tomat yang berhasil SpongeBob susun dengan benar di piring pelanggan? </span>
+                        <input type="number" id="sbIn_7" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(7, 50)">Cek</button>
+                    </div>
+                    <p>Di meja nomor lima, rombongan turis membawa total <b>180 buah koin</b> emas sebagai alat pembayaran makan siang. Tuan Krab memberikan diskon potongan harga sebesar <b>40 koin</b> karena mereka memesan dalam jumlah banyak. Sisa koin pembayaran tersebut akan dibagi rata ke dalam <b>7 laci kasir</b> otomatis milik Tuan Krab. Koin-koin tersebut berkilauan saat terkena lampu restoran yang sangat terang di siang hari ini. Tuan Krab sangat teliti saat menghitung koin agar tidak ada satu pun koin yang hilang. Squidward hanya menunggu para pelanggan selesai makan agar dia bisa segera pulang ke rumah.</p>
+                    <div class="sb-question-inline" id="sbCard_8">
+                        <span class="font-fun">Soal 8: Berapa banyak koin yang ada di setiap laci kasir? </span>
+                        <input type="number" id="sbIn_8" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(8, 20)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Tiba-tiba, Squidward harus membantu merapikan ruang penyimpanan persediaan saus yang sangat berantakan karena tumpukan botol. Di rak pertama, terdapat <b>25 botol saus</b> tomat yang disusun rapi oleh pelayan sebelumnya di pagi hari. Squidward menambah lagi <b>5 baris botol</b> baru, di mana setiap baris tersebut berisi <b>12 botol saus</b> tambahan. Botol-botol itu sangat berat sehingga Squidward merasa sangat lelah dan ingin segera istirahat di kursinya. Dia menggerutu sepanjang waktu sambil mengangkat botol satu per satu ke atas rak kayu yang tinggi. SpongeBob lewat sambil tertawa dan menawarkan bantuan, namun Squidward menolak bantuan tersebut dengan wajah yang sangat masam. Rak saus sekarang terlihat sangat penuh dan sesak oleh botol-botol kaca yang sangat mengkilap. Berapakah jumlah total botol saus tomat yang ada di rak tersebut sekarang?</p>
+                    <div class="sb-question-inline" id="sbCard_9">
+                        <span class="font-fun">Soal 9: Berapakah jumlah total botol saus tomat yang ada di rak tersebut sekarang? </span>
+                        <input type="number" id="sbIn_9" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(9, 85)">Cek</button>
+                    </div>
+                    <p>Selain saus tomat, ada juga <b>150 botol saus mustard</b> kuning yang harus dipindahkan ke meja saus utama. Sebanyak <b>30 botol saus</b> ternyata pecah saat pengiriman karena guncangan ombak laut yang sangat kuat tadi malam. Sisa botol mustard yang utuh akan dibagi rata ke dalam <b>10 kotak pengiriman</b> pesanan antar rumah. Squidward harus mencatat jumlah botol yang pecah agar Tuan Krab bisa meminta ganti rugi ke agen. Pekerjaan ini terasa sangat membosankan bagi Squidward yang lebih suka bermain klarinet di dalam rumahnya. Dia berharap jam kerja hari ini segera berakhir agar dia bisa bersantai sendirian.</p>
+                    <div class="sb-question-inline" id="sbCard_10">
+                        <span class="font-fun">Soal 10: Berapa banyak botol saus mustard yang ada pada setiap kotak pengiriman? </span>
+                        <input type="number" id="sbIn_10" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(10, 12)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Sandy Cheeks datang ke Krusty Krab dengan membawa peralatan sains canggih miliknya dari rumah kubah udara. Dia ingin menghitung berapa banyak kalori dalam satu Krabby Patty menggunakan rumus fisika yang sangat rumit sekali. Sandy menyiapkan <b>8 piring uji</b> laboratorium yang masing-masing piring berisi <b>25 miligram sampel</b> burger spesial koki. Namun, Sandy membuang <b>50 miligram sampel</b> karena tercampur dengan serpihan kayu yang jatuh dari atap koki. SpongeBob melihat Sandy bekerja dengan penuh rasa kagum karena kecerdasan sahabat karibnya itu dalam bidang sains. Sandy menjelaskan bahwa matematika adalah dasar dari segala ilmu pengetahuan yang ada di seluruh dunia laut. SpongeBob hanya mengangguk meskipun dia tidak sepenuhnya mengerti apa yang dijelaskan oleh Sandy pagi itu. Berapakah sisa sampel burger yang masih tersedia di atas meja laboratorium Sandy?</p>
+                    <div class="sb-question-inline" id="sbCard_11">
+                        <span class="font-fun">Soal 11: Berapakah sisa sampel burger yang masih tersedia di atas meja laboratorium Sandy? </span>
+                        <input type="number" id="sbIn_11" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(11, 150)">Cek</button>
+                    </div>
+                    <p>Sandy juga membawa <b>120 butir kacang tanah</b> dari Texas untuk dibagikan kepada teman-temannya di Bikini Bottom. Dia memisahkan <b>20 butir kacang</b> untuk eksperimen penanaman pohon darat di dalam kubah udaranya yang sangat luas. Sisa kacang yang ada di kantong plastiknya akan dibagikan rata kepada <b>5 orang sahabatnya</b> yang baik. Patrick langsung mendekat karena dia sangat suka makan kacang tanah Texas kiriman Sandy yang gurih. Sandy meminta mereka untuk makan dengan sopan dan tidak berantakan di dalam restoran Tuan Krab. SpongeBob berjanji akan menjaga kebersihan restoran agar Tuan Krab tidak marah kepada mereka semua.</p>
+                    <div class="sb-question-inline" id="sbCard_12">
+                        <span class="font-fun">Soal 12: Berapa banyak butir kacang tanah yang didapat setiap temannya? </span>
+                        <input type="number" id="sbIn_12" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(12, 20)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Di sore hari, Plankton datang mencoba mencuri resep rahasia Krabby Patty dengan membawa robot kepiting raksasa. Plankton menembakkan laser hijau ke arah pintu restoran, namun SpongeBob berhasil menahan pintu dengan kuat sekali. SpongeBob memiliki <b>40 buah bom air</b> yang ia simpan di dalam ember besar di dekat kasir. Dia kemudian mengisi lagi <b>6 ember baru</b>, di mana setiap ember berisi <b>15 buah bom air</b> tambahan. Seluruh bom air tersebut disiapkan untuk memadamkan laser panas dari robot Plankton yang sangat berbahaya. Plankton tertawa jahat karena merasa robot buatannya tidak akan bisa dikalahkan oleh SpongeBob yang kecil. Namun, SpongeBob tetap berani menghadapi Plankton demi menjaga keamanan resep rahasia milik Tuan Krab tercinta. Berapakah total bom air yang dimiliki SpongeBob untuk melawan serangan robot Plankton sore ini?</p>
+                    <div class="sb-question-inline" id="sbCard_13">
+                        <span class="font-fun">Soal 13: Berapakah total bom air yang dimiliki SpongeBob untuk melawan serangan robot Plankton sore ini? </span>
+                        <input type="number" id="sbIn_13" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(13, 130)">Cek</button>
+                    </div>
+                    <p>Robot Plankton memiliki <b>500 unit energi</b> cadangan yang tersimpan di dalam baterai besar di punggung mesinnya. Selama pertempuran, SpongeBob berhasil menghancurkan <b>200 unit energi</b> robot tersebut dengan tembakan bom air tepat sasaran. Sisa energi robot yang masih aktif akan dibagi ke dalam <b>10 bagian sirkuit</b> kecil untuk melarikan diri. Plankton merasa panik karena rencananya mulai gagal total akibat perlawanan sengit dari SpongeBob dan kawan-kawan. Dia mencoba menekan tombol darurat untuk memanggil bantuan dari Chum Bucket, namun baterainya mulai melemah. SpongeBob terus menembakkan air agar robot Plankton berhenti bergerak dan jatuh ke pasir laut dalam. Plankton akhirnya memutuskan untuk mundur dan merencanakan pencurian baru di hari esok yang lebih baik.</p>
+                    <div class="sb-question-inline" id="sbCard_14">
+                        <span class="font-fun">Soal 14: Berapa banyak unit energi pada setiap bagian sirkuit? </span>
+                        <input type="number" id="sbIn_14" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(14, 30)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Setelah Plankton pergi, suasana restoran kembali tenang dan semua pelanggan mulai kembali menikmati makan sore mereka. Tuan Krab meminta SpongeBob untuk menghitung persediaan cangkir minuman yang ada di lemari dapur restoran Krusty Krab. Di rak pertama, terdapat <b>70 buah cangkir</b> plastik bening yang sering digunakan untuk menyajikan jus kelapa laut. SpongeBob menambah lagi <b>5 pak cangkir</b> baru yang baru saja dibeli Tuan Krab dari pasar grosir. Setiap pak cangkir baru tersebut ternyata berisi <b>20 buah cangkir</b> yang sangat bersih dan berkilau terkena cahaya. SpongeBob menyusunnya dengan sangat hati-hati agar cangkir tersebut tidak jatuh dan pecah berkeping-keping di lantai. Tuan Krab mengamati kerja SpongeBob dari jauh sambil tersenyum puas melihat kerapihan koki andalannya itu. Berapakah jumlah total cangkir minuman yang tersedia di rak restoran Krusty Krab sekarang?</p>
+                    <div class="sb-question-inline" id="sbCard_15">
+                        <span class="font-fun">Soal 15: Berapakah jumlah total cangkir minuman yang tersedia di rak restoran Krusty Krab sekarang? </span>
+                        <input type="number" id="sbIn_15" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(15, 170)">Cek</button>
+                    </div>
+                    <p>Tuan Krab juga memiliki <b>400 buah piring</b> porselen yang sangat mahal dan mewah untuk acara pesta kerajaan. Sebanyak <b>80 buah piring</b> ternyata pecah karena Squidward terpeleset saat sedang membawanya menuju meja saji tadi siang. Sisa piring yang masih utuh akan disusun secara merata ke dalam <b>4 rak kayu jati</b> yang sangat kuat. Setiap rak harus diisi dengan jumlah piring yang sama agar tidak berat sebelah dan rak tidak patah. Tuan Krab memarahi Squidward karena kecerobohannya yang merugikan keuangan restoran Krusty Krab yang ia sayangi. Squidward hanya diam dan menahan kesal sambil membersihkan pecahan piring yang berserakan di atas lantai dapur.</p>
+                    <div class="sb-question-inline" id="sbCard_16">
+                        <span class="font-fun">Soal 16: Berapa banyak piring pada setiap rak? </span>
+                        <input type="number" id="sbIn_16" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(16, 80)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Malam mulai tiba di Bikini Bottom, dan SpongeBob harus membantu Ny. Puff di sekolah mengemudi untuk merapikan berkas. Ny. Puff memiliki <b>35 buah buku</b> panduan mengemudi kapal selam yang sudah lama tersimpan di dalam lemari. Ny. Puff kemudian membeli tambahan sebanyak <b>5 kotak buku</b> baru untuk dibagikan kepada para siswa koki. Setiap kotak baru tersebut ternyata berisi <b>12 buah buku</b> panduan yang sangat tebal dan berat untuk dibaca. SpongeBob menyusun semua buku tersebut di atas meja panjang kelas mengemudi dengan semangat yang membara sekali. Ny. Puff merasa sangat terbantu dengan kehadiran SpongeBob meskipun dia sering membuat Ny. Puff panik saat belajar mengemudi. Berapakah jumlah total buku panduan mengemudi yang ada di meja kelas sekolah mengemudi Ny. Puff?</p>
+                    <div class="sb-question-inline" id="sbCard_17">
+                        <span class="font-fun">Soal 17: Berapakah jumlah total buku panduan mengemudi yang ada di meja kelas sekolah mengemudi Ny. Puff? </span>
+                        <input type="number" id="sbIn_17" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(17, 95)">Cek</button>
+                    </div>
+                    <p>Di sekolah tersebut, ada total <b>240 buah kursi</b> plastik yang harus dibersihkan dari noda tinta pena siswa. Ny. Puff memisahkan <b>40 kursi</b> yang sudah sangat rusak dan tidak layak lagi untuk diduduki oleh para siswa. Sisa kursi yang masih bagus akan dibagi rata ke dalam <b>10 ruangan kelas</b> yang berbeda di gedung sekolah. SpongeBob mengelap kursi satu per satu hingga kursi tersebut terlihat mengkilap dan seperti baru lagi dari toko. Ny. Puff memberikan pujian kepada SpongeBob karena hasil kerjanya yang sangat cepat dan sangat bersih sekali. Sekolah mengemudi sekarang sudah siap digunakan untuk pelajaran mengemudi kapal di pagi hari esok yang cerah.</p>
+                    <div class="sb-question-inline" id="sbCard_18">
+                        <span class="font-fun">Soal 18: Berapa banyak kursi pada setiap kelas? </span>
+                        <input type="number" id="sbIn_18" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(18, 20)">Cek</button>
+                    </div>
+                </div>
+
+                <div class="sb-paragraph">
+                    <p>Akhirnya SpongeBob pulang ke rumah nanasnya dengan perasaan yang sangat puas dan hati yang sangat senang sekali. Sebelum tidur, SpongeBob ingin menghitung total koleksi kartu Bubble Buddy miliknya yang disimpan di dalam album. Mula-mula SpongeBob memiliki <b>150 lembar kartu</b> Bubble Buddy yang sangat langka dan sulit dicari di pasaran. Kemudian dia memenangkan <b>5 babak permainan</b>, di mana setiap babak memberikan hadiah <b>20 lembar kartu</b> tambahan baru. SpongeBob tersenyum melihat koleksi kartunya yang semakin banyak dan semakin lengkap memenuhi seluruh isi album birunya. Dia berencana menunjukkan koleksi kartu ini kepada Patrick Star saat mereka bermain bersama besok di pantai. Berapakah jumlah total kartu Bubble Buddy yang dimiliki SpongeBob di dalam album kesayangannya saat malam ini?</p>
+                    <div class="sb-question-inline" id="sbCard_19">
+                        <span class="font-fun">Soal 19: Berapakah jumlah total kartu Bubble Buddy yang dimiliki SpongeBob di dalam album kesayangannya saat malam ini? </span>
+                        <input type="number" id="sbIn_19" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(19, 250)">Cek</button>
+                    </div>
+                    <p>SpongeBob juga menyiapkan <b>500 gram makanan</b> sereal laut untuk sarapan Gary dan dirinya sendiri di pagi esok. Sebanyak <b>100 gram makanan</b> sereal ternyata sudah tumpah karena kotak makanannya digigit oleh Gary yang lapar. Sisa makanan sereal yang ada akan dibagi rata ke dalam <b>2 buah mangkuk</b> porselen berwarna kuning dan biru. SpongeBob mematikan lampu rumah nanasnya dan berbaring di tempat tidur sambil memeluk boneka beruang kesayangannya. Gary mendengkur halus di samping SpongeBob menciptakan suasana malam yang sangat tenang dan damai di Bikini Bottom. Dia menutup mata dan bermimpi tentang petualangan matematika yang jauh lebih seru lagi di masa depan nanti. Selamat malam Bikini Bottom, sampai jumpa di petualangan koki SpongeBob yang sangat hebat dan luar biasa.</p>
+                    <div class="sb-question-inline" id="sbCard_20">
+                        <span class="font-fun">Soal 20: Berapa gram makanan pada setiap mangkuknya? </span>
+                        <input type="number" id="sbIn_20" class="input-box" style="width: 150px;">
+                        <button class="btn-check" style="background: var(--sb-brown);" onclick="checkSpongeAnswer(20, 200)">Cek</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide7">
+        <h2 class="slide-title">Kesimpulan & Refleksi Belajar</h2>
+        <div class="content-area">
+            <div class="grid-2">
+                <div class="card" style="border-top: 6px solid var(--success);">
+                    <h3 style="margin-bottom: 15px; color: var(--success);"><i class="fa-solid fa-star"></i> Rangkuman Aturan</h3>
+                    <p style="font-size: 18px;">Ingat selalu hierarki hitung campuran ini:</p>
+                    <ol style="padding-left: 20px; margin-top: 10px; font-size: 16px;">
+                        <li>Selesaikan angka di dalam <b>Tanda Kurung</b>.</li>
+                        <li>Selesaikan <b>Perkalian & Pembagian</b> dari kiri ke kanan.</li>
+                        <li>Selesaikan <b>Penjumlahan & Pengurangan</b> dari kiri ke kanan.</li>
+                    </ol>
+                </div>
+                <div class="card" style="border-top: 6px solid #f59e0b;">
+                    <h3 style="margin-bottom: 15px; color: #d97706;"><i class="fa-solid fa-comments"></i> Diskusi Grup</h3>
+                    <p style="font-size: 18px;">Diskusikan bersama teman sekelompokmu:</p>
+                    <ul style="padding-left: 20px; font-size: 16px;">
+                        <li>Misi manakah yang menurut kalian paling menantang?</li>
+                        <li>Apakah kalian sudah berbagi peran secara adil tadi?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" id="slide8" style="text-align: center; justify-content: center; background: var(--primary); color: white;">
+        <h1 style="color: white; font-size: 75px;">Kerja Bagus!</h1>
+        <p style="font-size: 26px; margin-top: 25px;">Grup Belajar Kalian Sangat Kompak & Hebat.</p>
+        <div style="margin-top: 40px;"><i class="fa-solid fa-award" style="font-size: 130px; color: var(--sb-yellow);"></i></div>
+    </div>
+
+    <div class="global-nav">
+        <button class="nav-btn" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="slideIndicator" style="font-weight: bold; font-size: 18px; min-width: 60px; text-align: center;">1 / 8</div>
+        <button class="nav-btn" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<audio id="spongeMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+<script>
+    let curSlide = 1;
+    const totalSlides = 8;
+    let s1Name = "Siswa 1";
+    let s2Name = "Siswa 2";
+
+    // Bagian Script yang Diperbarui untuk Mendukung 20 Soal di Slide 6
+    function checkSpongeAnswer(id, correctVal) {
+        const inputVal = parseInt(document.getElementById(`sbIn_${id}`).value);
+        const elementCard = document.getElementById(`sbCard_${id}`);
+        
+        if (inputVal === correctVal) {
+            elementCard.style.backgroundColor = "#bbf7d0";
+            elementCard.style.borderColor = "var(--success)";
+            const targetStudent = (id % 2 === 1) ? s1Name : s2Name;
+            runVoiceOutput(`Good job ${targetStudent}`);
+            playAudioTone(true);
+        } else {
+            elementCard.style.backgroundColor = "#fecaca";
+            elementCard.style.borderColor = "var(--danger)";
+            runVoiceOutput("Try again");
+            playAudioTone(false);
+        }
+    }
+
+    // Fungsi navigasi dan data lainnya tetap sama
+    const bankM1 = [
+        {eq: "12 + 4 &times; 5", op: "kali", ans: 32},
+        {eq: "(20 - 5) &div; 3", op: "kurung", ans: 5},
+        {eq: "40 &div; 8 + 7", op: "bagi", ans: 12},
+        {eq: "15 &times; 2 - 10", op: "kali", ans: 20},
+        {eq: "30 - 12 + 8", op: "kurang", ans: 26},
+        {eq: "5 + 24 &div; 6", op: "bagi", ans: 9},
+        {eq: "18 &div; (3 + 3)", op: "kurung", ans: 3},
+        {eq: "7 &times; 6 + 4", op: "kali", ans: 46},
+        {eq: "25 + 15 - 20", op: "tambah", ans: 20},
+        {eq: "14 + 40 &div; 5", op: "bagi", ans: 22},
+        {eq: "9 &times; (2 + 5)", op: "kurung", ans: 63},
+        {eq: "50 - 5 &times; 8", op: "kali", ans: 10},
+        {eq: "36 &div; 4 &times; 3", op: "bagi", ans: 27},
+        {eq: "100 - (20 + 30)", op: "kurung", ans: 50},
+        {eq: "8 + 9 - 5", op: "tambah", ans: 12},
+        {eq: "42 &div; 7 - 2", op: "bagi", ans: 4},
+        {eq: "6 &times; 8 &div; 2", op: "kali", ans: 24},
+        {eq: "(15 + 5) &times; 4", op: "kurung", ans: 80},
+        {eq: "60 - 15 &div; 3", op: "bagi", ans: 55},
+        {eq: "12 &times; 3 + 4", op: "kali", ans: 40}
+    ];
+    let idxM1 = 0;
+
+    const bankM2 = [
+        {q: "Ali memiliki 5 kotak pensil. Setiap kotak berisi 10 pensil. Jika Ali memberikan 15 pensil kepada adiknya, berapakah sisa pensil Ali sekarang?", ans: 35, sol: "Langkah: 5 &times; 10 - 15 = 50 - 15 = 35 pensil."},
+        {q: "Ibu membeli 3 keranjang apel. Setiap keranjang berisi 24 buah. Ada 4 apel busuk. Sisa apel dibagi rata ke 8 kantong. Berapa isi setiap kantong?", ans: 8, sol: "Langkah: (3 &times; 24 - 4) &div; 8. (Angka disesuaikan)"},
+        {q: "Kakek membagikan uang Rp 100.000 kepada 4 orang cucu sama rata. Jika satu cucu belanja Rp 10.000, berapa sisanya?", ans: 15000, sol: "Langkah: (100.000 &div; 4) - 10.000 = 15.000"},
+        {q: "Toko menerima 6 karung baju. Tiap karung isi 15 baju. Di gudang masih ada sisa 20 baju. Berapa total baju?", ans: 110, sol: "6 &times; 15 + 20 = 110"},
+        {q: "Budi punya 80 kelereng. Dimasukkan ke 2 wadah sama banyak. Kakak ambil 15 kelereng dari wadah pertama. Sisa kelereng di wadah pertama?", ans: 25, sol: "80 &div; 2 - 15 = 25"}
+    ];
+    let idxM2 = 0;
+
+    function goToSlide(n) {
+        if(n < 1 || n > totalSlides) return;
+        document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+        document.getElementById(`slide${n}`).classList.add('active');
+        document.getElementById('slideIndicator').innerText = `${n} / ${totalSlides}`;
+        curSlide = n;
+        if(n === 4) setupM1Question();
+        if(n === 5) setupM2Question();
+    }
+    function nextSlide() { goToSlide(curSlide + 1); }
+    function prevSlide() { goToSlide(curSlide - 1); }
+    function saveStudentsData() {
+        s1Name = document.getElementById('nameSiswa1').value || "Siswa 1";
+        s2Name = document.getElementById('nameSiswa2').value || "Siswa 2";
+        nextSlide();
+    }
+
+    function playAudioTone(isCorrect) {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+        if (isCorrect) {
+            oscillator.frequency.setValueAtTime(587, audioCtx.currentTime);
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+        } else {
+            oscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
+            oscillator.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.2);
+        }
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3);
+    }
+
+    function runVoiceOutput(text) {
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = 'id-ID'; window.speechSynthesis.speak(speech);
+    }
+
+    let m1Cleared = false;
+    function setupM1Question() {
+        m1Cleared = false;
+        document.getElementById('m1Count').innerText = (idxM1 + 1);
+        document.getElementById('m1Equation').innerHTML = bankM1[idxM1].eq;
+        document.getElementById('m1FinalStep').style.display = "none";
+        document.getElementById('m1AnswInput').value = "";
+        document.querySelectorAll('.op-btn').forEach(b => b.className = "op-btn");
+    }
+    function checkM1Op(op) {
+        if(m1Cleared) return;
+        if (op === bankM1[idxM1].op) {
+            document.getElementById(`opBtn_${op}`).classList.add('selected-correct');
+            m1Cleared = true;
+            document.getElementById('m1FinalStep').style.display = "block";
+            playAudioTone(true);
+        } else {
+            document.getElementById(`opBtn_${op}`).classList.add('selected-wrong');
+            playAudioTone(false);
+        }
+    }
+    function checkM1FinalAnswer() {
+        if (parseInt(document.getElementById('m1AnswInput').value) === bankM1[idxM1].ans) {
+            runVoiceOutput("Good job"); playAudioTone(true);
+        } else {
+            runVoiceOutput("Try again"); playAudioTone(false);
+        }
+    }
+    function nextM1Question() { idxM1 = (idxM1 + 1) % bankM1.length; setupM1Question(); }
+
+    function setupM2Question() {
+        document.getElementById('m2Count').innerText = (idxM2 + 1);
+        document.getElementById('m2QuestionText').innerHTML = bankM2[idxM2 % bankM2.length].q;
+        document.getElementById('m2Input').value = "";
+        document.getElementById('m2SolutionBox').style.display = "none";
+    }
+    function checkM2Answer() {
+        if (parseInt(document.getElementById('m2Input').value) === bankM2[idxM2 % bankM2.length].ans) {
+            runVoiceOutput("Good job"); playAudioTone(true);
+        } else {
+            runVoiceOutput("Try again"); playAudioTone(false);
+        }
+    }
+    function toggleM2Solution() {
+        const box = document.getElementById('m2SolutionBox');
+        box.innerHTML = bankM2[idxM2 % bankM2.length].sol;
+        box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+    function nextM2Question() { idxM2++; setupM2Question(); }
+
+    let isPlaying = false;
+    function toggleSpongeBobMusic() {
+        const m = document.getElementById('spongeMusic');
+        if(!isPlaying) { m.play(); isPlaying = true; } else { m.pause(); isPlaying = false; }
+    }
+    function changeVolume(v) { document.getElementById('spongeMusic').volume = v; }
+</script>
+</body>
+</html>
