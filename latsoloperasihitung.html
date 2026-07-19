@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Petualangan Operasi Hitung — Belajar Matematika Seru!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF5F8; --bg2:#F9F0FA; --bg3:#FFEFF5;
+  --card:#FFFFFF; --card-h:#FFFBFD;
+  --pink:#FF6B9D; --pink-s:#FF8FB5; --pink-bg:rgba(255,107,157,.1);
+  --lav:#9B7FE0; --lav-s:#B8A2EE; --lav-bg:rgba(155,127,224,.1);
+  --yellow:#FFC93C; --yellow-s:#FFD970; --yellow-bg:rgba(255,201,60,.18);
+  --mint:#4ECDC4; --mint-s:#6FE0D8; --mint-bg:rgba(78,205,196,.12);
+  --peach:#FFB088;
+  --cream:#FFFBFD; --text:#3D2535; --dim:#9B7E8F;
+  --border:rgba(155,127,224,.18);
+  --shadow:0 12px 40px rgba(255,107,157,.12);
+  --shadow-lg:0 20px 60px rgba(155,127,224,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FFF5F8 0%,#F9F0FA 100%);color:var(--text);line-height:1.5}
+.display{font-family:'Fredoka',sans-serif;font-weight:700;letter-spacing:-.01em}
+
+/* Background girly */
+.bg-layer{position:fixed;inset:0;z-index:-2;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%,rgba(255,107,157,.18) 0%,transparent 60%),
+    radial-gradient(ellipse 70% 70% at 85% 80%,rgba(155,127,224,.18) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,rgba(255,201,60,.1) 0%,transparent 70%),
+    linear-gradient(135deg,#FFF5F8 0%,#F9F0FA 100%);
+}
+.bg-layer::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,107,157,.06) 1.5px,transparent 1.5px),radial-gradient(circle at 70% 60%,rgba(155,127,224,.06) 1.5px,transparent 1.5px);
+  background-size:50px 50px,80px 80px;opacity:.7}
+.float-sym{position:absolute;font-family:'Fredoka',sans-serif;font-weight:600;opacity:.15;user-select:none;pointer-events:none;animation:float 18s infinite ease-in-out}
+@keyframes float{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(20px,-30px) rotate(8deg)}}
+.bg-shape{position:absolute;border-radius:50%;filter:blur(40px);opacity:.5;animation:float 20s infinite ease-in-out}
+.bg-shape.s1{width:280px;height:280px;background:var(--pink);top:10%;left:5%}
+.bg-shape.s2{width:220px;height:220px;background:var(--lav);bottom:10%;right:8%;animation-delay:-5s}
+.bg-shape.s3{width:180px;height:180px;background:var(--yellow);top:60%;left:55%;animation-delay:-10s;opacity:.3}
+
+/* Top Nav */
+.top-nav{position:fixed;top:1rem;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:.55rem 1rem;border-radius:100px;border:1.5px solid var(--border);z-index:100;box-shadow:0 8px 32px rgba(255,107,157,.15)}
+.nav-btn{background:var(--pink-bg);border:1.5px solid var(--border);color:var(--pink);width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1.1rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.nav-btn:hover:not(:disabled){background:var(--pink);color:#fff;transform:scale(1.1)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.progress-info{font-size:.85rem;color:var(--dim);font-weight:700;letter-spacing:.05em;min-width:48px;text-align:center;font-family:'Fredoka',sans-serif}
+.dots{display:flex;gap:.35rem}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--border);border:none;cursor:pointer;transition:all .3s;padding:0}
+.dot.active{background:var(--pink);width:28px;border-radius:5px}
+.dot:hover:not(.active){background:var(--lav-s)}
+
+/* Slides */
+.slide{position:fixed;inset:0;padding:4.5rem 2.5rem 2rem;overflow-y:auto;display:none;flex-direction:column;animation:slideIn .5s ease}
+.slide.active{display:flex}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.slide::-webkit-scrollbar{width:10px}
+.slide::-webkit-scrollbar-track{background:transparent}
+.slide::-webkit-scrollbar-thumb{background:var(--pink-bg);border-radius:5px}
+.slide::-webkit-scrollbar-thumb:hover{background:var(--pink-s)}
+
+/* Common */
+.badge{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;background:var(--pink-bg);color:var(--pink);border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid rgba(255,107,157,.25);font-family:'Fredoka',sans-serif}
+.badge .star{color:var(--yellow)}
+.btn{background:linear-gradient(135deg,var(--pink) 0%,var(--pink-s) 100%);color:#fff;border:none;padding:1rem 2.3rem;font-size:1.05rem;font-weight:700;border-radius:100px;cursor:pointer;transition:all .3s;font-family:'Fredoka',sans-serif;box-shadow:0 8px 24px rgba(255,107,157,.35);display:inline-flex;align-items:center;gap:.5rem}
+.btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 14px 32px rgba(255,107,157,.5)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{background:#fff;color:var(--lav);border:1.5px solid var(--border);box-shadow:0 4px 12px rgba(155,127,224,.1)}
+.btn-ghost:hover:not(:disabled){background:var(--lav-bg);color:var(--lav);border-color:var(--lav-s);box-shadow:0 6px 16px rgba(155,127,224,.2)}
+.btn-sm{padding:.55rem 1.1rem;font-size:.85rem}
+
+/* === SLIDE 1: COVER === */
+.cover-content{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:1100px;margin:0 auto;width:100%;padding:1rem 0}
+.cover-title{font-size:clamp(2.8rem,7.5vw,6rem);line-height:.95;margin:1rem 0 .5rem;background:linear-gradient(135deg,var(--pink) 0%,var(--lav) 50%,var(--yellow) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 8px 30px rgba(255,107,157,.2))}
+.cover-sub{font-size:1.15rem;color:var(--dim);margin-bottom:2.2rem;max-width:600px}
+.name-inputs{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;width:100%;max-width:720px;margin-bottom:2rem}
+.name-card{background:rgba(255,255,255,.7);border:2px solid var(--border);border-radius:24px;padding:1.3rem 1.5rem;transition:all .3s;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.name-card.s1{border-color:rgba(255,107,157,.3)}
+.name-card.s2{border-color:rgba(155,127,224,.3)}
+.name-card:focus-within{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.name-card.s1:focus-within{border-color:var(--pink);box-shadow:0 12px 36px rgba(255,107,157,.25)}
+.name-card.s2:focus-within{border-color:var(--lav);box-shadow:0 12px 36px rgba(155,127,224,.25)}
+.name-label{display:flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;font-family:'Fredoka',sans-serif}
+.name-card.s1 .name-label{color:var(--pink)}
+.name-card.s2 .name-label{color:var(--lav)}
+.name-dot{width:12px;height:12px;border-radius:50%}
+.s1 .name-dot{background:var(--pink);box-shadow:0 0 12px var(--pink)}
+.s2 .name-dot{background:var(--lav);box-shadow:0 0 12px var(--lav)}
+.name-input{width:100%;background:transparent;border:none;border-bottom:2px solid var(--border);color:var(--text);font-size:1.4rem;font-family:'Fredoka',sans-serif;font-weight:600;padding:.4rem 0;outline:none;transition:border-color .3s}
+.name-card.s1 .name-input:focus{border-color:var(--pink)}
+.name-card.s2 .name-input:focus{border-color:var(--lav)}
+.name-input::placeholder{color:var(--dim);opacity:.6}
+
+/* === SLIDE 2: OBJECTIVES === */
+.slide-header{max-width:1200px;margin:0 auto 2rem;width:100%}
+.slide-title{font-size:clamp(2rem,5vw,3.5rem);margin:.5rem 0;color:var(--text)}
+.slide-sub{color:var(--dim);font-size:1.05rem;max-width:700px}
+.objectives-grid{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.obj-card{background:rgba(255,255,255,.8);border:1.5px solid var(--border);border-radius:22px;padding:1.5rem;transition:all .3s;position:relative;overflow:hidden;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.obj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pink),var(--lav),var(--yellow));transform:scaleX(0);transform-origin:left;transition:transform .4s;border-radius:22px 22px 0 0}
+.obj-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--pink-s)}
+.obj-card:hover::before{transform:scaleX(1)}
+.obj-num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.5rem;background:linear-gradient(135deg,var(--pink),var(--lav));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:.5rem}
+.obj-title{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;color:var(--text);font-family:'Fredoka',sans-serif}
+.obj-desc{color:var(--dim);font-size:.92rem;line-height:1.55}
+
+/* === SLIDE 3: ORDER OF OPERATIONS === */
+.order-content{max-width:1200px;margin:0 auto;width:100%;flex:1}
+.order-steps{display:flex;flex-direction:column;gap:1rem;margin:1.5rem 0}
+.order-step{display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:center;background:rgba(255,255,255,.8);border:1.5px solid var(--border);border-radius:22px;padding:1.3rem 1.8rem;backdrop-filter:blur(10px);transition:all .3s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.order-step:hover{transform:translateX(8px);border-color:var(--pink-s);box-shadow:var(--shadow-lg)}
+.order-step .step-num{font-family:'Fredoka',sans-serif;font-weight:700;font-size:3rem;line-height:1;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.order-step:nth-child(1) .step-num{background:linear-gradient(135deg,var(--pink),var(--pink-s))}
+.order-step:nth-child(2) .step-num{background:linear-gradient(135deg,var(--lav),var(--lav-s))}
+.order-step:nth-child(3) .step-num{background:linear-gradient(135deg,var(--yellow),var(--yellow-s));color:var(--text)}
+.step-body h3{font-size:1.3rem;font-weight:700;margin-bottom:.3rem;font-family:'Fredoka',sans-serif}
+.step-body p{color:var(--dim);font-size:.95rem}
+.step-tag{padding:.4rem .9rem;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-family:'Fredoka',sans-serif}
+.order-step:nth-child(1) .step-tag{background:var(--pink-bg);color:var(--pink)}
+.order-step:nth-child(2) .step-tag{background:var(--lav-bg);color:var(--lav)}
+.order-step:nth-child(3) .step-tag{background:var(--yellow-bg);color:#B8860B}
+.example-box{background:linear-gradient(135deg,rgba(255,107,157,.08),rgba(155,127,224,.08));border:1.5px solid var(--border);border-radius:22px;padding:1.5rem 2rem;margin-top:1.5rem;box-shadow:var(--shadow)}
+.example-box h4{color:var(--pink);font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-family:'Fredoka',sans-serif}
+.example-calc{font-family:'Fredoka',sans-serif;font-size:1.5rem;font-weight:600;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.ex-step{padding:.4rem .9rem;border-radius:12px;background:#fff;border:1.5px solid var(--border);transition:all .3s}
+.ex-step.active{background:var(--pink);color:#fff;transform:scale(1.08);border-color:var(--pink)}
+.ex-op{color:var(--dim);font-weight:400}
+.ex-result{color:var(--lav);font-size:1.7rem;font-weight:700}
+
+/* === SLIDE 4: REAL-LIFE === */
+.ops-grid{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.op-card{background:rgba(255,255,255,.8);border:1.5px solid var(--border);border-radius:22px;padding:1.8rem;backdrop-filter:blur(10px);transition:all .3s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.op-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+.op-card.add{border-top:4px solid var(--mint)}
+.op-card.sub{border-top:4px solid var(--pink)}
+.op-card.mul{border-top:4px solid var(--lav)}
+.op-card.div{border-top:4px solid var(--yellow)}
+.op-icon{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:2rem;font-weight:700;margin-bottom:1rem}
+.op-card.add .op-icon{background:var(--mint-bg);color:var(--mint)}
+.op-card.sub .op-icon{background:var(--pink-bg);color:var(--pink)}
+.op-card.mul .op-icon{background:var(--lav-bg);color:var(--lav)}
+.op-card.div .op-icon{background:var(--yellow-bg);color:#B8860B}
+.op-card h3{font-size:1.4rem;font-weight:700;margin-bottom:.4rem;font-family:'Fredoka',sans-serif}
+.op-desc{color:var(--dim);font-size:.92rem;margin-bottom:1rem}
+.op-keywords{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.op-keywords span{padding:.3rem .8rem;background:var(--bg3);border-radius:100px;font-size:.76rem;color:var(--text);border:1px solid var(--border);font-weight:600}
+.op-example{font-size:.88rem;color:var(--dim);padding:.7rem .9rem;background:rgba(255,255,255,.6);border-radius:12px;border-left:3px solid var(--yellow);font-style:italic}
+
+/* === SLIDE 5: PRACTICE === */
+.quiz-toolbar{max-width:1300px;margin:0 auto 1rem;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;background:rgba(255,255,255,.85);border:1.5px solid var(--border);border-radius:22px;padding:.9rem 1.3rem;backdrop-filter:blur(10px);flex-wrap:wrap;box-shadow:var(--shadow)}
+.q-info{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.q-number{font-family:'Fredoka',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text)}
+.q-number span{color:var(--pink)}
+.q-tags{display:flex;gap:.4rem}
+.q-tag{padding:.3rem .75rem;border-radius:100px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-family:'Fredoka',sans-serif}
+.q-tag.type{background:var(--lav-bg);color:var(--lav);border:1px solid var(--border)}
+.q-tag.mudah{background:var(--mint-bg);color:var(--mint)}
+.q-tag.sedang{background:var(--yellow-bg);color:#B8860B}
+.q-tag.hots{background:var(--pink-bg);color:var(--pink)}
+.timer-display{display:flex;align-items:center;gap:.7rem;background:linear-gradient(135deg,#fff,var(--bg3));padding:.5rem 1.1rem;border-radius:100px;border:1.5px solid var(--border)}
+.timer-icon{width:20px;height:20px;border:2px solid var(--mint);border-radius:50%;position:relative}
+.timer-icon::before{content:'';position:absolute;top:50%;left:50%;width:1.5px;height:7px;background:var(--mint);transform-origin:bottom center;transform:translate(-50%,-100%) rotate(0deg);animation:tick 2s linear infinite}
+@keyframes tick{to{transform:translate(-50%,-100%) rotate(360deg)}}
+.timer-text{font-family:'Fredoka',sans-serif;font-size:1.4rem;font-weight:700;min-width:64px;color:var(--mint)}
+.timer-display.warn{border-color:var(--yellow)}
+.timer-display.warn .timer-text{color:#B8860B}
+.timer-display.warn .timer-icon{border-color:var(--yellow)}
+.timer-display.warn .timer-icon::before{background:var(--yellow)}
+.timer-display.danger{border-color:var(--pink)}
+.timer-display.danger .timer-text{color:var(--pink);animation:pulse 1s infinite}
+.timer-display.danger .timer-icon{border-color:var(--pink)}
+.timer-display.danger .timer-icon::before{background:var(--pink)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.toolbar-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.quiz-grid{max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.student-panel{background:rgba(255,255,255,.85);border:2px solid var(--border);border-radius:22px;padding:1.3rem;backdrop-filter:blur(10px);display:flex;flex-direction:column;min-height:380px;box-shadow:var(--shadow)}
+.student-panel.s2{border-color:rgba(155,127,224,.35)}
+.student-panel.s1{border-color:rgba(255,107,157,.35)}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1.5px dashed var(--border)}
+.panel-name{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1.05rem;font-family:'Fredoka',sans-serif}
+.s2 .panel-name{color:var(--lav)}
+.s1 .panel-name{color:var(--pink)}
+.panel-status{font-size:.72rem;padding:.3rem .75rem;border-radius:100px;background:var(--bg3);color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-family:'Fredoka',sans-serif}
+.panel-status.answered{background:var(--mint-bg);color:var(--mint)}
+.panel-status.locked-status{background:var(--yellow-bg);color:#B8860B}
+.panel-status.correct-status{background:var(--mint-bg);color:var(--mint)}
+.panel-status.wrong-status{background:var(--pink-bg);color:var(--pink)}
+.question-text{font-size:1.05rem;line-height:1.55;margin-bottom:1.1rem;font-weight:600;color:var(--text)}
+.options-list{display:flex;flex-direction:column;gap:.5rem;flex:1}
+.option-btn{background:#fff;border:1.5px solid var(--border);color:var(--text);padding:.75rem 1rem;border-radius:14px;cursor:pointer;text-align:left;font-family:inherit;font-size:.95rem;transition:all .2s;display:flex;align-items:center;gap:.7rem;font-weight:600}
+.option-btn:hover:not(:disabled):not(.locked){background:var(--card-h);border-color:var(--lav-s);transform:translateX(2px)}
+.option-btn.selected{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.option-btn.correct{background:var(--mint-bg);border-color:var(--mint);color:var(--mint)}
+.option-btn.wrong{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.option-btn:disabled{cursor:not-allowed}
+.option-btn.locked{cursor:not-allowed;opacity:.95}
+.option-letter{width:26px;height:26px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;font-family:'Fredoka',sans-serif}
+.option-btn.selected .option-letter{background:var(--pink);color:#fff}
+.option-btn.correct .option-letter{background:var(--mint);color:#fff}
+.option-btn.wrong .option-letter{background:var(--pink);color:#fff}
+.tf-buttons{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;flex:1}
+.tf-btn{background:#fff;border:1.5px solid var(--border);color:var(--text);padding:1.3rem;border-radius:14px;cursor:pointer;font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:600;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.tf-btn:hover:not(:disabled):not(.locked){background:var(--card-h);border-color:var(--lav-s)}
+.tf-btn.selected{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.tf-btn.correct{background:var(--mint-bg);border-color:var(--mint);color:var(--mint)}
+.tf-btn.wrong{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.tf-icon{font-size:1.7rem}
+.checkbox-option{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;background:#fff;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s;font-weight:600}
+.checkbox-option:hover:not(.locked){background:var(--card-h);border-color:var(--lav-s)}
+.checkbox-option.selected{background:var(--pink-bg);border-color:var(--pink)}
+.checkbox-option.correct{background:var(--mint-bg);border-color:var(--mint)}
+.checkbox-option.wrong{background:var(--pink-bg);border-color:var(--pink)}
+.checkbox-box{width:24px;height:24px;border-radius:8px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.checkbox-option.selected .checkbox-box{background:var(--pink);border-color:var(--pink)}
+.checkbox-option.selected .checkbox-box::after{content:'';width:7px;height:12px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.checkbox-option.correct .checkbox-box{background:var(--mint);border-color:var(--mint)}
+.checkbox-option.correct .checkbox-box::after{content:'';width:7px;height:12px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.match-row{display:grid;grid-template-columns:1fr auto 1fr;gap:.7rem;align-items:center;padding:.5rem 0;border-bottom:1px dashed var(--border)}
+.match-row:last-child{border-bottom:none}
+.match-left{font-weight:700;font-size:.92rem;padding:.5rem .7rem;background:var(--bg3);border-radius:10px;text-align:center;font-family:'Fredoka',sans-serif}
+.match-arrow{color:var(--lav);font-weight:700;font-size:1.1rem}
+.match-select{background:#fff;border:1.5px solid var(--border);color:var(--text);padding:.55rem .7rem;border-radius:10px;font-family:inherit;font-size:.92rem;cursor:pointer;outline:none;transition:border-color .2s;width:100%;font-weight:600}
+.match-select:focus{border-color:var(--pink)}
+.match-select:disabled{cursor:not-allowed;opacity:.75}
+.match-select.correct{background:var(--mint-bg);border-color:var(--mint);color:var(--mint)}
+.match-select.wrong{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.isian-input{width:100%;background:#fff;border:1.5px solid var(--border);color:var(--text);padding:.85rem 1rem;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.3rem;font-weight:600;outline:none;transition:border-color .2s;text-align:center}
+.isian-input:focus{border-color:var(--pink)}
+.isian-input:disabled{cursor:not-allowed;opacity:.85}
+.isian-input.correct{background:var(--mint-bg);border-color:var(--mint);color:var(--mint)}
+.isian-input.wrong{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.lock-btn{margin-top:1rem;background:#fff;border:1.5px solid var(--border);color:var(--dim);padding:.6rem 1.1rem;border-radius:100px;cursor:pointer;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.88rem;transition:all .2s;align-self:flex-start}
+.lock-btn:hover:not(:disabled){transform:translateY(-2px)}
+.s2 .lock-btn:hover:not(:disabled){border-color:var(--lav);color:var(--lav);box-shadow:0 4px 12px rgba(155,127,224,.2)}
+.s1 .lock-btn:hover:not(:disabled){border-color:var(--pink);color:var(--pink);box-shadow:0 4px 12px rgba(255,107,157,.2)}
+.lock-btn.locked{background:var(--yellow-bg);border-color:var(--yellow);color:#B8860B;cursor:default}
+.explanation-box{max-width:1300px;margin:1rem auto 0;width:100%;background:linear-gradient(135deg,rgba(255,107,157,.06),rgba(155,127,224,.06));border:1.5px solid var(--border);border-radius:22px;padding:1.3rem 1.6rem;display:none;animation:slideIn .4s ease;box-shadow:var(--shadow)}
+.explanation-box.show{display:block}
+.explanation-box h4{color:var(--pink);font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;font-family:'Fredoka',sans-serif}
+.exp-content{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.exp-side{padding:.8rem 1rem;background:rgba(255,255,255,.7);border-radius:12px;border-left:4px solid}
+.exp-side.s2{border-color:var(--lav)}
+.exp-side.s1{border-color:var(--pink)}
+.exp-side h5{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.exp-side.s2 h5{color:var(--lav)}
+.exp-side.s1 h5{color:var(--pink)}
+.exp-side p{font-size:.92rem;color:var(--text)}
+.exp-detail{margin-top:.8rem;padding:.7rem .9rem;background:rgba(255,255,255,.6);border-radius:10px;font-size:.9rem;color:var(--dim)}
+
+/* === SLIDE 6: SCORES === */
+.scores-grid{max-width:1200px;margin:0 auto 1rem;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.score-card{background:rgba(255,255,255,.9);border:2px solid var(--border);border-radius:26px;padding:1.8rem;backdrop-filter:blur(10px);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.score-card.s2{border-color:rgba(155,127,224,.35)}
+.score-card.s1{border-color:rgba(255,107,157,.35)}
+.score-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;filter:blur(40px);opacity:.4}
+.score-card.s2::before{background:var(--lav)}
+.score-card.s1::before{background:var(--pink)}
+.score-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;position:relative}
+.score-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:1.6rem;font-weight:700;color:#fff}
+.s2 .score-avatar{background:linear-gradient(135deg,var(--lav),var(--lav-s))}
+.s1 .score-avatar{background:linear-gradient(135deg,var(--pink),var(--pink-s))}
+.score-name{font-size:1.3rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.score-tag{font-size:.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.score-big{font-family:'Fredoka',sans-serif;font-size:4rem;font-weight:700;line-height:1;margin:.5rem 0}
+.s2 .score-big{color:var(--lav)}
+.s1 .score-big{color:var(--pink)}
+.score-big small{font-size:1.3rem;color:var(--dim);font-weight:600}
+.score-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-top:1rem}
+.stat-box{background:var(--bg3);border-radius:14px;padding:.7rem .9rem}
+.stat-label{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.stat-val{font-family:'Fredoka',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text)}
+.score-bar{height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;margin-top:1rem}
+.score-bar-fill{height:100%;border-radius:5px;transition:width 1s ease}
+.s2 .score-bar-fill{background:linear-gradient(90deg,var(--lav),var(--lav-s))}
+.s1 .score-bar-fill{background:linear-gradient(90deg,var(--pink),var(--pink-s))}
+
+/* Detail grid */
+.detail-section{max-width:1200px;margin:1.5rem auto 0;width:100%;background:rgba(255,255,255,.85);border:1.5px solid var(--border);border-radius:22px;padding:1.4rem;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.detail-section h3{margin-bottom:1rem;font-size:1.2rem;font-family:'Fredoka',sans-serif;color:var(--text);display:flex;align-items:center;gap:.5rem}
+.detail-section h3 .icon{color:var(--pink)}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.7rem}
+.detail-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:.7rem;text-align:center;transition:all .2s}
+.detail-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(155,127,224,.15)}
+.dc-num{font-family:'Fredoka',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text);line-height:1}
+.dc-type{font-size:.62rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin:.2rem 0 .6rem;font-weight:700;font-family:'Fredoka',sans-serif}
+.dc-row{display:grid;grid-template-columns:auto 1fr auto;gap:.4rem;align-items:center;padding:.35rem .5rem;border-radius:8px;margin-top:.3rem;font-size:.82rem}
+.dc-row.s1{background:var(--pink-bg)}
+.dc-row.s2{background:var(--lav-bg)}
+.dc-tag{font-weight:700;font-size:.72rem;width:18px;text-align:left;font-family:'Fredoka',sans-serif}
+.dc-row.s1 .dc-tag{color:var(--pink)}
+.dc-row.s2 .dc-tag{color:var(--lav)}
+.dc-status{font-weight:700;font-family:'Fredoka',sans-serif}
+.dc-status.correct{color:var(--mint)}
+.dc-status.wrong{color:var(--pink)}
+.dc-status.skip{color:var(--dim)}
+.dc-time{font-size:.75rem;color:var(--dim);font-weight:600;font-family:'Fredoka',sans-serif}
+
+.winner-banner{max-width:1200px;margin:0 auto 1rem;width:100%;text-align:center;padding:1.2rem;background:linear-gradient(135deg,rgba(255,107,157,.12),rgba(155,127,224,.12));border:1.5px solid rgba(255,107,157,.25);border-radius:22px;box-shadow:var(--shadow)}
+.winner-banner h3{font-family:'Fredoka',sans-serif;font-size:1.6rem;color:var(--pink)}
+.winner-banner p{color:var(--dim);font-size:.95rem;margin-top:.3rem}
+
+/* === SLIDE 7: MEMORY GAME === */
+.memory-content{max-width:900px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column}
+.memory-players{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem}
+.mem-player{background:rgba(255,255,255,.85);border:2px solid var(--border);border-radius:20px;padding:1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;transition:all .3s;box-shadow:var(--shadow)}
+.mem-player.s2{border-color:rgba(155,127,224,.35)}
+.mem-player.s1{border-color:rgba(255,107,157,.35)}
+.mem-player.active{transform:scale(1.03);box-shadow:var(--shadow-lg)}
+.mem-player.s2.active{border-color:var(--lav);background:rgba(155,127,224,.08)}
+.mem-player.s1.active{border-color:var(--pink);background:rgba(255,107,157,.08)}
+.mem-player-info{display:flex;align-items:center;gap:.7rem}
+.mem-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;color:#fff}
+.s2 .mem-avatar{background:linear-gradient(135deg,var(--lav),var(--lav-s))}
+.s1 .mem-avatar{background:linear-gradient(135deg,var(--pink),var(--pink-s))}
+.mem-name{font-weight:700;font-size:1rem;font-family:'Fredoka',sans-serif}
+.mem-turn{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;font-weight:600;font-family:'Fredoka',sans-serif}
+.mem-score{font-family:'Fredoka',sans-serif;font-size:2.2rem;font-weight:700}
+.s2 .mem-score{color:var(--lav)}
+.s1 .mem-score{color:var(--pink)}
+.mem-board-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mem-board{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;width:100%;max-width:520px;margin:0 auto}
+.mem-card{aspect-ratio:1/1.15;perspective:1000px;cursor:pointer}
+.mem-card-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.mem-card.flipped .mem-card-inner,.mem-card.matched .mem-card-inner{transform:rotateY(180deg)}
+.mem-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:.4rem;text-align:center;font-weight:700}
+.mem-front{background:linear-gradient(135deg,var(--pink),var(--lav));border:2px solid #fff;font-family:'Fredoka',sans-serif;font-size:1.6rem;color:#fff;box-shadow:var(--shadow)}
+.mem-card:hover:not(.flipped):not(.matched) .mem-front{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.mem-back{background:#fff;border:2px solid var(--border);transform:rotateY(180deg);font-size:.9rem;line-height:1.2;color:var(--text);font-family:'Fredoka',sans-serif}
+.mem-card.matched .mem-back{border-color:var(--mint);background:var(--mint-bg);color:var(--mint);animation:matchPulse .5s ease}
+@keyframes matchPulse{0%{transform:rotateY(180deg) scale(1)}50%{transform:rotateY(180deg) scale(1.08)}100%{transform:rotateY(180deg) scale(1)}}
+.mem-card.s2-match.matched .mem-back{border-color:var(--lav);background:var(--lav-bg);color:var(--lav)}
+.mem-card.s1-match.matched .mem-back{border-color:var(--pink);background:var(--pink-bg);color:var(--pink)}
+.mem-controls{margin-top:1.2rem;display:flex;justify-content:center;gap:.7rem}
+.mem-result{margin-top:1rem;text-align:center;padding:1.2rem;background:rgba(255,255,255,.85);border:1.5px solid var(--border);border-radius:18px;display:none;box-shadow:var(--shadow)}
+.mem-result.show{display:block;animation:slideIn .4s ease}
+.mem-result h3{font-family:'Fredoka',sans-serif;font-size:1.7rem;color:var(--pink);margin-bottom:.3rem}
+
+/* === SLIDE 8: CONCLUSION === */
+.conclusion-content{max-width:1000px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column;justify-content:center}
+.conclusion-hero{text-align:center;margin-bottom:2rem}
+.conclusion-hero h2{font-size:clamp(2.2rem,5.5vw,4rem);line-height:1.05;margin:.5rem 0;font-family:'Fredoka',sans-serif;
+  background:linear-gradient(135deg,var(--pink),var(--lav),var(--yellow));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.conclusion-hero p{color:var(--dim);font-size:1.1rem;max-width:600px;margin:0 auto}
+.recap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.recap-item{background:rgba(255,255,255,.85);border:1.5px solid var(--border);border-radius:18px;padding:1rem 1.2rem;backdrop-filter:blur(10px);display:flex;align-items:center;gap:.8rem;transition:all .3s;box-shadow:var(--shadow)}
+.recap-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.recap-num{font-family:'Fredoka',sans-serif;font-size:1.8rem;font-weight:700;color:#fff;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pink),var(--lav));flex-shrink:0}
+.recap-text{font-size:.92rem;color:var(--text);line-height:1.4}
+.reflection-box{background:linear-gradient(135deg,rgba(255,107,157,.06),rgba(155,127,224,.06));border:1.5px solid var(--border);border-radius:22px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.reflection-box h3{font-size:1.15rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;font-family:'Fredoka',sans-serif;color:var(--text)}
+.reflection-inputs{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.reflection-input{display:flex;flex-direction:column;gap:.4rem}
+.reflection-input label{font-size:.78rem;color:var(--lav);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-family:'Fredoka',sans-serif}
+.reflection-input textarea{background:#fff;border:1.5px solid var(--border);color:var(--text);border-radius:12px;padding:.75rem .9rem;font-family:inherit;font-size:.92rem;resize:vertical;min-height:60px;outline:none;transition:border-color .2s}
+.reflection-input textarea:focus{border-color:var(--pink)}
+.thank-you{text-align:center;padding:1.8rem;background:linear-gradient(135deg,rgba(255,107,157,.1),rgba(155,127,224,.08));border:1.5px solid rgba(255,107,157,.2);border-radius:22px;box-shadow:var(--shadow)}
+.thank-you h3{font-family:'Fredoka',sans-serif;font-size:1.9rem;color:var(--pink);margin-bottom:.4rem}
+.thank-you p{color:var(--dim);font-size:.95rem}
+.thank-you .names{color:var(--lav);font-weight:700;font-family:'Fredoka',sans-serif}
+
+/* Toast */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120%);background:#fff;border:2px solid var(--border);color:var(--text);padding:.85rem 1.5rem;border-radius:100px;font-size:.9rem;font-weight:700;box-shadow:var(--shadow-lg);z-index:200;transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:.5rem;font-family:'Fredoka',sans-serif}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:var(--mint);color:var(--mint)}
+.toast.warn{border-color:var(--yellow);color:#B8860B}
+.toast.error{border-color:var(--pink);color:var(--pink)}
+
+/* Responsive */
+@media (max-width:900px){
+  .quiz-grid{grid-template-columns:1fr}
+  .scores-grid{grid-template-columns:1fr}
+  .name-inputs{grid-template-columns:1fr}
+  .memory-players{grid-template-columns:1fr}
+  .exp-content{grid-template-columns:1fr}
+  .reflection-inputs{grid-template-columns:1fr}
+  .order-step{grid-template-columns:auto 1fr}
+  .step-tag{grid-column:1/-1;justify-self:start}
+  .slide{padding:4rem 1.2rem 1.5rem}
+  .detail-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer">
+  <div class="bg-shape s1"></div>
+  <div class="bg-shape s2"></div>
+  <div class="bg-shape s3"></div>
+  <div class="float-sym" style="top:8%;left:6%;font-size:5rem;color:var(--pink);animation-delay:0s">♥</div>
+  <div class="float-sym" style="top:55%;left:12%;font-size:4rem;color:var(--lav);animation-delay:2s">✦</div>
+  <div class="float-sym" style="top:15%;right:8%;font-size:5.5rem;color:var(--yellow);animation-delay:1s">✿</div>
+  <div class="float-sym" style="bottom:12%;right:12%;font-size:4.5rem;color:var(--pink);animation-delay:3s">♥</div>
+  <div class="float-sym" style="top:45%;left:48%;font-size:3.5rem;color:var(--lav);animation-delay:4s">✦</div>
+  <div class="float-sym" style="top:75%;left:42%;font-size:3rem;color:var(--yellow);animation-delay:5s">✿</div>
+</div>
+
+<nav class="top-nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="progress-info" id="progress">1 / 8</span>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">›</button>
+</nav>
+
+<!-- SLIDE 1: COVER -->
+<section class="slide active" id="slide1">
+  <div class="cover-content">
+    <span class="badge"><span class="star">★</span> Petualangan Matematika</span>
+    <h1 class="display cover-title">Operasi Hitung & HOTS</h1>
+    <p class="cover-sub">Belajar operasi hitung jadi seru lewat duel soal, kompetisi seru, dan game memory yang mengasyikkan!</p>
+    <div class="name-inputs">
+      <div class="name-card s2">
+        <div class="name-label"><span class="name-dot"></span>SISWA 2 — Tim Kiri</div>
+        <input type="text" class="name-input" id="name2" placeholder="Tulis namamu..." maxlength="20">
+      </div>
+      <div class="name-card s1">
+        <div class="name-label"><span class="name-dot"></span>SISWA 1 — Tim Kanan</div>
+        <input type="text" class="name-input" id="name1" placeholder="Tulis namamu..." maxlength="20">
+      </div>
+    </div>
+    <button class="btn" onclick="startAdventure()">Mulai Petualangan →</button>
+  </div>
+</section>
+
+<!-- SLIDE 2: OBJECTIVES -->
+<section class="slide" id="slide2">
+  <div class="slide-header">
+    <span class="badge">Tujuan Pembelajaran</span>
+    <h2 class="display slide-title">Apa yang Akan Kita Kuasai?</h2>
+    <p class="slide-sub">Setelah petualangan ini, kalian akan menjadi ahli operasi hitung dan juara HOTS!</p>
+  </div>
+  <div class="objectives-grid">
+    <div class="obj-card">
+      <div class="obj-num">01</div>
+      <h3 class="obj-title">Urutan Operasi</h3>
+      <p class="obj-desc">Memahami urutan pengerjaan operasi hitung: kurung, kali/bagi, lalu tambah/kurang.</p>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">02</div>
+      <h3 class="obj-title">Penerapan Sehari-hari</h3>
+      <p class="obj-desc">Menggunakan operasi hitung dalam kehidupan nyata dan mengenali kata kuncinya.</p>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">03</div>
+      <h3 class="obj-title">Soal HOTS</h3>
+      <p class="obj-desc">Menyelesaikan soal Higher Order Thinking Skills dengan langkah strategis.</p>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">04</div>
+      <h3 class="obj-title">Kompetisi Sehat</h3>
+      <p class="obj-desc">Berlatih dengan semangat kompetisi yang sportif dan menyenangkan.</p>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">05</div>
+      <h3 class="obj-title">Memory Game Seru</h3>
+      <p class="obj-desc">Menyusun pasangan ekspresi operasi hitung dengan hasil yang tepat.</p>
+    </div>
+    <div class="obj-card">
+      <div class="obj-num">06</div>
+      <h3 class="obj-title">Refleksi Diri</h3>
+      <p class="obj-desc">Mengevaluasi pembelajaran dan merencanakan langkah perbaikan ke depan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: ORDER OF OPERATIONS -->
+<section class="slide" id="slide3">
+  <div class="slide-header">
+    <span class="badge">Aturan Emas</span>
+    <h2 class="display slide-title">Urutan Operasi Hitung</h2>
+    <p class="slide-sub">Ingat urutan ini agar tidak salah hitung. Ada 3 tingkat pengerjaan yang harus diurutkan!</p>
+  </div>
+  <div class="order-content">
+    <div class="order-steps">
+      <div class="order-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Kurung lebih dulu</h3>
+          <p>Semua operasi di dalam tanda kurung ( ) dikerjakan paling awal sebelum apapun.</p>
+        </div>
+        <span class="step-tag">Prioritas Tertinggi</span>
+      </div>
+      <div class="order-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Kali dan Bagi</h3>
+          <p>Setelah kurung, kerjakan perkalian (×) dan pembagian (÷) dari kiri ke kanan.</p>
+        </div>
+        <span class="step-tag">Prioritas Menengah</span>
+      </div>
+      <div class="order-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Tambah dan Kurang</h3>
+          <p>Terakhir, kerjakan penjumlahan (+) dan pengurangan (−) dari kiri ke kanan.</p>
+        </div>
+        <span class="step-tag">Prioritas Terakhir</span>
+      </div>
+    </div>
+    <div class="example-box">
+      <h4>★ Contoh Pengerjaan</h4>
+      <div class="example-calc">
+        <span class="ex-step" id="exOriginal">5 + 3 × (8 − 2)</span>
+        <span class="ex-op">→</span>
+        <span class="ex-step" id="ex1">5 + 3 × 6</span>
+        <span class="ex-op">→</span>
+        <span class="ex-step" id="ex2">5 + 18</span>
+        <span class="ex-op">→</span>
+        <span class="ex-step ex-result" id="ex3">23</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: REAL-LIFE APPLICATIONS -->
+<section class="slide" id="slide4">
+  <div class="slide-header">
+    <span class="badge">Penerapan Nyata</span>
+    <h2 class="display slide-title">Operasi Hitung di Kehidupan</h2>
+    <p class="slide-sub">Matematika ada di mana-mana! Kenali kata kuncinya agar mudah memilih operasi yang tepat.</p>
+  </div>
+  <div class="ops-grid">
+    <div class="op-card add">
+      <div class="op-icon">+</div>
+      <h3>Penjumlahan</h3>
+      <p class="op-desc">Menggabungkan dua kumpulan benda menjadi satu jumlah keseluruhan.</p>
+      <div class="op-keywords">
+        <span>Total</span><span>Seluruhnya</span><span>Gabungan</span><span>Bertambah</span><span>Kombinasi</span>
+      </div>
+      <div class="op-example">Ibu membeli 3 kg gula dan 2 kg tepung. Total belanjaan ibu adalah 5 kg.</div>
+    </div>
+    <div class="op-card sub">
+      <div class="op-icon">−</div>
+      <h3>Pengurangan</h3>
+      <p class="op-desc">Mencari selisih, sisa, atau perbedaan antara dua bilangan.</p>
+      <div class="op-keywords">
+        <span>Sisa</span><span>Selisih</span><span>Berkurang</span><span>Lebih sedikit</span><span>Beda</span>
+      </div>
+      <div class="op-example">Dari 10 kue, 4 dimakan. Sisa kue sekarang 6 buah.</div>
+    </div>
+    <div class="op-card mul">
+      <div class="op-icon">×</div>
+      <h3>Perkalian</h3>
+      <p class="op-desc">Menjumlahkan bilangan yang sama berulang kali. Penjumlahan berulang.</p>
+      <div class="op-keywords">
+        <span>Kali lipat</span><span>Setiap</span><span>Total grup</span><span>Sebanyak</span><span>Ganda</span>
+      </div>
+      <div class="op-example">1 kotak berisi 12 pensil. 5 kotak berarti 5 × 12 = 60 pensil.</div>
+    </div>
+    <div class="op-card div">
+      <div class="op-icon">÷</div>
+      <h3>Pembagian</h3>
+      <p class="op-desc">Membagi sesuatu menjadi bagian-bagian sama besar atau mengelompokkan.</p>
+      <div class="op-keywords">
+        <span>Bagi rata</span><span>Per orang</span><span>Dikelompokkan</span><span>Porsi</span><span>Sebanyak</span>
+      </div>
+      <div class="op-example">24 permen dibagi rata ke 6 anak. Setiap anak dapat 4 permen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: PRACTICE -->
+<section class="slide" id="slide5">
+  <div class="quiz-toolbar">
+    <div class="q-info">
+      <div class="q-number">Soal <span id="qNum">1</span>/40</div>
+      <div class="q-tags" id="qTags"></div>
+    </div>
+    <div class="timer-display" id="timerDisplay">
+      <div class="timer-icon"></div>
+      <div class="timer-text" id="timerText">02:00</div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-ghost btn-sm" onclick="addTime(15)">+15 detik</button>
+      <button class="btn btn-ghost btn-sm" onclick="prevQuestion()">‹ Sebelumnya</button>
+      <button class="btn btn-sm" onclick="checkAnswers()" id="checkBtn">Cek Jawaban</button>
+      <button class="btn btn-ghost btn-sm" onclick="nextQuestion()">Selanjutnya ›</button>
+    </div>
+  </div>
+  <div class="quiz-grid">
+    <div class="student-panel s2" id="panel2">
+      <div class="panel-header">
+        <div class="panel-name"><span class="name-dot" style="background:var(--lav)"></span><span id="panelName2">Siswa 2</span></div>
+        <div class="panel-status" id="status2">Belum dijawab</div>
+      </div>
+      <div id="question2"></div>
+    </div>
+    <div class="student-panel s1" id="panel1">
+      <div class="panel-header">
+        <div class="panel-name"><span class="name-dot" style="background:var(--pink)"></span><span id="panelName1">Siswa 1</span></div>
+        <div class="panel-status" id="status1">Belum dijawab</div>
+      </div>
+      <div id="question1"></div>
+    </div>
+  </div>
+  <div class="explanation-box" id="explanationBox">
+    <h4>♥ Pembahasan Soal</h4>
+    <div class="exp-content">
+      <div class="exp-side s2">
+        <h5>Siswa 2</h5>
+        <p id="exp2"></p>
+      </div>
+      <div class="exp-side s1">
+        <h5>Siswa 1</h5>
+        <p id="exp1"></p>
+      </div>
+    </div>
+    <div class="exp-detail" id="expDetail"></div>
+  </div>
+</section>
+
+<!-- SLIDE 6: SCORES -->
+<section class="slide" id="slide6">
+  <div class="slide-header">
+    <span class="badge">Hasil Pertandingan</span>
+    <h2 class="display slide-title">Skor & Statistik</h2>
+    <p class="slide-sub">Lihat performa kalian di sepanjang 40 soal. Siapa yang unggul?</p>
+  </div>
+  <div class="winner-banner" id="winnerBanner" style="display:none">
+    <h3 id="winnerText"></h3>
+    <p id="winnerSub"></p>
+  </div>
+  <div class="scores-grid">
+    <div class="score-card s2">
+      <div class="score-head">
+        <div class="score-avatar" id="avatar2">?</div>
+        <div>
+          <div class="score-name" id="scoreName2">Siswa 2</div>
+          <div class="score-tag">Tim Kiri</div>
+        </div>
+      </div>
+      <div class="score-big" id="scoreBig2">0<small>/40</small></div>
+      <div class="score-bar"><div class="score-bar-fill" id="scoreBar2" style="width:0"></div></div>
+      <div class="score-stats">
+        <div class="stat-box">
+          <div class="stat-label">Benar</div>
+          <div class="stat-val" id="statCorrect2">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Rata-rata Waktu</div>
+          <div class="stat-val" id="statAvg2">0s</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Total Waktu</div>
+          <div class="stat-val" id="statTotal2">0s</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Persentase</div>
+          <div class="stat-val" id="statPct2">0%</div>
+        </div>
+      </div>
+    </div>
+    <div class="score-card s1">
+      <div class="score-head">
+        <div class="score-avatar" id="avatar1">?</div>
+        <div>
+          <div class="score-name" id="scoreName1">Siswa 1</div>
+          <div class="score-tag">Tim Kanan</div>
+        </div>
+      </div>
+      <div class="score-big" id="scoreBig1">0<small>/40</small></div>
+      <div class="score-bar"><div class="score-bar-fill" id="scoreBar1" style="width:0"></div></div>
+      <div class="score-stats">
+        <div class="stat-box">
+          <div class="stat-label">Benar</div>
+          <div class="stat-val" id="statCorrect1">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Rata-rata Waktu</div>
+          <div class="stat-val" id="statAvg1">0s</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Total Waktu</div>
+          <div class="stat-val" id="statTotal1">0s</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Persentase</div>
+          <div class="stat-val" id="statPct1">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="detail-section">
+    <h3><span class="icon">♥</span> Detail Per Soal</h3>
+    <div class="detail-grid" id="detailGrid"></div>
+  </div>
+</section>
+
+<!-- SLIDE 7: MEMORY GAME -->
+<section class="slide" id="slide7">
+  <div class="slide-header">
+    <span class="badge">Game Battle</span>
+    <h2 class="display slide-title">Memory Operasi Hitung</h2>
+    <p class="slide-sub">Temukan pasangan ekspresi dengan hasil yang tepat! Bergantian membuka 2 kartu. Cocok = nilai + lanjut. Tidak cocok = giliran lawan.</p>
+  </div>
+  <div class="memory-content">
+    <div class="memory-players">
+      <div class="mem-player s2 active" id="memPlayer2">
+        <div class="mem-player-info">
+          <div class="mem-avatar" id="memAvatar2">?</div>
+          <div>
+            <div class="mem-name" id="memName2">Siswa 2</div>
+            <div class="mem-turn" id="memTurn2">Giliran kamu!</div>
+          </div>
+        </div>
+        <div class="mem-score" id="memScore2">0</div>
+      </div>
+      <div class="mem-player s1" id="memPlayer1">
+        <div class="mem-player-info">
+          <div class="mem-avatar" id="memAvatar1">?</div>
+          <div>
+            <div class="mem-name" id="memName1">Siswa 1</div>
+            <div class="mem-turn" id="memTurn1">Menunggu...</div>
+          </div>
+        </div>
+        <div class="mem-score" id="memScore1">0</div>
+      </div>
+    </div>
+    <div class="mem-board-wrap">
+      <div class="mem-board" id="memBoard"></div>
+      <div class="mem-result" id="memResult">
+        <h3 id="memResultTitle"></h3>
+        <p id="memResultText" style="color:var(--dim);margin-top:.3rem"></p>
+      </div>
+      <div class="mem-controls">
+        <button class="btn btn-ghost btn-sm" onclick="initMemoryGame()">Mulai Ulang Game</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: CONCLUSION -->
+<section class="slide" id="slide8">
+  <div class="conclusion-content">
+    <div class="conclusion-hero">
+      <span class="badge">Penutup</span>
+      <h2 class="display">Selamat, Kalian Sudah Selesai!</h2>
+      <p id="conclusionNames">Hari ini kalian berdua telah menyelesaikan petualangan matematika yang luar biasa.</p>
+    </div>
+    <div class="recap-grid">
+      <div class="recap-item">
+        <div class="recap-num">1</div>
+        <div class="recap-text">Urutan operasi: <strong>Kurung → Kali/Bagi → Tambah/Kurang</strong></div>
+      </div>
+      <div class="recap-item">
+        <div class="recap-num">2</div>
+        <div class="recap-text">Kenali kata kunci untuk memilih operasi yang tepat.</div>
+      </div>
+      <div class="recap-item">
+        <div class="recap-num">3</div>
+        <div class="recap-text">Soal HOTS butuh langkah strategis dan logika berurutan.</div>
+      </div>
+      <div class="recap-item">
+        <div class="recap-num">4</div>
+        <div class="recap-text">Latihan terus agar makin cepat dan tepat menghitung!</div>
+      </div>
+    </div>
+    <div class="reflection-box">
+      <h3>♥ Refleksi Pembelajaran</h3>
+      <div class="reflection-inputs">
+        <div class="reflection-input">
+          <label>Hal baru yang kamu pelajari hari ini</label>
+          <textarea id="refl1" placeholder="Tuliskan hal baru yang kamu kuasai..."></textarea>
+        </div>
+        <div class="reflection-input">
+          <label>Bagian yang paling kamu sukai</label>
+          <textarea id="refl2" placeholder="Apa yang membuat kamu semangat?"></textarea>
+        </div>
+        <div class="reflection-input">
+          <label>Bagian yang masih membingungkan</label>
+          <textarea id="refl3" placeholder="Apa yang ingin kamu pelajari lagi?"></textarea>
+        </div>
+        <div class="reflection-input">
+          <label>Strategi belajar selanjutnya</label>
+          <textarea id="refl4" placeholder="Apa rencanamu untuk lebih baik?"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="thank-you">
+      <h3>♥ Terima Kasih untuk Hari Ini! ♥</h3>
+      <p>Sampai jumpa di petualangan matematika berikutnya, <span class="names" id="thankNames">para juara</span>!</p>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA SOAL ============ */
+const QDATA = {
+  s1: [
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 24 + 36?',o:['60','50','70','64'],a:0,e:'24 + 36 = 60'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 7 × 8?',o:['54','56','64','49'],a:1,e:'7 × 8 = 56'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 81 ÷ 9?',o:['8','9','7','6'],a:1,e:'81 ÷ 9 = 9'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 100 − 47?',o:['63','43','53','57'],a:2,e:'100 − 47 = 53'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 12 + 18 + 30?',o:['50','60','40','70'],a:1,e:'12 + 18 + 30 = 60'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 6 + 4 × 3?',o:['30','18','22','13'],a:1,e:'Kali dulu: 4×3=12, lalu 6+12=18'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari (15 − 7) × 2?',o:['16','14','20','10'],a:0,e:'Kurung dulu: 15−7=8, lalu 8×2=16'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 50 − 6 × 7?',o:['8','308','14','0'],a:0,e:'Kali dulu: 6×7=42, lalu 50−42=8'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 36 ÷ 4 + 5?',o:['14','9','5','20'],a:0,e:'Bagi dulu: 36÷4=9, lalu 9+5=14'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari (20 + 4) ÷ 6?',o:['5','6','4','3'],a:2,e:'Kurung dulu: 20+4=24, lalu 24÷6=4'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: 5 + 3 × 2 = 16',a:false,e:'Seharusnya 3×2=6, lalu 5+6=11. Jadi pernyataan SALAH.'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: (8 + 2) × 3 = 30',a:true,e:'Kurung dulu: 8+2=10, lalu 10×3=30. Pernyataan BENAR!'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: 24 ÷ 6 + 2 = 6',a:true,e:'Bagi dulu: 24÷6=4, lalu 4+2=6. Pernyataan BENAR!'},
+    {t:'bs',d:'Sedang',q:'Pernyataan: 10 − 4 ÷ 2 = 3',a:false,e:'Bagi dulu: 4÷2=2, lalu 10−2=8. Bukan 3, jadi SALAH.'},
+    {t:'bs',d:'Sedang',q:'Pernyataan: 7 × (4 − 2) = 14',a:true,e:'Kurung dulu: 4−2=2, lalu 7×2=14. Pernyataan BENAR!'},
+    {t:'pgk',d:'Sedang',q:'Manakah ekspresi yang hasilnya 24?',o:['6 × 4','8 + 8 + 8','48 ÷ 2','5 × 5'],a:[0,1,2],e:'6×4=24, 8+8+8=24, 48÷2=24. Sedangkan 5×5=25 (bukan 24).'},
+    {t:'pgk',d:'Sedang',q:'Operasi mana yang harus dikerjakan PERTAMA dalam 8 + 4 × (6 − 2)?',o:['Penjumlahan 8+4','Perkalian 4×6','Pengurangan dalam kurung (6−2)','Tidak ada urutan tetap'],a:[2],e:'Urutan: Kurung → Kali/Bagi → Tambah/Kurang. Jadi (6−2) dikerjakan paling awal.'},
+    {t:'pgk',d:'Sedang',q:'Pilih pernyataan yang BENAR tentang 18 ÷ (3 + 3):',o:['Hasilnya 3','Operasi dalam kurung dikerjakan dulu','Sama dengan 18 ÷ 3 + 3','Hasil akhirnya 6'],a:[0,1],e:'(3+3)=6, lalu 18÷6=3. Jadi A dan B benar. C salah karena 18÷3+3=9, dan D salah karena hasilnya 3 bukan 6.'},
+    {t:'match',d:'Sedang',q:'Pasangkan ekspresi dengan hasilnya:',pairs:[
+      {l:'6 + 4 × 3',r:'18'},
+      {l:'(6 + 4) × 3',r:'30'},
+      {l:'6 + 4 − 3',r:'7'},
+      {l:'6 × 4 − 3',r:'21'}
+    ]},
+    {t:'match',d:'Sedang',q:'Pasangkan ekspresi dengan hasilnya:',pairs:[
+      {l:'100 ÷ 4 + 75',r:'100'},
+      {l:'25 × 4 − 30',r:'70'},
+      {l:'50 + 50 ÷ 2',r:'75'},
+      {l:'200 ÷ 2 + 15',r:'115'}
+    ]},
+    {t:'match',d:'Sedang',q:'Pasangkan kata kunci dengan operasinya:',pairs:[
+      {l:'"Total seluruhnya"',r:'Tambah'},
+      {l:'"Sisa setelah diambil"',r:'Kurang'},
+      {l:'"3 kali lipat"',r:'Kali'},
+      {l:'"Dibagi rata"',r:'Bagi'}
+    ]},
+    {t:'is',d:'Sedang',q:'Hasil dari 7 × 8 + 12 = ___',a:'68',e:'7×8=56, lalu 56+12=68'},
+    {t:'is',d:'Sedang',q:'Hasil dari (45 − 15) ÷ 5 = ___',a:'6',e:'(45−15)=30, lalu 30÷5=6'},
+    {t:'is',d:'Sedang',q:'Hasil dari 144 ÷ 12 = ___',a:'12',e:'144 ÷ 12 = 12'},
+    {t:'is',d:'Sedang',q:'Andi punya 5 kantong berisi 12 permen. Total permen Andi = ___',a:'60',e:'5 × 12 = 60 permen'},
+    {t:'pg',d:'HOTS',q:'Truk mengangkut 8 kotak, setiap kotak berisi 12 apel. Di jalan 15 apel jatuh. Berapa apel tersisa di truk?',o:['81','96','75','111'],a:0,e:'8 × 12 = 96 apel awal. Lalu 96 − 15 = 81 apel tersisa.'},
+    {t:'is',d:'HOTS',q:'Doni bersepeda 6 km/jam selama 2 jam, lalu 8 km/jam selama 1 jam. Total jarak tempuh Doni = ___ km. (Clue: Jarak = kecepatan × waktu)',a:'20',e:'Jarak = kecepatan × waktu. (6×2) + (8×1) = 12 + 8 = 20 km'},
+    {t:'pg',d:'HOTS',q:'Ibu membeli 5 dus mi instan. Setiap dus berisi 40 bungkus mie. Ibu menyumbangkan 120 bungkus mie kepada korban banjir dan sisanya dibagikan kepada 8 orang tetangga sama banyak. Bera[a bungkus mie yang diterima setiap tetangga?]',o:['15 bungkus','20 bungkus','25 bungkus','10 bungkus'],a:3,e:'Total mie: 5 × 40 = 200.Siswa setelah sumbangan: 200 - 120 = 80. Mie per tetangga: 80 : 8 = 10.'},
+    {t:'is',d:'HOTS',q:'Sebuah lift berada di lantai 15. Lift tersebut turun 8 lantai, lalu naik lagi 12 lantai. Karena ada barang yang tertinggal,lift turun lagi 4 lantai. Di lantai berapakah lift tersebut sekarang?',a:'Lantai 15',e:'Posisi awal 15, maka 15-8+12-4=15'},
+    {t:'bs',d:'HOTS',q:'Andi naik tangga sampai anak tangga ke-8, turun 3 anak tangga, lalu naik 4 anak tangga lagi. Jika tinggi setiap anak tangga 15 cm, maka Andi sekarang berada pada ketinggian 135 cm dari tanah.',a:true,e:'Posisi: 8 − 3 + 4 = 9. Tinggi: 9 × 15 = 135 cm. Pernyataan BENAR!'},
+    // 10 Soal Cerita Tambahan
+    {t:'pg',d:'HOTS',q:'Pak Budi memiliki 24 ekor ayam. Ia menjual sepertiga bagian ayamnya. Berapa ekor ayam Pak Budi sekarang?',o:['16','18','8','21'],a:0,e:'24 / 3 = 8 ekor ayam dijual. Sisa ayam: 24 - 8 = 16 ekor.'},
+    {t:'is',d:'HOTS',q:'Sebuah mobil melaju dengan kecepatan 60 km/jam selama 2 jam 30 menit. Berapa km jarak yang ditempuh mobil tersebut?',a:'150',e:'2 jam 30 menit = 2.5 jam. Jarak = 60 × 2.5 = 150 km'},
+    {t:'pg',d:'HOTS',q:'Andi mengerjakan PR 5 hari berturut-turut: 12, 15, 10, 18, dan 20 soal. Berapa rata-rata soal yang dikerjakan Andi setiap harinya?',o:['15','14','16','13'],a:0,e:'Total soal: 12+15+10+18+20 = 75 soal. Rata-rata: 75 / 5 = 15 soal per hari.'},
+    {t:'is',d:'HOTS',q:'Sebuah taman berbentuk persegi panjang dengan panjang 12 m dan lebar 8 m. Di sekeliling taman akan dipasang pagar. Berapa meter panjang pagar yang dibutuhkan?',a:'40',e:'Keliling = 2 × (p + l) = 2 × (12 + 8) = 2 × 20 = 40 meter.'},
+    {t:'pg',d:'HOTS',q:'Ibu membeli 2 kg apel @Rp 25.000 dan 2 kg jeruk @Rp 20.000. Ibu membayar dengan uang Rp 100.000. Berapa kembalian yang diterima ibu?',o:['Rp 10.000','Rp 20.000','Rp 30.000','Rp 50.000'],a:0,e:'Harga apel: 2×25.000=50.000. Harga jeruk: 2×20.000=40.000. Total = 90.000. Kembalian: 100.000 - 90.000 = 10.000.'},
+    {t:'is',d:'HOTS',q:'Tiga orang anak menyusun balok. Andi 18 balok, Budi 15 balok, dan Citra 21 balok. Jika balok dibagi rata kepada mereka, berapa balok yang diterima setiap anak?',a:'18',e:'Total balok: 18 + 15 + 21 = 54. Dibagi rata: 54 / 3 = 18 balok.'},
+    {t:'pg',d:'HOTS',q:'Sebuah kolam berisi 500 liter air. Setiap hari air berkurang 15 liter karena penguapan. Berapa liter air tersisa setelah 2 minggu?',o:['290 liter','210 liter','380 liter','300 liter'],a:0,e:'2 minggu = 14 hari. Air berkurang: 14 × 15 = 210 liter. Sisa air: 500 - 210 = 290 liter.'},
+    {t:'is',d:'HOTS',q:'Sebuah persegi memiliki keliling 48 cm. Berapa luas persegi tersebut (dalam cm²)?',a:'144',e:'Sisi = Keliling / 4 = 48 / 4 = 12 cm. Luas = sisi × sisi = 12 × 12 = 144 cm².'},
+    {t:'pg',d:'HOTS',q:'Pak Andi memiliki 4 kolam ikan. Setiap kolam menghasilkan 250 ekor ikan lele. Sebanyak 200 ekor ikan dijual ke pasar dan sisanya dimasukkan ke dalam 8 buah plastik untuk dijual ke pelanggan. Jika jumlah ikan di setiap plastik sama, berapa isi masing-masing plastik?',o:['100 ekor','50 ekor','25 ekor','40 ekor'],a:0,e:'Total ikan: 4 × 250 = 1000. Sisa ikan: 1000 - 200 = 800. Per plastik: 800 : 8 = 10.'},
+    {t:'is',d:'HOTS',q:'Sebuah pabrik memproduksi 450 mainan dalam 5 hari. Jika produksi setiap hari sama, berapa mainan yang diproduksi dalam 12 hari?',a:'1080',e:'Produksi per hari: 450 / 5 = 90. Produksi 12 hari: 90 × 12 = 1080 mainan.'}
+  ],
+  s2: [
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 35 + 25?',o:['50','60','70','55'],a:1,e:'35 + 25 = 60'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 9 × 6?',o:['45','54','56','48'],a:1,e:'9 × 6 = 54'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 72 ÷ 8?',o:['8','9','7','6'],a:1,e:'72 ÷ 8 = 9'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 100 − 38?',o:['72','62','68','58'],a:1,e:'100 − 38 = 62'},
+    {t:'pg',d:'Mudah',q:'Berapakah hasil dari 15 + 25 + 20?',o:['60','50','70','55'],a:0,e:'15 + 25 + 20 = 60'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 8 + 3 × 4?',o:['44','20','23','12'],a:1,e:'Kali dulu: 3×4=12, lalu 8+12=20'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari (18 − 6) × 3?',o:['36','30','24','54'],a:0,e:'Kurung dulu: 18−6=12, lalu 12×3=36'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 60 − 5 × 9?',o:['15','55','45','495'],a:0,e:'Kali dulu: 5×9=45, lalu 60−45=15'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari 48 ÷ 6 + 7?',o:['15','8','14','56'],a:0,e:'Bagi dulu: 48÷6=8, lalu 8+7=15'},
+    {t:'pg',d:'Sedang',q:'Berapakah hasil dari (30 + 6) ÷ 6?',o:['5','6','11','4'],a:1,e:'Kurung dulu: 30+6=36, lalu 36÷6=6'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: 4 + 5 × 2 = 18',a:false,e:'Seharusnya 5×2=10, lalu 4+10=14. Jadi pernyataan SALAH.'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: (10 + 5) × 2 = 30',a:true,e:'Kurung dulu: 10+5=15, lalu 15×2=30. Pernyataan BENAR!'},
+    {t:'bs',d:'Mudah',q:'Pernyataan: 32 ÷ 8 + 4 = 8',a:true,e:'Bagi dulu: 32÷8=4, lalu 4+4=8. Pernyataan BENAR!'},
+    {t:'bs',d:'Sedang',q:'Pernyataan: 12 − 6 ÷ 3 = 2',a:false,e:'Bagi dulu: 6÷3=2, lalu 12−2=10. Bukan 2, jadi SALAH.'},
+    {t:'bs',d:'Sedang',q:'Pernyataan: 6 × (5 − 2) = 18',a:true,e:'Kurung dulu: 5−2=3, lalu 6×3=18. Pernyataan BENAR!'},
+    {t:'pgk',d:'Sedang',q:'Manakah ekspresi yang hasilnya 36?',o:['6 × 6','12 + 12 + 12','72 ÷ 2','5 × 7'],a:[0,1,2],e:'6×6=36, 12+12+12=36, 72÷2=36. Sedangkan 5×7=35 (bukan 36).'},
+    {t:'pgk',d:'Sedang',q:'Operasi mana yang dikerjakan TERAKHIR dalam 12 + 4 × (8 − 3)?',o:['Perkalian 4×5','Penjumlahan 12+20','Pengurangan (8−3)','Pembagian'],a:[1],e:'Urutan: Kurung (8−3=5), lalu Kali (4×5=20), lalu Tambah (12+20=32). Tambah dikerjakan terakhir.'},
+    {t:'pgk',d:'Sedang',q:'Pilih pernyataan yang BENAR tentang 24 ÷ (4 + 2):',o:['Hasilnya 4','Operasi dalam kurung dikerjakan dulu','Sama dengan 24 ÷ 4 + 2','Hasil akhirnya 6'],a:[0,1],e:'(4+2)=6, lalu 24÷6=4. Jadi A dan B benar. C salah karena 24÷4+2=8, dan D salah karena hasilnya 4 bukan 6.'},
+    {t:'match',d:'Sedang',q:'Pasangkan ekspresi dengan hasilnya:',pairs:[
+      {l:'5 + 3 × 4',r:'17'},
+      {l:'(5 + 3) × 4',r:'32'},
+      {l:'5 + 3 − 4',r:'4'},
+      {l:'5 × 3 − 4',r:'11'}
+    ]},
+    {t:'match',d:'Sedang',q:'Pasangkan ekspresi dengan hasilnya:',pairs:[
+      {l:'120 ÷ 3 + 60',r:'100'},
+      {l:'30 × 4 − 50',r:'70'},
+      {l:'80 + 80 ÷ 8',r:'90'},
+      {l:'200 ÷ 4 + 15',r:'65'}
+    ]},
+    {t:'match',d:'Sedang',q:'Pasangkan kata kunci dengan operasinya:',pairs:[
+      {l:'"Selisih" / "Beda"',r:'Kurang'},
+      {l:'"Gabungan" / "Kombinasi"',r:'Tambah'},
+      {l:'"Tripel" / "Tiga kali"',r:'Kali'},
+      {l:'"Porsi" / "Bagian"',r:'Bagi'}
+    ]},
+    {t:'is',d:'Sedang',q:'Hasil dari 9 × 7 + 15 = ___',a:'78',e:'9×7=63, lalu 63+15=78'},
+    {t:'is',d:'Sedang',q:'Hasil dari (60 − 20) ÷ 8 = ___',a:'5',e:'(60−20)=40, lalu 40÷8=5'},
+    {t:'is',d:'Sedang',q:'Hasil dari 169 ÷ 13 = ___',a:'13',e:'169 ÷ 13 = 13'},
+    {t:'is',d:'Sedang',q:'Sari punya 4 toples berisi 15 kue. Total kue Sari = ___',a:'60',e:'4 × 15 = 60 kue'},
+    {t:'pg',d:'HOTS',q:'Kapal mengangkut 6 peti, setiap peti berisi 15 kelapa. Di pelabuhan 18 kelapa dibongkar. Berapa kelapa tersisa di kapal?',o:['72','90','108','60'],a:0,e:'6 × 15 = 90 kelapa awal. Lalu 90 − 18 = 72 kelapa tersisa.'},
+    {t:'is',d:'HOTS',q:'Rina berlari 5 km/jam selama 3 jam, lalu 4 km/jam selama 2 jam. Total jarak lari Rina = ___ km (Clue: Jarak = kecepatan × waktu)',a:'23',e:'Jarak = kecepatan × waktu. (5×3) + (4×2) = 15 + 8 = 23 km'},
+    {t:'pg',d:'HOTS',q:'Seorang pedagang buah memiliki 12 keranjang mangga yang masing-masing berisi 25kg. Setekag diperiksa, terdapat 30kg mangga yang busuk. Sisa mangga yang masih baik akan dibagikan sama rata ke dalam 6 peti. Berapa kg mangga yang ada di dalam setiap peti?',o:['40 kg','55 kg','50 kg','45 kg'],a:3,e:'Total mangga: 12 × 25 = 300 kg. Mangga baik: 300 - 30 = 270 kg. Isi per peti 270:6 = 45 kg.'},
+    {t:'is',d:'HOTS',q:'Sebuah lift berada di lantai 10. Lift tersebut naik 2 lantai lalu turun 7 lantai. Karena ada barang yang tertinggal, lift naik lagi 7 lantai. Di lantai berapakah lift tersebut sekarang?',a:'10',e:'Lantai awal 10, maka 10 + 2 - 7 + 7 = 10.'},
+    {t:'bs',d:'HOTS',q:'Lidia naik ke lantai 10, turun 4 lantai, lalu naik 5 lantai lagi. Jika tinggi setiap lantai 3 meter, maka Lidia sekarang berada pada ketinggian 33 meter dari tanah.',a:true,e:'Posisi: 10 − 4 + 5 = 11. Tinggi: 11 × 3 = 33 meter. Pernyataan BENAR!'},
+    // 10 Soal Cerita Tambahan
+    {t:'pg',d:'HOTS',q:'Ibu Guru memiliki 30 buah pensil. Ia membagikan 2/5 bagian pensil kepada siswa. Berapa ekor pensil yang tersisa?',o:['18','12','20','15'],a:0,e:'Pensil dibagikan: 2/5 × 30 = 12. Sisa pensil: 30 - 12 = 18 ekor.'},
+    {t:'is',d:'HOTS',q:'Sepeda melaju dengan kecepatan 40 km/jam selama 1 jam 15 menit. Berapa km jarak yang ditempuh sepeda tersebut?',a:'50',e:'1 jam 15 menit = 1.25 jam. Jarak = 40 × 1.25 = 50 km'},
+    {t:'pg',d:'HOTS',q:'Sari menabung uang selama 5 hari: 10, 15, 20, 10, dan 25 ribu rupiah. Berapa rata-rata uang yang ditabung Sari setiap hari?',o:['16 ribu','15 ribu','18 ribu','20 ribu'],a:0,e:'Total tabungan: 10+15+20+10+25 = 80 ribu. Rata-rata: 80 / 5 = 16 ribu per hari.'},
+    {t:'is',d:'HOTS',q:'Sebuah kamar berbentuk persegi panjang berukuran 10 m x 6 m. Lantai kamar akan dipasang karpet. Berapa m² luas karpet yang dibutuhkan?',a:'60',e:'Luas = panjang × lebar = 10 × 6 = 60 m².'},
+    {t:'pg',d:'HOTS',q:'Pak Andi membeli 4 kg mangga @Rp 20.000 dan 3 kg salak @Rp 15.000. Pak Andi membayar dengan uang Rp 150.000. Berapa kembalian yang diterima Pak Andi?',o:['Rp 25.000','Rp 35.000','Rp 15.000','Rp 50.000'],a:0,e:'Harga mangga: 4×20.000=80.000. Harga salak: 3×15.000=45.000. Total = 125.000. Kembalian: 150.000 - 125.000 = 25.000.'},
+    {t:'is',d:'HOTS',q:'Empat orang pekerja menyelesaikan proyek dengan upah total Rp 1.200.000. Jika upah dibagi rata, berapa rupiah yang diterima setiap pekerja?',a:'300.000',e:'Upah total 1.200.000 dibagi 4 orang = 300.000 per orang.'},
+    {t:'pg',d:'HOTS',q:'Sebuah tangki berisi 800 liter solar. Setiap hari digunakan 25 liter untuk mesin. Berapa liter solar tersisa setelah 3 minggu?',o:['275 liter','525 liter','325 liter','400 liter'],a:0,e:'3 minggu = 21 hari. Solar dipakai: 21 × 25 = 525 liter. Sisa solar: 800 - 525 = 275 liter.'},
+    {t:'is',d:'HOTS',q:'Sebuah persegi panjang memiliki keliling 30 cm. Jika lebarnya 5 cm, berapa luas persegi panjang tersebut (dalam cm²)?',a:'50',e:'Panjang = (Keliling / 2) - lebar = (30/2) - 5 = 15 - 5 = 10 cm. Luas = 10 × 5 = 50 cm².'},
+    {t:'pg',d:'HOTS',q:'Pak Andi memiliki 4 kolam ikan. Setiap kolam menghasilkan 150 ekor ikan lele. Sebanyak 200 ekor ikan dijual ke pasar dan sisanya dimasukkan ke dalam 8 buah plastik untuk dijual ke pelanggan. Jika jumlah ikan di setiap plastik sama, berapa isi masing-masing plastik?',o:['50 ekor','70 ekor','75 ekor','40 ekor'],a:0,e:'Total ikan: 4 × 150 = 600. Sisa ikan: 600 - 200 = 400. Per plastik: 400 : 8 = 50.'},
+    {t:'is',d:'HOTS',q:'Sebuah mesin mengemas 240 botol dalam 4 jam. Jika kecepatan tetap, berapa botol yang dikemas dalam 10 jam?',a:'600',e:'Kecepatan mesin: 240 / 4 = 60 botol/jam. Dalam 10 jam: 60 × 10 = 600 botol.'}
+  ]
+};
+
+const TYPE_LABELS = {pg:'Pilihan Ganda',pgk:'PG Kompleks',bs:'Benar-Salah',match:'Menjodohkan',is:'Isian Singkat'};
+const TYPE_SHORT = {pg:'PG',pgk:'PGK',bs:'BS',match:'Match',is:'Isian'};
+
+const state = {
+  currentSlide: 1,
+  names: {s1:'', s2:''},
+  currentQ: 0,
+  answers: {s1:new Array(40).fill(null), s2:new Array(40).fill(null)},
+  timer: {remaining: 120, interval: null, running: false, startTs: null},
+  checked: new Set(),
+  memory: {
+    cards: [], flipped: [], matches: {s1:[], s2:[]}, turn: 's2',
+    scores: {s1:0, s2:0}, locked: false, gameDone: false
+  }
+};
+
+/* ============ NAVIGATION ============ */
+const TOTAL_SLIDES = 8;
+function buildDots(){
+  const d = document.getElementById('dots');
+  d.innerHTML='';
+  for(let i=1;i<=TOTAL_SLIDES;i++){
+    const b=document.createElement('button');
+    b.className='dot'+(i===1?' active':'');
+    b.dataset.slide=i;
+    b.onclick=()=>goToSlide(i);
+    d.appendChild(b);
+  }
+}
+function goToSlide(n){
+  if(n<1||n>TOTAL_SLIDES) return;
+  if(state.currentSlide===5 && n!==5) pauseTimer();
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide'+n).classList.add('active');
+  state.currentSlide=n;
+  document.getElementById('progress').textContent=`${n} / ${TOTAL_SLIDES}`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i+1===n));
+  document.getElementById('prevBtn').disabled = n===1;
+  document.getElementById('nextBtn').disabled = n===TOTAL_SLIDES;
+  if(n===5){ renderQuestion(); }
+  if(n===6){ renderScores(); }
+  if(n===7){ if(state.memory.cards.length===0) initMemoryGame(); }
+  if(n===8){ renderConclusion(); }
+  if(n===5){ resumeTimerIfNeeded(); }
+  window.scrollTo(0,0);
+}
+function navigate(dir){ goToSlide(state.currentSlide+dir); }
+
+/* ============ SLIDE 1 ============ */
+function startAdventure(){
+  const n1 = document.getElementById('name1').value.trim();
+  const n2 = document.getElementById('name2').value.trim();
+  if(!n1 || !n2){
+    showToast('Isi nama kedua siswa dulu yuk!','warn');
+    return;
+  }
+  state.names.s1 = n1;
+  state.names.s2 = n2;
+  showToast('Selamat datang '+n1+' & '+n2+'!','success');
+  goToSlide(2);
+}
+
+/* ============ SLIDE 5: QUIZ ============ */
+function renderQuestion(){
+  const idx = state.currentQ;
+  const q1 = QDATA.s1[idx];
+  const q2 = QDATA.s2[idx];
+  document.getElementById('qNum').textContent = idx+1;
+  const tagsHtml = `<span class="q-tag type">${TYPE_LABELS[q1.t]}</span><span class="q-tag ${q1.d.toLowerCase()}">${q1.d}</span>`;
+  document.getElementById('qTags').innerHTML = tagsHtml;
+  document.getElementById('panelName1').textContent = state.names.s1;
+  document.getElementById('panelName2').textContent = state.names.s2;
+  document.getElementById('question1').innerHTML = renderQ(q1, 's1', idx);
+  document.getElementById('question2').innerHTML = renderQ(q2, 's2', idx);
+  updatePanelStatus('s1');
+  updatePanelStatus('s2');
+  const isChecked = state.checked.has(idx);
+  const expBox = document.getElementById('explanationBox');
+  if(isChecked){
+    expBox.classList.add('show');
+    showExplanation();
+    document.getElementById('checkBtn').textContent = 'Sudah Diperiksa';
+    document.getElementById('checkBtn').disabled = true;
+  } else {
+    expBox.classList.remove('show');
+    document.getElementById('checkBtn').textContent = 'Cek Jawaban';
+    document.getElementById('checkBtn').disabled = false;
+  }
+  restoreAnswer('s1', idx);
+  restoreAnswer('s2', idx);
+  if(!isChecked){
+    resetTimer();
+    startTimer();
+  } else {
+    stopTimer();
+    updateTimerDisplay();
+  }
+}
+
+function renderQ(q, side, idx){
+  let html = `<div class="question-text">${q.q}</div>`;
+  if(q.t==='pg'){
+    html += '<div class="options-list">';
+    q.o.forEach((opt,i)=>{
+      html += `<button class="option-btn" onclick="selectOption('${side}',${i})" data-opt="${i}"><span class="option-letter">${String.fromCharCode(65+i)}</span>${opt}</button>`;
+    });
+    html += '</div>';
+  } else if(q.t==='bs'){
+    html += '<div class="tf-buttons">';
+    html += `<button class="tf-btn" onclick="selectTF('${side}',true)" data-v="true"><span class="tf-icon">✓</span>Benar</button>`;
+    html += `<button class="tf-btn" onclick="selectTF('${side}',false)" data-v="false"><span class="tf-icon">✗</span>Salah</button>`;
+    html += '</div>';
+  } else if(q.t==='pgk'){
+    html += '<div class="options-list">';
+    q.o.forEach((opt,i)=>{
+      html += `<label class="checkbox-option" onclick="toggleCheckbox('${side}',${i})" data-opt="${i}"><span class="checkbox-box"></span>${opt}</label>`;
+    });
+    html += '</div>';
+  } else if(q.t==='match'){
+    if(!q._shuffled){
+      q._shuffled = q.pairs.map(p=>p.r).sort(()=>Math.random()-0.5);
+    }
+    html += '<div class="match-list">';
+    q.pairs.forEach((p,i)=>{
+      html += `<div class="match-row">
+        <div class="match-left">${p.l}</div>
+        <div class="match-arrow">→</div>
+        <select class="match-select" onchange="setMatch('${side}',${i},this.value)" data-row="${i}">
+          <option value="">Pilih...</option>
+          ${q._shuffled.map(r=>`<option value="${r}">${r}</option>`).join('')}
+        </select>
+      </div>`;
+    });
+    html += '</div>';
+  } else if(q.t==='is'){
+    html += `<input type="text" class="isian-input" placeholder="Ketik jawaban..." oninput="setIsian('${side}',this.value)" data-side="${side}">`;
+  }
+  html += `<button class="lock-btn" onclick="lockAnswer('${side}')" data-side="${side}">Kunci Jawaban</button>`;
+  return html;
+}
+
+function selectOption(side, i){
+  if(state.checked.has(state.currentQ)) return;
+  if(state.answers[side][state.currentQ]?.locked) return;
+  state.answers[side][state.currentQ] = {
+    answer: i,
+    time: (Date.now()-state.timer.startTs)/1000,
+    correct: null,
+    locked: false
+  };
+  document.querySelectorAll(`#panel${side==='s1'?1:2} .option-btn`).forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`#panel${side==='s1'?1:2} .option-btn[data-opt="${i}"]`).classList.add('selected');
+  updatePanelStatus(side);
+  checkBothAnswered();
+}
+
+function selectTF(side, val){
+  if(state.checked.has(state.currentQ)) return;
+  if(state.answers[side][state.currentQ]?.locked) return;
+  state.answers[side][state.currentQ] = {
+    answer: val,
+    time: (Date.now()-state.timer.startTs)/1000,
+    correct: null,
+    locked: false
+  };
+  document.querySelectorAll(`#panel${side==='s1'?1:2} .tf-btn`).forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`#panel${side==='s1'?1:2} .tf-btn[data-v="${val}"]`).classList.add('selected');
+  updatePanelStatus(side);
+  checkBothAnswered();
+}
+
+function toggleCheckbox(side, i){
+  if(state.checked.has(state.currentQ)) return;
+  if(state.answers[side][state.currentQ]?.locked) return;
+  if(!state.answers[side][state.currentQ]){
+    state.answers[side][state.currentQ] = {answer:[], time:0, correct:null, locked:false};
+  }
+  const ans = state.answers[side][state.currentQ].answer;
+  const idx = ans.indexOf(i);
+  if(idx>=0) ans.splice(idx,1);
+  else ans.push(i);
+  state.answers[side][state.currentQ].time = (Date.now()-state.timer.startTs)/1000;
+  document.querySelector(`#panel${side==='s1'?1:2} .checkbox-option[data-opt="${i}"]`).classList.toggle('selected');
+  updatePanelStatus(side);
+  checkBothAnswered();
+}
+
+function setMatch(side, row, val){
+  if(state.checked.has(state.currentQ)) return;
+  if(state.answers[side][state.currentQ]?.locked) return;
+  if(!state.answers[side][state.currentQ]){
+    state.answers[side][state.currentQ] = {answer:{}, time:0, correct:null, locked:false};
+  }
+  state.answers[side][state.currentQ].answer[row] = val;
+  state.answers[side][state.currentQ].time = (Date.now()-state.timer.startTs)/1000;
+  updatePanelStatus(side);
+  checkBothAnswered();
+}
+
+function setIsian(side, val){
+  if(state.checked.has(state.currentQ)) return;
+  if(state.answers[side][state.currentQ]?.locked) return;
+  state.answers[side][state.currentQ] = {
+    answer: val,
+    time: (Date.now()-state.timer.startTs)/1000,
+    correct: null,
+    locked: false
+  };
+  updatePanelStatus(side);
+  checkBothAnswered();
+}
+
+function lockAnswer(side){
+  if(state.checked.has(state.currentQ)) return;
+  const ans = state.answers[side][state.currentQ];
+  if(!ans || ans.answer==='' || ans.answer===null || (Array.isArray(ans.answer)&&ans.answer.length===0) || (typeof ans.answer==='object'&&!Array.isArray(ans.answer)&&Object.keys(ans.answer).length===0)){
+    showToast('Jawab dulu sebelum dikunci','warn');
+    return;
+  }
+  ans.locked = true;
+  ans.time = (Date.now()-state.timer.startTs)/1000;
+  const panel = document.getElementById('panel'+(side==='s1'?1:2));
+  panel.querySelectorAll('button, input, select').forEach(b=>{
+    if(b.classList.contains('lock-btn')){
+      b.classList.add('locked');
+      b.textContent = '✓ Terkunci';
+      b.disabled = true;
+    } else if(!b.classList.contains('option-btn') && !b.classList.contains('tf-btn')){
+      b.disabled = true;
+    }
+  });
+  panel.querySelectorAll('.option-btn, .tf-btn, .checkbox-option').forEach(b=>b.classList.add('locked'));
+  updatePanelStatus(side);
+  showToast((side==='s1'?state.names.s1:state.names.s2)+' mengunci jawaban!','success');
+  checkBothAnswered();
+}
+
+function updatePanelStatus(side){
+  const ans = state.answers[side][state.currentQ];
+  const status = document.getElementById('status'+(side==='s1'?1:2));
+  status.className = 'panel-status';
+  if(state.checked.has(state.currentQ)){
+    if(ans?.correct) { status.textContent='✓ Benar'; status.classList.add('correct-status');}
+    else if(ans && ans.answer!==null && ans.locked) { status.textContent='✗ Salah'; status.classList.add('wrong-status');}
+    else { status.textContent='Tidak dijawab';}
+  } else if(ans?.locked){
+    status.textContent = 'Terkunci';
+    status.classList.add('locked-status');
+  } else if(ans && ans.answer!==null && ans.answer!==''){
+    status.textContent = 'Sudah dijawab';
+    status.classList.add('answered');
+  } else {
+    status.textContent = 'Belum dijawab';
+  }
+}
+
+function checkBothAnswered(){
+  if(state.checked.has(state.currentQ)) return;
+  const a1 = state.answers.s1[state.currentQ];
+  const a2 = state.answers.s2[state.currentQ];
+  if(a1?.locked && a2?.locked){
+    stopTimer();
+  }
+}
+
+function restoreAnswer(side, idx){
+  const ans = state.answers[side][idx];
+  if(!ans) return;
+  const panel = document.getElementById('panel'+(side==='s1'?1:2));
+  if(ans.answer===null || ans.answer==='' ) return;
+  const q = QDATA[side][idx];
+  if(q.t==='pg'){
+    const btn = panel.querySelector(`.option-btn[data-opt="${ans.answer}"]`);
+    if(btn) btn.classList.add('selected');
+  } else if(q.t==='bs'){
+    const btn = panel.querySelector(`.tf-btn[data-v="${ans.answer}"]`);
+    if(btn) btn.classList.add('selected');
+  } else if(q.t==='pgk'){
+    ans.answer.forEach(i=>{
+      const el = panel.querySelector(`.checkbox-option[data-opt="${i}"]`);
+      if(el) el.classList.add('selected');
+    });
+  } else if(q.t==='match'){
+    Object.entries(ans.answer).forEach(([row,val])=>{
+      const sel = panel.querySelector(`.match-select[data-row="${row}"]`);
+      if(sel) sel.value = val;
+    });
+  } else if(q.t==='is'){
+    const inp = panel.querySelector('.isian-input');
+    if(inp) inp.value = ans.answer;
+  }
+  if(ans.locked){
+    panel.querySelectorAll('button, input, select').forEach(b=>{
+      if(b.classList.contains('lock-btn')){
+        b.classList.add('locked');
+        b.textContent = '✓ Terkunci';
+        b.disabled = true;
+      } else {
+        b.disabled = true;
+      }
+    });
+    panel.querySelectorAll('.option-btn, .tf-btn, .checkbox-option').forEach(b=>b.classList.add('locked'));
+  }
+}
+
+function checkAnswers(){
+  const idx = state.currentQ;
+  if(state.checked.has(idx)) return;
+  state.checked.add(idx);
+  stopTimer();
+  ['s1','s2'].forEach(side=>{
+    const q = QDATA[side][idx];
+    const ans = state.answers[side][idx];
+    if(!ans || !ans.locked){
+      if(!ans){
+        state.answers[side][idx] = {answer:null, time:120, correct:false, locked:false};
+      } else {
+        ans.time = ans.time || (120 - state.timer.remaining);
+        ans.correct = false;
+      }
+    } else {
+      ans.correct = evaluateAnswer(q, ans.answer);
+    }
+  });
+  document.getElementById('explanationBox').classList.add('show');
+  showExplanation();
+  document.querySelectorAll('#question1 button, #question1 input, #question1 select, #question2 button, #question2 input, #question2 select').forEach(el=>el.disabled=true);
+  document.querySelectorAll('#question1 .option-btn, #question1 .tf-btn, #question1 .checkbox-option, #question2 .option-btn, #question2 .tf-btn, #question2 .checkbox-option').forEach(el=>el.classList.add('locked'));
+  highlightAnswers();
+  updatePanelStatus('s1');
+  updatePanelStatus('s2');
+  document.getElementById('checkBtn').textContent = 'Sudah Diperiksa';
+  document.getElementById('checkBtn').disabled = true;
+  showToast('Jawaban sudah diperiksa! Lihat pembahasan di bawah.','success');
+}
+
+function evaluateAnswer(q, ans){
+  if(q.t==='pg') return ans===q.a;
+  if(q.t==='bs') return ans===q.a;
+  if(q.t==='pgk'){
+    if(!Array.isArray(ans)) return false;
+    const aSet = [...new Set(q.a)].sort();
+    const bSet = [...new Set(ans)].sort();
+    return aSet.length===bSet.length && aSet.every((v,i)=>v===bSet[i]);
+  }
+  if(q.t==='match'){
+    if(typeof ans!=='object') return false;
+    return q.pairs.every((p,i)=>ans[i]===p.r);
+  }
+  if(q.t==='is'){
+    const normalize = s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+    return normalize(ans)===normalize(q.a);
+  }
+  return false;
+}
+
+function highlightAnswers(){
+  const idx = state.currentQ;
+  ['s1','s2'].forEach(side=>{
+    const q = QDATA[side][idx];
+    const ans = state.answers[side][idx];
+    const panel = document.getElementById('panel'+(side==='s1'?1:2));
+    if(q.t==='pg'){
+      panel.querySelectorAll('.option-btn').forEach((b,i)=>{
+        if(i===q.a) b.classList.add('correct');
+        else if(ans?.answer===i) b.classList.add('wrong');
+      });
+    } else if(q.t==='bs'){
+      panel.querySelectorAll('.tf-btn').forEach(b=>{
+        const v = b.dataset.v==='true';
+        if(v===q.a) b.classList.add('correct');
+        else if(ans?.answer===v) b.classList.add('wrong');
+      });
+    } else if(q.t==='pgk'){
+      panel.querySelectorAll('.checkbox-option').forEach((b,i)=>{
+        if(q.a.includes(i)) b.classList.add('correct');
+        else if(ans?.answer?.includes(i)) b.classList.add('wrong');
+      });
+    } else if(q.t==='match'){
+      panel.querySelectorAll('.match-select').forEach((sel,i)=>{
+        if(!ans?.answer?.[i]){
+          sel.classList.add('wrong');
+        } else if(ans.answer[i]===q.pairs[i].r){
+          sel.classList.add('correct');
+        } else {
+          sel.classList.add('wrong');
+        }
+      });
+    } else if(q.t==='is'){
+      const inp = panel.querySelector('.isian-input');
+      if(inp){
+        if(ans?.correct) inp.classList.add('correct');
+        else inp.classList.add('wrong');
+        if(!ans?.correct){
+          inp.value = (inp.value?inp.value+' → ':'') + q.a;
+        }
+      }
+    }
+  });
+}
+
+function showExplanation(){
+  const idx = state.currentQ;
+  const q1 = QDATA.s1[idx];
+  const q2 = QDATA.s2[idx];
+  const a1 = state.answers.s1[idx];
+  const a2 = state.answers.s2[idx];
+  document.getElementById('exp1').innerHTML = a1?.correct ? 
+    `<strong style="color:var(--mint)">Benar!</strong> Jawaban: ${formatAnswer(q1, a1)}` : 
+    `<strong style="color:var(--pink)">${a1?.answer!==null&&a1?.locked?'Salah':'Tidak dijawab'}</strong>. Jawaban benar: ${formatCorrect(q1)}`;
+  document.getElementById('exp2').innerHTML = a2?.correct ? 
+    `<strong style="color:var(--mint)">Benar!</strong> Jawaban: ${formatAnswer(q2, a2)}` : 
+    `<strong style="color:var(--lav)">${a2?.answer!==null&&a2?.locked?'Salah':'Tidak dijawab'}</strong>. Jawaban benar: ${formatCorrect(q2)}`;
+  document.getElementById('expDetail').innerHTML = `<strong>Siswa 1:</strong> ${q1.e}<br><strong>Siswa 2:</strong> ${q2.e}`;
+}
+
+function formatAnswer(q, ans){
+  if(!ans || ans.answer===null) return '-';
+  if(q.t==='pg') return q.o[ans.answer];
+  if(q.t==='bs') return ans.answer?'Benar':'Salah';
+  if(q.t==='pgk') return ans.answer.map(i=>q.o[i]).join(', ');
+  if(q.t==='match') return Object.values(ans.answer).join(', ');
+  if(q.t==='is') return ans.answer;
+  return '-';
+}
+
+function formatCorrect(q){
+  if(q.t==='pg') return q.o[q.a];
+  if(q.t==='bs') return q.a?'Benar':'Salah';
+  if(q.t==='pgk') return q.a.map(i=>q.o[i]).join(', ');
+  if(q.t==='match') return q.pairs.map(p=>p.l+' = '+p.r).join(', ');
+  if(q.t==='is') return q.a;
+  return '-';
+}
+
+function nextQuestion(){
+  if(state.currentQ < 39){
+    state.currentQ++;
+    renderQuestion();
+  } else {
+    showToast('Sudah soal terakhir! Cek jawaban lalu lihat skor.','warn');
+  }
+}
+function prevQuestion(){
+  if(state.currentQ > 0){
+    state.currentQ--;
+    renderQuestion();
+  }
+}
+
+/* ============ TIMER ============ */
+function startTimer(){
+  if(state.timer.running) return;
+  if(state.checked.has(state.currentQ)) return;
+  state.timer.running = true;
+  state.timer.startTs = Date.now() - (120 - state.timer.remaining)*1000;
+  state.timer.interval = setInterval(()=>{
+    state.timer.remaining--;
+    updateTimerDisplay();
+    if(state.timer.remaining<=0){
+      stopTimer();
+      handleTimeUp();
+    }
+  },1000);
+}
+function pauseTimer(){
+  if(state.timer.interval){ clearInterval(state.timer.interval); state.timer.interval=null; }
+  state.timer.running = false;
+}
+function stopTimer(){ pauseTimer(); }
+function resetTimer(){
+  pauseTimer();
+  state.timer.remaining = 120;
+  updateTimerDisplay();
+}
+function resumeTimerIfNeeded(){
+  if(!state.checked.has(state.currentQ) && state.timer.remaining>0 && !state.timer.running){
+    startTimer();
+  }
+}
+function addTime(s){
+  if(state.checked.has(state.currentQ)) return;
+  state.timer.remaining += s;
+  updateTimerDisplay();
+  showToast('+'+s+' detik ditambahkan!','success');
+}
+function updateTimerDisplay(){
+  const r = Math.max(0, state.timer.remaining);
+  const m = Math.floor(r/60);
+  const s = r%60;
+  document.getElementById('timerText').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const td = document.getElementById('timerDisplay');
+  td.classList.remove('warn','danger');
+  if(r<=30) td.classList.add('danger');
+  else if(r<=60) td.classList.add('warn');
+}
+function handleTimeUp(){
+  showToast('Waktu habis! Cek jawaban untuk lanjut.','error');
+  ['s1','s2'].forEach(side=>{
+    const ans = state.answers[side][state.currentQ];
+    if(!ans || !ans.locked){
+      if(!ans){
+        state.answers[side][state.currentQ] = {answer:null, time:120, correct:false, locked:false};
+      } else {
+        ans.time = 120;
+      }
+    }
+  });
+  updatePanelStatus('s1');
+  updatePanelStatus('s2');
+}
+
+/* ============ SLIDE 6: SCORES ============ */
+function renderScores(){
+  const stats = {s1:computeStats('s1'), s2:computeStats('s2')};
+  ['s1','s2'].forEach(side=>{
+    const s = stats[side];
+    const num = side==='s1'?1:2;
+    document.getElementById('scoreName'+num).textContent = state.names[side];
+    document.getElementById('avatar'+num).textContent = (state.names[side][0]||'?').toUpperCase();
+    document.getElementById('scoreBig'+num).innerHTML = s.correct+'<small>/40</small>';
+    document.getElementById('scoreBar'+num).style.width = (s.correct/40*100)+'%';
+    document.getElementById('statCorrect'+num).textContent = s.correct;
+    document.getElementById('statAvg'+num).textContent = s.avgTime.toFixed(1)+'s';
+    document.getElementById('statTotal'+num).textContent = Math.round(s.totalTime)+'s';
+    document.getElementById('statPct'+num).textContent = Math.round(s.correct/40*100)+'%';
+  });
+  const banner = document.getElementById('winnerBanner');
+  if(stats.s1.correct > stats.s2.correct){
+    banner.style.display = 'block';
+    document.getElementById('winnerText').textContent = '♥ ' + state.names.s1 + ' Juara Hari Ini!';
+    document.getElementById('winnerSub').textContent = 'Selamat! Kamu menjawab '+stats.s1.correct+' soal dengan benar.';
+  } else if(stats.s2.correct > stats.s1.correct){
+    banner.style.display = 'block';
+    document.getElementById('winnerText').textContent = '♥ ' + state.names.s2 + ' Juara Hari Ini!';
+    document.getElementById('winnerSub').textContent = 'Selamat! Kamu menjawab '+stats.s2.correct+' soal dengan benar.';
+  } else {
+    banner.style.display = 'block';
+    document.getElementById('winnerText').textContent = '♥ Seri! Pertandingan Seimbang';
+    document.getElementById('winnerSub').textContent = 'Kalian berdua sama-sama hebat dengan '+stats.s1.correct+' jawaban benar.';
+  }
+  const grid = document.getElementById('detailGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<40;i++){
+    const q1 = QDATA.s1[i];
+    const a1 = state.answers.s1[i];
+    const a2 = state.answers.s2[i];
+    const card = document.createElement('div');
+    card.className = 'detail-card';
+    
+    const s1Status = a1?.correct ? 'correct' : (a1?.locked ? 'wrong' : 'skip');
+    const s2Status = a2?.correct ? 'correct' : (a2?.locked ? 'wrong' : 'skip');
+    const s1Icon = a1?.correct ? '✓' : (a1?.locked ? '✗' : '–');
+    const s2Icon = a2?.correct ? '✓' : (a2?.locked ? '✗' : '–');
+    const s1Time = a1?.time ? Math.round(a1.time)+'s' : '-';
+    const s2Time = a2?.time ? Math.round(a2.time)+'s' : '-';
+    
+    card.innerHTML = `
+      <div class="dc-num">${i+1}</div>
+      <div class="dc-type">${TYPE_SHORT[q1.t]} • ${q1.d}</div>
+      <div class="dc-row s1">
+        <span class="dc-tag">S1</span>
+        <span class="dc-status ${s1Status}">${s1Icon}</span>
+        <span class="dc-time">${s1Time}</span>
+      </div>
+      <div class="dc-row s2">
+        <span class="dc-tag">S2</span>
+        <span class="dc-status ${s2Status}">${s2Icon}</span>
+        <span class="dc-time">${s2Time}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+}
+
+function computeStats(side){
+  let correct=0, totalTime=0, count=0;
+  for(let i=0;i<40;i++){
+    const a = state.answers[side][i];
+    if(a){
+      if(a.correct) correct++;
+      if(a.time){
+        totalTime += a.time;
+        count++;
+      }
+    }
+  }
+  return { correct, totalTime, avgTime: count>0 ? totalTime/count : 0 };
+}
+
+/* ============ SLIDE 7: MEMORY GAME ============ */
+const MEM_PAIRS = [
+  {a:'8 + 6 × 2', b:'20'},
+  {a:'(12 − 5) × 4', b:'28'},
+  {a:'63 ÷ 9 + 11', b:'18'},
+  {a:'7 × 8 − 16', b:'40'},
+  {a:'(20 + 4) ÷ 6', b:'4'},
+  {a:'3 + 4 × 5', b:'23'},
+  {a:'50 − 6 × 7', b:'8'},
+  {a:'9 × (6 − 3)', b:'27'}
+];
+
+function initMemoryGame(){
+  state.memory = {
+    cards: [], flipped: [], matches: {s1:[], s2:[]}, turn: 's2',
+    scores: {s1:0, s2:0}, locked: false, gameDone: false
+  };
+  const cards = [];
+  MEM_PAIRS.forEach((p,i)=>{
+    cards.push({id:i*2, pair:i, text:p.a, type:'a'});
+    cards.push({id:i*2+1, pair:i, text:p.b, type:'b'});
+  });
+  cards.sort(()=>Math.random()-0.5);
+  state.memory.cards = cards;
+  const board = document.getElementById('memBoard');
+  board.innerHTML = '';
+  cards.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'mem-card';
+    div.dataset.id = c.id;
+    div.dataset.pair = c.pair;
+    div.innerHTML = `<div class="mem-card-inner">
+      <div class="mem-face mem-front">♥</div>
+      <div class="mem-face mem-back">${c.text}</div>
+    </div>`;
+    div.onclick = ()=>flipCard(c.id);
+    board.appendChild(div);
+  });
+  document.getElementById('memName1').textContent = state.names.s1;
+  document.getElementById('memName2').textContent = state.names.s2;
+  document.getElementById('memAvatar1').textContent = (state.names.s1[0]||'?').toUpperCase();
+  document.getElementById('memAvatar2').textContent = (state.names.s2[0]||'?').toUpperCase();
+  document.getElementById('memScore1').textContent = '0';
+  document.getElementById('memScore2').textContent = '0';
+  document.getElementById('memResult').classList.remove('show');
+  updateMemTurn();
+}
+
+function flipCard(id){
+  if(state.memory.locked) return;
+  if(state.memory.gameDone) return;
+  const card = state.memory.cards.find(c=>c.id===id);
+  const el = document.querySelector(`.mem-card[data-id="${id}"]`);
+  if(el.classList.contains('flipped') || el.classList.contains('matched')) return;
+  el.classList.add('flipped');
+  state.memory.flipped.push(card);
+  if(state.memory.flipped.length === 2){
+    state.memory.locked = true;
+    setTimeout(checkMatch, 900);
+  }
+}
+
+function checkMatch(){
+  const [c1, c2] = state.memory.flipped;
+  const turn = state.memory.turn;
+  if(c1.pair === c2.pair){
+    state.memory.matches[turn].push(c1.pair);
+    state.memory.scores[turn]++;
+    document.querySelectorAll(`.mem-card[data-pair="${c1.pair}"]`).forEach(el=>{
+      el.classList.add('matched', turn+'-match');
+      el.classList.remove('flipped');
+    });
+    document.getElementById('memScore'+(turn==='s1'?1:2)).textContent = state.memory.scores[turn];
+    showToast('♥ '+(turn==='s1'?state.names.s1:state.names.s2)+' dapat pasangan!','success');
+    state.memory.flipped = [];
+    state.memory.locked = false;
+    const totalMatches = state.memory.scores.s1 + state.memory.scores.s2;
+    if(totalMatches === MEM_PAIRS.length){
+      endMemoryGame();
+    }
+  } else {
+    document.querySelectorAll('.mem-card.flipped').forEach(el=>el.classList.remove('flipped'));
+    state.memory.flipped = [];
+    state.memory.turn = turn==='s1'?'s2':'s1';
+    state.memory.locked = false;
+    updateMemTurn();
+  }
+}
+
+function updateMemTurn(){
+  const isS1Turn = state.memory.turn === 's1';
+  document.getElementById('memPlayer1').classList.toggle('active', isS1Turn);
+  document.getElementById('memPlayer2').classList.toggle('active', !isS1Turn);
+  document.getElementById('memTurn1').textContent = isS1Turn ? 'Giliran kamu!' : 'Menunggu...';
+  document.getElementById('memTurn2').textContent = !isS1Turn ? 'Giliran kamu!' : 'Menunggu...';
+}
+
+function endMemoryGame(){
+  state.memory.gameDone = true;
+  const s1 = state.memory.scores.s1;
+  const s2 = state.memory.scores.s2;
+  const result = document.getElementById('memResult');
+  const title = document.getElementById('memResultTitle');
+  const text = document.getElementById('memResultText');
+  if(s1 > s2){
+    title.textContent = '♥ ' + state.names.s1 + ' Menang!';
+    text.textContent = `Skor akhir: ${state.names.s1} ${s1} — ${state.names.s2} ${s2}. Selamat!`;
+  } else if(s2 > s1){
+    title.textContent = '♥ ' + state.names.s2 + ' Menang!';
+    text.textContent = `Skor akhir: ${state.names.s2} ${s2} — ${state.names.s1} ${s1}. Selamat!`;
+  } else {
+    title.textContent = '♥ Permainan Seri!';
+    text.textContent = `Skor akhir: ${state.names.s1} ${s1} — ${state.names.s2} ${s2}. Kalian sama hebatnya!`;
+  }
+  result.classList.add('show');
+  showToast('Game selesai! Selamat untuk pemenangnya.','success');
+}
+
+/* ============ SLIDE 8: CONCLUSION ============ */
+function renderConclusion(){
+  document.getElementById('conclusionNames').textContent = 
+    `${state.names.s1} & ${state.names.s2}, hari ini kalian berdua telah menyelesaikan petualangan matematika yang luar biasa.`;
+  document.getElementById('thankNames').textContent = `${state.names.s1} & ${state.names.s2}`;
+}
+
+/* ============ TOAST ============ */
+function showToast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast '+type+' show';
+  clearTimeout(t._tm);
+  t._tm = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+/* ============ EXAMPLE ANIMATION (Slide 3) ============ */
+function animateExample(){
+  const steps = ['exOriginal','ex1','ex2','ex3'];
+  let i = 0;
+  setInterval(()=>{
+    steps.forEach(s=>document.getElementById(s).classList.remove('active'));
+    document.getElementById(steps[i]).classList.add('active');
+    i = (i+1) % steps.length;
+  }, 1500);
+}
+
+/* ============ INIT ============ */
+buildDots();
+animateExample();
+document.getElementById('name1').addEventListener('keydown', e=>{ if(e.key==='Enter') startAdventure(); });
+document.getElementById('name2').addEventListener('keydown', e=>{ if(e.key==='Enter') startAdventure(); });
+</script>
+</body>
+</html>
