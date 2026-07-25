@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧜‍♀️ Petualangan Matematika Ariel 🐚</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Pacifico&family=Quicksand:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --aqua-50:#E0F7FA; --aqua-100:#B2EBF2; --aqua-200:#80DEEA; --aqua-300:#4DD0E1;
+  --aqua-400:#26C6DA; --aqua-500:#00BCD4; --aqua-600:#00ACC1; --aqua-700:#0097A7;
+  --coral-100:#FFE0EC; --coral-200:#FFC9DC; --coral-300:#FFB0CC; --coral-400:#FF8FB1; --coral-500:#FF6B95;
+  --pearl-100:#FFF8DC; --pearl-200:#FFECB3; --pearl-300:#FFE082; --pearl-400:#FFD54F;
+  --shell-100:#F3E5F5; --shell-200:#E1BEE7; --shell-300:#CE93D8; --shell-400:#BA68C8; --shell-500:#9C27B0;
+  --deep-sea:#0D1B2A; --ocean:#1B263B; --sea-foam:#778DA9;
+  --text-dark:#1A2A4F; --text-mid:#3D5A80; --text-light:#98C1D9;
+  --shadow-aqua:0 8px 24px rgba(0,188,212,.25);
+  --shadow-coral:0 8px 24px rgba(255,107,149,.25);
+  --shadow-soft:0 4px 16px rgba(13,27,42,.12);
+}
+*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{
+  font-family:'Quicksand',sans-serif;
+  background:linear-gradient(135deg,#E0F7FA 0%,#FFF0F5 30%,#F3E5F5 60%,#E0F7FA 100%);
+  background-attachment:fixed;color:var(--text-dark);overflow:hidden;
+}
+.font-display{font-family:'Pacifico',cursive;}
+.font-cute{font-family:'Fredoka',sans-serif;}
+.bg-decorations{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-decorations .deco{position:absolute;font-size:1.8rem;opacity:.35;animation:floatUp linear infinite;}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg) translateX(0);}50%{transform:translateY(50vh) rotate(180deg) translateX(20px);}100%{transform:translateY(-20vh) rotate(360deg) translateX(-20px);}}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+@keyframes heartbeat{0%,100%{transform:scale(1);}25%{transform:scale(1.15);}50%{transform:scale(1);}75%{transform:scale(1.1);}}
+@keyframes pop-in{0%{transform:scale(.5);opacity:0;}60%{transform:scale(1.1);opacity:1;}100%{transform:scale(1);}}
+@keyframes bounce-soft{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+@keyframes bubble-rise{0%{transform:translateY(0) scale(1);opacity:0;}10%{opacity:1;}100%{transform:translateY(-300px) scale(1.5);opacity:0;}}
+
+.app-shell{position:relative;width:100vw;height:100vh;z-index:1;}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;padding:1.5rem 2.5rem 6rem;}
+.slide.active{display:flex;animation:slideUp .5s ease-out;}
+.slide::-webkit-scrollbar{width:8px;}
+.slide::-webkit-scrollbar-track{background:transparent;}
+.slide::-webkit-scrollbar-thumb{background:var(--aqua-300);border-radius:4px;}
+.slide-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-shrink:0;flex-wrap:wrap;gap:.5rem;}
+.slide-tag{display:inline-flex;align-items:center;gap:.5rem;background:white;padding:.4rem 1rem;border-radius:999px;font-weight:600;font-size:.85rem;color:var(--aqua-700);box-shadow:var(--shadow-soft);}
+.slide-num{background:linear-gradient(135deg,var(--coral-500),var(--shell-400));color:white;width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-family:'Fredoka';font-size:.85rem;}
+.nav-bar{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1rem;background:white;padding:.5rem 1rem;border-radius:999px;box-shadow:0 8px 24px rgba(0,188,212,.2);z-index:50;}
+.nav-btn{background:linear-gradient(135deg,var(--aqua-500),var(--coral-500));color:white;border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:.95rem;display:inline-flex;align-items:center;justify-content:center;transition:all .3s ease;}
+.nav-btn:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(0,188,212,.4);}
+.nav-btn:disabled{background:#DDD;cursor:not-allowed;transform:none;box-shadow:none;}
+.dots{display:flex;gap:.4rem;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--aqua-200);cursor:pointer;transition:all .3s ease;}
+.dot.active{background:var(--coral-500);width:24px;border-radius:999px;}
+
+.card{background:white;border-radius:24px;padding:1.3rem;box-shadow:var(--shadow-soft);border:2px solid var(--aqua-100);}
+.card-coral{background:linear-gradient(135deg,#FFE0EC 0%,#FFF5F8 100%);border-color:var(--coral-200);}
+.card-aqua{background:linear-gradient(135deg,#E0F7FA 0%,#F0FDFF 100%);border-color:var(--aqua-200);}
+.card-shell{background:linear-gradient(135deg,#F3E5F5 0%,#FAF0FD 100%);border-color:var(--shell-200);}
+.card-pearl{background:linear-gradient(135deg,#FFF8DC 0%,#FFFCEF 100%);border-color:var(--pearl-200);}
+
+.btn-cute{background:linear-gradient(135deg,var(--coral-500),var(--shell-400));color:white;border:none;padding:.65rem 1.4rem;border-radius:999px;font-family:'Fredoka',sans-serif;font-weight:500;cursor:pointer;transition:all .3s ease;box-shadow:var(--shadow-coral);font-size:.9rem;display:inline-flex;align-items:center;gap:.5rem;justify-content:center;}
+.btn-cute:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 24px rgba(255,107,149,.35);}
+.btn-cute:active{transform:translateY(0) scale(.98);}
+.btn-cute.aqua{background:linear-gradient(135deg,var(--aqua-500),var(--aqua-600));box-shadow:var(--shadow-aqua);}
+.btn-cute.pearl{background:linear-gradient(135deg,var(--pearl-300),var(--pearl-400));color:#5A4500;}
+.btn-cute.outline{background:white;color:var(--coral-500);border:2px solid var(--coral-300);box-shadow:none;}
+.btn-cute.outline:hover{background:var(--coral-100);}
+.btn-cute:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.input-cute{background:white;border:2px solid var(--aqua-200);border-radius:16px;padding:.7rem 1rem;font-family:'Quicksand';font-size:.95rem;color:var(--text-dark);transition:all .3s ease;width:100%;}
+.input-cute:focus{outline:none;border-color:var(--coral-500);box-shadow:0 0 0 4px rgba(255,107,149,.2);}
+.input-cute.correct{background:#E0F5EB;border-color:#7FD3B0;}
+.input-cute.wrong{background:#FFE0EC;border-color:var(--coral-400);}
+
+.op-btn{background:white;border:2px solid var(--aqua-200);color:var(--text-dark);width:60px;height:60px;border-radius:16px;cursor:pointer;transition:all .25s ease;font-size:1.5rem;font-family:'Fredoka';display:inline-flex;align-items:center;justify-content:center;}
+.op-btn:hover{transform:translateY(-3px);border-color:var(--coral-400);box-shadow:var(--shadow-coral);}
+.op-btn.selected{background:linear-gradient(135deg,var(--coral-500),var(--shell-400));color:white;border-color:transparent;transform:scale(1.05);}
+.op-btn.correct{background:linear-gradient(135deg,#7FD3B0,#4ADE80);color:white;border-color:transparent;animation:pop-in .4s;}
+.op-btn.wrong{background:linear-gradient(135deg,#FF8FB1,#FF6B95);color:white;border-color:transparent;animation:wiggle .4s;}
+
+.timer-display{font-family:'Fredoka';font-weight:600;font-size:1.1rem;display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:999px;transition:all .3s ease;}
+.timer-display.normal{background:var(--aqua-100);color:var(--aqua-700);}
+.timer-display.warning{background:var(--pearl-300);color:#8B6B00;animation:heartbeat 1s infinite;}
+.timer-display.danger{background:var(--coral-400);color:white;animation:heartbeat .5s infinite;}
+.timer-display.stopped{background:#E5E7EB;color:#999;}
+.timer-bar-bg{background:var(--aqua-100);height:8px;border-radius:4px;overflow:hidden;}
+.timer-bar-fill{height:100%;background:linear-gradient(90deg,var(--aqua-500),var(--aqua-400));border-radius:4px;transition:width .5s linear;}
+.timer-bar-fill.warning{background:linear-gradient(90deg,var(--pearl-400),var(--pearl-300));}
+.timer-bar-fill.danger{background:linear-gradient(90deg,var(--coral-500),var(--coral-400));}
+
+.q-card{border:2px solid var(--aqua-100);border-radius:20px;padding:1.2rem;margin-bottom:1rem;background:white;transition:all .3s;}
+.q-card.correct{background:linear-gradient(135deg,#E0F5EB,#F0FAF5);border-color:#7FD3B0;}
+.q-card.wrong{background:linear-gradient(135deg,#FFE0EC,#FFF5F8);border-color:var(--coral-300);}
+
+.disc-box{background:var(--aqua-50);border-left:4px solid var(--aqua-400);padding:.8rem 1rem;border-radius:8px;margin-top:.8rem;font-size:.85rem;color:var(--text-mid);display:none;}
+.disc-box.show{display:block;animation:slideUp .3s ease;}
+
+.sparkle{position:absolute;color:var(--pearl-400);font-size:1.5rem;animation:wiggle 3s ease-in-out infinite;pointer-events:none;}
+.title-gradient{background:linear-gradient(135deg,var(--coral-500),var(--shell-500),var(--aqua-600));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+
+.toast{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%) translateY(-100px);background:white;padding:.8rem 1.5rem;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.15);font-weight:600;color:var(--text-dark);z-index:100;transition:transform .4s ease;max-width:90vw;display:flex;align-items:center;gap:.5rem;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{background:linear-gradient(135deg,#B8E6D1,#7FD3B0);color:#2D6B5A;}
+.toast.error{background:linear-gradient(135deg,#FFB0C0,#FF8FA3);color:#8B1F3F;}
+.toast.info{background:linear-gradient(135deg,var(--aqua-200),var(--aqua-300));color:white;}
+
+.confetti{position:fixed;width:10px;height:10px;pointer-events:none;animation:confettiFall 3s ease-out forwards;z-index:200;}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+.bubble{position:absolute;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(0,188,212,.3));border-radius:50%;animation:bubble-rise 5s ease-out infinite;pointer-events:none;}
+
+.story-box{background:linear-gradient(135deg,#E0F7FA 0%,#FFF0F5 50%,#F3E5F5 100%);border-radius:20px;padding:1.5rem;margin-bottom:1rem;border:2px solid var(--aqua-200);position:relative;overflow:hidden;}
+.story-box::before{content:'🫧';position:absolute;top:10px;right:10px;font-size:1.5rem;opacity:.5;animation:bubble-rise 4s ease-out infinite;}
+.story-text{font-size:1rem;line-height:1.8;color:var(--text-dark);position:relative;z-index:1;}
+.story-text .highlight{background:linear-gradient(135deg,var(--pearl-300),var(--coral-300));padding:.1em .4em;border-radius:6px;font-weight:600;}
+.story-text .char-name{color:var(--coral-500);font-weight:700;}
+
+.story-input{display:inline-flex;align-items:center;gap:.5rem;background:white;border:2px solid var(--pearl-400);border-radius:12px;padding:.3em .5em;margin:0 .3em;vertical-align:middle;}
+.story-input input{border:none;width:80px;font-family:'Fredoka';font-weight:600;font-size:1em;text-align:center;color:var(--text-dark);}
+.story-input input:focus{outline:none;}
+.story-input.correct{background:#E0F5EB;border-color:#7FD3B0;}
+.story-input.wrong{background:#FFE0EC;border-color:var(--coral-400);animation:wiggle .4s;}
+.story-input button{background:var(--pearl-400);color:#5A4500;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;}
+
+.narrator-controls{background:white;border-radius:16px;padding:1rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--shadow-soft);border:2px solid var(--aqua-100);}
+.narrator-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--aqua-400),var(--coral-400));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.narrator-btn{background:linear-gradient(135deg,var(--aqua-500),var(--aqua-600));color:white;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .3s ease;}
+.narrator-btn:hover{transform:scale(1.1);box-shadow:var(--shadow-aqua);}
+.narrator-btn.playing{background:linear-gradient(135deg,var(--coral-500),var(--shell-400));}
+
+.stars{display:inline-flex;gap:.2rem;}
+.star{color:#DDD;font-size:1.6rem;cursor:pointer;transition:transform .2s,color .2s;}
+.star:hover{transform:scale(1.2);}
+.star.active{color:var(--pearl-400);}
+
+.keyword-tag{display:inline-block;padding:.3rem .8rem;border-radius:999px;font-size:.8rem;font-weight:600;margin:.2rem;}
+.keyword-tag.add{background:var(--aqua-100);color:var(--aqua-700);}
+.keyword-tag.sub{background:var(--coral-100);color:var(--coral-500);}
+.keyword-tag.mul{background:var(--shell-100);color:var(--shell-500);}
+.keyword-tag.div{background:var(--pearl-100);color:#8B6B00;}
+
+.stat-card{background:white;border-radius:16px;padding:1rem;text-align:center;box-shadow:var(--shadow-soft);border:2px solid var(--aqua-100);transition:all .3s ease;}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-coral);}
+.stat-value{font-family:'Fredoka';font-weight:700;font-size:2rem;line-height:1;}
+.stat-label{font-size:.75rem;color:var(--text-mid);margin-top:.3rem;text-transform:uppercase;letter-spacing:.05em;}
+
+@media(max-width:768px){.slide{padding:1rem 1rem 5rem;}}
+</style>
+</head>
+<body>
+<div class="bg-decorations" id="bgDecor"></div>
+
+<div class="app-shell" id="appShell">
+
+<!-- =================== SLIDE 1: COVER =================== -->
+<section class="slide active" data-slide="1">
+  <div class="flex-1 flex flex-col items-center justify-center text-center relative">
+    <div class="sparkle" style="top:8%;left:12%;">🧜‍♀️</div>
+    <div class="sparkle" style="top:14%;right:15%;animation-delay:.5s;">🐚</div>
+    <div class="sparkle" style="top:55%;left:5%;animation-delay:1s;">🐠</div>
+    <div class="sparkle" style="bottom:18%;right:8%;animation-delay:1.5s;">🦑</div>
+    <div class="sparkle" style="top:30%;right:5%;animation-delay:2s;">🦀</div>
+    <div class="sparkle" style="bottom:30%;left:8%;animation-delay:2.5s;">🌊</div>
+
+    <div class="text-sm font-cute tracking-[.3em] mb-3" style="color:var(--coral-500)">✦ UNDERWATER MATH ADVENTURE ✦</div>
+    <h1 class="font-display text-5xl md:text-7xl mb-3 title-gradient" style="line-height:1.1;">Ariel's Math Quest</h1>
+    <div class="text-lg md:text-xl mb-8 font-cute" style="color:var(--aqua-600);">🧜‍♀️ Petualangan Operasi Hitung Bersama Putri Duyung 🐚</div>
+
+    <div class="card max-w-md w-full card-coral">
+      <div class="font-cute font-semibold mb-4 flex items-center justify-center gap-2 text-lg" style="color:var(--coral-500)">
+        <i class="fas fa-heart" style="animation:heartbeat 1.5s infinite;"></i> Siapa namamu, calon putri duyung?
+      </div>
+      <input type="text" id="studentName" class="input-cute text-center" placeholder="Tulis namamu di sini..." maxlength="25" style="font-size:1.05rem;">
+      <button id="startBtn" class="btn-cute mt-5 mx-auto block" style="font-size:1.05rem;padding:.8rem 2.5rem;">
+        <i class="fas fa-water"></i> Mulai Berpetualang!
+      </button>
+    </div>
+    <div class="mt-6 grid grid-cols-3 gap-4 max-w-lg text-center">
+      <div><div class="text-3xl">📖</div><div class="text-xs font-cute mt-1" style="color:var(--aqua-600);">20 Soal Cerita</div></div>
+      <div><div class="text-3xl">🧜‍♀️</div><div class="text-xs font-cute mt-1" style="color:var(--coral-500);">Dongeng Interaktif</div></div>
+      <div><div class="text-3xl">⏱️</div><div class="text-xs font-cute mt-1" style="color:var(--shell-500);">Timer 2 Menit</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== SLIDE 2: PETUNJUK =================== -->
+<section class="slide" data-slide="2">
+  <div class="slide-header">
+    <div class="slide-tag"><span class="slide-num">2</span> Kata Kunci Operasi Hitung</div>
+    <div class="text-sm font-cute" style="color:var(--coral-500);"><i class="fas fa-lightbulb"></i> Mengerti soal cerita!</div>
+  </div>
+  <div class="flex-1 flex flex-col items-center justify-center">
+    <h2 class="font-display text-3xl md:text-4xl text-center mb-2 title-gradient">Kunci Memahami Soal Cerita 🗝️</h2>
+    <p class="text-center text-gray-500 mb-6 font-cute">Setiap operasi hitung punya "kata kunci" rahasia! Cari kata kunci untuk tahu operasi yang dipakai!</p>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full">
+      <div class="card card-aqua">
+        <div class="text-4xl mb-2">➕</div>
+        <h3 class="font-display text-xl mb-2" style="color:var(--aqua-700);">Penjumlahan</h3>
+        <div class="text-xs text-gray-500 mb-2 font-cute">KATA KUNCI:</div>
+        <div>
+          <span class="keyword-tag add">total</span>
+          <span class="keyword-tag add">jumlah</span>
+          <span class="keyword-tag add">gabung</span>
+          <span class="keyword-tag add">kumpul</span>
+          <span class="keyword-tag add">beli lagi</span>
+          <span class="keyword-tag add">bertambah</span>
+          <span class="keyword-tag add">diperoleh</span>
+          <span class="keyword-tag add">seluruhnya</span>
+          <span class="keyword-tag add">sekarang ada</span>
+        </div>
+      </div>
+      <div class="card card-coral">
+        <div class="text-4xl mb-2">➖</div>
+        <h3 class="font-display text-xl mb-2" style="color:var(--coral-500);">Pengurangan</h3>
+        <div class="text-xs text-gray-500 mb-2 font-cute">KATA KUNCI:</div>
+        <div>
+          <span class="keyword-tag sub">sisa</span>
+          <span class="keyword-tag sub">terpakai</span>
+          <span class="keyword-tag sub">dijual</span>
+          <span class="keyword-tag sub">hilang</span>
+          <span class="keyword-tag sub">berkurang</span>
+          <span class="keyword-tag sub">lebih</span>
+          <span class="keyword-tag sub">beratnya</span>
+          <span class="keyword-tag sub">selisih</span>
+          <span class="keyword-tag sub">dipakai</span>
+        </div>
+      </div>
+      <div class="card card-shell">
+        <div class="text-4xl mb-2">✖️</div>
+        <h3 class="font-display text-xl mb-2" style="color:var(--shell-500);">Perkalian</h3>
+        <div class="text-xs text-gray-500 mb-2 font-cute">KATA KUNCI:</div>
+        <div>
+          <span class="keyword-tag mul">setiap</span>
+          <span class="keyword-tag mul">masing-masing</span>
+          <span class="keyword-tag mul">total</span>
+          <span class="keyword-tag mul">kali</span>
+          <span class="keyword-tag mul">sebanyak</span>
+          <span class="keyword-tag mul">kelompok</span>
+          <span class="keyword-tag mul">lusin</span>
+          <span class="keyword-tag mul">kodi</span>
+          <span class="keyword-tag mul">rim</span>
+        </div>
+      </div>
+      <div class="card card-pearl">
+        <div class="text-4xl mb-2">➗</div>
+        <h3 class="font-display text-xl mb-2" style="color:#8B6B00;">Pembagian</h3>
+        <div class="text-xs text-gray-500 mb-2 font-cute">KATA KUNCI:</div>
+        <div>
+          <span class="keyword-tag div">dibagi</span>
+          <span class="keyword-tag div">sama rata</span>
+          <span class="keyword-tag div">setiap</span>
+          <span class="keyword-tag div">per</span>
+          <span class="keyword-tag div">bagian</span>
+          <span class="keyword-tag div">kelompok</span>
+          <span class="keyword-tag div">porsi</span>
+          <span class="keyword-tag div">distribusi</span>
+          <span class="keyword-tag div">masing-masing</span>
+        </div>
+      </div>
+    </div>
+    <div class="card max-w-2xl w-full mt-6 card-coral">
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">💡</div>
+        <p class="text-sm text-gray-600">Selalu baca soal dengan teliti. Temukan angkanya, lalu cari kata kunci untuk menentukan operasi yang tepat. Jika ragu, bayangkan situasinya seperti sedang berbelanja atau berbagi sesuatu!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== SLIDE 3: SOAL CERITA =================== -->
+<section class="slide" data-slide="3">
+  <div class="slide-header">
+    <div class="slide-tag"><span class="slide-num">3</span> Soal Cerita Operasi Hitung</div>
+    <div class="flex items-center gap-3 flex-wrap">
+      <div class="timer-display normal" id="timerDisplay">
+        <i class="fas fa-clock"></i> <span id="timerText">2:00</span>
+      </div>
+      <div class="text-xs font-cute" style="color:var(--coral-500);">Soal <span id="qCurrent">1</span>/20</div>
+    </div>
+  </div>
+  <div class="timer-bar-bg mb-3"><div class="timer-bar-fill" id="timerBar" style="width:100%;"></div></div>
+  
+  <div class="flex gap-3 flex-1 min-h-0">
+    <div class="flex-1 overflow-y-auto pr-2">
+      <div id="questionArea"></div>
+      
+      <div class="flex flex-wrap gap-2 mt-4 mb-4 sticky bottom-0 bg-white/90 backdrop-blur p-3 rounded-2xl border-2" style="border-color:var(--aqua-100);position:sticky;">
+        <button class="btn-cute outline" onclick="prevQuestion()"><i class="fas fa-chevron-left"></i> Prev</button>
+        <button class="btn-cute aqua" onclick="nextQuestion()">Soal Berikutnya <i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    
+    <div class="w-56 flex-shrink-0 hidden md:block">
+      <div class="card card-aqua sticky top-0">
+        <div class="text-xs font-cute mb-2 text-center" style="color:var(--aqua-600);">PETA SOAL</div>
+        <div class="grid grid-cols-5 gap-1" id="qNavGrid"></div>
+        <div class="mt-3 text-xs space-y-1">
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:var(--coral-500);"></div><span style="color:var(--coral-500);">Sekarang</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:#7FD3B0;"></div><span style="color:#7FD3B0;">Selesai</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:var(--aqua-100);"></div><span style="color:var(--aqua-600);">Belum</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== SLIDE 4: DONGENG ARIEL =================== -->
+<section class="slide" data-slide="4">
+  <div class="slide-header">
+    <div class="slide-tag"><span class="slide-num">4</span> Dongeng Ariel</div>
+    <div class="text-sm font-cute" style="color:var(--shell-500);"><i class="fas fa-book-open"></i> Baca dan Jawab!</div>
+  </div>
+  <div class="flex-1">
+    <h2 class="font-display text-2xl md:text-3xl text-center mb-2 title-gradient">🧜‍♀️ Petualangan Ariel di Kerajaan Atlantica 🐚</h2>
+    <p class="text-center text-gray-500 mb-3 font-cute text-sm">Dengarkan dongengnya dan jawab pertanyaan untuk melanjutkan cerita!</p>
+    
+    <div class="narrator-controls mb-4">
+      <div class="narrator-avatar">🧜‍♀️</div>
+      <div class="flex-1">
+        <div class="font-cute font-semibold" style="color:var(--aqua-700);">Narrator Laut</div>
+        <div class="text-xs text-gray-500">Klik play untuk mendengarkan cerita</div>
+      </div>
+      <button class="narrator-btn" id="narratorBtn" onclick="toggleNarrator()">
+        <i class="fas fa-play" id="narratorIcon"></i>
+      </button>
+    </div>
+
+    <div id="storyContainer" class="space-y-4"></div>
+  </div>
+</section>
+
+<!-- =================== SLIDE 5: REFLEKSI & STATISTIK =================== -->
+<section class="slide" data-slide="5">
+  <div class="slide-header">
+    <div class="slide-tag"><span class="slide-num">5</span> Penutup</div>
+    <div class="text-sm font-cute" style="color:var(--coral-500);"><i class="fas fa-heart"></i> Terima kasih!</div>
+  </div>
+  <div class="flex-1 flex flex-col items-center justify-center text-center">
+    <div class="sparkle" style="top:10%;left:10%;">🧜‍♀️</div>
+    <div class="sparkle" style="top:15%;right:12%;animation-delay:.7s;">🐚</div>
+    <div class="sparkle" style="bottom:20%;left:8%;animation-delay:1.4s;">🐠</div>
+    <div class="sparkle" style="bottom:25%;right:10%;animation-delay:2.1s;">🌊</div>
+
+    <h2 class="font-display text-3xl md:text-4xl mb-4 title-gradient">Kesimpulan Petualangan 🌟</h2>
+    
+    <!-- STATISTIK -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl w-full mb-6">
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--aqua-600);" id="statAnswered">0</div>
+        <div class="stat-label">📋 Soal Dijawab</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:#7FD3B0;" id="statCorrect">0</div>
+        <div class="stat-label">✅ Jawaban Benar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--coral-500);" id="statWrong">0</div>
+        <div class="stat-label">❌ Jawaban Salah</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--shell-500);" id="statAvgTime">0s</div>
+        <div class="stat-label">⏱️ Rata-rata Waktu</div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-3 max-w-3xl w-full mb-6">
+      <div class="card card-aqua">
+        <div class="text-2xl mb-1">🔍</div>
+        <h3 class="font-cute font-bold" style="color:var(--aqua-700);">Teman Baru</h3>
+        <p class="text-xs mt-1 text-gray-600">Kata kunci: tambah (total, jumlah), kurang (sisa, terpakai), kali (setiap, lusin), bagi (sama rata, per).</p>
+      </div>
+      <div class="card card-coral">
+        <div class="text-2xl mb-1">🧮</div>
+        <h3 class="font-cute font-bold" style="color:var(--coral-500);">Operasi Tepat</h3>
+        <p class="text-xs mt-1 text-gray-600">Pilih operasi yang tepat sebelum menghitung. Pikirkan konteks soalnya!</p>
+      </div>
+      <div class="card card-shell">
+        <div class="text-2xl mb-1">📖</div>
+        <h3 class="font-cute font-bold" style="color:var(--shell-500);">Dongeng Ariel</h3>
+        <p class="text-xs mt-1 text-gray-600">Matematika ada di mana-mana, bahkan di dasar laut bersama Ariel!</p>
+      </div>
+      <div class="card card-pearl">
+        <div class="text-2xl mb-1">⏱️</div>
+        <h3 class="font-cute font-bold" style="color:#8B6B00;">Manajemen Waktu</h3>
+        <p class="text-xs mt-1 text-gray-600">Latihan dengan timer membuatmu lebih cepat dan fokus!</p>
+      </div>
+    </div>
+
+    <div class="card max-w-md w-full mb-4 card-coral">
+      <h3 class="font-cute font-bold mb-3" style="color:var(--coral-500);">💭 Refleksi: Bagaimana petualanganmu hari ini?</h3>
+      <div class="stars flex justify-center gap-1 mb-3" id="refleksiStars">
+        <span class="star" data-r="1">★</span>
+        <span class="star" data-r="2">★</span>
+        <span class="star" data-r="3">★</span>
+        <span class="star" data-r="4">★</span>
+        <span class="star" data-r="5">★</span>
+      </div>
+      <textarea id="refleksiText" class="input-cute" rows="2" placeholder="Tulis kesan dan pesanmu..." style="font-size:.9rem;"></textarea>
+    </div>
+
+    <div class="text-center">
+      <h3 class="font-display text-2xl md:text-3xl title-gradient mb-2">Thank You For Today! 🐚</h3>
+      <p class="font-cute mb-3" style="color:var(--coral-500);">Kerja bagus, <span id="tyName" class="font-semibold">Putri Duyung</span>!</p>
+      <p class="text-xs font-cute mb-4" style="color:var(--aqua-600);">Sampai jumpa di petualangan bawah laut berikutnya! 🌊</p>
+      <button class="btn-cute pearl" onclick="celebrate()"><i class="fas fa-sparkles"></i> Rayakan!</button>
+      <button class="btn-cute outline ml-2" onclick="restart()"><i class="fas fa-rotate-left"></i> Mulai Lagi</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav-bar" id="navBar" style="display:none;">
+  <button class="nav-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============= DATA: 20 SOAL CERITA ============= */
+const questions = [
+  {q:"Di kerajaan Atlantica, Ariel mengumpulkan 2.500 kerang mutiara dan 1.750 kerang warna-warni. Berapa total kerang yang Ariel kumpulkan?", op:"+", a:4250, e:"Penjumlahan. 2.500 + 1.750 = 4.250 kerang."},
+  {q:"Budi si kepiting memiliki 3.200 butir pasir. Ia membuat istana pasir dan terpakai 1.450 butir. Berapa sisa pasir Budi?", op:"-", a:1750, e:"Pengurangan. 3.200 - 1.450 = 1.750 butir."},
+  {q:"Ujang si gurita memiliki 12 tentakel. Setiap tentakel memegang 8 mutiara. Berapa total mutiara Ujang?", op:"×", a:96, e:"Perkalian. 12 × 8 = 96 mutiara."},
+  {q:"Ibu duyung memberikan 480 mutiara kepada 6 anaknya secara sama rata. Berapa mutiara yang diterima setiap anak?", op:"÷", a:80, e:"Pembagian. 480 ÷ 6 = 80 mutiara."},
+  {q:"Ariel menemukan 4.200 keping harta karun. Kemudian ia menemukan 3.150 keping lagi. Berapa total harta karun Ariel?", op:"+", a:7350, e:"Penjumlahan. 4.200 + 3.150 = 7.350 keping."},
+  {q:"Ucup si bintang laut memiliki 5.600 butir pasir emas. Ia menyumbangkan 2.350 butir untuk pesta laut. Berapa sisa pasir emas Ucup?", op:"-", a:3250, e:"Pengurangan. 5.600 - 2.350 = 3.250 butir."},
+  {q:"Setiap hari Ariel mengoleksi 15 kerang baru. Berapa kerang yang dikoleksi Ariel dalam 28 hari?", op:"×", a:420, e:"Perkalian. 15 × 28 = 420 kerang."},
+  {q:"Raja Triton membagikan 840 mahkota mutiara kepada 7 putri duyung secara adil. Berapa mahkota yang diterima setiap putri?", op:"÷", a:120, e:"Pembagian. 840 ÷ 7 = 120 mahkota."},
+  {q:"Di pasar Atlantica, Ariel membeli 3.450 gram rumput laut dan 2.200 gram batu giok. Berapa total berat belanjaan Ariel?", op:"+", a:5650, e:"Penjumlahan. 3.450 + 2.200 = 5.650 gram."},
+  {q:"Sebastian si lobster memiliki 6.750 koral merah. Ia memberikan 4.200 koral kepada teman-temannya. Berapa sisa koral Sebastian?", op:"-", a:2550, e:"Pengurangan. 6.750 - 4.200 = 2.550 koral."},
+  {q:"Flounder si ikan mengoleksi 18 kerang per hari selama 25 hari. Berapa total kerang yang dikoleksi Flounder?", op:"×", a:450, e:"Perkalian. 18 × 25 = 450 kerang."},
+  {q:"Ada 960 mutiara yang harus dibagi sama rata ke dalam 8 kotak harta. Berapa mutiara dalam setiap kotak?", op:"÷", a:120, e:"Pembagian. 960 ÷ 8 = 120 mutiara."},
+  {q:"Ariel menghitung ada 7.500 ikan karang dan 3.200 ikan badai di terumbu. Berapa total ikan di terumbu?", op:"+", a:10700, e:"Penjumlahan. 7.500 + 3.200 = 10.700 ikan."},
+  {q:"Hutan rumput laut di kebun Ariel memiliki 9.850 batang. Badai merusak 6.400 batang. Berapa sisa batang rumput laut?", op:"-", a:3450, e:"Pengurangan. 9.850 - 6.400 = 3.450 batang."},
+  {q:"Di pesta laut, setiap meja memiliki 16 hidangan. Jika ada 35 meja, berapa total hidangan di pesta?", op:"×", a:560, e:"Perkalian. 16 × 35 = 560 hidangan."},
+  {q:"Ariel menemukan 720 mutiara dan ingin membaginya sama rata ke 9 temannya. Berapa mutiara yang diterima setiap teman?", op:"÷", a:80, e:"Pembagian. 720 ÷ 9 = 80 mutiara."},
+  {q:"Ariel mengoleksi 5.600 kerang putih dan 4.300 kerang merah muda. Berapa total kerang koleksi Ariel?", op:"+", a:9900, e:"Penjumlahan. 5.600 + 4.300 = 9.900 kerang."},
+  {q:"Budi si kepiting memanen 8.950 gram rumput laut. Ia menjual 5.600 gram ke pasar. Berapa sisa rumput laut Budi?", op:"-", a:3350, e:"Pengurangan. 8.950 - 5.600 = 3.350 gram."},
+  {q:"Di sekolah ikan, setiap kelas ada 24 ekor ikan kecil. Jika ada 15 kelas, berapa total ikan kecil di sekolah?", op:"×", a:360, e:"Perkalian. 24 × 15 = 360 ikan."},
+  {q:"Raja Triton membagi 1.200 medali emas kepada 6 prajurit terbaiknya secara merata. Berapa medali yang diterima setiap prajurit?", op:"÷", a:200, e:"Pembagian. 1.200 ÷ 6 = 200 medali."}
+];
+
+/* ============= DONGENG ARIEL ============= */
+const storyData = [
+  {
+    text: "Di dasar samudra yang biru, hiduplah seorang putri duyung bernama <span class='char-name'>Ariel</span>. Ia memiliki sahabat-sahabat yang lucu: <span class='char-name'>Budi</span> si kepiting, <span class='char-name'>Ujang</span> si gurita, <span class='char-name'>Ucup</span> si bintang laut, dan <span class='char-name'>Sebastian</span> si lobster. Pada suatu pagi yang cerah, Ariel menemukan kerajaan bawah laut yang sangat indah dan penuh harta karun.",
+    hasQuestion: false
+  },
+  {
+    text: "Ariel memanggil sahabat-sahabatnya untuk menghitung harta karun yang ditemukan. Ariel berkata, 'Aku menemukan <span class='highlight'>3.500 keping emas</span> dan <span class='highlight'>2.200 keping perak</span>. Berapa total harta karun yang kita temukan?'",
+    hasQuestion: true,
+    qIdx: 0,
+    question: "3.500 + 2.200 = ?",
+    answer: 5700
+  },
+  {
+    text: "Setelah menghitung, Budi si kepiting berseru, 'Aku punya ide! Mari kita buat istana pasir yang besar!' Budi memiliki <span class='highlight'>4.800 butir pasir</span>, tapi untuk membuat istana raksasa, ia harus mengeluarkan <span class='highlight'>1.650 butir pasir</span>. Berapa sisa pasir Budi?",
+    hasQuestion: true,
+    qIdx: 1,
+    question: "4.800 - 1.650 = ?",
+    answer: 3150
+  },
+  {
+    text: "Sementara itu, Ujang si gurita yang memiliki <span class='highlight'>8 tentakel</span> sedang sibuk menghitung mutiaranya. Setiap tentakelnya memegang <span class='highlight'>12 butir mutiara</span>. Ujang bertanya kepada Ariel, 'Berapa total mutiara yang aku punya?'",
+    hasQuestion: true,
+    qIdx: 2,
+    question: "12 × 8 = ?",
+    answer: 96
+  },
+  {
+    text: "Ariel sangat senang dengan kerja sama teman-temannya. Kemudian Ucup si bintang laut datang membawa <span class='highlight'>640 butir batu akik</span>. Ucup berkata, 'Aku ingin membagi batu akik ini sama rata kepada <span class='highlight'>8 kerabat bintang laut</span> yang lain.' Berapa batu akik yang diterima setiap kerabat?",
+    hasQuestion: true,
+    qIdx: 3,
+    question: "640 ÷ 8 = ?",
+    answer: 80
+  },
+  {
+    text: "Ariel dan sahabat-sahabatnya melanjutkan petualangan. Mereka sampai di sebuah taman rumput laut ajaib. Di sana terdapat <span class='highlight'>5.250 batang rumput laut hijau</span> dan <span class='highlight'>3.150 batang rumput laut biru</span>. Ariel ingin tahu berapa total rumput laut di taman itu.",
+    hasQuestion: true,
+    qIdx: 4,
+    question: "5.250 + 3.150 = ?",
+    answer: 8400
+  },
+  {
+    text: "Taman itu sangat indah, namun Sebastian si lobster memperingatkan, 'Hati-hati! Rumput laut biru itu yang berjumlah <span class='highlight'>3.150 batang</span> bisa berkurang karena dimakan oleh penyu. Jika <span class='highlight'>1.200 batang</span> dimakan penyu, berapa sisa rumput laut biru?'",
+    hasQuestion: true,
+    qIdx: 5,
+    question: "3.150 - 1.200 = ?",
+    answer: 1950
+  },
+  {
+    text: "Setelah melewati taman rumput laut, mereka tiba di gua mutiara. Di gua itu, ada <span class='highlight'>15 kerang besar</span>, dan setiap kerang mengandung <span class='highlight'>24 butir mutiara</span>. Sebastian penasaran dan bertanya, 'Berapa total mutiara yang ada di semua kerang?'",
+    hasQuestion: true,
+    qIdx: 6,
+    question: "24 × 15 = ?",
+    answer: 360
+  },
+  {
+    text: "Ariel sangat terkejut dengan jumlah mutiaranya. Lalu ia memutuskan untuk berbagi rezeki. Ia mengambil <span class='highlight'>840 butir mutiara</span> dan ingin membaginya sama rata kepada <span class='highlight'>6 anak duyung yatim</span> di kerajaan tersebut. Berapa mutiara yang diterima setiap anak duyung?",
+    hasQuestion: true,
+    qIdx: 7,
+    question: "840 ÷ 6 = ?",
+    answer: 140
+  },
+  {
+    text: "Petualangan Ariel belum selesai. Ia dan teman-temannya melanjutkan perjalanan dan menemukan dua gua lagi. Gua pertama berisi <span class='highlight'>4.600 kerang</span>, dan gua kedua berisi <span class='highlight'>3.300 kerang</span>. Budi ingin tahu berapa total kerang di kedua gua tersebut.",
+    hasQuestion: true,
+    qIdx: 8,
+    question: "4.600 + 3.300 = ?",
+    answer: 7900
+  },
+  {
+    text: "Saat mereka menghitung kerang, Ujang melihat bahwa ada <span class='highlight'>7.950 kerang</span> yang ternyata sudah retak dan pecah. Jika dari total kerang itu, <span class='highlight'>5.400 kerang</span> dibuang karena rusak parah, berapa kerang yang masih bisa diselamatkan?",
+    hasQuestion: true,
+    qIdx: 9,
+    question: "7.950 - 5.400 = ?",
+    answer: 2550
+  },
+  {
+    text: "Di akhir petualangan, Raja Triton memanggil Ariel dan sahabat-sahabatnya. Raja berkata, 'Kalian telah menemukan harta karun yang berlimpah! <span class='highlight'>960 butir mutiara</span> akan kubagikan sama rata kepada <span class='highlight'>8 penjaga laut</span> yang telah membantu menjaga kerajaan.' Berapa mutiara yang diterima setiap penjaga laut?",
+    hasQuestion: true,
+    qIdx: 10,
+    question: "960 ÷ 8 = ?",
+    answer: 120
+  },
+  {
+    text: "Ariel, Budi, Ujang, Ucup, dan Sebastian sangat gembira. Mereka menyadari bahwa matematika sangat membantu dalam petualangan mereka. Sejak hari itu, Ariel dan sahabat-sahabatnya selalu menghitung dan membagi harta dengan adil. Dan mereka hidup bahagia selamanya di kerajaan Atlantica yang indah.",
+    hasQuestion: false
+  }
+];
+
+/* ============= STATE ============= */
+let currentSlide = 1;
+const totalSlides = 5;
+let studentName = '';
+let currentQ = 0;
+let selectedOp = null;
+let opChecked = false;
+let finalAnswered = false;
+let timerInterval = null;
+let timeLeft = 120;
+let timerRunning = false;
+let timerStarted = false;
+let answers = {};
+let refleksiRating = 0;
+let narratorPlaying = false;
+let narratorUtterance = null;
+let storyAnswers = {};
+let currentStoryPara = 0;
+
+/* ============= UTILS ============= */
+function $(s){return document.querySelector(s);}
+function $$(s){return document.querySelectorAll(s);}
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function showToast(msg, type='info', duration=2200){
+  const t = $('#toast');
+  t.className = 'toast ' + type;
+  let icon = 'ℹ️';
+  if(type==='success') icon='✅';
+  if(type==='error') icon='⚠️';
+  t.innerHTML = `<span style="font-size:1.2rem">${icon}</span> <span>${msg}</span>`;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(()=>t.classList.remove('show'), duration);
+}
+
+function launchConfetti(){
+  const colors=['#FF6B95','#FFD54F','#00BCD4','#9C27B0','#26C6DA','#FF8FB1'];
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=randInt(0,100)+'vw';
+    c.style.background=colors[randInt(0,colors.length-1)];
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDelay=Math.random()*.5+'s';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+function initBgDecor(){
+  const decor = $('#bgDecor');
+  const chars = ['🫧','🐚','🐠','🦀','🦑','🌊','🧜‍♀️','✨','💫','🦐'];
+  for(let i=0;i<16;i++){
+    const d=document.createElement('div');
+    d.className='deco';
+    d.textContent=chars[randInt(0,chars.length-1)];
+    d.style.left=randInt(0,100)+'vw';
+    d.style.fontSize=(1.2+Math.random()*1.5)+'rem';
+    d.style.animationDuration=(15+Math.random()*15)+'s';
+    d.style.animationDelay=(-Math.random()*15)+'s';
+    decor.appendChild(d);
+  }
+}
+
+function formatTime(seconds){
+  const m = Math.floor(seconds/60);
+  const s = seconds%60;
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+/* ============= NAVIGATION ============= */
+function initDots(){
+  const dots = $('#dots');
+  dots.innerHTML='';
+  for(let i=1;i<=totalSlides;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===1?' active':'');
+    d.onclick=()=>goToSlide(i);
+    dots.appendChild(d);
+  }
+}
+
+function goToSlide(n){
+  if(n<1||n>totalSlides) return;
+  if(currentSlide===3 && n!==3) stopTimer();
+  if(currentSlide===4 && n!==4) stopNarrator();
+  $$('.slide').forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.slide[data-slide="${n}"]`).classList.add('active');
+  $$('.dot').forEach((d,i)=>d.classList.toggle('active', i===n-1));
+  currentSlide = n;
+  $('#prevBtn').disabled = (n===1);
+  $('#nextBtn').disabled = (n===totalSlides);
+  if(n===1) $('#navBar').style.display='none';
+  else $('#navBar').style.display='flex';
+  if(n===3) renderQuestion();
+  if(n===4) renderStory();
+  if(n===5){
+    $('#tyName').textContent = studentName||'Putri Duyung';
+    renderStats();
+  }
+}
+
+function nextSlide(){ if(currentSlide<totalSlides) goToSlide(currentSlide+1); }
+function prevSlide(){ if(currentSlide>1) goToSlide(currentSlide-1); }
+
+/* ============= SLIDE 1: START ============= */
+function initSlide1(){
+  $('#startBtn').onclick = ()=>{
+    const name = $('#studentName').value.trim();
+    if(!name){
+      showToast('Tulis namamu dulu, ya! 🧜‍♀️','error');
+      $('#studentName').focus();
+      return;
+    }
+    studentName = name;
+    showToast(`Selamat datang, ${name}! 🌊`,'success',3000);
+    launchConfetti();
+    setTimeout(()=>goToSlide(2),800);
+  };
+  $('#studentName').addEventListener('keypress',e=>{if(e.key==='Enter')$('#startBtn').click();});
+}
+
+/* ============= SLIDE 3: TIMER & SOAL ============= */
+function startTimer(){
+  if(timeLeft<=0) return;
+  if(timerRunning) return;
+  timerRunning = true;
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=0){
+      stopTimer();
+      showToast('Waktu habis! Pindah ke soal berikutnya. ⏰','error',2500);
+      setTimeout(()=>nextQuestion(),1500);
+    }
+  },1000);
+}
+
+function stopTimer(){
+  timerRunning = false;
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+}
+
+function resetTimer(){
+  stopTimer();
+  timeLeft = 120;
+  timerStarted = false;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay(){
+  const display = $('#timerDisplay');
+  const text = $('#timerText');
+  const bar = $('#timerBar');
+  
+  if(text) text.textContent = formatTime(Math.max(0,timeLeft));
+  if(bar) bar.style.width = Math.max(0,(timeLeft/120*100))+'%';
+  
+  if(!display) return;
+  display.className = 'timer-display';
+  if(bar) bar.className = 'timer-bar-fill';
+  
+  if(!timerRunning){
+    display.classList.add('stopped');
+  } else if(timeLeft<=30){
+    display.classList.add('danger');
+    if(bar) bar.classList.add('danger');
+  } else if(timeLeft<=60){
+    display.classList.add('warning');
+    if(bar) bar.classList.add('warning');
+  } else {
+    display.classList.add('normal');
+  }
+}
+
+function renderQuestion(){
+  const q = questions[currentQ];
+  if(!q) return;
+  
+  $('#qCurrent').textContent = currentQ+1;
+  
+  const isOpChecked = answers[currentQ]?.opChecked;
+  const isOpCorrect = answers[currentQ]?.opCorrect;
+  const isFinal = answers[currentQ]?.finalAnswered;
+  selectedOp = answers[currentQ]?.selectedOp || null;
+  
+  let html = `
+    <div class="q-card ${isFinal ? (answers[currentQ].correct ? 'correct' : 'wrong') : ''}" id="qCard">
+      <div class="flex justify-between items-start gap-2 mb-3 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-display text-2xl" style="color:var(--coral-500);">Soal ${currentQ+1}</span>
+          <span class="keyword-tag ${q.op==='+'?'add':q.op==='-'?'sub':q.op==='×'?'mul':'div'}">Operasi: ${q.op}</span>
+        </div>
+      </div>
+      <div class="text-base md:text-lg font-semibold mb-4 leading-relaxed">${q.q}</div>
+      
+      <div class="mb-4">
+        <div class="text-sm font-cute mb-2" style="color:var(--aqua-700);">🎯 Pilih operasi hitung yang tepat:</div>
+        <div class="flex gap-2">
+          <button class="op-btn ${selectedOp==='+'?'selected':''} ${isOpChecked && isOpCorrect && q.op==='+'?'correct':''} ${isOpChecked && !isOpCorrect && selectedOp==='+'?'wrong':''}" onclick="selectOp('+')" ${isOpChecked?'disabled':''}>+</button>
+          <button class="op-btn ${selectedOp==='-'?'selected':''} ${isOpChecked && isOpCorrect && q.op==='-'?'correct':''} ${isOpChecked && !isOpCorrect && selectedOp==='-'?'wrong':''}" onclick="selectOp('-')" ${isOpChecked?'disabled':''}>−</button>
+          <button class="op-btn ${selectedOp==='×'?'selected':''} ${isOpChecked && isOpCorrect && q.op==='×'?'correct':''} ${isOpChecked && !isOpCorrect && selectedOp==='×'?'wrong':''}" onclick="selectOp('×')" ${isOpChecked?'disabled':''}>×</button>
+          <button class="op-btn ${selectedOp==='÷'?'selected':''} ${isOpChecked && isOpCorrect && q.op==='÷'?'correct':''} ${isOpChecked && !isOpCorrect && selectedOp==='÷'?'wrong':''}" onclick="selectOp('÷')" ${isOpChecked?'disabled':''}>÷</button>
+        </div>
+        <button class="btn-cute aqua mt-3" id="checkOpBtn" onclick="checkOp()" ${isOpChecked?'disabled':''}>
+          <i class="fas fa-check"></i> Cek Operasi
+        </button>
+        <div id="opFeedback" class="mt-2 text-sm font-cute min-h-[1.5rem]"></div>
+      </div>
+      
+      ${isOpChecked && isOpCorrect ? `
+        <div class="mt-4 p-4 rounded-2xl" style="background:var(--aqua-50);">
+          <div class="text-sm font-cute mb-2" style="color:var(--coral-500);">✨ Bagus! Sekarang hitung hasil akhir:</div>
+          <div class="flex gap-2 items-center">
+            <input type="number" class="input-cute" placeholder="Hasil akhir..." id="finalAnswer" value="${answers[currentQ]?.finalInput||''}" style="max-width:200px;" ${isFinal?'disabled':''}>
+            <button class="btn-cute" onclick="checkFinalAnswer()" ${isFinal?'disabled':''}>
+              <i class="fas fa-check-double"></i> Cek Jawaban
+            </button>
+            <button class="btn-cute outline" onclick="toggleDiscussion()" ${!isFinal?'disabled':''}>
+              <i class="fas fa-book"></i> Pembahasan
+            </button>
+          </div>
+          <div id="finalFeedback" class="mt-2 text-sm font-cute min-h-[1.5rem]"></div>
+          <div class="disc-box" id="discBox"><b>Pembahasan:</b> ${q.e}</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+  $('#questionArea').innerHTML = html;
+  renderNavGrid();
+  
+  if(isOpChecked) {
+    if(isOpCorrect) {
+      $('#opFeedback').innerHTML = '<span style="color:#7FD3B0">✅ Operasi benar! Lanjut ke hasil akhir.</span>';
+    } else {
+      $('#opFeedback').innerHTML = '<span style="color:#FF6B95">❌ Belum tepat. Coba lagi!</span>';
+    }
+  }
+  if(isFinal) {
+    stopTimer();
+    if(answers[currentQ].correct) {
+      $('#finalFeedback').innerHTML = '<span style="color:#7FD3B0">🎉 Jawaban benar!</span>';
+    } else {
+      $('#finalFeedback').innerHTML = '<span style="color:#FF6B95">❌ Jawaban salah. Lihat pembahasan!</span>';
+    }
+  }
+  
+  updateTimerDisplay();
+}
+
+function selectOp(op){
+  if(opChecked) return;
+  selectedOp = op;
+  if(!answers[currentQ]) answers[currentQ] = {};
+  answers[currentQ].selectedOp = op;
+  renderQuestion();
+}
+
+function checkOp(){
+  if(!selectedOp){
+    showToast('Pilih operasi dulu! 🧮','error');
+    return;
+  }
+  const q = questions[currentQ];
+  const isCorrect = selectedOp === q.op;
+  if(!answers[currentQ]) answers[currentQ] = {};
+  answers[currentQ].opChecked = true;
+  answers[currentQ].opCorrect = isCorrect;
+  opChecked = true;
+  
+  if(isCorrect){
+    showToast('Operasi benar! 🎉','success',1800);
+    if(!timerStarted){
+      timerStarted = true;
+      startTimer();
+    }
+  } else {
+    showToast('Operasi salah. Coba lagi! 💪','error',2000);
+    setTimeout(()=>{
+      answers[currentQ].opChecked = false;
+      answers[currentQ].opCorrect = false;
+      opChecked = false;
+      selectedOp = null;
+      renderQuestion();
+    }, 1500);
+  }
+  renderQuestion();
+}
+
+function checkFinalAnswer(){
+  const input = $('#finalAnswer');
+  const val = parseInt(input.value);
+  if(!val && val!==0){
+    showToast('Isi jawabannya dulu! 📝','error');
+    return;
+  }
+  const q = questions[currentQ];
+  const isCorrect = val === q.a;
+  if(!answers[currentQ]) answers[currentQ] = {};
+  answers[currentQ].finalAnswered = true;
+  answers[currentQ].finalInput = val;
+  answers[currentQ].correct = isCorrect;
+  answers[currentQ].timeSpent = 120 - timeLeft;
+  finalAnswered = true;
+  
+  stopTimer();
+  
+  if(isCorrect){
+    showToast('Jawaban benar! 🎉','success',2000);
+    launchConfetti();
+  } else {
+    showToast('Jawaban salah. Lihat pembahasan! 📖','error',2500);
+  }
+  renderQuestion();
+}
+
+function toggleDiscussion(){
+  $('#discBox').classList.toggle('show');
+}
+
+function nextQuestion(){
+  if(currentQ < questions.length-1){
+    currentQ++;
+    selectedOp = null;
+    opChecked = false;
+    finalAnswered = false;
+    resetTimer();
+    renderQuestion();
+    $('#questionArea').scrollTop = 0;
+  } else {
+    showToast('Soal terakhir! Kerja bagus! 🌟','success',3000);
+    launchConfetti();
+  }
+}
+
+function prevQuestion(){
+  if(currentQ > 0){
+    currentQ--;
+    selectedOp = answers[currentQ]?.selectedOp || null;
+    opChecked = answers[currentQ]?.opChecked || false;
+    finalAnswered = answers[currentQ]?.finalAnswered || false;
+    resetTimer();
+    renderQuestion();
+    $('#questionArea').scrollTop = 0;
+  }
+}
+
+function renderNavGrid(){
+  const grid = $('#qNavGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  questions.forEach((q,i)=>{
+    const cell = document.createElement('div');
+    let cls = 'w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold cursor-pointer transition-all ';
+    if(i===currentQ) { cls += 'text-white'; cell.style.backgroundColor = 'var(--coral-500)'; }
+    else if(answers[i]?.finalAnswered) { cls += 'text-white'; cell.style.backgroundColor = '#7FD3B0'; }
+    else if(answers[i]?.opChecked) { cls += 'text-white'; cell.style.backgroundColor = 'var(--aqua-300)'; }
+    else { cell.style.backgroundColor = 'var(--aqua-100)'; cell.style.color = 'var(--aqua-700)'; }
+    cell.className = cls;
+    cell.textContent = i+1;
+    cell.onclick = ()=>{
+      currentQ = i;
+      selectedOp = answers[i]?.selectedOp || null;
+      opChecked = answers[i]?.opChecked || false;
+      finalAnswered = answers[i]?.finalAnswered || false;
+      resetTimer();
+      renderQuestion();
+    };
+    grid.appendChild(cell);
+  });
+}
+
+/* ============= SLIDE 4: DONGENG ============= */
+function renderStory(){
+  const container = $('#storyContainer');
+  if(container.children.length > 0) return;
+  
+  let fullHtml = '';
+  storyData.forEach((para, idx) => {
+    let html = `<div class="story-box" id="storyPara-${idx}">`;
+    html += `<div class="text-xs font-cute mb-2" style="color:var(--shell-500);">📖 Paragraf ${idx+1}</div>`;
+    html += `<div class="story-text" id="storyText-${idx}">`;
+    
+    if(para.hasQuestion){
+      const parts = para.text.split(/(\?)/);
+      html += parts[0];
+      html += `<span class="story-input" id="storyInput-${para.qIdx}">
+        <input type="number" placeholder="?" id="storyAns-${para.qIdx}" onkeypress="if(event.key==='Enter') checkStoryAnswer(${para.qIdx})">
+        <button onclick="checkStoryAnswer(${para.qIdx})"><i class="fas fa-check"></i></button>
+      </span>`;
+      html += parts[1] || '';
+    } else {
+      html += para.text;
+    }
+    
+    html += `</div></div>`;
+    fullHtml += html;
+  });
+  container.innerHTML = fullHtml;
+}
+
+function checkStoryAnswer(qIdx){
+  const input = $(`#storyAns-${qIdx}`);
+  const val = parseInt(input.value);
+  if(!val && val!==0){
+    showToast('Isi jawabannya dulu! 📝','error');
+    return;
+  }
+  const para = storyData.find(p => p.qIdx === qIdx);
+  const isCorrect = val === para.answer;
+  const inputBox = $(`#storyInput-${qIdx}`);
+  
+  if(isCorrect){
+    inputBox.classList.add('correct');
+    inputBox.classList.remove('wrong');
+    input.disabled = true;
+    storyAnswers[qIdx] = true;
+    showToast('Benar! Cerita berlanjut... 📖','success',1500);
+    if(narratorPlaying){
+      setTimeout(()=>resumeNarrator(), 1000);
+    }
+  } else {
+    inputBox.classList.add('wrong');
+    showToast('Belum tepat, coba lagi! 🔄','error',1800);
+    setTimeout(()=>inputBox.classList.remove('wrong'), 2000);
+  }
+}
+
+function toggleNarrator(){
+  if(!('speechSynthesis' in window)){
+    showToast('Maaf, browsermu tidak mendukung fitur suara. 🙏','error');
+    return;
+  }
+  
+  if(narratorPlaying){
+    stopNarrator();
+  } else {
+    startNarrator();
+  }
+}
+
+function startNarrator(){
+  narratorPlaying = true;
+  $('#narratorIcon').className = 'fas fa-pause';
+  $('#narratorBtn').classList.add('playing');
+  speakParagraph(0);
+}
+
+function stopNarrator(){
+  narratorPlaying = false;
+  $('#narratorIcon').className = 'fas fa-play';
+  $('#narratorBtn').classList.remove('playing');
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+}
+
+function speakParagraph(idx){
+  if(!narratorPlaying || idx >= storyData.length){
+    stopNarrator();
+    return;
+  }
+  
+  currentStoryPara = idx;
+  const para = storyData[idx];
+  const cleanText = para.text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  if(para.hasQuestion && storyAnswers[para.qIdx] !== true){
+    const textBeforeQ = cleanText.split('?')[0] + '?';
+    narratorUtterance = new SpeechSynthesisUtterance(textBeforeQ);
+    narratorUtterance.lang = 'id-ID';
+    narratorUtterance.rate = 0.9;
+    narratorUtterance.pitch = 1.1;
+    
+    narratorUtterance.onend = () => {
+      if(narratorPlaying){
+        showToast('Jawab pertanyaan untuk melanjutkan dongeng! 📖','info',2500);
+        const input = $(`#storyAns-${para.qIdx}`);
+        if(input){
+          input.focus();
+          input.parentElement.style.animation = 'heartbeat 1s infinite';
+        }
+      }
+    };
+    speechSynthesis.speak(narratorUtterance);
+  } else {
+    narratorUtterance = new SpeechSynthesisUtterance(cleanText);
+    narratorUtterance.lang = 'id-ID';
+    narratorUtterance.rate = 0.9;
+    narratorUtterance.pitch = 1.1;
+    
+    narratorUtterance.onend = () => {
+      if(narratorPlaying){
+        setTimeout(()=>speakParagraph(idx+1), 500);
+      }
+    };
+    speechSynthesis.speak(narratorUtterance);
+  }
+}
+
+function resumeNarrator(){
+  speakParagraph(currentStoryPara);
+}
+
+/* ============= SLIDE 5: STATISTIK & REFLEKSI ============= */
+function renderStats(){
+  let answered = 0, correct = 0, wrong = 0, totalTime = 0;
+  
+  for(let i=0; i<questions.length; i++){
+    if(answers[i]?.finalAnswered){
+      answered++;
+      if(answers[i].correct){
+        correct++;
+      } else {
+        wrong++;
+      }
+      if(answers[i].timeSpent){
+        totalTime += answers[i].timeSpent;
+      }
+    }
+  }
+  
+  const avgTime = answered > 0 ? Math.round(totalTime / answered) : 0;
+  
+  $('#statAnswered').textContent = answered;
+  $('#statCorrect').textContent = correct;
+  $('#statWrong').textContent = wrong;
+  $('#statAvgTime').textContent = formatTime(avgTime);
+}
+
+function initRefleksi(){
+  $$('#refleksiStars .star').forEach(s=>{
+    s.onclick = ()=>{
+      refleksiRating = parseInt(s.dataset.r);
+      $$('#refleksiStars .star').forEach(x=>{
+        x.classList.toggle('active', parseInt(x.dataset.r)<=refleksiRating);
+      });
+      if(refleksiRating>=4) launchConfetti();
+    };
+  });
+}
+
+function celebrate(){
+  launchConfetti();
+  showToast('Kamu adalah putri duyung matematika! 🧜‍♀️','success',3000);
+}
+
+function restart(){
+  currentSlide = 1;
+  currentQ = 0;
+  selectedOp = null;
+  opChecked = false;
+  finalAnswered = false;
+  answers = {};
+  storyAnswers = {};
+  refleksiRating = 0;
+  stopTimer();
+  stopNarrator();
+  $('#studentName').value = '';
+  $('#refleksiText').value = '';
+  $$('#refleksiStars .star').forEach(x=>x.classList.remove('active'));
+  $('#storyContainer').innerHTML = '';
+  goToSlide(1);
+}
+
+/* ============= INIT ============= */
+window.addEventListener('DOMContentLoaded',()=>{
+  initBgDecor();
+  initDots();
+  initSlide1();
+  initRefleksi();
+  $('#prevBtn').onclick = prevSlide;
+  $('#nextBtn').onclick = nextSlide;
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight' && currentSlide>1) nextSlide();
+    if(e.key==='ArrowLeft' && currentSlide>1) prevSlide();
+  });
+});
+</script>
+</body>
+</html>
