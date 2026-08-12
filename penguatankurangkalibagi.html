@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Matematika Hebat</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg: #FFF8EC;
+  --bg-2: #FFE8C2;
+  --primary: #0E7C7B;
+  --primary-dark: #095453;
+  --primary-light: #B8E5E4;
+  --s1: #FF8C42;
+  --s1-dark: #E5701F;
+  --s1-light: #FFE0C7;
+  --s2: #E63946;
+  --s2-dark: #C72533;
+  --s2-light: #FFD0D5;
+  --accent: #FFB627;
+  --accent-2: #4ECDC4;
+  --text: #2D3047;
+  --muted: #6B7280;
+  --card: #FFFFFF;
+  --border: #F0E0C0;
+  --success: #10B981;
+  --danger: #EF4444;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+.font-display { font-family: 'Fredoka', sans-serif; }
+.bg-pattern {
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 182, 39, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(78, 205, 196, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(255, 140, 66, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(230, 57, 70, 0.12) 0%, transparent 30%);
+  background-attachment: fixed;
+}
+.float-deco {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0.4;
+  font-size: 2.5rem;
+  animation: float 8s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+.slide {
+  min-height: calc(100vh - 70px);
+  padding: 2rem 1.5rem 4rem;
+  display: none;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+.slide.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nav-top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 248, 236, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--border);
+  padding: 0.75rem 1.5rem;
+}
+.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  color: var(--muted);
+  background: transparent;
+}
+.nav-pill:hover { background: var(--bg-2); color: var(--text); }
+.nav-pill.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(14, 124, 123, 0.3);
+}
+.card {
+  background: var(--card);
+  border-radius: 1.25rem;
+  border: 2px solid var(--border);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.card-s1 { border-color: var(--s1); border-width: 3px; }
+.card-s2 { border-color: var(--s2); border-width: 3px; }
+
+/* CSS Grid untuk Menjajakan Angka */
+.cell {
+  width: 100%;
+  height: 2.5rem;
+  text-align: center;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  background: white;
+  transition: all 0.2s;
+  color: var(--text);
+  padding: 0;
+  box-sizing: border-box;
+}
+.cell:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.25);
+  outline: none;
+  transform: scale(1.08);
+}
+.cell.borrow {
+  border-color: var(--accent);
+  background: #FFFBEB;
+  border-style: dashed;
+}
+.cell.borrow.s1 { border-color: var(--s1); }
+.cell.borrow.s2 { border-color: var(--s2); }
+.cell.correct {
+  border-color: var(--success) !important;
+  background: #ECFDF5 !important;
+  color: var(--success);
+}
+.cell.wrong {
+  border-color: var(--danger) !important;
+  background: #FEF2F2 !important;
+  color: var(--danger);
+  animation: shake 0.4s;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.digit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 2.5rem;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text);
+  position: relative;
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+.digit.strike { color: #9CA3AF; }
+.digit.strike::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 3px;
+  background: var(--danger);
+  transform: rotate(-8deg);
+}
+.operator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--s2);
+}
+.math-grid {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: 'Fredoka', sans-serif;
+}
+.math-row {
+  display: grid;
+  gap: 0.25rem;
+  align-items: center;
+  justify-items: stretch;
+}
+.math-row.sub-row {
+  grid-template-columns: 2rem repeat(4, 2.5rem); /* Op + 4 digit */
+}
+.math-row.mult-row {
+  grid-template-columns: 2rem repeat(4, 2.5rem); /* Op + 4 digit */
+}
+.math-row.result-row {
+  border-top: 2px solid var(--text);
+  padding-top: 0.25rem;
+}
+.tab-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 2px solid var(--border);
+  background: white;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Nunito', sans-serif;
+}
+.tab-btn:hover { background: var(--bg-2); }
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(14, 124, 123, 0.3);
+}
+.btn {
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 14px rgba(14, 124, 123, 0.4); }
+.btn-s1 { background: var(--s1); color: white; }
+.btn-s1:hover { background: var(--s1-dark); transform: translateY(-2px); }
+.btn-s2 { background: var(--s2); color: white; }
+.btn-s2:hover { background: var(--s2-dark); transform: translateY(-2px); }
+.btn-accent { background: var(--accent); color: var(--text); }
+.btn-accent:hover { background: #E5A41F; transform: translateY(-2px); }
+.btn-ghost { background: white; color: var(--text); border: 2px solid var(--border); }
+.btn-ghost:hover { background: var(--bg-2); }
+.practice-area {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scroll-behavior: smooth;
+}
+.practice-area::-webkit-scrollbar { width: 8px; }
+.practice-area::-webkit-scrollbar-track { background: var(--bg-2); border-radius: 4px; }
+.practice-area::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+.practice-area.s1::-webkit-scrollbar-thumb { background: var(--s1); }
+.practice-area.s2::-webkit-scrollbar-thumb { background: var(--s2); }
+.problem-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+}
+.problem-card:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+.problem-card.s1 { border-left: 5px solid var(--s1); }
+.problem-card.s2 { border-left: 5px solid var(--s2); }
+.problem-card.solved { border-color: var(--success); background: #F0FDF4; }
+.problem-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.problem-num.s1 { background: var(--s1); }
+.problem-num.s2 { background: var(--s2); }
+.feedback {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: none;
+}
+.feedback.show { display: block; animation: bounce-in 0.4s; }
+.feedback.correct { background: #D1FAE5; color: #065F46; border-left: 4px solid var(--success); }
+.feedback.wrong { background: #FEE2E2; color: #991B1B; border-left: 4px solid var(--danger); }
+.feedback.info { background: #DBEAFE; color: #1E40AF; border-left: 4px solid var(--primary); }
+.tips-box {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 2px solid var(--accent);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  position: relative;
+  margin-top: 1rem;
+}
+.tips-box::before {
+  content: '💡';
+  position: absolute;
+  top: -0.75rem;
+  left: 1rem;
+  background: var(--accent);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.progress-bar {
+  height: 12px;
+  background: var(--bg-2);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--s2));
+  transition: width 0.5s ease;
+  border-radius: 999px;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.confetti {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  animation: confettiFall 3s ease-out forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+.scaffold-step {
+  background: #F9FAFB;
+  border-left: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.scaffold-step.s1 { border-color: var(--s1); background: #FFF4EA; }
+.scaffold-step.s2 { border-color: var(--s2); background: #FFF0F1; }
+.game-stage {
+  background: linear-gradient(135deg, #FFF8EC 0%, #FFE8C2 100%);
+  border: 3px solid var(--primary);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s;
+}
+.game-stage.locked { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+.game-stage.completed { border-color: var(--success); background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); }
+.stage-num {
+  position: absolute;
+  top: -1rem;
+  left: 1.5rem;
+  background: var(--primary);
+  color: white;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(14, 124, 123, 0.4);
+}
+.game-stage.completed .stage-num { background: var(--success); }
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 182, 39, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(255, 182, 39, 0); }
+}
+.pulse-glow { animation: pulse-glow 2s infinite; }
+@keyframes bounce-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.bounce-in { animation: bounce-in 0.5s ease; }
+.treasure-box {
+  width: 180px;
+  height: 160px;
+  margin: 0 auto;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.treasure-box:hover { transform: scale(1.05); }
+.treasure-box .lid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  background: linear-gradient(135deg, #92400E 0%, #B45309 100%);
+  border-radius: 1rem 1rem 0.5rem 0.5rem;
+  transform-origin: bottom;
+  transition: transform 1s ease;
+  z-index: 2;
+  border: 4px solid #78350F;
+  border-bottom: none;
+}
+.treasure-box.open .lid { transform: rotateX(-110deg) translateY(-5px); }
+.treasure-box .body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+  border-radius: 0.5rem 0.5rem 1rem 1rem;
+  border: 4px solid #78350F;
+  border-top: none;
+}
+.treasure-box .glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.8) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.5s;
+  z-index: 1;
+}
+.treasure-box.open .glow { opacity: 1; animation: glow-pulse 2s ease-in-out infinite; }
+@keyframes glow-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .cell, .digit { width: 100%; height: 2rem; font-size: 1rem; }
+  .math-row.sub-row, .math-row.mult-row {
+    grid-template-columns: 1.5rem repeat(4, 2rem);
+  }
+  .operator { width: 100%; font-size: 1.2rem; }
+}
+</style>
+</head>
+<body class="bg-pattern">
+
+<div class="float-deco" style="top: 10%; left: 5%; animation-delay: 0s;">➕</div>
+<div class="float-deco" style="top: 30%; right: 8%; animation-delay: 1s;">➖</div>
+<div class="float-deco" style="bottom: 20%; left: 7%; animation-delay: 2s;">✖️</div>
+<div class="float-deco" style="bottom: 30%; right: 5%; animation-delay: 1.5s;">➗</div>
+<div class="float-deco" style="top: 60%; left: 3%; animation-delay: 0.5s;">🔢</div>
+
+<nav class="nav-top">
+  <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center font-display font-bold text-white text-lg" style="background: linear-gradient(135deg, var(--primary), var(--accent-2));">
+        <i class="fa-solid fa-calculator"></i>
+      </div>
+      <span class="font-display font-bold text-lg" style="color: var(--primary);">Petualangan Matematika</span>
+    </div>
+    <div class="flex gap-1 flex-wrap">
+      <button class="nav-pill active" data-slide="1"><i class="fa-solid fa-house"></i> Cover</button>
+      <button class="nav-pill" data-slide="2"><i class="fa-solid fa-book"></i> Materi</button>
+      <button class="nav-pill" data-slide="3"><i class="fa-solid fa-pen"></i> Soal Cerita</button>
+      <button class="nav-pill" data-slide="4"><i class="fa-solid fa-gamepad"></i> Game</button>
+      <button class="nav-pill" data-slide="5"><i class="fa-solid fa-flag-checkered"></i> Penutup</button>
+    </div>
+  </div>
+</nav>
+
+<!-- SLIDE 1: COVER -->
+<section id="slide1" class="slide active">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="inline-block mb-4 px-4 py-2 rounded-full text-sm font-bold bounce-in" style="background: var(--accent); color: var(--text);">
+        <i class="fa-solid fa-star"></i> Petualangan Matematika Hebat
+      </div>
+      <h1 class="font-display text-5xl md:text-7xl font-bold mb-4 leading-tight">
+        <span style="color: var(--primary);">Mari Berhitung</span><br>
+        <span style="color: var(--s1);">Bersama-Sama!</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+        Pengurangan dengan peminjaman, perkalian bersusun, pembagian, dan soal cerita — semua dalam satu petualangan seru untuk dua siswa!
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="card p-6 pulse-glow" style="border-color: var(--s1); border-width: 3px;">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-display font-bold text-xl" style="background: var(--s1);">1</div>
+          <div>
+            <h3 class="font-display font-bold text-xl">Siswa 1</h3>
+            <p class="text-sm text-gray-600">Pemain di sisi kiri</p>
+          </div>
+        </div>
+        <label class="block text-sm font-bold mb-2 text-gray-700">Masukkan nama kamu:</label>
+        <input id="name1" type="text" placeholder="Tulis namamu di sini..." 
+          class="w-full px-4 py-3 rounded-xl border-2 text-lg font-semibold focus:outline-none transition" style="border-color: var(--s1); background: var(--s1-light);">
+        <div class="mt-3 flex gap-2 flex-wrap">
+          <span class="text-xs px-2 py-1 rounded-full font-bold" style="background: var(--s1-light); color: var(--s1-dark);">Tim Oranye</span>
+          <span class="text-xs px-2 py-1 rounded-full font-bold" style="background: var(--s1-light); color: var(--s1-dark);">20 soal per materi</span>
+        </div>
+      </div>
+
+      <div class="card p-6 pulse-glow" style="border-color: var(--s2); border-width: 3px; animation-delay: 1s;">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-display font-bold text-xl" style="background: var(--s2);">2</div>
+          <div>
+            <h3 class="font-display font-bold text-xl">Siswa 2</h3>
+            <p class="text-sm text-gray-600">Pemain di sisi kanan</p>
+          </div>
+        </div>
+        <label class="block text-sm font-bold mb-2 text-gray-700">Masukkan nama kamu:</label>
+        <input id="name2" type="text" placeholder="Tulis namamu di sini..." 
+          class="w-full px-4 py-3 rounded-xl border-2 text-lg font-semibold focus:outline-none transition" style="border-color: var(--s2); background: var(--s2-light);">
+        <div class="mt-3 flex gap-2 flex-wrap">
+          <span class="text-xs px-2 py-1 rounded-full font-bold" style="background: var(--s2-light); color: var(--s2-dark);">Tim Merah</span>
+          <span class="text-xs px-2 py-1 rounded-full font-bold" style="background: var(--s2-light); color: var(--s2-dark);">20 soal per materi</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button id="startBtn" class="btn btn-primary text-xl px-8 py-4">
+        <i class="fa-solid fa-rocket"></i> Mulai Petualangan
+      </button>
+      <p id="nameWarning" class="text-sm text-red-500 mt-3 hidden">Yuk isi dulu nama kedua siswa!</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: MATERI -->
+<section id="slide2" class="slide">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="font-display text-4xl font-bold mb-2 text-center" style="color: var(--primary);">
+      <i class="fa-solid fa-book"></i> Materi Pembelajaran
+    </h2>
+    <p class="text-center text-gray-700 mb-6">Pilih topik, pelajari contoh, lalu kerjakan latihan!</p>
+
+    <div class="flex justify-center gap-2 mb-6 flex-wrap">
+      <button class="tab-btn active" data-tab="subtraction"><i class="fa-solid fa-minus"></i> Pengurangan</button>
+      <button class="tab-btn" data-tab="multiplication"><i class="fa-solid fa-xmark"></i> Perkalian</button>
+      <button class="tab-btn" data-tab="division"><i class="fa-solid fa-divide"></i> Pembagian</button>
+    </div>
+
+    <!-- SUBTRACTION TAB -->
+    <div id="tab-subtraction" class="tab-content">
+      <div class="card p-6 mb-6">
+        <h3 class="font-display text-2xl font-bold mb-3" style="color: var(--s1);">
+          <i class="fa-solid fa-minus-circle"></i> Pengurangan Bersusun dengan Peminjaman
+        </h3>
+        <p class="mb-4">Pengurangan dengan peminjaman terjadi ketika angka di atas lebih kecil dari angka di bawahnya. Kita "meminjam" 1 dari angka di sebelah kirinya, sehingga angka tersebut bertambah 10.</p>
+        
+        <div class="bg-yellow-50 p-4 rounded-xl mb-4">
+          <p class="font-bold mb-3">📋 Contoh: <span class="font-display text-xl">5000 − 2347 = ?</span></p>
+          <p class="text-sm mb-4">Angka satuan: <b>0 − 7</b> tidak bisa! Kita harus pinjam. Tapi angka puluhan dan ratusan juga 0. Jadi kita pinjam dari ribuan: 5 jadi 4, lalu 0 jadi 9 (puluhan), 0 jadi 9 (ratusan), 0 jadi 10 (satuan).</p>
+          
+          <div class="flex items-start gap-6 flex-wrap">
+            <div class="math-grid" id="subDemo">
+              <!-- Baris Peminjaman -->
+              <div class="math-row sub-row">
+                <span></span>
+                <input class="cell borrow" maxlength="2" data-demo-sub-borrow="0" placeholder="-">
+                <input class="cell borrow" maxlength="2" data-demo-sub-borrow="1" placeholder="-">
+                <input class="cell borrow" maxlength="2" data-demo-sub-borrow="2" placeholder="-">
+                <input class="cell borrow" maxlength="2" data-demo-sub-borrow="3" placeholder="-">
+              </div>
+              <!-- Baris Angka Atas -->
+              <div class="math-row sub-row">
+                <span></span>
+                <span class="digit" data-demo-sub-top="0">5</span>
+                <span class="digit" data-demo-sub-top="1">0</span>
+                <span class="digit" data-demo-sub-top="2">0</span>
+                <span class="digit" data-demo-sub-top="3">0</span>
+              </div>
+              <!-- Baris Angka Bawah -->
+              <div class="math-row sub-row">
+                <span class="operator">−</span>
+                <span class="digit">2</span>
+                <span class="digit">3</span>
+                <span class="digit">4</span>
+                <span class="digit">7</span>
+              </div>
+              <!-- Baris Hasil -->
+              <div class="math-row sub-row result-row">
+                <span></span>
+                <input class="cell" maxlength="1" data-demo-sub-result="0">
+                <input class="cell" maxlength="1" data-demo-sub-result="1">
+                <input class="cell" maxlength="1" data-demo-sub-result="2">
+                <input class="cell" maxlength="1" data-demo-sub-result="3">
+              </div>
+            </div>
+            <div class="flex-1 min-w-[200px]">
+              <p class="text-sm mb-2 font-bold">Petunjuk mengisi:</p>
+              <ol class="text-sm list-decimal list-inside space-y-1">
+                <li>Isi kolom <span style="color: var(--accent); font-weight: bold;">peminjaman</span> di baris paling atas (boleh 2 angka, contoh: <b>10</b>)</li>
+                <li>Saat kolom peminjaman diisi, angka asli di bawahnya akan <span class="strike">dicoret</span></li>
+                <li>Isi kolom hasil paling bawah</li>
+                <li>Klik "Cek Contoh"</li>
+              </ol>
+              <button onclick="checkSubDemo()" class="btn btn-primary mt-3">
+                <i class="fa-solid fa-check"></i> Cek Contoh
+              </button>
+              <div id="subDemoFeedback" class="feedback mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-box">
+          <p class="font-bold mb-1">Tips & Trick Pengurangan:</p>
+          <ul class="text-sm list-disc list-inside space-y-1">
+            <li>Mulai dari kanan (satuan) ke kiri (ribu)</li>
+            <li>Jika angka atas lebih kecil, pinjam 1 dari kiri → angka atas kiri berkurang 1</li>
+            <li>Angka yang dipinjam menjadi <b>+10</b> (misal: 0 jadi 10, 5 jadi 15)</li>
+            <li>Jika angka kiri juga 0, terus pinjam sampai ketemu angka bukan 0</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-4 card-s1">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s1);">
+              <i class="fa-solid fa-user"></i> <span id="practiceName1">Siswa 1</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s1-light); color: var(--s1-dark);">
+              <span id="subProgress1">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="subProgressBar1" style="width: 0%;"></div></div>
+          <div class="practice-area s1" id="subPractice1"></div>
+        </div>
+        <div class="card p-4 card-s2">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s2);">
+              <i class="fa-solid fa-user"></i> <span id="practiceName2">Siswa 2</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s2-light); color: var(--s2-dark);">
+              <span id="subProgress2">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="subProgressBar2" style="width: 0%;"></div></div>
+          <div class="practice-area s2" id="subPractice2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MULTIPLICATION TAB -->
+    <div id="tab-multiplication" class="tab-content hidden">
+      <div class="card p-6 mb-6">
+        <h3 class="font-display text-2xl font-bold mb-3" style="color: var(--accent);">
+          <i class="fa-solid fa-times-circle"></i> Perkalian Bersusun Puluhan
+        </h3>
+        <p class="mb-4">Perkalian puluhan dengan puluhan dilakukan bertahap: kalikan angka satuan bawah dengan angka atas, lalu kalikan angka puluhan bawah dengan angka atas (digeser ke kiri). Terakhir, jumlahkan!</p>
+        
+        <div class="bg-yellow-50 p-4 rounded-xl mb-4">
+          <p class="font-bold mb-3">📋 Contoh: <span class="font-display text-xl">24 × 13 = ?</span></p>
+          
+          <div class="flex items-start gap-6 flex-wrap">
+            <div class="math-grid" id="multDemo">
+              <!-- Baris Simpanan -->
+              <div class="math-row mult-row">
+                <span></span><span></span><span></span>
+                <input class="cell borrow" maxlength="1" data-demo-mult-simpan="1" placeholder="-" style="border-color: var(--accent);">
+                <span></span>
+              </div>
+              <!-- Baris Atas -->
+              <div class="math-row mult-row">
+                <span></span><span></span><span></span>
+                <span class="digit">2</span>
+                <span class="digit">4</span>
+              </div>
+              <!-- Baris Bawah -->
+              <div class="math-row mult-row">
+                <span class="operator">×</span><span></span><span></span>
+                <span class="digit">1</span>
+                <span class="digit">3</span>
+              </div>
+              <!-- Hasil Perkalian 1 (3 x 24 = 72) -->
+              <div class="math-row mult-row result-row">
+                <span></span><span></span><span></span>
+                <input class="cell" maxlength="1" data-demo-mult-pp1="0" placeholder="?">
+                <input class="cell" maxlength="1" data-demo-mult-pp1="1" placeholder="?">
+              </div>
+              <!-- Hasil Perkalian 2 (1 x 24 = 24, geser kiri jadi 240) -->
+              <div class="math-row mult-row">
+                <span></span><span></span>
+                <input class="cell" maxlength="1" data-demo-mult-pp2="0" placeholder="?">
+                <input class="cell" maxlength="1" data-demo-mult-pp2="1" placeholder="?">
+                <span class="digit" style="color: var(--muted);">0</span>
+              </div>
+              <!-- Hasil Akhir (312) -->
+              <div class="math-row mult-row result-row">
+                <span></span><span></span>
+                <input class="cell" maxlength="1" data-demo-mult-result="0" placeholder="?">
+                <input class="cell" maxlength="1" data-demo-mult-result="1" placeholder="?">
+                <input class="cell" maxlength="1" data-demo-mult-result="2" placeholder="?">
+              </div>
+            </div>
+            <div class="flex-1 min-w-[220px]">
+              <p class="text-sm mb-2 font-bold">Langkah-langkah:</p>
+              <ol class="text-sm list-decimal list-inside space-y-2">
+                <li><b>3 × 4 = 12</b> → tulis <b>2</b>, simpan <b>1</b></li>
+                <li><b>3 × 2 = 6</b>, + simpan 1 = <b>7</b> → tulis di puluhan</li>
+                <li>Hasil baris 1: <b>72</b></li>
+                <li><b>1 × 4 = 4</b> → tulis di puluhan (geser kiri)</li>
+                <li><b>1 × 2 = 2</b> → tulis di ratusan</li>
+                <li>Hasil baris 2: <b>240</b> (0 di belakang)</li>
+                <li>Jumlahkan: 72 + 240 = <b>312</b></li>
+              </ol>
+              <button onclick="checkMultDemo()" class="btn btn-primary mt-3">
+                <i class="fa-solid fa-check"></i> Cek Contoh
+              </button>
+              <div id="multDemoFeedback" class="feedback mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-box">
+          <p class="font-bold mb-1">Tips & Trick Perkalian:</p>
+          <ul class="text-sm list-disc list-inside space-y-1">
+            <li>Ingat perkalian dasar: 2×3=6, 4×5=20, dst.</li>
+            <li>Jika hasil kali ≥ 10, simpan angka puluhan di atas</li>
+            <li>Baris kedua (puluhan) selalu digeser 1 kolom ke kiri → tambah 0 di paling kanan</li>
+            <li>Terakhir jumlahkan kedua baris hasil</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-4 card-s1">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s1);">
+              <i class="fa-solid fa-user"></i> <span class="practiceName1">Siswa 1</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s1-light); color: var(--s1-dark);">
+              <span id="multProgress1">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="multProgressBar1" style="width: 0%;"></div></div>
+          <div class="practice-area s1" id="multPractice1"></div>
+        </div>
+        <div class="card p-4 card-s2">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s2);">
+              <i class="fa-solid fa-user"></i> <span class="practiceName2">Siswa 2</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s2-light); color: var(--s2-dark);">
+              <span id="multProgress2">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="multProgressBar2" style="width: 0%;"></div></div>
+          <div class="practice-area s2" id="multPractice2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVISION TAB -->
+    <div id="tab-division" class="tab-content hidden">
+      <div class="card p-6 mb-6">
+        <h3 class="font-display text-2xl font-bold mb-3" style="color: var(--primary);">
+          <i class="fa-solid fa-divide"></i> Pembagian Bersusun
+        </h3>
+        <p class="mb-4"><b>Konsep pembagian:</b> Pembagian adalah membagi suatu bilangan menjadi bagian-bagian yang sama. Contoh sederhana: <b>20 ÷ 5 = 4</b> artinya 20 dibagi menjadi 5 kelompok sama besar, setiap kelompok berisi 4.</p>
+        
+        <div class="bg-blue-50 p-4 rounded-xl mb-4">
+          <p class="font-bold mb-2">🎯 Trick Menentukan Hasil Bagi dengan Cepat:</p>
+          <ul class="text-sm list-disc list-inside space-y-1 mb-3">
+            <li>Gunakan <b>perkalian terbalik</b>: 20 ÷ 5 = ? → pikir "5 × ? = 20" → 5 × 4 = 20, jadi 20 ÷ 5 = 4</li>
+            <li>Hafalkan perkalian 1-10 agar cepat menemukan jawaban</li>
+            <li>Untuk bilangan besar, gunakan <b>pembagian bersusun</b></li>
+          </ul>
+        </div>
+
+        <div class="bg-yellow-50 p-4 rounded-xl mb-4">
+          <p class="font-bold mb-3">📋 Contoh: <span class="font-display text-xl">144 ÷ 6 = ?</span></p>
+          <p class="text-sm mb-4">Kita bagi 144 dengan 6 menggunakan pembagian bersusun. Ambil 2 angka pertama (14) karena 1 tidak bisa dibagi 6.</p>
+          
+          <div class="flex items-start gap-6 flex-wrap">
+            <div id="divDemo" style="font-family: 'Fredoka', sans-serif;">
+              <div style="display: flex; align-items: end; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <div style="width: 2rem;"></div>
+                <div style="display: flex; gap: 0.25rem; padding-bottom: 0.25rem; border-bottom: 3px solid var(--text);">
+                  <input class="cell" maxlength="1" data-demo-div-q="0" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                  <input class="cell" maxlength="1" data-demo-div-q="1" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 2rem; text-align: center; font-size: 1.5rem; font-weight: 700; color: var(--primary); border-right: 3px solid var(--text); padding-right: 0.5rem;">6</div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                  <div style="display: flex; gap: 0.25rem;">
+                    <span class="digit" style="width: 2rem; height: 2rem; font-size: 1rem;">1</span>
+                    <span class="digit" style="width: 2rem; height: 2rem; font-size: 1rem;">4</span>
+                    <span class="digit" style="width: 2rem; height: 2rem; font-size: 1rem;">4</span>
+                  </div>
+                  <div style="display: flex; gap: 0.25rem; align-items: center;">
+                    <span style="width: 1rem; text-align: center; color: var(--s2); font-weight: bold;">−</span>
+                    <input class="cell" maxlength="1" data-demo-div-m1="0" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                    <input class="cell" maxlength="1" data-demo-div-m1="1" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                  </div>
+                  <div style="border-top: 2px solid var(--text); margin-left: 1.25rem; width: calc(2.5rem * 2 + 0.25rem);"></div>
+                  <div style="display: flex; gap: 0.25rem; align-items: center;">
+                    <span style="width: 1rem;"></span>
+                    <input class="cell" maxlength="1" data-demo-div-bd1="0" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                    <input class="cell" maxlength="1" data-demo-div-bd1="1" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                  </div>
+                  <div style="display: flex; gap: 0.25rem; align-items: center;">
+                    <span style="width: 1rem; text-align: center; color: var(--s2); font-weight: bold;">−</span>
+                    <input class="cell" maxlength="1" data-demo-div-m2="0" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                    <input class="cell" maxlength="1" data-demo-div-m2="1" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                  </div>
+                  <div style="border-top: 2px solid var(--text); margin-left: 1.25rem; width: calc(2.5rem * 2 + 0.25rem);"></div>
+                  <div style="display: flex; gap: 0.25rem; align-items: center;">
+                    <span style="width: 1rem;"></span>
+                    <input class="cell" maxlength="1" data-demo-div-rem="0" placeholder="?" style="width: 2rem; height: 2rem; font-size: 0.95rem;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 min-w-[220px]">
+              <p class="text-sm mb-2 font-bold">Langkah-langkah:</p>
+              <ol class="text-sm list-decimal list-inside space-y-2">
+                <li>Ambil "14", bagi dengan 6 → 6 × 2 = 12, jadi <b>2</b></li>
+                <li>Tulis 12 di bawah 14, kurangkan: 14 − 12 = <b>2</b></li>
+                <li>Turunkan angka 4 → jadi <b>24</b></li>
+                <li>24 ÷ 6 = <b>4</b> (karena 6 × 4 = 24)</li>
+                <li>Tulis 24 di bawah 24, kurangkan: 24 − 24 = <b>0</b></li>
+                <li>Sisa 0, selesai! Hasil: <b>24</b></li>
+              </ol>
+              <button onclick="checkDivDemo()" class="btn btn-primary mt-3">
+                <i class="fa-solid fa-check"></i> Cek Contoh
+              </button>
+              <div id="divDemoFeedback" class="feedback mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-box">
+          <p class="font-bold mb-1">Tips Pembagian Bersusun:</p>
+          <ul class="text-sm list-disc list-inside space-y-1">
+            <li>Bagi dari kiri (angka terdepan) ke kanan</li>
+            <li>Tulis hasil bagi di atas baris atas</li>
+            <li>Kalikan hasil bagi dengan pembagi, tulis di bawah</li>
+            <li>Kurangkan, lalu turunkan 1 angka berikutnya</li>
+            <li>Ulangi sampai semua angka diturunkan dan sisa = 0</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-4 card-s1">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s1);">
+              <i class="fa-solid fa-user"></i> <span class="practiceName1">Siswa 1</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s1-light); color: var(--s1-dark);">
+              <span id="divProgress1">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="divProgressBar1" style="width: 0%;"></div></div>
+          <div class="practice-area s1" id="divPractice1"></div>
+        </div>
+        <div class="card p-4 card-s2">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-display font-bold text-lg" style="color: var(--s2);">
+              <i class="fa-solid fa-user"></i> <span class="practiceName2">Siswa 2</span>
+            </h4>
+            <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s2-light); color: var(--s2-dark);">
+              <span id="divProgress2">0</span>/20
+            </span>
+          </div>
+          <div class="progress-bar mb-3"><div class="progress-fill" id="divProgressBar2" style="width: 0%;"></div></div>
+          <div class="practice-area s2" id="divPractice2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: SOAL CERITA -->
+<section id="slide3" class="slide">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="font-display text-4xl font-bold mb-2 text-center" style="color: var(--s2);">
+      <i class="fa-solid fa-book-open"></i> Soal Cerita Matematika
+    </h2>
+    <p class="text-center text-gray-700 mb-6">Membentuk operasi hitung dari cerita dengan langkah scaffolding</p>
+
+    <div class="card p-6 mb-6">
+      <h3 class="font-display text-2xl font-bold mb-3" style="color: var(--primary);">
+        <i class="fa-solid fa-lightbulb"></i> Tips & Trick Membentuk Operasi dari Soal Cerita
+      </h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <p class="font-bold mb-2">Kata kunci operasi:</p>
+          <ul class="text-sm space-y-2">
+            <li><span class="inline-block px-2 py-1 rounded font-bold" style="background: var(--s1-light); color: var(--s1-dark);">+ Penjumlahan</span> : "menambah", "diberi", "membeli lagi", "total", "seluruhnya"</li>
+            <li><span class="inline-block px-2 py-1 rounded font-bold" style="background: var(--s2-light); color: var(--s2-dark);">− Pengurangan</span> : "memberikan", "memakan", "terpakai", "sisa", "lebih sedikit"</li>
+            <li><span class="inline-block px-2 py-1 rounded font-bold" style="background: #FEF3C7; color: #92400E;">× Perkalian</span> : "setiap", "masing-masing", "sebanyak ... kali", "kelompok"</li>
+            <li><span class="inline-block px-2 py-1 rounded font-bold" style="background: var(--primary-light); color: var(--primary-dark);">÷ Pembagian</span> : "dibagi rata", "setiap", "distribusi", "seperti"</li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-bold mb-2">Langkah mengerjakan:</p>
+          <ol class="text-sm list-decimal list-inside space-y-1">
+            <li><b>Baca</b> soal dengan teliti (2 kali)</li>
+            <li><b>Tandai</b> angka dan kata kunci</li>
+            <li><b>Tentukan</b> operasi yang diperlukan</li>
+            <li><b>Tulis</b> operasi dalam bentuk kalimat matematika</li>
+            <li><b>Hitung</b> langkah demi langkah</li>
+            <li><b>Tulis jawaban akhir</b> dengan satuan</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="card p-4 card-s1">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-display font-bold text-lg" style="color: var(--s1);">
+            <i class="fa-solid fa-user"></i> <span class="practiceName1">Siswa 1</span>
+          </h4>
+          <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s1-light); color: var(--s1-dark);">
+            <span id="storyProgress1">0</span>/20
+          </span>
+        </div>
+        <div class="progress-bar mb-3"><div class="progress-fill" id="storyProgressBar1" style="width: 0%;"></div></div>
+        <div class="practice-area s1" id="storyPractice1"></div>
+      </div>
+      <div class="card p-4 card-s2">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-display font-bold text-lg" style="color: var(--s2);">
+            <i class="fa-solid fa-user"></i> <span class="practiceName2">Siswa 2</span>
+          </h4>
+          <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--s2-light); color: var(--s2-dark);">
+            <span id="storyProgress2">0</span>/20
+          </span>
+        </div>
+        <div class="progress-bar mb-3"><div class="progress-fill" id="storyProgressBar2" style="width: 0%;"></div></div>
+        <div class="practice-area s2" id="storyPractice2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: GAME -->
+<section id="slide4" class="slide">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="font-display text-4xl font-bold mb-2 text-center" style="color: var(--accent);">
+      <i class="fa-solid fa-treasure-chest"></i> Misi Harta Karun Matematika
+    </h2>
+    <p class="text-center text-gray-700 mb-6">Bekerja sama untuk memecahkan 5 rahasia dan menemukan harta karun!</p>
+
+    <div class="card p-6 mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-display text-xl font-bold">Progres Misi</h3>
+        <span class="text-sm font-bold px-3 py-1 rounded-full" style="background: var(--accent); color: var(--text);">
+          <span id="gameStagesDone">0</span>/5 tahap selesai
+        </span>
+      </div>
+      <div class="progress-bar" style="height: 16px;"><div class="progress-fill" id="gameProgress" style="width: 0%;"></div></div>
+    </div>
+
+    <div id="gameStages" class="space-y-6"></div>
+
+    <div id="treasureReveal" class="card p-8 text-center hidden" style="background: linear-gradient(135deg, #FFF8EC 0%, #FFE8C2 100%); border-color: var(--accent);">
+      <h3 class="font-display text-3xl font-bold mb-4" style="color: var(--accent);">Harta Karun Ditemukan!</h3>
+      <div class="treasure-box open" id="treasureBox">
+        <div class="glow"></div>
+        <div class="lid"></div>
+        <div class="body"></div>
+      </div>
+      <p class="mt-4 text-lg font-bold">Selamat <span id="gameName1">Siswa 1</span> & <span id="gameName2">Siswa 2</span>!</p>
+      <p class="text-gray-700 mt-2">Kerja sama yang luar biasa! Kalian berhasil memecahkan semua rahasia matematika!</p>
+      <button onclick="celebrateEnd()" class="btn btn-accent mt-4 text-lg px-6 py-3">
+        <i class="fa-solid fa-party-horn"></i> Rayakan Kemenangan!
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: CLOSING -->
+<section id="slide5" class="slide">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="inline-block mb-4 px-4 py-2 rounded-full text-sm font-bold bounce-in" style="background: var(--accent-2); color: white;">
+        <i class="fa-solid fa-flag-checkered"></i> Akhir Petualangan
+      </div>
+      <h2 class="font-display text-5xl font-bold mb-4" style="color: var(--primary);">
+        Selamat! Kalian Hebat!
+      </h2>
+      <p class="text-lg text-gray-700">Terima kasih sudah belajar dengan giat hari ini, <span id="closingName1" class="font-bold" style="color: var(--s1);">Siswa 1</span> dan <span id="closingName2" class="font-bold" style="color: var(--s2);">Siswa 2</span>!</p>
+    </div>
+
+    <div class="card p-6 mb-6">
+      <h3 class="font-display text-2xl font-bold mb-4" style="color: var(--primary);">
+        <i class="fa-solid fa-list-check"></i> Apa yang Sudah Kalian Pelajari?
+      </h3>
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background: var(--s1-light);">
+          <i class="fa-solid fa-circle-check text-xl mt-1" style="color: var(--s1);"></i>
+          <div>
+            <h4 class="font-bold">Pengurangan dengan Peminjaman</h4>
+            <p class="text-sm text-gray-700">Meminjam dari angka di kiri saat angka atas lebih kecil</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background: #FEF3C7;">
+          <i class="fa-solid fa-circle-check text-xl mt-1" style="color: var(--accent);"></i>
+          <div>
+            <h4 class="font-bold">Perkalian Bersusun</h4>
+            <p class="text-sm text-gray-700">Mengalikan per bagian, lalu menjumlahkan</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background: var(--primary-light);">
+          <i class="fa-solid fa-circle-check text-xl mt-1" style="color: var(--primary);"></i>
+          <div>
+            <h4 class="font-bold">Pembagian Bersusun</h4>
+            <p class="text-sm text-gray-700">Membagi bertahap dengan trick perkalian terbalik</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-3 rounded-xl" style="background: var(--s2-light);">
+          <i class="fa-solid fa-circle-check text-xl mt-1" style="color: var(--s2);"></i>
+          <div>
+            <h4 class="font-bold">Soal Cerita</h4>
+            <p class="text-sm text-gray-700">Membentuk operasi dari cerita dengan kata kunci</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-8 text-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white;">
+      <div class="text-6xl mb-4">🎉</div>
+      <h3 class="font-display text-3xl font-bold mb-3">Thank You for Today!</h3>
+      <p class="text-lg mb-2">Teruslah berlatih, karena matematika adalah petualangan yang tidak pernah berakhir!</p>
+      <p class="text-sm opacity-90 mb-6">"Belajar matematika tidak harus sulit. Dengan trik dan latihan, semua jadi mudah!"</p>
+      <button onclick="restartAdventure()" class="btn btn-accent text-lg px-6 py-3">
+        <i class="fa-solid fa-rotate-right"></i> Mulai Petualangan Lagi
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ============== DATA ==============
+const subtractionProblems = [
+  [5000, 2347], [8000, 4567], [6000, 1879], [9000, 5432], [7234, 3856],
+  [6543, 2987], [8123, 5678], [9456, 3897], [5005, 2867], [8004, 5479],
+  [4000, 1568], [6200, 3789], [9100, 4865], [7003, 4589], [5300, 2876],
+  [8600, 5987], [4200, 1968], [7500, 3899], [6800, 4275], [9300, 5678]
+];
+const multiplicationProblems = [
+  [24, 13], [35, 12], [42, 23], [56, 14], [27, 15],
+  [38, 21], [45, 32], [63, 24], [52, 18], [71, 26],
+  [34, 25], [48, 33], [62, 17], [29, 36], [55, 22],
+  [67, 19], [73, 28], [81, 35], [46, 41], [58, 27]
+];
+const divisionProblems = [
+  [144, 6], [156, 4], [285, 5], [432, 8], [364, 7],
+  [192, 6], [225, 9], [342, 6], [455, 7], [216, 8],
+  [1248, 4], [2536, 8], [1845, 5], [2736, 9], [1962, 6],
+  [1458, 3], [3264, 8], [2175, 5], [1680, 7], [2436, 6]
+];
+const storyProblems = [
+  { text: "Andi memiliki 5 kantong berisi 12 permen setiap kantong. Dia memberikan 18 permen kepada adiknya. Berapa sisa permen Andi?", steps: [{ op: "5 × 12", desc: "Total permen Andi", answer: 60 }, { op: "60 − 18", desc: "Sisa setelah diberikan", answer: 42 }], finalAnswer: 42, explanation: "Langkah 1: Total permen = 5 × 12 = 60. Langkah 2: Sisa setelah diberikan ke adik = 60 − 18 = 42 permen." },
+  { text: "Ibu membeli 4 kg mangga seharga Rp 15.000 per kg. Ibu membayar dengan uang Rp 100.000. Berapa kembalian ibu?", steps: [{ op: "4 × 15.000", desc: "Total harga mangga", answer: 60000 }, { op: "100.000 − 60.000", desc: "Kembalian", answer: 40000 }], finalAnswer: 40000, explanation: "Langkah 1: Total harga = 4 × 15.000 = 60.000. Langkah 2: Kembalian = 100.000 − 60.000 = 40.000." },
+  { text: "Sekolah memiliki 240 siswa yang dibagi rata ke 8 rombongan belajar. Setiap rombel menerima 5 buku per siswa. Berapa total buku?", steps: [{ op: "240 ÷ 8", desc: "Siswa per rombel", answer: 30 }, { op: "30 × 5", desc: "Total buku", answer: 150 }], finalAnswer: 150, explanation: "Langkah 1: Siswa per rombel = 240 ÷ 8 = 30. Langkah 2: Total buku = 30 × 5 = 150 buku." },
+  { text: "Toko menjual 8 kotak pensil, setiap kotak berisi 24 pensil. Pensil dibagikan rata kepada 6 kelas. Berapa pensil per kelas?", steps: [{ op: "8 × 24", desc: "Total pensil", answer: 192 }, { op: "192 ÷ 6", desc: "Pensil per kelas", answer: 32 }], finalAnswer: 32, explanation: "Langkah 1: Total pensil = 8 × 24 = 192. Langkah 2: Pensil per kelas = 192 ÷ 6 = 32." },
+  { text: "Petani memanen 360 kg jeruk. Ia menjual 4 karung berisi 35 kg setiap karung. Sisanya dibagi rata ke 5 tetangga. Berapa kg per tetangga?", steps: [{ op: "4 × 35", desc: "Jeruk terjual", answer: 140 }, { op: "360 − 140", desc: "Sisa jeruk", answer: 220 }, { op: "220 ÷ 5", desc: "Per tetangga", answer: 44 }], finalAnswer: 44, explanation: "Langkah 1: Terjual = 4 × 35 = 140 kg. Langkah 2: Sisa = 360 − 140 = 220 kg. Langkah 3: Per tetangga = 220 ÷ 5 = 44 kg." },
+  { text: "Ali menabung Rp 2.500 setiap hari selama 12 hari. Ia membeli mainan seharga Rp 18.000. Berapa sisa uang Ali?", steps: [{ op: "12 × 2.500", desc: "Total tabungan", answer: 30000 }, { op: "30.000 − 18.000", desc: "Sisa uang", answer: 12000 }], finalAnswer: 12000, explanation: "Langkah 1: Total tabungan = 12 × 2.500 = 30.000. Langkah 2: Sisa uang = 30.000 − 18.000 = 12.000." },
+  { text: "Pabrik menghasilkan 4.525 batu bata. 375 batu bata rusak. Sisanya dikirim ke 5 toko secara merata. Berapa batu bata per toko?", steps: [{ op: "4.525 − 375", desc: "Batu bata bagus", answer: 4150 }, { op: "4.150 ÷ 5", desc: "Per toko", answer: 830 }], finalAnswer: 830, explanation: "Langkah 1: Batu bata bagus = 4.525 − 375 = 4.150. Langkah 2: Per toko = 4.150 ÷ 5 = 830." },
+  { text: "Budi bersepeda 12 km setiap hari selama 6 hari. Lalu ia berjalan kaki 8 km. Berapa total jarak yang ditempuh Budi?", steps: [{ op: "12 × 6", desc: "Jarak bersepeda", answer: 72 }, { op: "72 + 8", desc: "Total jarak", answer: 80 }], finalAnswer: 80, explanation: "Langkah 1: Bersepeda = 12 × 6 = 72 km. Langkah 2: Total = 72 + 8 = 80 km." },
+  { text: "Doni memiliki 56 kelereng. Ia memberikan seperempat bagian kepada adiknya. Berapa kelereng Doni sekarang?", steps: [{ op: "56 ÷ 4", desc: "Diberikan ke adik", answer: 14 }, { op: "56 − 14", desc: "Sisa kelereng", answer: 42 }], finalAnswer: 42, explanation: "Langkah 1: Diberikan ke adik = 56 ÷ 4 = 14. Langkah 2: Sisa = 56 − 14 = 42 kelereng." },
+  { text: "Kelas membuat 8 rangkaian bunga, masing-masing 15 bunga. Lalu ditambahkan 24 bunga untuk hiasan meja. Berapa total bunga?", steps: [{ op: "8 × 15", desc: "Bunga rangkaian", answer: 120 }, { op: "120 + 24", desc: "Total bunga", answer: 144 }], finalAnswer: 144, explanation: "Langkah 1: Bunga rangkaian = 8 × 15 = 120. Langkah 2: Total = 120 + 24 = 144 bunga." },
+  { text: "Bus berangkat dengan 45 penumpang. Di perhentian pertama turun 12 orang, naik 18 orang. Di perhentian kedua turun 9 orang. Berapa penumpang sekarang?", steps: [{ op: "45 − 12", desc: "Setelah turun", answer: 33 }, { op: "33 + 18", desc: "Setelah naik", answer: 51 }, { op: "51 − 9", desc: "Setelah turun lagi", answer: 42 }], finalAnswer: 42, explanation: "Langkah 1: 45 − 12 = 33. Langkah 2: 33 + 18 = 51. Langkah 3: 51 − 9 = 42 penumpang." },
+  { text: "Ibu membuat 144 kue. 24 kue disimpan untuk keluarga. Sisanya dibagi rata kepada 8 tetangga. Berapa kue per tetangga?", steps: [{ op: "144 − 24", desc: "Kue untuk dibagi", answer: 120 }, { op: "120 ÷ 8", desc: "Per tetangga", answer: 15 }], finalAnswer: 15, explanation: "Langkah 1: Kue untuk dibagi = 144 − 24 = 120. Langkah 2: Per tetangga = 120 ÷ 8 = 15 kue." },
+  { text: "Ayah membeli 9 durian seharga Rp 25.000 setiap buah. Ayah membayar dengan 2 lembar uang Rp 200.000. Berapa kembalian?", steps: [{ op: "9 × 25.000", desc: "Total harga", answer: 225000 }, { op: "2 × 200.000", desc: "Uang dibayar", answer: 400000 }, { op: "400.000 − 225.000", desc: "Kembalian", answer: 175000 }], finalAnswer: 175000, explanation: "Langkah 1: Total = 9 × 25.000 = 225.000. Langkah 2: Bayar = 2 × 200.000 = 400.000. Langkah 3: Kembalian = 400.000 − 225.000 = 175.000." },
+  { text: "Toko sepatu mendapat 156 pasang sepatu. Selama 6 hari terjual rata 18 pasang per hari. Berapa sisa sepatu?", steps: [{ op: "6 × 18", desc: "Sepatu terjual", answer: 108 }, { op: "156 − 108", desc: "Sisa sepatu", answer: 48 }], finalAnswer: 48, explanation: "Langkah 1: Terjual = 6 × 18 = 108 pasang. Langkah 2: Sisa = 156 − 108 = 48 pasang." },
+  { text: "Kolam berisi 2.500 liter air. Dipakai 875 liter untuk menyiram tanaman. Sisanya diisi ke 5 drum. Berapa liter per drum?", steps: [{ op: "2.500 − 875", desc: "Sisa air", answer: 1625 }, { op: "1.625 ÷ 5", desc: "Per drum", answer: 325 }], finalAnswer: 325, explanation: "Langkah 1: Sisa air = 2.500 − 875 = 1.625 liter. Langkah 2: Per drum = 1.625 ÷ 5 = 325 liter." },
+  { text: "Rani membaca 18 halaman setiap hari. Setelah 7 hari, masih tersisa 24 halaman. Berapa total halaman buku Rani?", steps: [{ op: "18 × 7", desc: "Halaman dibaca", answer: 126 }, { op: "126 + 24", desc: "Total halaman", answer: 150 }], finalAnswer: 150, explanation: "Langkah 1: Sudah dibaca = 18 × 7 = 126. Langkah 2: Total = 126 + 24 = 150 halaman." },
+  { text: "Tukang cat mengecat 6 rumah. Setiap rumah butuh 8 kaleng cat. Satu kaleng cat harganya Rp 35.000. Berapa total biaya cat?", steps: [{ op: "6 × 8", desc: "Total kaleng", answer: 48 }, { op: "48 × 35.000", desc: "Total biaya", answer: 1680000 }], finalAnswer: 1680000, explanation: "Langkah 1: Total kaleng = 6 × 8 = 48. Langkah 2: Total biaya = 48 × 35.000 = 1.680.000." },
+  { text: "Sawah Pak Tani menghasilkan 1.250 kg padi. Separuh dijual, sisanya untuk konsumsi. Berapa kg padi untuk konsumsi?", steps: [{ op: "1.250 ÷ 2", desc: "Padi dijual", answer: 625 }, { op: "1.250 − 625", desc: "Padi konsumsi", answer: 625 }], finalAnswer: 625, explanation: "Langkah 1: Dijual = 1.250 ÷ 2 = 625 kg. Langkah 2: Konsumsi = 1.250 − 625 = 625 kg." },
+  { text: "Kelas 5 ada 32 siswa. Setiap siswa membawa 6 buku. Separuh dari semua buku adalah buku matematika. Berapa buku matematika?", steps: [{ op: "32 × 6", desc: "Total buku", answer: 192 }, { op: "192 ÷ 2", desc: "Buku matematika", answer: 96 }], finalAnswer: 96, explanation: "Langkah 1: Total buku = 32 × 6 = 192. Langkah 2: Buku matematika = 192 ÷ 2 = 96." },
+  { text: "Bioskop memiliki 12 baris kursi, setiap baris 18 kursi. Hari ini ada 4 film, masing-masing ditonton 15 orang. Berapa kursi kosong?", steps: [{ op: "12 × 18", desc: "Total kursi", answer: 216 }, { op: "4 × 15", desc: "Total penonton", answer: 60 }, { op: "216 − 60", desc: "Kursi kosong", answer: 156 }], finalAnswer: 156, explanation: "Langkah 1: Total kursi = 12 × 18 = 216. Langkah 2: Penonton = 4 × 15 = 60. Langkah 3: Kursi kosong = 216 − 60 = 156." }
+];
+
+const gameStages = [
+  { story: "Petualangan dimulai! Sebuah peta kuno menunjukkan rahasia pertama: kalikan 24 dengan 12, lalu bagi hasilnya dengan 6 untuk membuka gerbang pertama.", s1Op: "24 × 12", s1Ans: 288, s2Op: "288 ÷ 6", s2Ans: 48 },
+  { story: "Petunjuk kedua terungkap! Jumlahkan 156 dengan 244, lalu kurangi 100 untuk menemukan kunci berikutnya.", s1Op: "156 + 244", s1Ans: 400, s2Op: "400 − 100", s2Ans: 300 },
+  { story: "Rahasia ketiga menanti! Bagi 432 dengan 8, lalu kalikan hasilnya dengan 5 untuk membuka pintu rahasia.", s1Op: "432 ÷ 8", s1Ans: 54, s2Op: "54 × 5", s2Ans: 270 },
+  { story: "Hampir sampai! Kalikan 25 dengan 16, lalu kurangi 80 untuk mendapatkan kode berikutnya.", s1Op: "25 × 16", s1Ans: 400, s2Op: "400 − 80", s2Ans: 320 },
+  { story: "Petunjuk terakhir! 980 dikurangi 380, lalu dibagi 4 untuk membuka harta karun!", s1Op: "980 − 380", s1Ans: 600, s2Op: "600 ÷ 4", s2Ans: 150 }
+];
+
+// ============== STATE ==============
+let studentNames = { s1: "Siswa 1", s2: "Siswa 2" };
+let progress = {
+  sub: { s1: 0, s2: 0 }, mult: { s1: 0, s2: 0 }, div: { s1: 0, s2: 0 }, story: { s1: 0, s2: 0 }
+};
+let gameStageCompleted = [false, false, false, false, false];
+
+// ============== NAVIGATION ==============
+document.querySelectorAll('.nav-pill').forEach(p => {
+  p.addEventListener('click', () => goToSlide(p.dataset.slide));
+});
+
+function goToSlide(num) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.getElementById('slide' + num).classList.add('active');
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.toggle('active', p.dataset.slide === num));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startAdventure() {
+  const n1 = document.getElementById('name1').value.trim();
+  const n2 = document.getElementById('name2').value.trim();
+  if (!n1 || !n2) {
+    document.getElementById('nameWarning').classList.remove('hidden');
+    return;
+  }
+  studentNames = { s1: n1, s2: n2 };
+  document.getElementById('nameWarning').classList.add('hidden');
+  updateAllNames();
+  goToSlide('2');
+}
+
+document.getElementById('startBtn').addEventListener('click', startAdventure);
+
+function updateAllNames() {
+  document.querySelectorAll('.practiceName1').forEach(e => e.textContent = studentNames.s1);
+  document.querySelectorAll('.practiceName2').forEach(e => e.textContent = studentNames.s2);
+  const pn1 = document.getElementById('practiceName1');
+  const pn2 = document.getElementById('practiceName2');
+  if (pn1) pn1.textContent = studentNames.s1;
+  if (pn2) pn2.textContent = studentNames.s2;
+  
+  const g1 = document.getElementById('gameName1');
+  const g2 = document.getElementById('gameName2');
+  if (g1) g1.textContent = studentNames.s1;
+  if (g2) g2.textContent = studentNames.s2;
+  
+  const c1 = document.getElementById('closingName1');
+  const c2 = document.getElementById('closingName2');
+  if (c1) c1.textContent = studentNames.s1;
+  if (c2) c2.textContent = studentNames.s2;
+}
+
+// ============== TABS ==============
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.add('hidden'));
+    b.classList.add('active');
+    document.getElementById('tab-' + b.dataset.tab).classList.remove('hidden');
+  });
+});
+
+// ============== SUBTRACTION ==============
+function computeSubBorrow(a, b) {
+  const aStr = String(a);
+  const bStr = String(b).padStart(aStr.length, '0');
+  const aDigits = aStr.split('').map(Number);
+  const bDigits = bStr.split('').map(Number);
+  const top = [...aDigits];
+  const n = aDigits.length;
+  for (let i = n - 1; i >= 0; i--) {
+    if (top[i] < bDigits[i]) {
+      let j = i - 1;
+      while (j >= 0 && top[j] === 0) { top[j] = 9; j--; }
+      if (j >= 0) top[j] -= 1;
+      top[i] += 10;
+    }
+  }
+  return top;
+}
+
+function createSubProblem(a, b, num, sid) {
+  const borrow = computeSubBorrow(a, b);
+  const result = a - b;
+  const resultStr = String(result).padStart(4, '0').split('');
+  const aStr = String(a).padStart(4, '0');
+  const bStr = String(b).padStart(4, '0');
+  const cardClass = sid === 1 ? 's1' : 's2';
+  
+  return `
+    <div class="problem-card ${cardClass}" data-sub-card="${sid}-${num}" data-a="${a}" data-b="${b}">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="problem-num ${cardClass}">${num}</span>
+          <span class="font-display font-bold">${a} − ${b} = ?</span>
+        </div>
+      </div>
+      <div class="math-grid">
+        <div class="math-row sub-row">
+          <span></span>
+          <input class="cell borrow ${cardClass}" maxlength="2" data-sub-borrow="0" placeholder="−">
+          <input class="cell borrow ${cardClass}" maxlength="2" data-sub-borrow="1" placeholder="−">
+          <input class="cell borrow ${cardClass}" maxlength="2" data-sub-borrow="2" placeholder="−">
+          <input class="cell borrow ${cardClass}" maxlength="2" data-sub-borrow="3" placeholder="−">
+        </div>
+        <div class="math-row sub-row">
+          <span></span>
+          <span class="digit" data-sub-top="0">${aStr[0]}</span>
+          <span class="digit" data-sub-top="1">${aStr[1]}</span>
+          <span class="digit" data-sub-top="2">${aStr[2]}</span>
+          <span class="digit" data-sub-top="3">${aStr[3]}</span>
+        </div>
+        <div class="math-row sub-row">
+          <span class="operator">−</span>
+          <span class="digit">${bStr[0]}</span>
+          <span class="digit">${bStr[1]}</span>
+          <span class="digit">${bStr[2]}</span>
+          <span class="digit">${bStr[3]}</span>
+        </div>
+        <div class="math-row sub-row result-row">
+          <span></span>
+          <input class="cell" maxlength="1" data-sub-result="0">
+          <input class="cell" maxlength="1" data-sub-result="1">
+          <input class="cell" maxlength="1" data-sub-result="2">
+          <input class="cell" maxlength="1" data-sub-result="3">
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2 items-center flex-wrap">
+        <button class="btn ${cardClass === 's1' ? 'btn-s1' : 'btn-s2'}" onclick="checkSubProblem(${sid}, ${num})">
+          <i class="fa-solid fa-check"></i> Cek Jawaban
+        </button>
+        <button class="btn btn-ghost text-xs" onclick="resetProblem(this)">
+          <i class="fa-solid fa-eraser"></i> Reset
+        </button>
+      </div>
+      <div class="feedback" id="sub-feedback-${sid}-${num}"></div>
+      <div class="hidden" data-expected-borrow="${borrow.join(',')}"></div>
+      <div class="hidden" data-expected-result="${resultStr.join(',')}"></div>
+    </div>
+  `;
+}
+
+function checkSubProblem(sid, num) {
+  const card = document.querySelector(`[data-sub-card="${sid}-${num}"]`);
+  const expectedBorrow = card.querySelector('[data-expected-borrow]').dataset.expectedBorrow.split(',').map(Number);
+  const expectedResult = card.querySelector('[data-expected-result]').dataset.expectedResult.split(',').map(Number);
+  let allCorrect = true;
+
+  expectedBorrow.forEach((exp, i) => {
+    const cell = card.querySelector(`[data-sub-borrow="${i}"]`);
+    const topDigit = card.querySelector(`[data-sub-top="${i}"]`);
+    const val = cell.value.trim();
+    if (val !== '') {
+      if (parseInt(val) === exp) {
+        cell.classList.add('correct');
+        topDigit.classList.add('strike');
+      } else {
+        cell.classList.add('wrong');
+        topDigit.classList.add('strike');
+        allCorrect = false;
+      }
+    } else {
+      cell.classList.add('wrong');
+      allCorrect = false;
+    }
+  });
+
+  expectedResult.forEach((exp, i) => {
+    const cell = card.querySelector(`[data-sub-result="${i}"]`);
+    const val = cell.value.trim();
+    if (val !== '') {
+      if (parseInt(val) === exp) {
+        cell.classList.add('correct');
+      } else {
+        cell.classList.add('wrong');
+        allCorrect = false;
+      }
+    } else {
+      cell.classList.add('wrong');
+      allCorrect = false;
+    }
+  });
+
+  const feedback = document.getElementById(`sub-feedback-${sid}-${num}`);
+  feedback.classList.add('show');
+  if (allCorrect) {
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Hebat! Semua benar! 🌟';
+    if (!card.classList.contains('solved')) {
+      card.classList.add('solved');
+      progress.sub[sid === 1 ? 's1' : 's2']++;
+      updateProgress('sub', sid);
+    }
+  } else {
+    feedback.className = 'feedback show wrong';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Ada yang belum tepat. Periksa kolom merah ya!';
+  }
+}
+
+document.addEventListener('input', (e) => {
+  if (e.target.matches('[data-sub-borrow]')) {
+    const card = e.target.closest('[data-sub-card]');
+    if (!card) return;
+    const idx = e.target.dataset.subBorrow;
+    const topDigit = card.querySelector(`[data-sub-top="${idx}"]`);
+    if (e.target.value.trim() !== '') {
+      topDigit.classList.add('strike');
+    } else {
+      topDigit.classList.remove('strike');
+    }
+  }
+});
+
+function checkSubDemo() {
+  const expectedBorrow = [4, 9, 9, 10];
+  const expectedResult = [2, 6, 5, 3];
+  let allCorrect = true;
+  expectedBorrow.forEach((exp, i) => {
+    const cell = document.querySelector(`[data-demo-sub-borrow="${i}"]`);
+    const topDigit = document.querySelector(`[data-demo-sub-top="${i}"]`);
+    const val = cell.value.trim();
+    if (val !== '' && parseInt(val) === exp) {
+      cell.classList.add('correct');
+      topDigit.classList.add('strike');
+    } else {
+      cell.classList.add('wrong');
+      allCorrect = false;
+      if (val !== '') topDigit.classList.add('strike');
+    }
+  });
+  expectedResult.forEach((exp, i) => {
+    const cell = document.querySelector(`[data-demo-sub-result="${i}"]`);
+    const val = cell.value.trim();
+    if (val !== '' && parseInt(val) === exp) {
+      cell.classList.add('correct');
+    } else {
+      cell.classList.add('wrong');
+      allCorrect = false;
+    }
+  });
+  const feedback = document.getElementById('subDemoFeedback');
+  feedback.classList.add('show');
+  if (allCorrect) {
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = '<i class="fa-solid fa-star"></i> Luar biasa! Kamu paham konsep peminjaman dengan baik!';
+  } else {
+    feedback.className = 'feedback show wrong';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-info"></i> Coba lagi ya! Ingat: 0 jadi 10, 0 jadi 9 (dipinjam), 0 jadi 9 (dipinjam), 5 jadi 4.';
+  }
+}
+document.addEventListener('input', (e) => {
+  if (e.target.matches('[data-demo-sub-borrow]')) {
+    const idx = e.target.dataset.demoSubBorrow;
+    const topDigit = document.querySelector(`[data-demo-sub-top="${idx}"]`);
+    if (e.target.value.trim() !== '') topDigit.classList.add('strike');
+    else topDigit.classList.remove('strike');
+  }
+});
+
+// ============== MULTIPLICATION ==============
+function createMultProblem(a, b, num, sid) {
+  const result = a * b;
+  const aTens = Math.floor(a / 10), aOnes = a % 10;
+  const bTens = Math.floor(b / 10), bOnes = b % 10;
+  const step1 = bOnes * aOnes;
+  const simpan1 = Math.floor(step1 / 10);
+  const pp1 = bOnes * a;
+  const pp2 = bTens * a;
+  const rStr = String(result).split('');
+  const cardClass = sid === 1 ? 's1' : 's2';
+  const pp1Str = String(pp1).split('');
+  const pp2Str = String(pp2).split('');
+  
+  // Jumlah kolom adalah 5 (Op + 4 Digit). Kita isi dynamically
+  const pp1Html = '<span></span>'.repeat(4 - pp1Str.length) + pp1Str.map((d, i) => `<input class="cell" maxlength="1" data-mult-pp1="${i}">`).join('');
+  const pp2Html = '<span></span>'.repeat(3 - pp2Str.length) + pp2Str.map((d, i) => `<input class="cell" maxlength="1" data-mult-pp2="${i}">`).join('') + '<span class="digit" style="color: var(--muted);">0</span>';
+  const rHtml = '<span></span>'.repeat(4 - rStr.length) + rStr.map((d, i) => `<input class="cell" maxlength="1" data-mult-result="${i}">`).join('');
+  
+  return `
+    <div class="problem-card ${cardClass}" data-mult-card="${sid}-${num}" data-a="${a}" data-b="${b}">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="problem-num ${cardClass}">${num}</span>
+          <span class="font-display font-bold">${a} × ${b} = ?</span>
+        </div>
+      </div>
+      <div class="flex gap-4 items-start flex-wrap">
+        <div class="math-grid">
+          <div class="math-row mult-row">
+            <span></span><span></span><span></span><input class="cell borrow ${cardClass}" maxlength="1" data-mult-simpan placeholder="−" title="Simpan"><span></span>
+          </div>
+          <div class="math-row mult-row">
+            <span></span><span></span><span></span><span class="digit">${aTens}</span><span class="digit">${aOnes}</span>
+          </div>
+          <div class="math-row mult-row">
+            <span class="operator">×</span><span></span><span></span><span class="digit">${bTens}</span><span class="digit">${bOnes}</span>
+          </div>
+          <div class="math-row mult-row result-row">
+            <span></span>${pp1Html}
+          </div>
+          <div class="math-row mult-row">
+            <span></span>${pp2Html}
+          </div>
+          <div class="math-row mult-row result-row">
+            <span></span>${rHtml}
+          </div>
+        </div>
+        <div class="text-xs space-y-1 text-gray-600">
+          <div><b>Langkah:</b></div>
+          <div>1. ${bOnes} × ${aOnes} = ${step1}${simpan1 ? ', simpan ' + simpan1 : ''}</div>
+          <div>2. ${bOnes} × ${aTens}${simpan1 ? ' + ' + simpan1 : ''} = ${bOnes * aTens + simpan1}</div>
+          <div>3. ${bTens} × ${aOnes} = ${bTens * aOnes}</div>
+          <div>4. ${bTens} × ${aTens} = ${bTens * aTens}</div>
+          <div>5. Jumlahkan ${pp1} + ${pp2}0</div>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2 items-center flex-wrap">
+        <button class="btn ${cardClass === 's1' ? 'btn-s1' : 'btn-s2'}" onclick="checkMultProblem(${sid}, ${num})">
+          <i class="fa-solid fa-check"></i> Cek Jawaban
+        </button>
+        <button class="btn btn-ghost text-xs" onclick="resetProblem(this)">
+          <i class="fa-solid fa-eraser"></i> Reset
+        </button>
+      </div>
+      <div class="feedback" id="mult-feedback-${sid}-${num}"></div>
+      <div class="hidden" data-expected-simpan="${simpan1}"></div>
+      <div class="hidden" data-expected-pp1="${pp1Str.join(',')}"></div>
+      <div class="hidden" data-expected-pp2="${pp2Str.join(',')}"></div>
+      <div class="hidden" data-expected-result="${rStr.join(',')}"></div>
+    </div>
+  `;
+}
+
+function checkMultProblem(sid, num) {
+  const card = document.querySelector(`[data-mult-card="${sid}-${num}"]`);
+  const expSimpan = parseInt(card.querySelector('[data-expected-simpan]').dataset.expectedSimpan);
+  const expPP1 = card.querySelector('[data-expected-pp1]').dataset.expectedPp1.split(',').map(Number);
+  const expPP2 = card.querySelector('[data-expected-pp2]').dataset.expectedPp2.split(',').map(Number);
+  const expResult = card.querySelector('[data-expected-result]').dataset.expectedResult.split(',').map(Number);
+  let allCorrect = true;
+
+  const simpanCell = card.querySelector('[data-mult-simpan]');
+  const sVal = simpanCell.value.trim();
+  if (sVal !== '' && parseInt(sVal) === expSimpan) simpanCell.classList.add('correct');
+  else { simpanCell.classList.add('wrong'); allCorrect = false; }
+
+  expPP1.forEach((exp, i) => {
+    const cell = card.querySelector(`[data-mult-pp1="${i}"]`);
+    if (cell) {
+      const val = cell.value.trim();
+      if (val !== '' && parseInt(val) === exp) cell.classList.add('correct');
+      else { cell.classList.add('wrong'); allCorrect = false; }
+    }
+  });
+  expPP2.forEach((exp, i) => {
+    const cell = card.querySelector(`[data-mult-pp2="${i}"]`);
+    if (cell) {
+      const val = cell.value.trim();
+      if (val !== '' && parseInt(val) === exp) cell.classList.add('correct');
+      else { cell.classList.add('wrong'); allCorrect = false; }
+    }
+  });
+  expResult.forEach((exp, i) => {
+    const cell = card.querySelector(`[data-mult-result="${i}"]`);
+    if (cell) {
+      const val = cell.value.trim();
+      if (val !== '' && parseInt(val) === exp) cell.classList.add('correct');
+      else { cell.classList.add('wrong'); allCorrect = false; }
+    }
+  });
+
+  const feedback = document.getElementById(`mult-feedback-${sid}-${num}`);
+  feedback.classList.add('show');
+  if (allCorrect) {
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Hebat! Perkalian bersusun benar! 🌟';
+    if (!card.classList.contains('solved')) {
+      card.classList.add('solved');
+      progress.mult[sid === 1 ? 's1' : 's2']++;
+      updateProgress('mult', sid);
+    }
+  } else {
+    feedback.className = 'feedback show wrong';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Periksa lagi langkah-langkahnya ya!';
+  }
+}
+
+function checkMultDemo() {
+  const expSimpan = 1, expPP1 = [7, 2], expPP2 = [2, 4], expResult = [3, 1, 2];
+  let allCorrect = true;
+  const sCell = document.querySelector('[data-demo-mult-simpan]');
+  if (sCell.value.trim() === '1') sCell.classList.add('correct');
+  else { sCell.classList.add('wrong'); allCorrect = false; }
+  expPP1.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-mult-pp1="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  expPP2.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-mult-pp2="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  expResult.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-mult-result="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  const fb = document.getElementById('multDemoFeedback');
+  fb.classList.add('show');
+  if (allCorrect) {
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '<i class="fa-solid fa-star"></i> Sempurna! Kamu menguasai perkalian bersusun!';
+  } else {
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = '<i class="fa-solid fa-circle-info"></i> Cek kembali: simpan=1, PP1=72, PP2=240, hasil=312';
+  }
+}
+
+// ============== DIVISION ==============
+function createDivProblem(dividend, divisor, num, sid) {
+  const quotient = Math.floor(dividend / divisor);
+  const qStr = String(quotient);
+  const dStr = String(dividend);
+  const cardClass = sid === 1 ? 's1' : 's2';
+  
+  let stepsHtml = '';
+  let prevDiff = '';
+  for (let i = 0; i < dStr.length; i++) {
+    const curDigit = dStr[i];
+    const newRem = prevDiff === '0' ? curDigit : prevDiff + curDigit;
+    const cur = parseInt(newRem);
+    if (cur >= divisor) {
+      const q = Math.floor(cur / divisor);
+      const prod = q * divisor;
+      const diff = cur - prod;
+      stepsHtml += `
+        <div class="scaffold-step ${cardClass}" style="font-size: 0.85rem; margin-left: ${i * 1.5}rem;">
+          <b>Bagi ${newRem} ÷ ${divisor} = ${q}</b><br>
+          ${q} × ${divisor} = ${prod} → tulis <input class="cell" maxlength="${String(prod).length}" data-div-mult="${i}" style="width: 2rem; height: 2rem; font-size: 0.85rem;"><br>
+          ${newRem} − <span data-div-mult-display="${i}">?</span> = <input class="cell" maxlength="${String(diff).length}" data-div-diff="${i}" style="width: 2rem; height: 2rem; font-size: 0.85rem;">
+        </div>`;
+      prevDiff = String(diff);
+    } else {
+      prevDiff = newRem;
+    }
+  }
+  
+  return `
+    <div class="problem-card ${cardClass}" data-div-card="${sid}-${num}" data-dividend="${dividend}" data-divisor="${divisor}">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="problem-num ${cardClass}">${num}</span>
+          <span class="font-display font-bold">${dividend} ÷ ${divisor} = ?</span>
+        </div>
+      </div>
+      <div class="flex gap-3 items-start flex-wrap">
+        <div style="font-family: 'Fredoka', sans-serif;">
+          <div style="display: flex; align-items: end; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <div style="width: 2rem;"></div>
+            <div style="display: flex; gap: 0.25rem; padding-bottom: 0.25rem; border-bottom: 3px solid var(--text);">
+              ${qStr.split('').map((d, i) => `<input class="cell" maxlength="1" data-div-q="${i}" style="width: 2rem; height: 2rem; font-size: 1rem;">`).join('')}
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 2rem; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--primary); border-right: 3px solid var(--text); padding-right: 0.5rem;">${divisor}</div>
+            <div style="display: flex; gap: 0.25rem;">
+              ${dStr.split('').map(d => `<span class="digit" style="width: 2rem; height: 2rem; font-size: 1rem;">${d}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p class="text-xs font-bold mb-1">Langkah-langkah:</p>
+        ${stepsHtml}
+        <div class="scaffold-step ${cardClass}" style="font-size: 0.85rem;">
+          <b>Sisa akhir:</b> <input class="cell" maxlength="1" data-div-rem style="width: 2rem; height: 2rem; font-size: 0.85rem;"> (harus 0)
+        </div>
+      </div>
+      <div class="mt-3 flex gap-2 items-center flex-wrap">
+        <button class="btn ${cardClass === 's1' ? 'btn-s1' : 'btn-s2'}" onclick="checkDivProblem(${sid}, ${num})">
+          <i class="fa-solid fa-check"></i> Cek Jawaban
+        </button>
+        <button class="btn btn-ghost text-xs" onclick="resetProblem(this)">
+          <i class="fa-solid fa-eraser"></i> Reset
+        </button>
+      </div>
+      <div class="feedback" id="div-feedback-${sid}-${num}"></div>
+      <div class="hidden" data-expected-q="${qStr.split('').join(',')}"></div>
+    </div>
+  `;
+}
+
+function checkDivProblem(sid, num) {
+  const card = document.querySelector(`[data-div-card="${sid}-${num}"]`);
+  const dividend = parseInt(card.dataset.dividend);
+  const divisor = parseInt(card.dataset.divisor);
+  const quotient = Math.floor(dividend / divisor);
+  const qStr = String(quotient).split('');
+  let allCorrect = true;
+
+  qStr.forEach((d, i) => {
+    const cell = card.querySelector(`[data-div-q="${i}"]`);
+    if (cell.value.trim() === d) cell.classList.add('correct');
+    else { cell.classList.add('wrong'); allCorrect = false; }
+  });
+
+  const dStr = String(dividend);
+  let prevDiff = '';
+  for (let i = 0; i < dStr.length; i++) {
+    const newRem = prevDiff === '0' ? dStr[i] : prevDiff + dStr[i];
+    const cur = parseInt(newRem);
+    if (cur >= divisor) {
+      const q = Math.floor(cur / divisor);
+      const prod = q * divisor;
+      const diff = cur - prod;
+      const multCell = card.querySelector(`[data-div-mult="${i}"]`);
+      const diffCell = card.querySelector(`[data-div-diff="${i}"]`);
+      if (multCell) {
+        if (multCell.value.trim() === String(prod)) multCell.classList.add('correct');
+        else { multCell.classList.add('wrong'); allCorrect = false; }
+        const disp = card.querySelector(`[data-div-mult-display="${i}"]`);
+        if (disp) disp.textContent = multCell.value.trim() || '?';
+      }
+      if (diffCell) {
+        if (diffCell.value.trim() === String(diff)) diffCell.classList.add('correct');
+        else { diffCell.classList.add('wrong'); allCorrect = false; }
+      }
+      prevDiff = String(diff);
+    } else {
+      prevDiff = newRem;
+    }
+  }
+
+  const remCell = card.querySelector('[data-div-rem]');
+  if (remCell && remCell.value.trim() === '0') remCell.classList.add('correct');
+  else if (remCell) { remCell.classList.add('wrong'); allCorrect = false; }
+
+  const feedback = document.getElementById(`div-feedback-${sid}-${num}`);
+  feedback.classList.add('show');
+  if (allCorrect) {
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Hebat! ${dividend} ÷ ${divisor} = ${quotient} 🌟`;
+    if (!card.classList.contains('solved')) {
+      card.classList.add('solved');
+      progress.div[sid === 1 ? 's1' : 's2']++;
+      updateProgress('div', sid);
+    }
+  } else {
+    feedback.className = 'feedback show wrong';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Periksa setiap langkah bagi, kali, dan kurangnya ya!';
+  }
+}
+
+function checkDivDemo() {
+  const expected = { q: [2, 4], m1: [1, 2], bd1: [2, 4], m2: [2, 4], rem: 0 };
+  let allCorrect = true;
+  expected.q.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-div-q="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  expected.m1.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-div-m1="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  expected.bd1.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-div-bd1="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  expected.m2.forEach((e, i) => {
+    const c = document.querySelector(`[data-demo-div-m2="${i}"]`);
+    if (c.value.trim() === String(e)) c.classList.add('correct');
+    else { c.classList.add('wrong'); allCorrect = false; }
+  });
+  const rc = document.querySelector('[data-demo-div-rem]');
+  if (rc.value.trim() === '0') rc.classList.add('correct');
+  else { rc.classList.add('wrong'); allCorrect = false; }
+  
+  const fb = document.getElementById('divDemoFeedback');
+  fb.classList.add('show');
+  if (allCorrect) {
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '<i class="fa-solid fa-star"></i> Hebat! Kamu menguasai pembagian bersusun!';
+  } else {
+    fb.className = 'feedback show wrong';
+    fb.innerHTML = '<i class="fa-solid fa-circle-info"></i> Ingat: 14÷6=2 sisa 2, turunkan 4 jadi 24, 24÷6=4 sisa 0';
+  }
+}
+
+// ============== STORY PROBLEMS ==============
+function createStoryProblem(p, num, sid) {
+  const cardClass = sid === 1 ? 's1' : 's2';
+  const stepsHtml = p.steps.map((s, i) => `
+    <div class="scaffold-step ${cardClass}">
+      <b>Langkah ${i + 1}:</b> ${s.desc}<br>
+      <span class="font-display font-bold">${s.op} = </span>
+      <input class="cell" type="number" data-story-step="${i}" style="width: 4rem; height: 2rem; font-size: 0.95rem;">
+    </div>
+  `).join('');
+  
+  return `
+    <div class="problem-card ${cardClass}" data-story-card="${sid}-${num}">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="problem-num ${cardClass}">${num}</span>
+        <span class="text-xs font-bold uppercase text-gray-500">Soal Cerita</span>
+      </div>
+      <p class="text-sm mb-3 leading-relaxed">${p.text}</p>
+      <div class="space-y-2 mb-3">
+        ${stepsHtml}
+      </div>
+      <div class="scaffold-step ${cardClass}" style="background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);">
+        <b>Jawaban akhir:</b>
+        <input class="cell" type="number" data-story-final style="width: 5rem; height: 2.25rem; font-size: 1rem;">
+        <span class="text-xs text-gray-600 ml-2">(dengan satuan)</span>
+      </div>
+      <div class="mt-3 flex gap-2 items-center flex-wrap">
+        <button class="btn ${cardClass === 's1' ? 'btn-s1' : 'btn-s2'}" onclick="checkStoryProblem(${sid}, ${num})">
+          <i class="fa-solid fa-check"></i> Cek Jawaban
+        </button>
+        <button class="btn btn-ghost text-xs" onclick="toggleStoryExplanation(${sid}, ${num})">
+          <i class="fa-solid fa-lightbulb"></i> Pembahasan
+        </button>
+        <button class="btn btn-ghost text-xs" onclick="resetProblem(this)">
+          <i class="fa-solid fa-eraser"></i> Reset
+        </button>
+      </div>
+      <div class="feedback" id="story-feedback-${sid}-${num}"></div>
+      <div class="hidden mt-2 p-3 rounded-xl text-sm" id="story-explain-${sid}-${num}" style="background: #DBEAFE; color: #1E40AF; border-left: 4px solid var(--primary);">
+        <b>📖 Pembahasan:</b><br>${p.explanation}
+      </div>
+      <div class="hidden" data-story-steps='${JSON.stringify(p.steps.map(s => s.answer))}'></div>
+      <div class="hidden" data-story-final="${p.finalAnswer}"></div>
+    </div>
+  `;
+}
+
+function checkStoryProblem(sid, num) {
+  const card = document.querySelector(`[data-story-card="${sid}-${num}"]`);
+  const stepAnswers = JSON.parse(card.querySelector('[data-story-steps]').dataset.storySteps);
+  const finalAnswer = parseInt(card.querySelector('[data-story-final]').dataset.storyFinal);
+  let allCorrect = true;
+
+  stepAnswers.forEach((ans, i) => {
+    const cell = card.querySelector(`[data-story-step="${i}"]`);
+    const val = parseInt(cell.value);
+    if (val === ans) cell.classList.add('correct');
+    else { cell.classList.add('wrong'); allCorrect = false; }
+  });
+
+  const finalCell = card.querySelector('[data-story-final]');
+  if (parseInt(finalCell.value) === finalAnswer) finalCell.classList.add('correct');
+  else { finalCell.classList.add('wrong'); allCorrect = false; }
+
+  const feedback = document.getElementById(`story-feedback-${sid}-${num}`);
+  feedback.classList.add('show');
+  if (allCorrect) {
+    feedback.className = 'feedback show correct';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Luar biasa! Semua langkah benar! 🌟';
+    if (!card.classList.contains('solved')) {
+      card.classList.add('solved');
+      progress.story[sid === 1 ? 's1' : 's2']++;
+      updateProgress('story', sid);
+    }
+  } else {
+    feedback.className = 'feedback show wrong';
+    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Periksa kembali langkah-langkahnya ya! Buka pembahasan jika perlu.';
+  }
+}
+
+function toggleStoryExplanation(sid, num) {
+  const el = document.getElementById(`story-explain-${sid}-${num}`);
+  el.classList.toggle('hidden');
+  if (!el.classList.contains('hidden')) {
+    el.classList.add('bounce-in');
+  }
+}
+
+// ============== RESET ==============
+function resetProblem(btn) {
+  const card = btn.closest('.problem-card');
+  card.querySelectorAll('input.cell').forEach(c => {
+    c.value = '';
+    c.classList.remove('correct', 'wrong');
+  });
+  card.querySelectorAll('.digit').forEach(d => d.classList.remove('strike'));
+  card.querySelectorAll('.feedback').forEach(f => {
+    f.classList.remove('show');
+    f.innerHTML = '';
+  });
+  card.querySelectorAll('[data-div-mult-display]').forEach(d => d.textContent = '?');
+}
+
+// ============== PROGRESS ==============
+function updateProgress(type, sid) {
+  const key = type;
+  const sKey = sid === 1 ? 's1' : 's2';
+  const count = progress[key][sKey];
+  const el = document.getElementById(`${type}Progress${sid}`);
+  const bar = document.getElementById(`${type}ProgressBar${sid}`);
+  if (el) el.textContent = count;
+  if (bar) bar.style.width = (count / 20 * 100) + '%';
+  if (count === 20) {
+    launchConfetti();
+  }
+}
+
+// ============== GAME ==============
+function renderGame() {
+  const container = document.getElementById('gameStages');
+  if (!container) return;
+  container.innerHTML = gameStages.map((s, i) => `
+    <div class="game-stage ${i === 0 ? '' : 'locked'}" id="gameStage${i}" data-stage="${i}">
+      <div class="stage-num">${i + 1}</div>
+      <div class="ml-12">
+        <p class="text-sm text-gray-700 mb-4 italic">📜 ${s.story}</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="card p-4" style="border-color: var(--s1); border-width: 2px;">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style="background: var(--s1);">1</div>
+              <span class="font-bold text-sm">${studentNames.s1}</span>
+            </div>
+            <p class="text-xs text-gray-600 mb-1">Tugasmu:</p>
+            <p class="font-display text-xl font-bold mb-2">${s.s1Op} = ?</p>
+            <input class="cell" type="number" data-game-s1="${i}" style="width: 5rem; height: 2.5rem; font-size: 1.1rem;">
+            <div class="feedback mt-2" id="game-s1-fb-${i}"></div>
+          </div>
+          <div class="card p-4" style="border-color: var(--s2); border-width: 2px;">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style="background: var(--s2);">2</div>
+              <span class="font-bold text-sm">${studentNames.s2}</span>
+            </div>
+            <p class="text-xs text-gray-600 mb-1">Tugasmu (pakai hasil Siswa 1):</p>
+            <p class="font-display text-xl font-bold mb-2">${s.s2Op} = ?</p>
+            <input class="cell" type="number" data-game-s2="${i}" style="width: 5rem; height: 2.5rem; font-size: 1.1rem;">
+            <div class="feedback mt-2" id="game-s2-fb-${i}"></div>
+          </div>
+        </div>
+        <div class="mt-3 text-center">
+          <button class="btn btn-primary" onclick="checkGameStage(${i})">
+            <i class="fa-solid fa-key"></i> Buka Rahasia ${i + 1}
+          </button>
+          <div class="feedback mt-2" id="game-stage-fb-${i}"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function checkGameStage(idx) {
+  const stage = gameStages[idx];
+  const s1Input = document.querySelector(`[data-game-s1="${idx}"]`);
+  const s2Input = document.querySelector(`[data-game-s2="${idx}"]`);
+  const s1Val = parseInt(s1Input.value);
+  const s2Val = parseInt(s2Input.value);
+  const s1Fb = document.getElementById(`game-s1-fb-${idx}`);
+  const s2Fb = document.getElementById(`game-s2-fb-${idx}`);
+  const stageFb = document.getElementById(`game-stage-fb-${idx}`);
+
+  let s1Ok = s1Val === stage.s1Ans;
+  let s2Ok = s2Val === stage.s2Ans;
+
+  s1Input.classList.remove('correct', 'wrong');
+  s2Input.classList.remove('correct', 'wrong');
+  s1Fb.classList.remove('show');
+  s2Fb.classList.remove('show');
+
+  if (s1Ok) {
+    s1Input.classList.add('correct');
+    s1Fb.className = 'feedback show correct mt-2';
+    s1Fb.innerHTML = '<i class="fa-solid fa-check"></i> Benar!';
+  } else {
+    s1Input.classList.add('wrong');
+    s1Fb.className = 'feedback show wrong mt-2';
+    s1Fb.innerHTML = `<i class="fa-solid fa-xmark"></i> Belum tepat. ${stage.s1Op} = ${stage.s1Ans}`;
+  }
+
+  if (s2Ok) {
+    s2Input.classList.add('correct');
+    s2Fb.className = 'feedback show correct mt-2';
+    s2Fb.innerHTML = '<i class="fa-solid fa-check"></i> Benar!';
+  } else {
+    s2Input.classList.add('wrong');
+    s2Fb.className = 'feedback show wrong mt-2';
+    s2Fb.innerHTML = `<i class="fa-solid fa-xmark"></i> Belum tepat. ${stage.s2Op} = ${stage.s2Ans}`;
+  }
+
+  if (s1Ok && s2Ok) {
+    stageFb.className = 'feedback show correct mt-2';
+    stageFb.innerHTML = '<i class="fa-solid fa-trophy"></i> Tahap ' + (idx + 1) + ' selesai! Rahasia terpecahkan! 🎉';
+    gameStageCompleted[idx] = true;
+    const stageEl = document.getElementById(`gameStage${idx}`);
+    stageEl.classList.add('completed');
+    document.getElementById(`stageInd${idx + 1}`).style.background = 'var(--success)';
+    document.getElementById(`stageInd${idx + 1}`).style.color = 'white';
+    
+    const done = gameStageCompleted.filter(x => x).length;
+    document.getElementById('gameStagesDone').textContent = done;
+    document.getElementById('gameProgress').style.width = (done / 5 * 100) + '%';
+    
+    if (idx < 4) {
+      const next = document.getElementById(`gameStage${idx + 1}`);
+      next.classList.remove('locked');
+      next.classList.add('bounce-in');
+      setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'center' }), 500);
+    } else {
+      setTimeout(() => {
+        document.getElementById('treasureReveal').classList.remove('hidden');
+        document.getElementById('treasureReveal').classList.add('bounce-in');
+        launchConfetti();
+        setTimeout(() => {
+          document.getElementById('treasureReveal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }, 800);
+    }
+    launchConfetti();
+  } else {
+    stageFb.className = 'feedback show wrong mt-2';
+    stageFb.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Kedua siswa harus benar bersama-sama!';
+  }
+}
+
+function celebrateEnd() {
+  launchConfetti(50);
+  setTimeout(() => {
+    goToSlide('5');
+  }, 1500);
+}
+
+function restartAdventure() {
+  document.getElementById('name1').value = '';
+  document.getElementById('name2').value = '';
+  studentNames = { s1: "Siswa 1", s2: "Siswa 2" };
+  updateAllNames();
+  progress = { sub: { s1: 0, s2: 0 }, mult: { s1: 0, s2: 0 }, div: { s1: 0, s2: 0 }, story: { s1: 0, s2: 0 } };
+  gameStageCompleted = [false, false, false, false, false];
+  ['sub', 'mult', 'div', 'story'].forEach(t => {
+    [1, 2].forEach(s => {
+      const el = document.getElementById(`${t}Progress${s}`);
+      const bar = document.getElementById(`${t}ProgressBar${s}`);
+      if (el) el.textContent = '0';
+      if (bar) bar.style.width = '0%';
+    });
+  });
+  document.querySelectorAll('.problem-card').forEach(c => {
+    c.classList.remove('solved');
+    c.querySelectorAll('input.cell').forEach(i => { i.value = ''; i.classList.remove('correct', 'wrong'); });
+    c.querySelectorAll('.feedback').forEach(f => { f.classList.remove('show'); f.innerHTML = ''; });
+  });
+  document.getElementById('treasureReveal').classList.add('hidden');
+  document.getElementById('gameProgress').style.width = '0%';
+  document.getElementById('gameStagesDone').textContent = '0';
+  for (let i = 1; i <= 5; i++) {
+    const ind = document.getElementById(`stageInd${i}`);
+    ind.style.background = 'var(--bg-2)';
+    ind.style.color = '';
+    const stage = document.getElementById(`gameStage${i - 1}`);
+    if (stage) {
+      stage.classList.remove('completed');
+      if (i > 1) stage.classList.add('locked');
+    }
+  }
+  goToSlide('1');
+}
+
+// ============== CONFETTI ==============
+function launchConfetti(count = 30) {
+  const colors = ['#FF8C42', '#E63946', '#FFB627', '#4ECDC4', '#0E7C7B', '#10B981'];
+  for (let i = 0; i < count; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = (2 + Math.random() * 2) + 's';
+    c.style.animationDelay = Math.random() * 0.5 + 's';
+    if (Math.random() > 0.5) c.style.borderRadius = '50%';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+// ============== INIT ==============
+function init() {
+  const sub1 = document.getElementById('subPractice1');
+  const sub2 = document.getElementById('subPractice2');
+  const mult1 = document.getElementById('multPractice1');
+  const mult2 = document.getElementById('multPractice2');
+  const div1 = document.getElementById('divPractice1');
+  const div2 = document.getElementById('divPractice2');
+  const story1 = document.getElementById('storyPractice1');
+  const story2 = document.getElementById('storyPractice2');
+
+  if (sub1 && sub2) {
+    sub1.innerHTML = subtractionProblems.map((p, i) => createSubProblem(p[0], p[1], i + 1, 1)).join('');
+    sub2.innerHTML = subtractionProblems.map((p, i) => createSubProblem(p[0], p[1], i + 1, 2)).join('');
+  }
+  if (mult1 && mult2) {
+    mult1.innerHTML = multiplicationProblems.map((p, i) => createMultProblem(p[0], p[1], i + 1, 1)).join('');
+    mult2.innerHTML = multiplicationProblems.map((p, i) => createMultProblem(p[0], p[1], i + 1, 2)).join('');
+  }
+  if (div1 && div2) {
+    div1.innerHTML = divisionProblems.map((p, i) => createDivProblem(p[0], p[1], i + 1, 1)).join('');
+    div2.innerHTML = divisionProblems.map((p, i) => createDivProblem(p[0], p[1], i + 1, 2)).join('');
+  }
+  if (story1 && story2) {
+    story1.innerHTML = storyProblems.map((p, i) => createStoryProblem(p, i + 1, 1)).join('');
+    story2.innerHTML = storyProblems.map((p, i) => createStoryProblem(p, i + 1, 2)).join('');
+  }
+
+  renderGame();
+  updateAllNames();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
