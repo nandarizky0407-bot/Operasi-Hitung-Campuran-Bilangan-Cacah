@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Matematika - Soal Cerita Operasi Hitung Campuran</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-cream:#fff8ec;--bg-warm:#fef3e2;
+  --coral:#ff6b6b;--coral-light:#ffa8a8;--coral-dark:#e85a5a;--coral-bg:#fff0f0;
+  --teal:#06a77d;--teal-light:#4dd4b0;--teal-dark:#048a66;--teal-bg:#e8f8f3;
+  --yellow:#ffd166;--yellow-dark:#f4b942;
+  --dark:#2d3047;--muted:#6b7280;
+  --card-bg:#ffffff;--border:#f0e6d2;
+  --success:#10b981;--error:#ef4444;--warn:#f59e0b;
+  --purple:#9b5de5;--blue:#118ab2;--orange:#f78c6b;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg-cream);color:var(--dark);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Fredoka',sans-serif}
+
+.bg-decoration{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.bg-decoration .symbol{position:absolute;font-family:'Fredoka',sans-serif;font-weight:700;color:rgba(255,209,102,0.12);font-size:90px;animation:float 20s infinite ease-in-out;user-select:none}
+.bg-decoration .symbol:nth-child(1){top:8%;left:5%;animation-delay:0s}
+.bg-decoration .symbol:nth-child(2){top:25%;right:8%;animation-delay:2s;color:rgba(255,107,107,0.1)}
+.bg-decoration .symbol:nth-child(3){bottom:15%;left:12%;animation-delay:4s;color:rgba(6,167,125,0.1)}
+.bg-decoration .symbol:nth-child(4){top:55%;right:15%;animation-delay:6s;color:rgba(17,138,178,0.1)}
+.bg-decoration .symbol:nth-child(5){bottom:40%;left:45%;animation-delay:8s}
+.bg-decoration .symbol:nth-child(6){top:75%;right:35%;animation-delay:10s;color:rgba(155,93,229,0.1)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-30px) rotate(15deg)}}
+
+.top-nav{position:fixed;top:0;left:0;right:0;height:64px;background:rgba(255,248,236,0.95);backdrop-filter:blur(12px);border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+.nav-brand{font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:var(--coral);display:flex;align-items:center;gap:10px}
+.nav-brand i{color:var(--yellow-dark)}
+.nav-progress{display:flex;gap:6px}
+.nav-progress button{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:8px 14px;border:2px solid var(--border);background:#fff;color:var(--muted);border-radius:50px;cursor:pointer;transition:all 0.3s ease;display:flex;align-items:center;gap:6px}
+.nav-progress button:hover{border-color:var(--coral);color:var(--coral);transform:translateY(-2px)}
+.nav-progress button.active{background:var(--coral);color:#fff;border-color:var(--coral);box-shadow:0 4px 12px rgba(255,107,107,0.3)}
+
+.slides-container{padding-top:64px;min-height:100vh;position:relative;z-index:1}
+.slide{display:none;padding:32px;min-height:calc(100vh - 64px);position:relative}
+.slide.active{display:block;animation:slideIn 0.5s ease}
+#slide-latihan.slide.active{display:flex;flex-direction:column;height:calc(100vh - 64px);min-height:0;padding:16px 24px}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.slide-header{text-align:center;margin-bottom:24px}
+.slide-header h2{font-size:32px;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:12px}
+.slide-header h2 i{color:var(--yellow-dark)}
+.slide-header p{color:var(--muted);font-size:16px;font-weight:600}
+
+#slide-cover{display:none}
+#slide-cover.active{display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.cover-content{max-width:900px;width:100%;text-align:center;animation:coverIn 0.8s ease}
+@keyframes coverIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.cover-badge{display:inline-flex;align-items:center;gap:8px;background:var(--coral-bg);color:var(--coral-dark);padding:8px 20px;border-radius:50px;font-weight:800;font-size:14px;margin-bottom:24px;border:2px solid var(--coral-light)}
+.cover-badge i{color:var(--yellow-dark)}
+.cover-title{font-size:64px;font-weight:700;color:var(--dark);line-height:1.1;margin-bottom:12px;background:linear-gradient(135deg,var(--coral) 0%,var(--yellow-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cover-subtitle{font-size:28px;font-weight:500;color:var(--teal-dark);margin-bottom:16px}
+.cover-desc{font-size:17px;color:var(--muted);font-weight:600;margin-bottom:36px;max-width:600px;margin-left:auto;margin-right:auto}
+.cover-inputs{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:36px}
+.input-card{background:#fff;border-radius:20px;padding:24px;border:3px solid var(--border);transition:all 0.3s ease;position:relative;overflow:hidden}
+.input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px}
+.kelas-2-card::before{background:var(--coral)}
+.kelas-3-card::before{background:var(--teal)}
+.input-card:focus-within{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,0.1)}
+.kelas-2-card:focus-within{border-color:var(--coral)}
+.kelas-3-card:focus-within{border-color:var(--teal)}
+.input-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;margin:0 auto 12px}
+.kelas-2-card .input-icon{background:var(--coral)}
+.kelas-3-card .input-icon{background:var(--teal)}
+.input-card label{display:block;font-weight:800;font-size:14px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.kelas-2-card label{color:var(--coral-dark)}
+.kelas-3-card label{color:var(--teal-dark)}
+.input-card input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:600;text-align:center;color:var(--dark);transition:all 0.3s}
+.kelas-2-card input:focus{outline:none;border-color:var(--coral);background:var(--coral-bg)}
+.kelas-3-card input:focus{outline:none;border-color:var(--teal);background:var(--teal-bg)}
+
+.btn-start{background:linear-gradient(135deg,var(--coral) 0%,var(--coral-dark) 100%);color:#fff;border:none;padding:18px 48px;border-radius:50px;font-family:'Fredoka',sans-serif;font-size:22px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(255,107,107,0.4);transition:all 0.3s ease}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,107,107,0.5)}
+.btn-start:active{transform:translateY(0)}
+
+.materi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:1200px;margin:0 auto 28px}
+.materi-card{background:#fff;border-radius:20px;padding:24px;border:3px solid var(--border);position:relative;overflow:hidden;transition:all 0.3s ease}
+.materi-card:hover{transform:translateY(-6px);box-shadow:0 16px 36px rgba(0,0,0,0.08)}
+.materi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:8px}
+.materi-penjumlahan::before{background:var(--yellow)}
+.materi-pengurangan::before{background:var(--coral)}
+.materi-perkalian::before{background:var(--teal)}
+.materi-pembagian::before{background:var(--blue)}
+.materi-symbol{width:80px;height:80px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700;font-family:'Fredoka',sans-serif;color:#fff;margin-bottom:16px}
+.materi-penjumlahan .materi-symbol{background:linear-gradient(135deg,var(--yellow) 0%,var(--yellow-dark) 100%)}
+.materi-pengurangan .materi-symbol{background:linear-gradient(135deg,var(--coral) 0%,var(--coral-dark) 100%)}
+.materi-perkalian .materi-symbol{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-dark) 100%)}
+.materi-pembagian .materi-symbol{background:linear-gradient(135deg,var(--blue) 0%,#0a5a7c 100%)}
+.materi-card h3{font-size:24px;margin-bottom:6px;color:var(--dark)}
+.materi-desc{color:var(--muted);font-size:14px;font-weight:600;margin-bottom:16px}
+.materi-keywords{display:flex;flex-wrap:wrap;gap:6px}
+.keyword{background:var(--bg-warm);color:var(--dark);padding:5px 12px;border-radius:50px;font-size:12px;font-weight:700;border:1px solid var(--border)}
+.materi-penjumlahan .keyword{background:#fff8e1;color:#8b6914;border-color:#ffd166}
+.materi-pengurangan .keyword{background:var(--coral-bg);color:var(--coral-dark);border-color:var(--coral-light)}
+.materi-perkalian .keyword{background:var(--teal-bg);color:var(--teal-dark);border-color:var(--teal-light)}
+.materi-pembagian .keyword{background:#e3f2fd;color:#0a5a7c;border-color:#64b5f6}
+.materi-tip{max-width:900px;margin:0 auto 24px;background:linear-gradient(135deg,#fff8e1 0%,#fff3c4 100%);border:2px solid var(--yellow);border-radius:16px;padding:20px;display:flex;gap:16px;align-items:flex-start}
+.materi-tip i{font-size:28px;color:var(--yellow-dark);flex-shrink:0;margin-top:2px}
+.materi-tip p{color:var(--dark);font-weight:600;line-height:1.5}
+
+.contoh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1200px;margin:0 auto 28px}
+.contoh-card{background:#fff;border-radius:20px;padding:24px;border:3px solid var(--border);transition:all 0.3s ease;position:relative;overflow:hidden}
+.contoh-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.08)}
+.contoh-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.contoh-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0}
+.contoh-title{font-size:18px;font-weight:700;color:var(--dark)}
+.contoh-num{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.contoh-question{color:var(--dark);font-weight:600;line-height:1.5;margin-bottom:16px;font-size:15px}
+.btn-pembahasan-contoh{width:100%;background:var(--bg-warm);color:var(--dark);border:2px solid var(--border);padding:10px 16px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-pembahasan-contoh:hover{background:var(--yellow);color:#fff;border-color:var(--yellow)}
+.btn-pembahasan-contoh.active{background:var(--yellow-dark);color:#fff;border-color:var(--yellow-dark)}
+.contoh-explanation{margin-top:14px;padding:16px;background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:2px solid var(--success);border-radius:12px;animation:expandIn 0.4s ease}
+.contoh-explanation.hidden{display:none}
+.contoh-explanation p{font-weight:600;color:var(--dark);line-height:1.5;margin-bottom:6px}
+.contoh-explanation p:last-child{margin-bottom:0}
+.contoh-explanation strong{color:var(--success)}
+.contoh-math{font-family:'Fredoka',sans-serif;font-size:18px;color:var(--coral-dark);background:#fff;padding:8px 14px;border-radius:8px;display:inline-block;margin:6px 0;border:2px solid var(--coral-light)}
+@keyframes expandIn{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
+
+.slide-nav{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding-top:8px}
+.btn-next,.btn-prev,.btn-restart{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:500;padding:12px 28px;border-radius:50px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:all 0.3s ease;border:none}
+.btn-next{background:var(--coral);color:#fff;box-shadow:0 4px 14px rgba(255,107,107,0.3)}
+.btn-next:hover{background:var(--coral-dark);transform:translateY(-2px)}
+.btn-prev{background:#fff;color:var(--muted);border:2px solid var(--border)}
+.btn-prev:hover{border-color:var(--coral);color:var(--coral)}
+.btn-restart{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(6,167,125,0.3)}
+.btn-restart:hover{background:var(--teal-dark);transform:translateY(-2px)}
+
+.latihan-content{display:flex;flex-direction:column;flex:1;min-height:0;gap:12px}
+.latihan-content .slide-header{margin-bottom:8px}
+.latihan-content .slide-header h2{font-size:26px}
+.latihan-content .slide-header p{font-size:14px}
+.practice-container{display:flex;gap:16px;flex:1;min-height:0}
+.student-panel{flex:1;display:flex;flex-direction:column;background:#fff;border-radius:20px;overflow:hidden;min-height:0;border:3px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.kelas-2-panel{border-color:var(--coral-light)}
+.kelas-3-panel{border-color:var(--teal-light)}
+.panel-header{padding:14px 18px;border-bottom:2px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.kelas-2-panel .panel-header{background:linear-gradient(135deg,#fff5f5 0%,#ffe5e5 100%)}
+.kelas-3-panel .panel-header{background:linear-gradient(135deg,#f0fdfa 0%,#ccfbef 100%)}
+.panel-title{display:flex;align-items:center;gap:10px;min-width:0}
+.panel-badge{font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#fff;padding:5px 12px;border-radius:50px;flex-shrink:0}
+.kelas-2-panel .panel-badge{background:var(--coral)}
+.kelas-3-panel .panel-badge{background:var(--teal)}
+.panel-name{font-weight:800;font-size:15px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.panel-progress{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.progress-text{font-size:13px;font-weight:800;color:var(--muted);white-space:nowrap}
+.progress-bar{width:80px;height:8px;background:#fff;border-radius:50px;overflow:hidden;border:1px solid var(--border)}
+.progress-fill{height:100%;width:0%;border-radius:50px;transition:width 0.5s ease}
+.kelas-2-panel .progress-fill{background:linear-gradient(90deg,var(--coral) 0%,var(--yellow) 100%)}
+.kelas-3-panel .progress-fill{background:linear-gradient(90deg,var(--teal) 0%,var(--blue) 100%)}
+
+.questions-scroll{flex:1;overflow-y:auto;padding:14px;scroll-behavior:smooth}
+.questions-scroll::-webkit-scrollbar{width:8px}
+.questions-scroll::-webkit-scrollbar-track{background:var(--bg-warm);border-radius:50px}
+.questions-scroll::-webkit-scrollbar-thumb{background:var(--coral-light);border-radius:50px}
+.kelas-3-panel .questions-scroll::-webkit-scrollbar-thumb{background:var(--teal-light)}
+
+.section-divider{margin:14px 0 10px;padding:10px 14px;border-radius:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kelas-2-panel .section-divider{background:linear-gradient(135deg,#fff5f5 0%,#ffeded 100%);border-left:4px solid var(--coral)}
+.kelas-3-panel .section-divider{background:linear-gradient(135deg,#f0fdfa 0%,#dcfce7 100%);border-left:4px solid var(--teal)}
+.section-label{font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px}
+.kelas-2-panel .section-label{color:var(--coral-dark)}
+.kelas-3-panel .section-label{color:var(--teal-dark)}
+.section-title{font-weight:800;font-size:14px;color:var(--dark)}
+.section-desc{font-size:12px;color:var(--muted);font-weight:700;margin-left:auto}
+
+.question-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;transition:all 0.3s ease;position:relative;overflow:hidden}
+.question-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.question-card[data-tipe="Penjumlahan"]::before{background:var(--yellow)}
+.question-card[data-tipe="Pengurangan"]::before{background:var(--coral)}
+.question-card[data-tipe="Perkalian"]::before{background:var(--teal)}
+.question-card[data-tipe="Pembagian"]::before{background:var(--blue)}
+.question-card[data-tipe="Campuran"]::before{background:var(--purple)}
+.question-card[data-tipe="Dua Langkah"]::before{background:var(--orange)}
+.question-card:hover{box-shadow:0 6px 16px rgba(0,0,0,0.06);transform:translateY(-1px)}
+.q-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.q-number{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.kelas-2-panel .q-number{background:var(--coral)}
+.kelas-3-panel .q-number{background:var(--teal)}
+.q-tag{font-size:11px;font-weight:800;padding:3px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:0.5px}
+.tag-penjumlahan{background:#fff8e1;color:#8b6914}
+.tag-pengurangan{background:var(--coral-bg);color:var(--coral-dark)}
+.tag-perkalian{background:var(--teal-bg);color:var(--teal-dark)}
+.tag-pembagian{background:#e3f2fd;color:#0a5a7c}
+.tag-campuran{background:#f3e5f5;color:#6b21a8}
+.tag-dua-langkah{background:#fff3e0;color:#c2410c}
+.q-text{font-size:14px;line-height:1.5;color:var(--dark);font-weight:600;margin-bottom:12px}
+.q-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.q-input-group label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.q-input-group input{width:100%;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:var(--dark);transition:all 0.3s}
+.q-input-group input:focus{outline:none;border-color:var(--coral);background:var(--coral-bg)}
+.kelas-3-panel .q-input-group input:focus{border-color:var(--teal);background:var(--teal-bg)}
+
+.math-keyboard{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap}
+.math-keyboard button{background:var(--bg-warm);border:1px solid var(--border);color:var(--dark);width:28px;height:28px;border-radius:6px;cursor:pointer;font-weight:800;font-size:14px;font-family:'Fredoka',sans-serif;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;padding:0}
+.kelas-2-panel .math-keyboard button:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
+.kelas-3-panel .math-keyboard button:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+.answer-input-wrapper{display:flex;flex-direction:column;gap:6px}
+.unit-options{display:flex;gap:6px;flex-wrap:wrap}
+.unit-btn{background:var(--bg-warm);border:1px solid var(--border);color:var(--dark);padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;font-family:'Nunito',sans-serif;transition:all 0.2s ease}
+.kelas-2-panel .unit-btn:hover{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark)}
+.kelas-3-panel .unit-btn:hover{background:var(--teal-light);border-color:var(--teal);color:var(--teal-dark)}
+.kelas-2-panel .unit-btn.active{background:var(--coral);color:#fff;border-color:var(--coral)}
+.kelas-3-panel .unit-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+.q-actions{display:flex;gap:8px}
+.btn-cek,.btn-pembahasan{flex:1;padding:8px 12px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;transition:all 0.3s ease;border:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-cek{background:var(--coral);color:#fff}
+.kelas-3-panel .btn-cek{background:var(--teal)}
+.btn-cek:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-pembahasan{background:var(--bg-warm);color:var(--dark);border:2px solid var(--border)}
+.btn-pembahasan:hover{background:var(--yellow);color:#fff;border-color:var(--yellow)}
+.btn-pembahasan.active{background:var(--yellow-dark);color:#fff;border-color:var(--yellow-dark)}
+
+.q-result{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;animation:popIn 0.4s ease}
+.q-result i{font-size:18px}
+.result-correct{background:#dcfce7;color:#166534;border:2px solid var(--success)}
+.result-partial{background:#fef3c7;color:#92400e;border:2px solid var(--warn)}
+.result-wrong{background:#fee2e2;color:#991b1b;border:2px solid var(--error)}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+
+.q-pembahasan{margin-top:10px;padding:12px;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:2px solid var(--blue);border-radius:10px;animation:expandIn 0.4s ease}
+.q-pembahasan.hidden{display:none}
+.q-pembahasan p{font-size:13px;font-weight:600;color:var(--dark);line-height:1.5;margin-bottom:6px}
+.q-pembahasan p:last-child{margin-bottom:0}
+.q-pembahasan strong{color:var(--blue)}
+.pembahasan-math{font-family:'Fredoka',sans-serif;font-size:16px;color:var(--coral-dark);background:#fff;padding:6px 12px;border-radius:6px;display:inline-block;margin:4px 0;border:2px solid var(--coral-light);font-weight:600}
+
+.hasil-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto 24px}
+.hasil-card{background:#fff;border-radius:24px;padding:28px;border:3px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:all 0.3s ease}
+.hasil-card::before{content:'';position:absolute;top:0;left:0;right:0;height:8px}
+.hasil-card.kelas-2-card::before{background:var(--coral)}
+.hasil-card.kelas-3-card::before{background:var(--teal)}
+.hasil-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(0,0,0,0.08)}
+.hasil-avatar{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;margin:0 auto 14px}
+.kelas-2-card .hasil-avatar{background:linear-gradient(135deg,var(--coral) 0%,var(--coral-dark) 100%)}
+.kelas-3-card .hasil-avatar{background:linear-gradient(135deg,var(--teal) 0%,var(--teal-dark) 100%)}
+.hasil-card h3{font-size:22px;margin-bottom:16px;color:var(--dark)}
+.hasil-score{margin-bottom:20px}
+.score-circle{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;border:8px solid;position:relative}
+.score-circle::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px dashed currentColor;opacity:0.3;animation:spin 20s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.score-number{font-family:'Fredoka',sans-serif;font-size:48px;font-weight:700;line-height:1}
+.score-total{font-size:14px;font-weight:700;opacity:0.7}
+.score-excellent{border-color:var(--success);color:var(--success);background:#dcfce7}
+.score-good{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.score-fair{border-color:var(--warn);color:var(--warn);background:#fef3c7}
+.score-poor{border-color:var(--error);color:var(--error);background:#fee2e2}
+.hasil-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat-item{padding:10px;border-radius:12px;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px}
+.stat-item i{font-size:18px}
+.stat-benar{background:#dcfce7;color:#166534}
+.stat-salah{background:#fee2e2;color:#991b1b}
+.stat-persentase{background:#e3f2fd;color:#0a5a7c}
+.stat-item strong{font-size:18px;font-family:'Fredoka',sans-serif}
+.hasil-refleksi{padding:14px;border-radius:12px;font-size:13px;font-weight:600;line-height:1.5;text-align:left}
+.kelas-2-card .hasil-refleksi{background:var(--coral-bg);border-left:4px solid var(--coral)}
+.kelas-3-card .hasil-refleksi{background:var(--teal-bg);border-left:4px solid var(--teal)}
+
+.kesimpulan-section{max-width:900px;margin:0 auto 24px;background:linear-gradient(135deg,#fff8e1 0%,#fff3c4 100%);border:2px solid var(--yellow);border-radius:20px;padding:24px}
+.kesimpulan-section h3{font-size:22px;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.kesimpulan-section h3 i{color:var(--yellow-dark)}
+.kesimpulan-section p{color:var(--dark);font-weight:600;line-height:1.6;font-size:15px}
+
+.thankyou-section{max-width:800px;margin:0 auto 24px;text-align:center;padding:36px 24px;background:linear-gradient(135deg,#ffeded 0%,#fff8ec 50%,#ccfbef 100%);border-radius:24px;border:3px solid var(--border);position:relative;overflow:hidden}
+.thankyou-section::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,209,102,0.15) 0%,transparent 50%);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.1);opacity:0.8}}
+.thankyou-icon{font-size:60px;color:var(--coral);margin-bottom:14px;animation:beat 1.5s ease-in-out infinite;position:relative;z-index:1}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.thankyou-section h3{font-size:36px;color:var(--dark);margin-bottom:10px;position:relative;z-index:1}
+.thankyou-section p{color:var(--muted);font-weight:600;line-height:1.6;font-size:16px;position:relative;z-index:1;max-width:600px;margin:0 auto}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--coral);color:#fff;padding:12px 24px;border-radius:50px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:1000;transition:transform 0.4s ease;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.confetti{position:fixed;width:10px;height:10px;background:var(--coral);pointer-events:none;z-index:1000;border-radius:2px}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+@media(max-width:900px){
+  .cover-inputs{grid-template-columns:1fr}
+  .hasil-grid{grid-template-columns:1fr}
+  .practice-container{flex-direction:column}
+  .cover-title{font-size:42px}
+  .cover-subtitle{font-size:22px}
+  .nav-progress button span{display:none}
+  .nav-progress button{padding:8px 12px}
+  .q-inputs{grid-template-columns:1fr}
+  .slide-nav{flex-direction:column;gap:10px}
+  .btn-next,.btn-prev,.btn-restart{width:100%;justify-content:center}
+}
+@media(max-width:600px){
+  .slide{padding:20px 16px}
+  .materi-grid{grid-template-columns:1fr}
+  .contoh-grid{grid-template-columns:1fr}
+  .hasil-stats{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-decoration">
+  <div class="symbol">+</div>
+  <div class="symbol">×</div>
+  <div class="symbol">÷</div>
+  <div class="symbol">−</div>
+  <div class="symbol">=</div>
+  <div class="symbol">?</div>
+</div>
+
+<nav class="top-nav">
+  <div class="nav-brand"><i class="fas fa-calculator"></i> <span>Math Adventure</span></div>
+  <div class="nav-progress">
+    <button data-slide="0" class="active"><i class="fas fa-home"></i> <span>Cover</span></button>
+    <button data-slide="1"><i class="fas fa-book"></i> <span>Materi</span></button>
+    <button data-slide="2"><i class="fas fa-lightbulb"></i> <span>Contoh</span></button>
+    <button data-slide="3"><i class="fas fa-pencil-alt"></i> <span>Latihan</span></button>
+    <button data-slide="4"><i class="fas fa-trophy"></i> <span>Hasil</span></button>
+  </div>
+</nav>
+
+<div class="slides-container">
+
+  <section class="slide active" id="slide-cover">
+    <div class="cover-content">
+      <div class="cover-badge"><i class="fas fa-star"></i> Kelas 2 & 3 SD</div>
+      <h1 class="cover-title">Petualangan Matematika</h1>
+      <h2 class="cover-subtitle">Soal Cerita Operasi Hitung Campuran</h2>
+      <p class="cover-desc">Yuk belajar menyelesaikan soal cerita dengan menuliskan kalimat matematika terlebih dahulu, lalu mencari jawaban akhirnya!</p>
+      
+      <div class="cover-inputs">
+        <div class="input-card kelas-2-card">
+          <div class="input-icon"><i class="fas fa-user"></i></div>
+          <label>Siswa Kelas 2</label>
+          <input type="text" id="nama-kelas-2" placeholder="Tulis namamu di sini...">
+        </div>
+        <div class="input-card kelas-3-card">
+          <div class="input-icon"><i class="fas fa-user"></i></div>
+          <label>Siswa Kelas 3</label>
+          <input type="text" id="nama-kelas-3" placeholder="Tulis namamu di sini...">
+        </div>
+      </div>
+      
+      <button class="btn-start" id="btn-start"><i class="fas fa-rocket"></i> Mulai Petualangan</button>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-materi">
+    <div class="slide-header">
+      <h2><i class="fas fa-book-open"></i> Materi Pengingat</h2>
+      <p>Kenali kata kunci pada setiap operasi hitung penjumlahan, pengurangan, perkalian, dan pembagian!</p>
+    </div>
+    
+    <div class="materi-grid">
+      <div class="materi-card materi-penjumlahan">
+        <div class="materi-symbol">+</div>
+        <h3>Penjumlahan</h3>
+        <p class="materi-desc">Menggabungkan atau menambahkan dua kelompok benda</p>
+        <div class="materi-keywords">
+          <span class="keyword">jumlah</span><span class="keyword">seluruhnya</span>
+          <span class="keyword">total</span><span class="keyword">berdua</span>
+          <span class="keyword">ditambah</span><span class="keyword">lagi</span>
+          <span class="keyword">diberi</span><span class="keyword">membeli ... lagi</span>
+        </div>
+      </div>
+      
+      <div class="materi-card materi-pengurangan">
+        <div class="materi-symbol">−</div>
+        <h3>Pengurangan</h3>
+        <p class="materi-desc">Mencari selisih, sisa, atau yang sudah terpakai</p>
+        <div class="materi-keywords">
+          <span class="keyword">sisa</span><span class="keyword">kurang</span>
+          <span class="keyword">terjual</span><span class="keyword">sudah</span>
+          <span class="keyword">belum</span><span class="keyword">dipakai</span>
+          <span class="keyword">diberikan</span><span class="keyword">terlepas</span>
+        </div>
+      </div>
+      
+      <div class="materi-card materi-perkalian">
+        <div class="materi-symbol">×</div>
+        <h3>Perkalian</h3>
+        <p class="materi-desc">Penjumlahan berulang dari bilangan yang sama</p>
+        <div class="materi-keywords">
+          <span class="keyword">setiap</span><span class="keyword">masing-masing</span>
+          <span class="keyword">tiap</span><span class="keyword">berisi</span>
+          <span class="keyword">kelompok</span><span class="keyword">baris</span>
+          <span class="keyword">tingkat</span><span class="keyword">kantong</span>
+        </div>
+      </div>
+      
+      <div class="materi-card materi-pembagian">
+        <div class="materi-symbol">÷</div>
+        <h3>Pembagian</h3>
+        <p class="materi-desc">Membagi sesuatu menjadi bagian yang sama rata</p>
+        <div class="materi-keywords">
+          <span class="keyword">sama rata</span><span class="keyword">sama banyak</span>
+          <span class="keyword">dibagikan</span><span class="keyword">dibagi</span>
+          <span class="keyword">masing-masing</span><span class="keyword">per</span>
+          <span class="keyword">potongan</span><span class="keyword">tiap</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="materi-tip">
+      <i class="fas fa-lightbulb"></i>
+      <p><strong>Tips Penting:</strong> Bacalah soal dengan cermat, lalu cari kata kunci untuk menentukan operasi yang tepat. Tuliskan <strong>kalimat matematika</strong> terlebih dahulu sebelum menghitung jawaban akhir. Jangan lupa tulis satuannya!</p>
+    </div>
+    
+    <div class="slide-nav">
+      <button class="btn-prev" onclick="goToSlide(0)"><i class="fas fa-arrow-left"></i> Kembali</button>
+      <button class="btn-next" onclick="goToSlide(2)">Lihat Contoh Soal <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-contoh">
+    <div class="slide-header">
+      <h2><i class="fas fa-lightbulb"></i> Contoh Soal</h2>
+      <p>Pelajari contoh berikut. Klik tombol "Lihat Pembahasan" untuk memahami cara menjawabnya!</p>
+    </div>
+    
+    <div class="contoh-grid" id="contoh-grid"></div>
+    
+    <div class="slide-nav">
+      <button class="btn-prev" onclick="goToSlide(1)"><i class="fas fa-arrow-left"></i> Kembali</button>
+      <button class="btn-next" onclick="goToSlide(3)">Mulai Latihan <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-latihan">
+    <div class="latihan-content">
+      <div class="slide-header">
+        <h2><i class="fas fa-pencil-alt"></i> Latihan Soal</h2>
+        <p>Kerjakan soal di sisi masing-masing. Scroll mandiri, tidak perlu menunggu teman!</p>
+      </div>
+      
+      <div class="practice-container">
+        <div class="student-panel kelas-2-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-badge">Kelas 2</span>
+              <span class="panel-name" id="nama-2-display">Siswa 1</span>
+            </div>
+            <div class="panel-progress">
+              <span class="progress-text"><span id="progress-2">0</span>/30</span>
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill-2"></div></div>
+            </div>
+          </div>
+          <div class="questions-scroll" id="questions-2"></div>
+        </div>
+        
+        <div class="student-panel kelas-3-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-badge">Kelas 3</span>
+              <span class="panel-name" id="nama-3-display">Siswa 2</span>
+            </div>
+            <div class="panel-progress">
+              <span class="progress-text"><span id="progress-3">0</span>/30</span>
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill-3"></div></div>
+            </div>
+          </div>
+          <div class="questions-scroll" id="questions-3"></div>
+        </div>
+      </div>
+      
+      <div class="slide-nav">
+        <button class="btn-prev" onclick="goToSlide(2)"><i class="fas fa-arrow-left"></i> Kembali</button>
+        <button class="btn-next" onclick="goToSlide(4)"><i class="fas fa-trophy"></i> Lihat Hasil</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-hasil">
+    <div class="slide-header">
+      <h2><i class="fas fa-trophy"></i> Hasil Akhir</h2>
+      <p>Ini adalah hasil belajar kalian hari ini!</p>
+    </div>
+    
+    <div class="hasil-grid">
+      <div class="hasil-card kelas-2-card">
+        <div class="hasil-avatar"><i class="fas fa-child"></i></div>
+        <h3 id="hasil-nama-2">Siswa Kelas 2</h3>
+        <div class="hasil-score">
+          <div class="score-circle" id="score-circle-2">
+            <span class="score-number" id="score-2">0</span>
+            <span class="score-total">dari 30</span>
+          </div>
+        </div>
+        <div class="hasil-stats">
+          <div class="stat-item stat-benar"><i class="fas fa-check"></i><span>Benar</span><strong id="benar-2">0</strong></div>
+          <div class="stat-item stat-salah"><i class="fas fa-times"></i><span>Salah</span><strong id="salah-2">0</strong></div>
+          <div class="stat-item stat-persentase"><i class="fas fa-percentage"></i><span>Nilai</span><strong id="persen-2">0</strong></div>
+        </div>
+        <div class="hasil-refleksi" id="refleksi-2"></div>
+      </div>
+      
+      <div class="hasil-card kelas-3-card">
+        <div class="hasil-avatar"><i class="fas fa-child"></i></div>
+        <h3 id="hasil-nama-3">Siswa Kelas 3</h3>
+        <div class="hasil-score">
+          <div class="score-circle" id="score-circle-3">
+            <span class="score-number" id="score-3">0</span>
+            <span class="score-total">dari 30</span>
+          </div>
+        </div>
+        <div class="hasil-stats">
+          <div class="stat-item stat-benar"><i class="fas fa-check"></i><span>Benar</span><strong id="benar-3">0</strong></div>
+          <div class="stat-item stat-salah"><i class="fas fa-times"></i><span>Salah</span><strong id="salah-3">0</strong></div>
+          <div class="stat-item stat-persentase"><i class="fas fa-percentage"></i><span>Nilai</span><strong id="persen-3">0</strong></div>
+        </div>
+        <div class="hasil-refleksi" id="refleksi-3"></div>
+      </div>
+    </div>
+    
+    <div class="kesimpulan-section">
+      <h3><i class="fas fa-clipboard-check"></i> Kesimpulan</h3>
+      <p id="kesimpulan-text"></p>
+    </div>
+    
+    <div class="thankyou-section">
+      <div class="thankyou-icon"><i class="fas fa-heart"></i></div>
+      <h3>Thank You for Today!</h3>
+      <p>Terima kasih sudah belajar dengan sungguh-sungguh hari ini. Kalian sudah berusaha dengan baik. Tetap semangat belajar, karena setiap usaha pasti membuahkan hasil. Sampai jumpa di petualangan matematika berikutnya!</p>
+    </div>
+    
+    <div class="slide-nav">
+      <button class="btn-prev" onclick="goToSlide(3)"><i class="fas fa-arrow-left"></i> Kembali ke Latihan</button>
+      <button class="btn-restart" onclick="restart()"><i class="fas fa-redo"></i> Mulai Lagi</button>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const dataKelas2 = [
+  {no:1,bagian:'A',tipe:'Penjumlahan',soal:'Attaya mengumpulkan 165 butir kelereng merah dan 124 butir kelereng biru. Berapa jumlah kelereng Attaya seluruhnya?',kalimat:'165 + 124 = 289',jawaban:'289',satuan:'butir kelereng',pembahasan:'165 butir ditambah 124 butir. Hasilnya adalah 289 butir kelereng.'},
+  {no:2,bagian:'A',tipe:'Penjumlahan',soal:'Di dalam lemari kelas terdapat 215 buku cerita dan 170 buku gambar. Berapa total seluruh buku di dalam lemari tersebut?',kalimat:'215 + 170 = 385',jawaban:'385',satuan:'buku',pembahasan:'Buku cerita (215) digabung buku gambar (170). Totalnya adalah 385 buku.'},
+  {no:3,bagian:'A',tipe:'Penjumlahan',soal:'Dani memetik 240 buah jeruk dari kebun kakek. Mila memetik 155 buah jeruk. Berapa banyak buah jeruk yang mereka petik berdua?',kalimat:'240 + 155 = 395',jawaban:'395',satuan:'buah jeruk',pembahasan:'Jeruk Dani (240) ditambah jeruk Mila (155). Totalnya adalah 395 buah jeruk.'},
+  {no:4,bagian:'A',tipe:'Penjumlahan',soal:'Sebuah toko roti menjual 310 donat cokelat dan 165 donat keju dalam satu hari. Berapa jumlah donat yang terjual di toko tersebut?',kalimat:'310 + 165 = 475',jawaban:'475',satuan:'donat',pembahasan:'Donat cokelat (310) ditambah donat keju (165). Totalnya adalah 475 buah donat.'},
+  {no:5,bagian:'A',tipe:'Penjumlahan',soal:'Ibu membeli 180 gram gula pasir, lalu membeli lagi sebanyak 215 gram gula pasir. Berapa gram gula pasir yang dibeli Ibu seluruhnya?',kalimat:'180 + 215 = 395',jawaban:'395',satuan:'gram',pembahasan:'Pembelian awal (180 g) ditambah pembelian kedua (215 g). Totalnya adalah 395 gram gula pasir.'},
+  {no:6,bagian:'B',tipe:'Pengurangan',soal:'Paman membawa 460 buah jeruk ke pasar. Sebanyak 225 buah jeruk telah laku terjual. Berapa sisa buah jeruk paman sekarang?',kalimat:'460 − 225 = 235',jawaban:'235',satuan:'buah jeruk',pembahasan:'Jeruk awal 460 dikurangi yang terjual 225. Sisanya adalah 235 buah jeruk.'},
+  {no:7,bagian:'B',tipe:'Pengurangan',soal:'Sebuah buku cerita tebalnya 375 halaman. Siti sudah selesai membaca 150 halaman. Berapa halaman buku yang belum dibaca Siti?',kalimat:'375 − 150 = 225',jawaban:'225',satuan:'halaman',pembahasan:'Total 375 halaman dikurangi 150 halaman yang sudah dibaca. Sisa 225 halaman.'},
+  {no:8,bagian:'B',tipe:'Pengurangan',soal:'Di perpustakaan ada 580 buku pelajaran. Sebanyak 260 buku sedang dipinjam siswa. Berapa banyak buku pelajaran yang masih ada di perpustakaan?',kalimat:'580 − 260 = 320',jawaban:'320',satuan:'buku',pembahasan:'Total 580 buku dikurangi 260 buku yang dipinjam. Sisa 320 buku.'},
+  {no:9,bagian:'B',tipe:'Pengurangan',soal:'Pedagang buah memiliki 450 buah mangga. Pada siang hari tersisa 135 buah mangga. Berapa banyak buah mangga yang sudah terjual?',kalimat:'450 − 135 = 315',jawaban:'315',satuan:'buah mangga',pembahasan:'Mangga awal 450 dikurangi sisa 135. Buah yang terjual adalah 315 buah mangga.'},
+  {no:10,bagian:'B',tipe:'Pengurangan',soal:'Budi memiliki 750 koin mainan. Sebanyak 230 koin diberikan kepada adiknya. Berapa sisa koin mainan milik Budi sekarang?',kalimat:'750 − 230 = 520',jawaban:'520',satuan:'koin mainan',pembahasan:'Koin awal 750 dikurangi yang diberikan ke adik 230. Sisanya adalah 520 koin mainan.'},
+  {no:11,bagian:'C',tipe:'Perkalian',soal:'Di dalam kelas ada 5 meja kelompok. Setiap meja ditempati oleh 4 orang siswa. Berapa jumlah siswa di seluruh meja tersebut?',kalimat:'5 × 4 = 20',jawaban:'20',satuan:'siswa',pembahasan:'Ada 5 kelompok meja, tiap meja 4 siswa. Totalnya adalah 20 orang siswa.'},
+  {no:12,bagian:'C',tipe:'Perkalian',soal:'Ibu membeli 6 kantong plastik buah jeruk. Setiap kantong berisi 7 buah jeruk. Berapa banyak buah jeruk yang dibeli Ibu seluruhnya?',kalimat:'6 × 7 = 42',jawaban:'42',satuan:'buah jeruk',pembahasan:'Ada 6 kantong masing-masing isi 7 jeruk. Totalnya adalah 42 buah jeruk.'},
+  {no:13,bagian:'C',tipe:'Perkalian',soal:'Dani mempunyai 4 kotak krayon baru. Di dalam setiap kotak terdapat 12 batang krayon. Berapa jumlah seluruh batang krayon milik Dani?',kalimat:'4 × 12 = 48',jawaban:'48',satuan:'batang krayon',pembahasan:'Ada 4 kotak masing-masing isi 12 batang krayon. Totalnya adalah 48 batang krayon.'},
+  {no:14,bagian:'C',tipe:'Perkalian',soal:'Di rak buku ada 3 tingkat. Setiap tingkat berisi 15 buku cerita. Berapa jumlah buku cerita di rak tersebut?',kalimat:'3 × 15 = 45',jawaban:'45',satuan:'buku',pembahasan:'Ada 3 susun masing-masing isi 15 buku. Totalnya adalah 45 buah buku.'},
+  {no:15,bagian:'C',tipe:'Perkalian',soal:'Kakek menanam bibit cabai dalam 7 baris. Setiap baris berisi 8 bibit cabai. Berapa total bibit cabai yang ditanam Kakek?',kalimat:'7 × 8 = 56',jawaban:'56',satuan:'bibit cabai',pembahasan:'Ada 7 baris masing-masing berisi 8 bibit. Totalnya adalah 56 bibit cabai.'},
+  {no:16,bagian:'D',tipe:'Pembagian',soal:'Bu Guru membawa 36 pensil warna untuk dibagikan sama banyak kepada 6 kelompok siswa. Berapa pensil warna yang didapat tiap kelompok?',kalimat:'36 ÷ 6 = 6',jawaban:'6',satuan:'pensil warna',pembahasan:'36 pensil dibagikan rata ke 6 kelompok. Tiap kelompok mendapat 6 batang pensil warna.'},
+  {no:17,bagian:'D',tipe:'Pembagian',soal:'Mila memiliki 42 lembar stiker. Stiker tersebut dibagikan sama rata kepada 6 orang temannya. Berapa stiker yang diterima setiap teman Mila?',kalimat:'42 ÷ 6 = 7',jawaban:'7',satuan:'stiker',pembahasan:'42 stiker dibagikan sama rata ke 6 anak. Tiap anak mendapat 7 lembar stiker.'},
+  {no:18,bagian:'D',tipe:'Pembagian',soal:'Kakek memiliki 48 butir buah rambutan yang dimasukkan ke dalam 6 kantong sama banyak. Berapa butir rambutan isi masing-masing kantong?',kalimat:'48 ÷ 6 = 8',jawaban:'8',satuan:'butir rambutan',pembahasan:'48 butir rambutan dibagi ke dalam 6 kantong. Tiap kantong berisi 8 butir rambutan.'},
+  {no:19,bagian:'D',tipe:'Pembagian',soal:'Sebanyak 63 bibit tanaman bunga dibagikan sama banyak ke dalam 7 pot besar. Berapa isi bibit bunga di setiap pot?',kalimat:'63 ÷ 7 = 9',jawaban:'9',satuan:'bibit bunga',pembahasan:'63 bibit dibagi ke dalam 7 pot sama banyak. Tiap pot berisi 9 bibit bunga.'},
+  {no:20,bagian:'D',tipe:'Pembagian',soal:'Paman mempunyai tali sepanjang 40 meter. Tali itu dipotong menjadi 5 bagian sama panjang. Berapa meter panjang setiap potongan tali?',kalimat:'40 ÷ 5 = 8',jawaban:'8',satuan:'meter',pembahasan:'Tali 40 meter dipotong menjadi 5 bagian sama panjang. Panjang tiap potong adalah 8 meter.'},
+  {no:21,bagian:'E',tipe:'Campuran',soal:'Toko kue memiliki 240 kue bolu. Pada siang hari terjual 110 kue, lalu dibuat lagi 70 kue baru. Berapa banyak kue bolu di toko sekarang?',kalimat:'240 − 110 + 70 = 200',jawaban:'200',satuan:'kue bolu',pembahasan:'240 dikurangi 110 (terjual) menjadi 130, lalu ditambah 70 (kue baru). Totalnya adalah 200 kue bolu.'},
+  {no:22,bagian:'E',tipe:'Campuran',soal:'Attaya memiliki 175 kertas lipat. Ia memakai 45 lembar untuk membuat origami, lalu Ayah membelikan lagi 30 lembar. Berapa kertas lipat Attaya sekarang?',kalimat:'175 − 45 + 30 = 160',jawaban:'160',satuan:'kertas lipat',pembahasan:'175 dikurangi 45 (terpakai) menjadi 130, lalu ditambah 30 dari Ayah. Sisanya adalah 160 lembar kertas lipat.'},
+  {no:23,bagian:'E',tipe:'Campuran',soal:'Di dalam bus kota ada 40 penumpang. Di halte pertama turun 15 orang dan naik 8 orang baru. Berapa jumlah penumpang di dalam bus sekarang?',kalimat:'40 − 15 + 8 = 33',jawaban:'33',satuan:'penumpang',pembahasan:'40 dikurangi 15 (turun) menjadi 25, lalu ditambah 8 (naik). Penumpang sekarang adalah 33 orang.'},
+  {no:24,bagian:'E',tipe:'Campuran',soal:'Di keranjang buah ada 250 buah apel dan 120 buah jeruk. Sebanyak 140 buah diambil untuk pesta. Berapa sisa buah di dalam keranjang?',kalimat:'(250 + 120) − 140 = 230',jawaban:'230',satuan:'buah',pembahasan:'Total buah (250 + 120 = 370), lalu diambil 140 (370 − 140). Sisa buah adalah 230 buah.'},
+  {no:25,bagian:'E',tipe:'Campuran',soal:'Petani memanen 400 butir telur ayam. Sebanyak 50 butir pecah dan dibuang, lalu ayam bertelur lagi 100 butir. Berapa butir telur yang bagus sekarang?',kalimat:'400 − 50 + 100 = 450',jawaban:'450',satuan:'butir telur',pembahasan:'400 dikurangi 50 (pecah) menjadi 350, lalu ditambah 100 (telur baru). Total telur bagus adalah 450 butir telur.'},
+  {no:26,bagian:'F',tipe:'Dua Langkah',soal:'Ibu membeli 3 kantong permen. Setiap kantong berisi 10 butir permen. Permen tersebut dibagikan sama banyak kepada 6 orang anak. Berapa permen yang didapat setiap anak?',kalimat:'(3 × 10) ÷ 6 = 5',jawaban:'5',satuan:'permen',pembahasan:'Total permen 3 × 10 = 30 butir. Dibagikan ke 6 anak (30 ÷ 6). Setiap anak mendapat 5 butir permen.'},
+  {no:27,bagian:'F',tipe:'Dua Langkah',soal:'Dani memiliki 4 kantong kelereng. Setiap kantong berisi 12 kelereng. Dani memberikan 15 kelereng kepada temannya. Berapa sisa kelereng Dani?',kalimat:'(4 × 12) − 15 = 33',jawaban:'33',satuan:'kelereng',pembahasan:'Kelereng awal 4 × 12 = 48 butir. Diberikan ke teman 15 butir (48 − 15). Sisanya adalah 33 butir kelereng.'},
+  {no:28,bagian:'F',tipe:'Dua Langkah',soal:'Ayah membeli 2 kardus susu kotak. Setiap kardus berisi 20 kotak susu. Sebanyak 14 kotak susu telah diminum. Berapa kotak susu yang belum diminum?',kalimat:'(2 × 20) − 14 = 26',jawaban:'26',satuan:'kotak susu',pembahasan:'Total susu 2 × 20 = 40 kotak. Diminum 14 kotak (40 − 14). Sisanya adalah 26 kotak susu.'},
+  {no:29,bagian:'F',tipe:'Dua Langkah',soal:'Di toko buku ada 4 paket buku tulis. Setiap paket berisi 15 buku. Hari ini terjual 25 buku. Berapa sisa buku tulis di toko?',kalimat:'(4 × 15) − 25 = 35',jawaban:'35',satuan:'buku',pembahasan:'Total buku 4 × 15 = 60 buku. Terjual 25 buku (60 − 25). Sisanya adalah 35 buku tulis.'},
+  {no:30,bagian:'F',tipe:'Dua Langkah',soal:'Mila memiliki 5 kotak pensil. Setiap kotak berisi 6 pensil. Mila membeli lagi 1 kotak berisi 10 pensil. Berapa total pensil Mila sekarang?',kalimat:'(5 × 6) + 10 = 40',jawaban:'40',satuan:'pensil',pembahasan:'Pensil awal 5 × 6 = 30 pensil. Ditambah 10 pensil baru (30 + 10). Totalnya adalah 40 batang pensil.'}
+];
+
+const dataKelas3 = [
+  {no:1,bagian:'A',tipe:'Penjumlahan',soal:'Attaya memiliki 145 butir kelereng. Pada hari ulang tahunnya, paman memberinya hadiah 130 butir kelereng lagi. Berapa jumlah kelereng Attaya sekarang?',kalimat:'145 + 130 = 275',jawaban:'275',satuan:'butir kelereng',pembahasan:'Awalnya 145 kelereng ditambah 130 kelereng. Hasilnya adalah 275 butir kelereng.'},
+  {no:2,bagian:'A',tipe:'Penjumlahan',soal:'Di sebuah toko buku, terdapat 235 buku cerita anak di rak pertama dan 184 buku di rak kedua. Berapa total buku cerita di kedua rak tersebut?',kalimat:'235 + 184 = 419',jawaban:'419',satuan:'buku',pembahasan:'Rak pertama (235) digabung dengan rak kedua (184). Totalnya adalah 419 buku.'},
+  {no:3,bagian:'A',tipe:'Penjumlahan',soal:'Dani memetik 312 buah jeruk dari kebun kakek. Mila memetik 245 buah jeruk. Berapa jumlah seluruh buah jeruk yang mereka petik berdua?',kalimat:'312 + 245 = 557',jawaban:'557',satuan:'buah jeruk',pembahasan:'Jeruk Dani (312) dijumlahkan dengan jeruk Mila (245). Hasilnya adalah 557 buah jeruk.'},
+  {no:4,bagian:'A',tipe:'Penjumlahan',soal:'Sebuah peternakan ayam menghasilkan 420 butir telur pada hari Sabtu dan 365 butir telur pada hari Minggu. Berapa butir telur yang dihasilkan selama dua hari tersebut?',kalimat:'420 + 365 = 785',jawaban:'785',satuan:'butir telur',pembahasan:'Hasil Sabtu (420) ditambah hasil Minggu (365). Total produksi adalah 785 butir telur.'},
+  {no:5,bagian:'A',tipe:'Penjumlahan',soal:'Ibu membeli 175 gram tepung terigu, kemudian membeli lagi sebanyak 250 gram untuk membuat kue bolu. Berapa gram total tepung terigu yang dibeli Ibu?',kalimat:'175 + 250 = 425',jawaban:'425',satuan:'gram',pembahasan:'Pembelian pertama (175 g) ditambah pembelian kedua (250 g). Totalnya adalah 425 gram tepung terigu.'},
+  {no:6,bagian:'B',tipe:'Pengurangan',soal:'Pak Rahmat memanen 480 butir kelapa. Sebanyak 235 butir kelapa telah dijual ke pasar. Berapa sisa kelapa Pak Rahmat yang belum terjual?',kalimat:'480 − 235 = 245',jawaban:'245',satuan:'butir kelapa',pembahasan:'Panen mula-mula 480 dikurangi yang terjual 235. Sisanya adalah 245 butir kelapa.'},
+  {no:7,bagian:'B',tipe:'Pengurangan',soal:'Sebuah buku cerita memiliki ketebalan 350 halaman. Siti sudah membaca sebanyak 185 halaman. Berapa halaman lagi yang belum dibaca Siti?',kalimat:'350 − 185 = 165',jawaban:'165',satuan:'halaman',pembahasan:'Total halaman 350 dikurangi halaman yang sudah dibaca 185. Sisanya adalah 165 halaman.'},
+  {no:8,bagian:'B',tipe:'Pengurangan',soal:'Di perpustakaan sekolah terdapat 560 buku pelajaran. Sebanyak 275 buku sedang dipinjam oleh siswa. Berapa buku pelajaran yang masih tersisa di perpustakaan?',kalimat:'560 − 275 = 285',jawaban:'285',satuan:'buku',pembahasan:'Jumlah buku 560 dikurangi buku yang dipinjam 275. Buku yang ada di perpustakaan adalah 285 buku.'},
+  {no:9,bagian:'B',tipe:'Pengurangan',soal:'Pedagang buah memiliki 425 kg semangka. Pada sore hari, semangka tersebut tersisa 160 kg. Berapa kilogram semangka yang berhasil terjual hari itu?',kalimat:'425 − 160 = 265',jawaban:'265',satuan:'kg',pembahasan:'Semangka awal 425 kg dikurangi sisa sore 160 kg. Buah yang terjual adalah 265 kg semangka.'},
+  {no:10,bagian:'B',tipe:'Pengurangan',soal:'Budi mempunyai tabungan sebesar Rp850. Ia menggunakan Rp325 untuk membeli pensil warna baru. Berapa sisa uang tabungan Budi?',kalimat:'850 − 325 = 525',jawaban:'525',satuan:'Rupiah',pembahasan:'Uang tabungan Rp850 dikurangi harga pensil warna Rp325. Sisa uang adalah Rp525.'},
+  {no:11,bagian:'C',tipe:'Perkalian',soal:'Di ruang kelas terdapat 6 meja belajar. Setiap meja diisi oleh 4 orang siswa. Berapa jumlah seluruh siswa yang duduk di meja tersebut?',kalimat:'6 × 4 = 24',jawaban:'24',satuan:'siswa',pembahasan:'Ada 6 kelompok meja, tiap meja 4 siswa. Total siswa adalah 24 orang siswa.'},
+  {no:12,bagian:'C',tipe:'Perkalian',soal:'Ibu membeli 5 kantong plastik buah apel. Setiap kantong berisi 8 butir buah apel segar. Berapa banyak buah apel yang dibeli Ibu seluruhnya?',kalimat:'5 × 8 = 40',jawaban:'40',satuan:'buah apel',pembahasan:'Ada 5 kantong masing-masing berisi 8 apel. Total apel adalah 40 butir buah apel.'},
+  {no:13,bagian:'C',tipe:'Perkalian',soal:'Kakak memiliki 7 kotak pensil warna. Di dalam setiap kotak terdapat 12 batang pensil warna. Berapa jumlah batang pensil warna milik Kakak?',kalimat:'7 × 12 = 84',jawaban:'84',satuan:'pensil warna',pembahasan:'Ada 7 kotak dengan isi masing-masing 12 batang pensil. Totalnya adalah 84 batang pensil warna.'},
+  {no:14,bagian:'C',tipe:'Perkalian',soal:'Sebuah rak piring memiliki 4 susun. Setiap susun dapat memuat 15 buah piring. Berapa total piring yang dapat dimuat di rak tersebut?',kalimat:'4 × 15 = 60',jawaban:'60',satuan:'piring',pembahasan:'Ada 4 susun rak dengan kapasitas masing-masing 15 piring. Total kapasitas adalah 60 buah piring.'},
+  {no:15,bagian:'C',tipe:'Perkalian',soal:'Dani menanam pohon di 8 baris kebun. Setiap baris ditanami 9 bibit pohon mangga. Berapa jumlah seluruh bibit pohon mangga yang ditanam Dani?',kalimat:'8 × 9 = 72',jawaban:'72',satuan:'bibit',pembahasan:'Ada 8 baris, tiap baris 9 bibit. Total pohon yang ditanam adalah 72 bibit pohon.'},
+  {no:16,bagian:'D',tipe:'Pembagian',soal:'Bu Guru membawa 48 batang spidol untuk dibagikan secara merata kepada 6 kelompok belajar siswa. Berapa banyak spidol yang diterima oleh setiap kelompok?',kalimat:'48 ÷ 6 = 8',jawaban:'8',satuan:'spidol',pembahasan:'48 spidol dibagi merata ke 6 kelompok. Setiap kelompok menerima 8 batang spidol.'},
+  {no:17,bagian:'D',tipe:'Pembagian',soal:'Mila memiliki 56 buah stiker lucu. Ia ingin membagikan stiker tersebut kepada 7 orang temannya secara sama rata. Berapa stiker yang didapat setiap anak?',kalimat:'56 ÷ 7 = 8',jawaban:'8',satuan:'stiker',pembahasan:'56 stiker dibagi rata kepada 7 teman. Setiap anak memperoleh 8 buah stiker.'},
+  {no:18,bagian:'D',tipe:'Pembagian',soal:'Kakek memetik 72 butir buah rambutan dari pohonnya. Buah rambutan tersebut dimasukkan ke dalam 8 kantong sama banyak. Berapa butir rambutan isi setiap kantong?',kalimat:'72 ÷ 8 = 9',jawaban:'9',satuan:'butir rambutan',pembahasan:'72 butir rambutan dibagi ke 8 kantong sama banyak. Isi tiap kantong adalah 9 butir rambutan.'},
+  {no:19,bagian:'D',tipe:'Pembagian',soal:'Sebanyak 90 bibit bunga mawar akan ditanam merata pada 9 bedengan taman. Berapa bibit bunga mawar yang ada di setiap bedengan?',kalimat:'90 ÷ 9 = 10',jawaban:'10',satuan:'bibit bunga',pembahasan:'90 bibit dibagi ke dalam 9 bedengan taman. Tiap bedengan berisi 10 bibit bunga.'},
+  {no:20,bagian:'D',tipe:'Pembagian',soal:'Paman memiliki tali sepanjang 64 meter yang dipotong menjadi 8 bagian sama panjang. Berapa meter panjang setiap potongan tali tersebut?',kalimat:'64 ÷ 8 = 8',jawaban:'8',satuan:'meter',pembahasan:'Tali 64 meter dibagi menjadi 8 potongan sama panjang. Panjang tiap potong adalah 8 meter.'},
+  {no:21,bagian:'E',tipe:'Campuran',soal:'Toko roti mula-mula membuat 250 roti. Di siang hari terjual 120 roti, lalu sore harinya toko memanggang 80 roti lagi. Berapa jumlah roti di toko sekarang?',kalimat:'250 − 120 + 80 = 210',jawaban:'210',satuan:'roti',pembahasan:'250 dikurangi 120 (terjual) menjadi 130, lalu ditambah 80 (panggang baru). Totalnya adalah 210 buah roti.'},
+  {no:22,bagian:'E',tipe:'Campuran',soal:'Attaya mempunyai 185 lembar origami. Ia memberikan 65 lembar kepada temannya, lalu ibunya membelikan lagi 50 lembar. Berapa lembar origami Attaya saat ini?',kalimat:'185 − 65 + 50 = 170',jawaban:'170',satuan:'lembar origami',pembahasan:'185 dikurangi 65 menjadi 120, lalu ditambah 50 dari ibu. Totalnya adalah 170 lembar origami.'},
+  {no:23,bagian:'E',tipe:'Campuran',soal:'Di sebuah bus mulanya ada 45 penumpang. Di halte A turun 18 orang dan naik 12 orang baru. Berapa jumlah penumpang yang ada di dalam bus sekarang?',kalimat:'45 − 18 + 12 = 39',jawaban:'39',satuan:'penumpang',pembahasan:'45 dikurangi 18 (turun) menjadi 27, lalu ditambah 12 (naik). Penumpang sekarang adalah 39 orang.'},
+  {no:24,bagian:'E',tipe:'Campuran',soal:'Di sebuah kolam terdapat 320 ekor ikan nila dan 150 ekor ikan gurame. Pemilik kolam kemudian memanen 190 ekor ikan. Berapa ekor ikan yang tersisa di kolam?',kalimat:'(320 + 150) − 190 = 280',jawaban:'280',satuan:'ekor ikan',pembahasan:'Total ikan (320 + 150 = 470), kemudian dipanen 190 (470 − 190). Sisa ikan adalah 280 ekor.'},
+  {no:25,bagian:'E',tipe:'Campuran',soal:'Petani memetik 500 buah tomat. Sebanyak 75 buah busuk dan dibuang, lalu petani memetik lagi 125 buah tomat segar. Berapa total tomat bagus milik petani sekarang?',kalimat:'500 − 75 + 125 = 550',jawaban:'550',satuan:'buah tomat',pembahasan:'500 dikurangi 75 (busuk) menjadi 425, lalu ditambah 125 (panen baru). Total tomat bagus adalah 550 buah tomat.'},
+  {no:26,bagian:'F',tipe:'Dua Langkah',soal:'Ibu membeli 4 bungkus permen. Setiap bungkus berisi 10 butir permen. Permen tersebut kemudian dibagikan sama banyak kepada 5 orang keponakannya. Berapa permen yang diterima setiap anak?',kalimat:'(4 × 10) ÷ 5 = 8',jawaban:'8',satuan:'permen',pembahasan:'Total permen yang dibeli adalah 4 × 10 = 40. Lalu dibagikan ke 5 anak (40 ÷ 5). Tiap anak menerima 8 butir permen.'},
+  {no:27,bagian:'F',tipe:'Dua Langkah',soal:'Dani memiliki 3 kotak kelereng. Setiap kotak berisi 15 kelereng. Saat bermain di halaman, Dani kalah sebanyak 12 kelereng. Berapa butir kelereng Dani yang tersisa?',kalimat:'(3 × 15) − 12 = 33',jawaban:'33',satuan:'kelereng',pembahasan:'Total awal 3 × 15 = 45. Setelah berkurang karena kalah 12 butir (45 − 12), sisa kelereng adalah 33 butir kelereng.'},
+  {no:28,bagian:'F',tipe:'Dua Langkah',soal:'Ayah membeli 2 dus air mineral. Setiap dus berisi 24 botol. Sebanyak 18 botol disajikan untuk tamu yang datang. Berapa sisa botol air mineral Ayah yang belum diminum?',kalimat:'(2 × 24) − 18 = 30',jawaban:'30',satuan:'botol',pembahasan:'Total air mineral 2 × 24 = 48 botol. Dikurangi 18 botol yang disajikan (48 − 18). Sisanya adalah 30 botol air mineral.'},
+  {no:29,bagian:'F',tipe:'Dua Langkah',soal:'Di koperasi sekolah terdapat 5 kotak buku tulis baru. Masing-masing kotak berisi 20 buku. Hari ini koperasi menjual 45 buku. Berapa buku tulis yang tersisa di koperasi?',kalimat:'(5 × 20) − 45 = 55',jawaban:'55',satuan:'buku',pembahasan:'Total buku awal 5 × 20 = 100 buku. Dikurangi 45 buku yang terjual (100 − 45). Sisanya adalah 55 buku tulis.'},
+  {no:30,bagian:'F',tipe:'Dua Langkah',soal:'Mila memiliki 6 kotak pensil. Setiap kotak berisi 8 pensil. Kemudian Mila membeli lagi 1 kotak berisi 10 pensil. Berapa jumlah seluruh pensil Mila sekarang?',kalimat:'(6 × 8) + 10 = 58',jawaban:'58',satuan:'pensil',pembahasan:'Pensil awal 6 × 8 = 48 pensil. Ditambah 1 kotak berisi 10 (48 + 10). Total pensil Mila adalah 58 batang pensil.'}
+];
+
+const contohSoal = [
+  {tipe:'Penjumlahan',icon:'plus',warna:'#ffd166',soal:'Andi memiliki 25 butir permen. Kemudian Budi memberikan 15 butir permen lagi. Berapa jumlah permen Andi sekarang?',kalimat:'25 + 15 = 40',jawaban:'40 butir permen',pembahasan:'Kata kunci "memberikan ... lagi" menunjukkan operasi penjumlahan. Jumlah permen Andi semula (25) ditambah pemberian Budi (15) sama dengan 40 butir permen.'},
+  {tipe:'Pengurangan',icon:'minus',warna:'#ef476f',soal:'Ibu membuat 30 buah kue. Sebanyak 12 kue sudah dimakan oleh anak-anak. Berapa sisa kue yang tersisa?',kalimat:'30 − 12 = 18',jawaban:'18 kue',pembahasan:'Kata kunci "sisa" menunjukkan operasi pengurangan. Kue yang dibuat (30) dikurangi kue yang sudah dimakan (12) sama dengan 18 kue.'},
+  {tipe:'Perkalian',icon:'times',warna:'#06a77d',soal:'Ada 4 kotak pensil warna. Setiap kotak berisi 6 batang pensil. Berapa jumlah seluruh pensil warna?',kalimat:'4 × 6 = 24',jawaban:'24 batang pensil',pembahasan:'Kata kunci "setiap" menunjukkan operasi perkalian. Ada 4 kotak, masing-masing berisi 6 pensil. Totalnya 4 × 6 = 24 batang pensil.'},
+  {tipe:'Pembagian',icon:'divide',warna:'#118ab2',soal:'Ibu memiliki 20 buah apel. Apel tersebut dibagikan sama rata kepada 5 orang anak. Berapa apel yang diterima setiap anak?',kalimat:'20 ÷ 5 = 4',jawaban:'4 buah apel',pembahasan:'Kata kunci "sama rata" dan "dibagikan" menunjukkan operasi pembagian. 20 apel dibagi 5 anak sama dengan 4 apel per anak.'},
+  {tipe:'Operasi Campuran',icon:'layer-group',warna:'#9b5de5',soal:'Toko roti memiliki 50 roti. Pada siang hari terjual 20 roti, lalu toko membuat 15 roti baru. Berapa roti di toko sekarang?',kalimat:'50 − 20 + 15 = 45',jawaban:'45 roti',pembahasan:'Soal ini memiliki lebih dari satu operasi. Pertama, 50 dikurangi 20 (terjual) menjadi 30. Lalu ditambah 15 (roti baru) menjadi 45 roti. Kalimat matematikanya: 50 − 20 + 15 = 45.'}
+];
+
+const state = {
+  currentSlide: 0,
+  namaKelas2: '',
+  namaKelas3: '',
+  jawabanKelas2: {},
+  jawabanKelas3: {}
+};
+
+const bagianInfo = {
+  'A': {title: 'Penjumlahan', desc: 'Soal 1-5'},
+  'B': {title: 'Pengurangan', desc: 'Soal 6-10'},
+  'C': {title: 'Perkalian', desc: 'Soal 11-15'},
+  'D': {title: 'Pembagian', desc: 'Soal 16-20'},
+  'E': {title: 'Campuran +/−', desc: 'Soal 21-25'},
+  'F': {title: 'Dua Langkah', desc: 'Soal 26-30'}
+};
+
+function goToSlide(index) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-progress button').forEach(b => b.classList.remove('active'));
+  const slides = ['slide-cover','slide-materi','slide-contoh','slide-latihan','slide-hasil'];
+  document.getElementById(slides[index]).classList.add('active');
+  document.querySelector(`.nav-progress button[data-slide="${index}"]`).classList.add('active');
+  state.currentSlide = index;
+  if (index === 4) showResults();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+document.querySelectorAll('.nav-progress button').forEach(btn => {
+  btn.addEventListener('click', () => goToSlide(parseInt(btn.dataset.slide)));
+});
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  const nama2 = document.getElementById('nama-kelas-2').value.trim();
+  const nama3 = document.getElementById('nama-kelas-3').value.trim();
+  
+  if (!nama2 || !nama3) {
+    showToast('Mohon isi nama kedua siswa terlebih dahulu!', 'error');
+    return;
+  }
+  
+  state.namaKelas2 = nama2;
+  state.namaKelas3 = nama3;
+  document.getElementById('nama-2-display').textContent = nama2;
+  document.getElementById('nama-3-display').textContent = nama3;
+  
+  goToSlide(1);
+  showToast('Selamat belajar ' + nama2 + ' & ' + nama3 + '!', 'success');
+});
+
+function showToast(message, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = '';
+  const icon = document.createElement('i');
+  icon.className = type === 'success' ? 'fas fa-check-circle' : type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle';
+  toast.appendChild(icon);
+  toast.appendChild(document.createTextNode(' ' + message));
+  toast.style.background = type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : 'var(--coral)';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function generateContoh() {
+  const grid = document.getElementById('contoh-grid');
+  grid.innerHTML = contohSoal.map((c, i) => `
+    <div class="contoh-card">
+      <div class="contoh-header">
+        <div class="contoh-icon" style="background:${c.warna}"><i class="fas fa-${c.icon}"></i></div>
+        <div>
+          <div class="contoh-num">Contoh ${i+1}</div>
+          <div class="contoh-title">${c.tipe}</div>
+        </div>
+      </div>
+      <p class="contoh-question">${c.soal}</p>
+      <button class="btn-pembahasan-contoh" onclick="toggleContoh(${i})">
+        <i class="fas fa-eye"></i> Lihat Pembahasan
+      </button>
+      <div class="contoh-explanation hidden" id="contoh-exp-${i}">
+        <p><strong>Kalimat Matematika:</strong></p>
+        <div class="contoh-math">${c.kalimat}</div>
+        <p><strong>Jawaban Akhir:</strong> ${c.jawaban}</p>
+        <p><strong>Penjelasan:</strong> ${c.pembahasan}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleContoh(i) {
+  const exp = document.getElementById(`contoh-exp-${i}`);
+  const btn = exp.previousElementSibling;
+  exp.classList.toggle('hidden');
+  btn.classList.toggle('active');
+  btn.innerHTML = exp.classList.contains('hidden') 
+    ? '<i class="fas fa-eye"></i> Lihat Pembahasan' 
+    : '<i class="fas fa-eye-slash"></i> Sembunyikan Pembahasan';
+}
+
+// Generate tombol opsi satuan
+function generateUnitOptions(correctUnit) {
+  const pool = ['buah', 'lembar', 'ekor', 'meter', 'gram', 'orang', 'batang', 'kantong', 'butir', 'kotak', 'buku', 'koin', 'rupiah'];
+  let options = [correctUnit];
+  while(options.length < 3) {
+    const rand = pool[Math.floor(Math.random() * pool.length)];
+    // Hindari kemiripan kata (misal "buah" dan "buah apel")
+    if (!options.includes(rand) && !correctUnit.toLowerCase().includes(rand.toLowerCase()) && !rand.toLowerCase().includes(correctUnit.toLowerCase())) {
+      options.push(rand);
+    }
+  }
+  return options.sort(() => Math.random() - 0.5);
+}
+
+function generateQuestions(data, kelas) {
+  const container = document.getElementById(`questions-${kelas}`);
+  let html = '';
+  let currentBagian = '';
+  
+  data.forEach(q => {
+    if (q.bagian !== currentBagian) {
+      currentBagian = q.bagian;
+      const info = bagianInfo[q.bagian];
+      html += `
+        <div class="section-divider">
+          <span class="section-label">Bagian ${q.bagian}</span>
+          <span class="section-title">${info.title}</span>
+          <span class="section-desc">${info.desc}</span>
+        </div>
+      `;
+    }
+    
+    const tagClass = q.tipe.toLowerCase().replace(/\s+/g, '-');
+    const units = generateUnitOptions(q.satuan);
+    
+    html += `
+      <div class="question-card" data-no="${q.no}" data-kelas="${kelas}" data-tipe="${q.tipe}">
+        <div class="q-header">
+          <span class="q-number">${q.no}</span>
+          <span class="q-tag tag-${tagClass}">${q.tipe}</span>
+        </div>
+        <p class="q-text">${q.soal}</p>
+        <div class="q-inputs">
+          <div class="q-input-group">
+            <label><i class="fas fa-calculator"></i> Kalimat Matematika</label>
+            <div class="math-keyboard">
+              <button type="button" onclick="insertSymbol(this, '+')">+</button>
+              <button type="button" onclick="insertSymbol(this, '−')">−</button>
+              <button type="button" onclick="insertSymbol(this, '×')">×</button>
+              <button type="button" onclick="insertSymbol(this, '÷')">÷</button>
+              <button type="button" onclick="insertSymbol(this, '=')">=</button>
+              <button type="button" onclick="insertSymbol(this, '(')">(</button>
+              <button type="button" onclick="insertSymbol(this, ')')">)</button>
+            </div>
+            <input type="text" class="input-kalimat" placeholder="Contoh: 12 + 8 = 20">
+          </div>
+          <div class="q-input-group">
+            <label><i class="fas fa-pencil-alt"></i> Jawaban Akhir</label>
+            <div class="answer-input-wrapper">
+              <input type="text" class="input-jawaban" placeholder="Contoh: 20" inputmode="numeric" pattern="[0-9]*">
+              <div class="unit-options">
+                ${units.map(u => `<button type="button" class="unit-btn" onclick="selectUnit(this)" data-unit="${u}">${u}</button>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="q-actions">
+          <button class="btn-cek" onclick="checkAnswer(${q.no}, ${kelas})"><i class="fas fa-check-circle"></i> Cek Jawaban</button>
+          <button class="btn-pembahasan" onclick="togglePembahasan(${q.no}, ${kelas})"><i class="fas fa-eye"></i> Pembahasan</button>
+        </div>
+        <div class="q-result" id="result-${kelas}-${q.no}" hidden></div>
+        <div class="q-pembahasan hidden" id="pembahasan-${kelas}-${q.no}">
+          <p><strong>Kalimat Matematika:</strong></p>
+          <div class="pembahasan-math">${q.kalimat}</div>
+          <p><strong>Jawaban Akhir:</strong> ${q.jawaban} ${q.satuan}</p>
+          <p><strong>Penjelasan:</strong> ${q.pembahasan}</p>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+// Fungsi pilih satuan
+function selectUnit(btn) {
+  const card = btn.closest('.question-card');
+  card.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function insertSymbol(btn, symbol) {
+  const input = btn.closest('.q-input-group').querySelector('.input-kalimat');
+  let start = input.selectionStart || input.value.length;
+  let end = input.selectionEnd || input.value.length;
+  let text = input.value;
+  input.value = text.substring(0, start) + symbol + text.substring(end);
+  input.focus();
+  input.setSelectionRange(start + symbol.length, start + symbol.length);
+}
+
+function normalizeMath(str) {
+  if (!str) return '';
+  return str.toString()
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[*x×X]/g, '×')
+    .replace(/[/:÷]/g, '÷')
+    .replace(/[−–—\-]/g, '−')
+    .replace(/==/g, '=');
+}
+
+function checkMathSentence(userInput, correctAnswer) {
+  const u = normalizeMath(userInput);
+  const a = normalizeMath(correctAnswer);
+  if (!u) return false;
+  if (u === a) return true;
+  return u.replace(/[()]/g, '') === a.replace(/[()]/g, '');
+}
+
+function checkAnswer(no, kelas) {
+  const data = kelas === 2 ? dataKelas2 : dataKelas3;
+  const q = data.find(x => x.no === no);
+  if (!q) return;
+  
+  const card = document.querySelector(`.question-card[data-no="${no}"][data-kelas="${kelas}"]`);
+  const kalimatInput = card.querySelector('.input-kalimat').value.trim();
+  const jawabanInput = card.querySelector('.input-jawaban').value.trim();
+  const selectedUnitBtn = card.querySelector('.unit-btn.active');
+  const selectedUnit = selectedUnitBtn ? selectedUnitBtn.dataset.unit : '';
+  
+  if (!kalimatInput && !jawabanInput && !selectedUnit) {
+    showToast('Isi kalimat matematika, jawaban, dan pilih satuan dulu ya!', 'error');
+    return;
+  }
+  
+  const kalimatCorrect = checkMathSentence(kalimatInput, q.kalimat);
+  const answerValueCorrect = jawabanInput.replace(/\s/g, '') === q.jawaban;
+  const answerUnitCorrect = selectedUnit === q.satuan;
+  const jawabanCorrect = answerValueCorrect && answerUnitCorrect;
+  
+  state[`jawabanKelas${kelas}`][no] = {
+    kalimat: kalimatInput,
+    jawaban: jawabanInput,
+    satuan: selectedUnit,
+    kalimatCorrect,
+    jawabanCorrect,
+    checked: true
+  };
+  
+  const resultEl = document.getElementById(`result-${kelas}-${no}`);
+  let resultClass, resultIcon, resultText;
+  
+  if (kalimatCorrect && jawabanCorrect) {
+    resultClass = 'result-correct';
+    resultIcon = 'fa-check-circle';
+    resultText = 'Hebat! Kalimat matematika dan jawaban akhir benar. Kamu hebat!';
+    celebrate(card);
+  } else {
+    resultClass = 'result-wrong';
+    resultIcon = 'fa-times-circle';
+    resultText = 'Belum tepat. Jangan menyerah! Klik "Pembahasan" untuk memahami cara menjawabnya.';
+    
+    if (kalimatCorrect) {
+      resultClass = 'result-partial';
+      resultIcon = 'fa-exclamation-circle';
+      if (answerValueCorrect && !answerUnitCorrect) {
+        resultText = 'Kalimat dan nilai sudah benar, tapi satuan salah. Periksa kembali satuannya!';
+      } else if (!answerValueCorrect && answerUnitCorrect) {
+        resultText = 'Kalimat dan satuan benar, tapi nilai salah. Periksa lagi perhitunganmu ya!';
+      } else {
+        resultText = 'Kalimat matematika benar, tapi nilai dan satuan masih salah. Semangat ya!';
+      }
+    } else if (jawabanCorrect) {
+      resultClass = 'result-partial';
+      resultIcon = 'fa-exclamation-circle';
+      resultText = 'Jawaban akhir benar, tapi kalimat matematika kurang tepat. Lihat pembahasan ya!';
+    }
+  }
+  
+  resultEl.className = `q-result ${resultClass}`;
+  resultEl.innerHTML = `<i class="fas ${resultIcon}"></i> ${resultText}`;
+  resultEl.hidden = false;
+  
+  updateProgress(kelas);
+}
+
+function togglePembahasan(no, kelas) {
+  const exp = document.getElementById(`pembahasan-${kelas}-${no}`);
+  const card = document.querySelector(`.question-card[data-no="${no}"][data-kelas="${kelas}"]`);
+  const btn = card.querySelector('.btn-pembahasan');
+  exp.classList.toggle('hidden');
+  btn.classList.toggle('active');
+  btn.innerHTML = exp.classList.contains('hidden') 
+    ? '<i class="fas fa-eye"></i> Pembahasan' 
+    : '<i class="fas fa-eye-slash"></i> Sembunyikan';
+}
+
+function updateProgress(kelas) {
+  const jawaban = state[`jawabanKelas${kelas}`];
+  const count = Object.values(jawaban).filter(j => j.checked).length;
+  document.getElementById(`progress-${kelas}`).textContent = count;
+  const percent = (count / 30) * 100;
+  document.getElementById(`progress-fill-${kelas}`).style.width = percent + '%';
+}
+
+function celebrate(card) {
+  const rect = card.getBoundingClientRect();
+  const colors = ['#ff6b6b', '#ffd166', '#06a77d', '#118ab2', '#9b5de5', '#f78c6b'];
+  for (let i = 0; i < 15; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = (rect.left + rect.width / 2) + 'px';
+    confetti.style.top = (rect.top + rect.height / 2) + 'px';
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animation = `confettiFall ${1 + Math.random()}s ease-out forwards`;
+    confetti.style.transform = `translate(${(Math.random() - 0.5) * 300}px, ${Math.random() * -200 - 50}px) rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 2000);
+  }
+}
+
+function showResults() {
+  ['2', '3'].forEach(kelas => {
+    const jawaban = state[`jawabanKelas${kelas}`] || {};
+    let benar = 0, salah = 0;
+    
+    Object.values(jawaban).forEach(j => {
+      if (j.kalimatCorrect && j.jawabanCorrect) benar++;
+      else if (j.checked) salah++;
+    });
+    
+    const total = 30;
+    const persen = Math.round((benar / total) * 100);
+    
+    document.getElementById(`score-${kelas}`).textContent = benar;
+    document.getElementById(`benar-${kelas}`).textContent = benar;
+    document.getElementById(`salah-${kelas}`).textContent = salah;
+    document.getElementById(`persen-${kelas}`).textContent = persen;
+    
+    const scoreCircle = document.getElementById(`score-circle-${kelas}`);
+    scoreCircle.className = 'score-circle';
+    if (persen >= 80) scoreCircle.classList.add('score-excellent');
+    else if (persen >= 60) scoreCircle.classList.add('score-good');
+    else if (persen >= 40) scoreCircle.classList.add('score-fair');
+    else scoreCircle.classList.add('score-poor');
+    
+    const nama = kelas === '2' ? state.namaKelas2 : state.namaKelas3;
+    let refleksi;
+    if (persen >= 80) {
+      refleksi = `<strong>Refleksi:</strong> Luar biasa, ${nama}! Kamu sudah menguasai materi soal cerita operasi hitung campuran dengan sangat baik. Kamu mampu menuliskan kalimat matematika dan menemukan jawaban dengan tepat. Pertahankan semangat belajarmu!`;
+    } else if (persen >= 60) {
+      refleksi = `<strong>Refleksi:</strong> Bagus sekali, ${nama}! Kamu sudah cukup memahami materi. Tingkatkan lagi latihan agar semakin mahir menyelesaikan soal cerita, terutama pada soal operasi campuran.`;
+    } else if (persen >= 40) {
+      refleksi = `<strong>Refleksi:</strong> Cukup baik, ${nama}. Masih ada beberapa soal yang perlu kamu pelajari lagi, terutama dalam menuliskan kalimat matematika. Jangan menyerah dan teruslah berlatih!`;
+    } else {
+      refleksi = `<strong>Refleksi:</strong> Tetap semangat, ${nama}! Pelajari kembali materi kata kunci operasi hitung dan kerjakan ulang soal-soal yang masih salah. Kamu pasti bisa lebih baik!`;
+    }
+    
+    document.getElementById(`refleksi-${kelas}`).innerHTML = `<p>${refleksi}</p>`;
+    document.getElementById(`hasil-nama-${kelas}`).textContent = nama;
+  });
+  
+  const benar2 = Object.values(state.jawabanKelas2).filter(j => j.kalimatCorrect && j.jawabanCorrect).length;
+  const benar3 = Object.values(state.jawabanKelas3).filter(j => j.kalimatCorrect && j.jawabanCorrect).length;
+  const totalBenar = benar2 + benar3;
+  const totalSoal = 60;
+  
+  let kesimpulan;
+  if (totalBenar >= 50) {
+    kesimpulan = `Hasil belajar hari ini sangat memuaskan! ${state.namaKelas2} dan ${state.namaKelas3} berhasil menjawab ${totalBenar} dari ${totalSoal} soal dengan benar. Kalian menunjukkan pemahaman yang sangat baik dalam menuliskan kalimat matematika dan menyelesaikan soal cerita operasi hitung campuran. Pertahankan kerja keras kalian dan teruslah berlatih!`;
+  } else if (totalBenar >= 30) {
+    kesimpulan = `Hasil belajar hari ini cukup baik. ${state.namaKelas2} dan ${state.namaKelas3} berhasil menjawab ${totalBenar} dari ${totalSoal} soal dengan benar. Kalian sudah mulai memahami cara menuliskan kalimat matematika. Tetap semangat untuk berlatih lebih banyak agar semakin mahir!`;
+  } else if (totalBenar >= 15) {
+    kesimpulan = `Hasil belajar hari ini menunjukkan bahwa kalian masih perlu berlatih lebih banyak. ${state.namaKelas2} dan ${state.namaKelas3} berhasil menjawab ${totalBenar} dari ${totalSoal} soal dengan benar. Pelajari kembali materi kata kunci operasi hitung dan kerjakan ulang soal-soal yang masih salah.`;
+  } else {
+    kesimpulan = `Belum maksimal hari ini, tetapi jangan menyerah! ${state.namaKelas2} dan ${state.namaKelas3} berhasil menjawab ${totalBenar} dari ${totalSoal} soal dengan benar. Mari pelajari kembali materi dari awal, mulai dari mengenali kata kunci operasi hitung, lalu kerjakan ulang soal-soalnya. Belajar adalah proses, dan kalian pasti bisa!`;
+  }
+  
+  document.getElementById('kesimpulan-text').textContent = kesimpulan;
+  
+  if (totalBenar >= 40) {
+    setTimeout(() => {
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * window.innerWidth + 'px';
+          confetti.style.top = '-20px';
+          const colors = ['#ff6b6b', '#ffd166', '#06a77d', '#118ab2', '#9b5de5', '#f78c6b'];
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s ease-out forwards`;
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 4000);
+        }, i * 80);
+      }
+    }, 300);
+  }
+}
+
+function restart() {
+  state.jawabanKelas2 = {};
+  state.jawabanKelas3 = {};
+  state.namaKelas2 = '';
+  state.namaKelas3 = '';
+  document.getElementById('nama-kelas-2').value = '';
+  document.getElementById('nama-kelas-3').value = '';
+  document.getElementById('nama-2-display').textContent = 'Siswa 1';
+  document.getElementById('nama-3-display').textContent = 'Siswa 2';
+  document.getElementById('progress-2').textContent = '0';
+  document.getElementById('progress-3').textContent = '0';
+  document.getElementById('progress-fill-2').style.width = '0%';
+  document.getElementById('progress-fill-3').style.width = '0%';
+  generateQuestions(dataKelas2, 2);
+  generateQuestions(dataKelas3, 3);
+  goToSlide(0);
+  showToast('Yuk mulai petualangan baru!', 'success');
+}
+
+generateContoh();
+generateQuestions(dataKelas2, 2);
+generateQuestions(dataKelas3, 3);
+
+document.getElementById('nama-kelas-3').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('btn-start').click();
+});
+document.getElementById('nama-kelas-2').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('nama-kelas-3').focus();
+});
+</script>
+
+</body>
+</html>
