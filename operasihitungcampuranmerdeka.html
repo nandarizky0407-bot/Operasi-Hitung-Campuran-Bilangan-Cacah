@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operasi Hitung Campuran — Kurikulum Merdeka</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #FAF6EE;
+    --bg-2: #F0E9D9;
+    --fg: #1F2937;
+    --fg-2: #374151;
+    --muted: #6B7280;
+    --primary: #0E7C66;
+    --primary-dark: #095F4E;
+    --primary-light: #D4F0E8;
+    --accent: #FF6B47;
+    --accent-dark: #E54E2E;
+    --accent-light: #FFE5DD;
+    --yellow: #F5B82E;
+    --yellow-light: #FEF3C7;
+    --green: #10B981;
+    --green-light: #D1FAE5;
+    --red: #EF4444;
+    --red-light: #FEE2E2;
+    --card: #FFFFFF;
+    --border: #E7DECB;
+    --shadow-sm: 0 2px 8px rgba(31, 41, 55, 0.06);
+    --shadow-md: 0 6px 24px rgba(31, 41, 55, 0.08);
+    --shadow-lg: 0 12px 40px rgba(31, 41, 55, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  .font-display { font-family: 'Fredoka', sans-serif; letter-spacing: -0.01em; }
+  
+  .bg-decorated {
+    background: 
+      radial-gradient(circle at 15% 15%, rgba(14, 124, 102, 0.06) 0%, transparent 35%),
+      radial-gradient(circle at 85% 85%, rgba(255, 107, 71, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(245, 184, 46, 0.04) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  .bg-grid::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(31, 41, 55, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(31, 41, 55, 0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .shape { position: fixed; pointer-events: none; z-index: 0; }
+  .shape-1 {
+    top: 8%; left: 4%;
+    width: 160px; height: 160px;
+    background: var(--primary-light);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: float 18s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  .shape-2 {
+    bottom: 12%; right: 5%;
+    width: 220px; height: 220px;
+    background: var(--accent-light);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: float 22s ease-in-out infinite reverse;
+    opacity: 0.7;
+  }
+  .shape-3 {
+    top: 35%; right: 15%;
+    width: 100px; height: 100px;
+    background: var(--yellow-light);
+    border-radius: 50%;
+    animation: float 15s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -40px) rotate(120deg); }
+    66% { transform: translate(-20px, 30px) rotate(240deg); }
+  }
+  
+  .math-symbol {
+    position: absolute;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    opacity: 0.12;
+    pointer-events: none;
+    animation: float 20s ease-in-out infinite;
+  }
+  
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(250, 246, 238, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 12px 24px;
+  }
+  
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 96px 24px 100px;
+    position: relative;
+    z-index: 1;
+  }
+  .slide.active {
+    display: block;
+    animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(250, 246, 238, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    padding: 14px 24px;
+  }
+  
+  .btn {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-size: 16px;
+    text-decoration: none;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 14px rgba(14, 124, 102, 0.3);
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14, 124, 102, 0.4); }
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 14px rgba(255, 107, 71, 0.3);
+  }
+  .btn-accent:hover:not(:disabled) { background: var(--accent-dark); transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 2px solid var(--border);
+  }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+  .btn-yellow {
+    background: var(--yellow);
+    color: #5C3D00;
+    box-shadow: 0 4px 14px rgba(245, 184, 46, 0.4);
+  }
+  .btn-yellow:hover:not(:disabled) { background: #E0A620; transform: translateY(-2px); }
+  
+  .card {
+    background: var(--card);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-clean {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .input-field {
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    padding: 14px 20px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: white;
+    color: var(--fg);
+    width: 100%;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(14, 124, 102, 0.1);
+  }
+  .input-field.correct { border-color: var(--green); background: var(--green-light); }
+  .input-field.incorrect { border-color: var(--red); background: var(--red-light); }
+  .input-field:disabled { cursor: not-allowed; }
+  
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    width: 100%;
+    color: var(--fg);
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); transform: translateX(4px); }
+  .option-btn.selected { border-color: var(--primary); background: var(--primary-light); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); color: #064E3B; }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-light); color: #7F1D1D; }
+  .option-btn:disabled { cursor: not-allowed; }
+  .option-letter {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .option-btn.selected .option-letter { background: var(--primary); color: white; }
+  .option-btn.correct .option-letter { background: var(--green); color: white; }
+  .option-btn.incorrect .option-letter { background: var(--red); color: white; }
+  
+  .progress-dot {
+    width: 32px; height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    padding: 0;
+  }
+  .progress-dot.active { background: var(--primary); width: 56px; }
+  .progress-dot.completed { background: var(--accent); }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Fredoka', sans-serif;
+  }
+  .badge-primary { background: var(--primary-light); color: var(--primary-dark); }
+  .badge-accent { background: var(--accent-light); color: var(--accent-dark); }
+  .badge-yellow { background: var(--yellow-light); color: #92400E; }
+  .badge-green { background: var(--green-light); color: #064E3B; }
+  
+  .timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--yellow-light);
+    border-radius: 100px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    color: #92400E;
+    font-size: 15px;
+    border: 2px solid var(--yellow);
+  }
+  .timer.running { background: var(--red-light); color: #7F1D1D; border-color: var(--red); animation: timerPulse 1.5s ease-in-out infinite; }
+  .timer.stopped { background: var(--green-light); color: #064E3B; border-color: var(--green); }
+  @keyframes timerPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  }
+  .timer-dot {
+    width: 8px; height: 8px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  .timer.stopped .timer-dot { animation: none; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  
+  .math-expr {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    padding: 16px 28px;
+    border-radius: 14px;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    border: 2px solid rgba(14, 124, 102, 0.2);
+  }
+  
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--bg);
+    border: 2px solid transparent;
+    transition: all 0.3s;
+  }
+  .step-item.active { border-color: var(--primary); background: var(--primary-light); }
+  .step-item.done { background: var(--green-light); border-color: var(--green); }
+  .step-number {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .step-item.active .step-number { background: var(--primary); color: white; }
+  .step-item.done .step-number { background: var(--green); color: white; }
+  
+  .hint-box {
+    background: var(--yellow-light);
+    border-left: 4px solid var(--yellow);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    color: #92400E;
+    font-size: 15px;
+  }
+  .explanation-box {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    color: var(--primary-dark);
+    font-size: 15px;
+  }
+  .correct-box {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    color: #064E3B;
+    font-size: 15px;
+  }
+  .incorrect-box {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    color: #7F1D1D;
+    font-size: 15px;
+  }
+  
+  .stat-box {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .stat-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .stat-value {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  
+  .q-nav-pill {
+    min-width: 36px; height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+    background: var(--bg-2);
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .q-nav-pill:hover { background: var(--primary-light); color: var(--primary-dark); }
+  .q-nav-pill.active { background: var(--primary); color: white; transform: scale(1.1); }
+  .q-nav-pill.correct { background: var(--green); color: white; }
+  .q-nav-pill.incorrect { background: var(--red); color: white; }
+  .q-nav-pill.unanswered { background: white; border-color: var(--border); color: var(--muted); }
+  
+  .ops-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    background: white;
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ops-step:hover { transform: translateX(8px); border-color: var(--primary); }
+  .ops-step.highlight { border-color: var(--accent); background: var(--accent-light); transform: scale(1.02); }
+  .ops-step-num {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  
+  .scenario-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+  }
+  .scenario-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: var(--shadow-md); }
+  .scenario-card.expanded { border-color: var(--accent); box-shadow: var(--shadow-lg); }
+  .scenario-icon {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin-bottom: 16px;
+    color: white;
+  }
+  
+  .score-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 300px; height: 300px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+  }
+  .score-card-accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  }
+  
+  .reflection-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 16px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    resize: vertical;
+    background: white;
+    color: var(--fg);
+    transition: all 0.2s;
+  }
+  .reflection-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(14, 124, 102, 0.1);
+  }
+  
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 14px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 3s ease-out forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .shake { animation: shake 0.4s ease-in-out; }
+  
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .bounce-in { animation: bounceIn 0.5s ease-out; }
+  
+  .reveal {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease-out, padding 0.5s ease-out, margin 0.5s ease-out;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+  }
+  .reveal.show {
+    max-height: 2000px;
+    opacity: 1;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-top: 12px;
+  }
+  
+  .tab-btn {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: 2px solid var(--border);
+    background: white;
+    color: var(--muted);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+  }
+  .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+  .tab-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+  
+  .scroll-x { overflow-x: auto; }
+  .scroll-x::-webkit-scrollbar { height: 6px; }
+  .scroll-x::-webkit-scrollbar-track { background: transparent; }
+  .scroll-x::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 100px;
+    padding: 4px;
+    gap: 2px;
+    transition: all 0.2s;
+  }
+  .lang-toggle:hover { border-color: var(--primary); }
+  .lang-btn {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lang-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(14, 124, 102, 0.3);
+  }
+  
+  .story-text-en {
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.7;
+  }
+  .story-text-en .highlight-num {
+    background: var(--yellow-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    color: #92400E;
+  }
+  
+  @media (max-width: 768px) {
+    .card { padding: 20px; }
+    .math-expr { font-size: 22px; padding: 12px 18px; }
+    .slide { padding: 96px 16px 100px; }
+    .top-nav, .bottom-nav { padding: 12px 16px; }
+    .stat-value { font-size: 28px; }
+  }
+  
+  button:focus { outline: none; }
+  button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+  
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--fg);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    z-index: 9999;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.3s ease-out;
+  }
+  @keyframes toastIn {
+    from { transform: translate(-50%, -20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+  
+  .rating-btn {
+    font-size: 28px;
+    color: var(--border);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 4px;
+  }
+  .rating-btn:hover { transform: scale(1.2); }
+  .rating-btn.active { color: var(--yellow); }
+</style>
+</head>
+<body class="bg-decorated bg-grid">
+<div class="shape shape-1"></div>
+<div class="shape shape-2"></div>
+<div class="shape shape-3"></div>
+
+<header class="top-nav">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--primary); color: white;">
+        <i class="fa-solid fa-square-root-variable text-lg"></i>
+      </div>
+      <div>
+        <div class="font-display font-bold text-base leading-tight" style="color: var(--fg);">Operasi Hitung Campuran</div>
+        <div class="text-xs hidden sm:block" style="color: var(--muted);">Kurikulum Merdeka • Fase C (Kelas 5 SD)</div>
+      </div>
+    </div>
+    <div class="hidden lg:flex items-center gap-2" id="slideDots"></div>
+    <div class="flex items-center gap-2">
+      <div id="studentBadge" class="hidden items-center gap-2 px-3 py-1.5 rounded-full badge badge-primary">
+        <i class="fa-solid fa-user-graduate text-sm"></i>
+        <span class="font-display font-semibold text-sm" id="studentNameDisplay">Siswa</span>
+      </div>
+      <div id="globalScore" class="hidden items-center gap-2 px-3 py-1.5 rounded-full badge badge-yellow">
+        <i class="fa-solid fa-star text-sm"></i>
+        <span class="font-display font-semibold text-sm" id="globalScoreText">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- SLIDE 1: COVER -->
+<section class="slide active" data-slide="cover">
+  <div class="max-w-6xl mx-auto pt-4 relative">
+    <span class="math-symbol" style="top: 5%; left: 5%; font-size: 80px; color: var(--primary);">+</span>
+    <span class="math-symbol" style="top: 10%; right: 8%; font-size: 100px; color: var(--accent); animation-delay: 2s;">×</span>
+    <span class="math-symbol" style="top: 40%; left: 2%; font-size: 70px; color: var(--yellow); animation-delay: 4s;">÷</span>
+    <span class="math-symbol" style="bottom: 10%; right: 5%; font-size: 90px; color: var(--primary); animation-delay: 1s;">−</span>
+    <span class="math-symbol" style="top: 60%; right: 12%; font-size: 60px; color: var(--accent); animation-delay: 3s;">( )</span>
+    
+    <div class="badge badge-primary mb-6">
+      <i class="fa-solid fa-graduation-cap"></i>
+      Kurikulum Merdeka • Fase C (Kelas 5 SD)
+    </div>
+    
+    <h1 class="font-display font-bold leading-none mb-4" style="font-size: clamp(48px, 9vw, 104px);">
+      Operasi Hitung<br>
+      <span style="color: var(--accent);">Campuran</span>
+    </h1>
+    
+    <p class="text-xl md:text-2xl mb-2 font-display font-semibold" style="color: var(--fg-2);">Bilangan Cacah untuk Kelas 5</p>
+    <p class="text-lg mb-10 max-w-2xl" style="color: var(--muted);">
+      Pelajari urutan operasi hitung — kurung, kali, bagi, tambah, kurang — melalui materi interaktif, contoh bertahap, dan latihan soal cerita yang kontekstual.
+    </p>
+    
+    <div class="grid sm:grid-cols-3 gap-4 mb-10">
+      <div class="card-clean">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--primary-light); color: var(--primary-dark);">
+            <i class="fa-solid fa-list-ol"></i>
+          </div>
+          <div class="text-3xl font-display font-bold" style="color: var(--primary);">10</div>
+        </div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Contoh interaktif dengan scaffolding langkah demi langkah</div>
+      </div>
+      <div class="card-clean">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--accent-light); color: var(--accent-dark);">
+            <i class="fa-solid fa-pencil"></i>
+          </div>
+          <div class="text-3xl font-display font-bold" style="color: var(--accent);">25</div>
+        </div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Latihan operasi campuran (15 PG + 10 isian)</div>
+      </div>
+      <div class="card-clean">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--yellow-light); color: #92400E;">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="text-3xl font-display font-bold" style="color: #92400E;">30</div>
+        </div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Soal cerita Kurikulum Merdeka (Bahasa Indonesia + Eng)</div>
+      </div>
+    </div>
+    
+    <div class="card max-w-2xl">
+      <label class="block font-display font-semibold text-lg mb-3" for="studentName">
+        <i class="fa-solid fa-user-pen mr-2" style="color: var(--primary);"></i>
+        Tuliskan namamu untuk memulai
+      </label>
+      <input type="text" id="studentName" class="input-field" placeholder="Contoh: Aisyah Putri" oninput="checkName()" onkeydown="if(event.key==='Enter' && !document.getElementById('startBtn').disabled) startSession()">
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-6">
+        <p class="text-sm" style="color: var(--muted);">
+          <i class="fa-solid fa-circle-info mr-1"></i>
+          Namamu akan tampil di setiap slide dan laporan akhir.
+        </p>
+        <button class="btn btn-primary" id="startBtn" onclick="startSession()" disabled>
+          <i class="fa-solid fa-play"></i>
+          Mulai Belajar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: TRIGGER -->
+<section class="slide" data-slide="trigger">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10">
+      <div class="badge badge-accent mb-4">
+        <i class="fa-solid fa-lightbulb"></i>
+        Pertanyaan Pemantik
+      </div>
+      <h2 class="font-display font-bold mb-4" style="font-size: clamp(32px, 5vw, 52px);">
+        Pernahkah kamu mengalami hal ini?
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Empat situasi sehari-hari yang ternyata melibatkan operasi hitung campuran. Klik setiap kartu untuk mengungkap hubungannya dengan matematika.
+      </p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6" id="scenarioGrid"></div>
+    <div class="text-center mt-10">
+      <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full" style="background: var(--primary-light); color: var(--primary-dark);">
+        <i class="fa-solid fa-arrow-right text-sm"></i>
+        <span class="font-display font-semibold text-sm">Setelah memahami, lanjut ke materi urutan operasi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: MATERIAL -->
+<section class="slide" data-slide="material">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10">
+      <div class="badge badge-primary mb-4">
+        <i class="fa-solid fa-book"></i>
+        Materi Inti
+      </div>
+      <h2 class="font-display font-bold mb-3" style="font-size: clamp(32px, 5vw, 52px);">
+        Urutan Operasi Hitung
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Saat sebuah kalimat matematika memuat beberapa operasi sekaligus, kita tidak boleh mengerjakannya sembarangan. Ada aturan urutan yang harus diikuti.
+      </p>
+    </div>
+    
+    <div class="space-y-4 mb-10">
+      <div class="ops-step" id="opsStep1">
+        <div class="ops-step-num" style="background: var(--accent);">1</div>
+        <div class="flex-1">
+          <div class="font-display font-bold text-xl mb-1">Kurung terlebih dahulu</div>
+          <div class="text-base" style="color: var(--fg-2);">Operasi di dalam tanda kurung <span class="font-display font-bold" style="color: var(--accent);">( &nbsp; )</span> dikerjakan paling awal, sebelum operasi lain di luar kurung.</div>
+        </div>
+        <div class="math-expr text-base" style="font-size: 18px; padding: 10px 16px;">( 8 + 4 ) × 3</div>
+      </div>
+      <div class="ops-step" id="opsStep2">
+        <div class="ops-step-num" style="background: var(--yellow); color: #5C3D00;">2</div>
+        <div class="flex-1">
+          <div class="font-display font-bold text-xl mb-1">Kali dan Bagi (dari kiri ke kanan)</div>
+          <div class="text-base" style="color: var(--fg-2);">Setelah kurung, kerjakan operasi perkalian <span class="font-display font-bold" style="color: #92400E;">×</span> dan pembagian <span class="font-display font-bold" style="color: #92400E;">÷</span> secara berurutan dari kiri ke kanan.</div>
+        </div>
+        <div class="math-expr text-base" style="font-size: 18px; padding: 10px 16px;">12 × 3 ÷ 6</div>
+      </div>
+      <div class="ops-step" id="opsStep3">
+        <div class="ops-step-num" style="background: var(--primary);">3</div>
+        <div class="flex-1">
+          <div class="font-display font-bold text-xl mb-1">Tambah dan Kurang (dari kiri ke kanan)</div>
+          <div class="text-base" style="color: var(--fg-2);">Terakhir, kerjakan operasi penjumlahan <span class="font-display font-bold" style="color: var(--primary);">+</span> dan pengurangan <span class="font-display font-bold" style="color: var(--primary);">−</span> dari kiri ke kanan.</div>
+        </div>
+        <div class="math-expr text-base" style="font-size: 18px; padding: 10px 16px;">20 − 5 + 3</div>
+      </div>
+    </div>
+    
+    <div class="card mb-8" style="background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%); border: none;">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+        <div class="flex-shrink-0">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: var(--primary); color: white;">
+            <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="font-display font-bold text-xl mb-2" style="color: var(--primary-dark);">Demo Interaktif: Lihat urutan pengerjaan</div>
+          <div class="text-base mb-4" style="color: var(--fg-2);">Klik tombol untuk melihat bagaimana ekspresi berikut dikerjakan langkah demi langkah.</div>
+          <div class="math-expr mb-4" id="demoExpression">( 8 + 4 ) × 3 − 6 ÷ 2</div>
+          <div class="flex flex-wrap gap-3">
+            <button class="btn btn-primary" onclick="nextDemoStep()" id="demoNextBtn">
+              <i class="fa-solid fa-forward-step"></i>
+              <span id="demoBtnText">Langkah 1</span>
+            </button>
+            <button class="btn btn-ghost" onclick="resetDemo()">
+              <i class="fa-solid fa-rotate-left"></i>
+              Ulangi
+            </button>
+          </div>
+          <div id="demoExplanation" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-clean" style="background: var(--yellow-light); border-color: var(--yellow);">
+      <div class="flex items-start gap-4">
+        <i class="fa-solid fa-lightbulb text-2xl mt-1" style="color: #92400E;"></i>
+        <div>
+          <div class="font-display font-bold text-lg mb-2" style="color: #92400E;">Tips Mengingat</div>
+          <div style="color: #92400E;">Ingat urutan ini: <strong>Kurung → Kali/Bagi → Tambah/Kurang</strong>. Jika ada operasi dengan tingkat yang sama (kali dengan bagi, atau tambah dengan kurang), kerjakan dari <strong>kiri ke kanan</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: EXAMPLES -->
+<section class="slide" data-slide="examples">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="badge badge-accent mb-4">
+        <i class="fa-solid fa-flask"></i>
+        10 Contoh dengan Scaffolding
+      </div>
+      <h2 class="font-display font-bold mb-3" style="font-size: clamp(32px, 5vw, 48px);">
+        Belajar Menyelesaikan Soal
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Setiap contoh dipecah menjadi beberapa langkah kecil. Kerjakan tiap langkah, periksa jawabanmu, lalu lanjut ke langkah berikutnya.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-6 justify-center scroll-x" id="exampleNav"></div>
+    <div class="card" id="exampleContainer"></div>
+    <div class="flex items-center justify-between mt-6 gap-4">
+      <button class="btn btn-ghost" onclick="prevExample()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Contoh Sebelumnya
+      </button>
+      <div class="text-sm font-display font-semibold" style="color: var(--muted);">
+        Contoh <span id="exampleNum">1</span> dari 10
+      </div>
+      <button class="btn btn-primary" onclick="nextExample()">
+        Contoh Berikutnya
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: PRACTICE -->
+<section class="slide" data-slide="practice">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="badge badge-primary mb-4">
+        <i class="fa-solid fa-dumbbell"></i>
+        Latihan Operasi Hitung Campuran
+      </div>
+      <h2 class="font-display font-bold mb-3" style="font-size: clamp(32px, 5vw, 48px);">
+        Saatnya Berlatih
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        15 soal pilihan ganda dan 10 soal isian singkat. Setiap soal memiliki stopwatch dan pembahasan lengkap.
+      </p>
+    </div>
+    
+    <div class="grid lg:grid-cols-4 gap-6 mb-6">
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--green);" id="practiceCorrect">0</div>
+        <div class="stat-label">Jawaban Benar</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--red);" id="practiceWrong">0</div>
+        <div class="stat-label">Jawaban Salah</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--primary);" id="practiceScore">0</div>
+        <div class="stat-label">Skor</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent);" id="practiceAnswered">0<span class="text-base" style="color: var(--muted);">/25</span></div>
+        <div class="stat-label">Soal Dijawab</div>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div class="flex gap-2">
+        <button class="tab-btn active" id="tabMcq" onclick="switchPracticeTab('mcq')">
+          <i class="fa-solid fa-list-check mr-2"></i>Pilihan Ganda (15)
+        </button>
+        <button class="tab-btn" id="tabShort" onclick="switchPracticeTab('short')">
+          <i class="fa-solid fa-pen mr-2"></i>Isian Singkat (10)
+        </button>
+      </div>
+      <div class="timer" id="practiceTimerWrap">
+        <span class="timer-dot"></span>
+        <i class="fa-solid fa-stopwatch"></i>
+        <span id="practiceTimer">00:00.00</span>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2 mb-6 scroll-x" id="practiceNav"></div>
+    <div class="card" id="practiceQuestionContainer"></div>
+    
+    <div class="flex items-center justify-between mt-6 gap-4">
+      <button class="btn btn-ghost" onclick="prevPractice()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Sebelumnya
+      </button>
+      <div class="text-sm font-display font-semibold" style="color: var(--muted);" id="practiceProgress">
+        Soal 1
+      </div>
+      <button class="btn btn-primary" onclick="nextPractice()">
+        Berikutnya
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: STORY PROBLEMS -->
+<section class="slide" data-slide="story">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+      <div class="badge badge-yellow mb-4">
+        <i class="fa-solid fa-book-open-reader"></i>
+        Soal Cerita Kurikulum Merdeka
+      </div>
+      <h2 class="font-display font-bold mb-3" style="font-size: clamp(32px, 5vw, 48px);">
+        Soal Cerita Operasi Hitung Campuran
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        30 soal cerita sesuai Kurikulum Merdeka. Gunakan tombol translate untuk beralih ke bahasa Inggris jika perlu.
+      </p>
+    </div>
+    
+    <div class="grid lg:grid-cols-4 gap-6 mb-6">
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--green);" id="storyCorrect">0</div>
+        <div class="stat-label">Jawaban Benar</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--red);" id="storyWrong">0</div>
+        <div class="stat-label">Jawaban Salah</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--primary);" id="storyScore">0</div>
+        <div class="stat-label">Skor</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" style="color: var(--accent);" id="storyAnswered">0<span class="text-base" style="color: var(--muted);">/30</span></div>
+        <div class="stat-label">Soal Dijawab</div>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="text-sm font-display font-semibold" style="color: var(--muted);">
+          Soal <span id="storyProgress">1</span> dari 30
+        </div>
+        <div class="lang-toggle">
+          <button class="lang-btn" id="langBtnEn" onclick="setStoryLang('en')">
+            <i class="fa-solid fa-flag-usa"></i>
+            English
+          </button>
+          <button class="lang-btn active" id="langBtnId" onclick="setStoryLang('id')">
+            <i class="fa-solid fa-language"></i>
+            Indonesia
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="timer" id="storyTimerWrap">
+          <span class="timer-dot"></span>
+          <i class="fa-solid fa-stopwatch"></i>
+          <span id="storyTimer">00:00.00</span>
+        </div>
+        <button class="btn btn-accent" onclick="confirmFinishExam()">
+          <i class="fa-solid fa-flag-checkered"></i>
+          Finish Exam
+        </button>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2 mb-6 scroll-x" id="storyNav"></div>
+    <div class="card" id="storyQuestionContainer"></div>
+    
+    <div class="flex items-center justify-between mt-6 gap-4">
+      <button class="btn btn-ghost" onclick="prevStory()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Sebelumnya
+      </button>
+      <button class="btn btn-primary" onclick="nextStory()">
+        Berikutnya
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: RESULTS -->
+<section class="slide" data-slide="result">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10">
+      <div class="badge badge-green mb-4">
+        <i class="fa-solid fa-flag-checkered"></i>
+        Hasil & Refleksi
+      </div>
+      <h2 class="font-display font-bold mb-3" style="font-size: clamp(32px, 5vw, 52px);">
+        Lihat Pencapaianmu
+      </h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Berikut ringkasan hasil latihanmu hari ini, <span class="font-display font-bold" style="color: var(--primary);" id="resultStudentName">Siswa</span>.
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-6 mb-10">
+      <div class="score-card">
+        <div class="relative" style="z-index: 1;">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.2);">
+              <i class="fa-solid fa-dumbbell text-xl"></i>
+            </div>
+            <div>
+              <div class="font-display font-bold text-xl">Latihan Operasi Hitung</div>
+              <div class="text-sm opacity-80">Pilihan Ganda + Isian Singkat</div>
+            </div>
+          </div>
+          <div class="flex items-end gap-2 mb-4">
+            <div class="font-display font-bold" style="font-size: 64px; line-height: 1;" id="practiceFinalScore">0</div>
+            <div class="text-2xl opacity-80 mb-2">/ 25</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white bg-opacity-20 rounded-xl p-3">
+              <div class="text-xs opacity-80 font-display font-semibold">BENAR</div>
+              <div class="text-2xl font-display font-bold" id="practiceFinalCorrect">0</div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-xl p-3">
+              <div class="text-xs opacity-80 font-display font-semibold">SALAH</div>
+              <div class="text-2xl font-display font-bold" id="practiceFinalWrong">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="score-card score-card-accent">
+        <div class="relative" style="z-index: 1;">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.2);">
+              <i class="fa-solid fa-book-open-reader text-xl"></i>
+            </div>
+            <div>
+              <div class="font-display font-bold text-xl">Soal Cerita Kurmer</div>
+              <div class="text-sm opacity-80">30 Soal Pilihan Ganda</div>
+            </div>
+          </div>
+          <div class="flex items-end gap-2 mb-4">
+            <div class="font-display font-bold" style="font-size: 64px; line-height: 1;" id="storyFinalScore">0</div>
+            <div class="text-2xl opacity-80 mb-2">/ 30</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white bg-opacity-20 rounded-xl p-3">
+              <div class="text-xs opacity-80 font-display font-semibold">BENAR</div>
+              <div class="text-2xl font-display font-bold" id="storyFinalCorrect">0</div>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-xl p-3">
+              <div class="text-xs opacity-80 font-display font-semibold">SALAH</div>
+              <div class="text-2xl font-display font-bold" id="storyFinalWrong">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-8">
+      <h3 class="font-display font-bold text-2xl mb-4">
+        <i class="fa-solid fa-clipboard-list mr-2" style="color: var(--primary);"></i>
+        Kesimpulan
+      </h3>
+      <p class="text-base mb-3" style="color: var(--fg-2);">
+        Hari ini kamu telah mempelajari urutan operasi hitung campuran: <strong>kurung dulu, lalu kali/bagi dari kiri ke kanan, terakhir tambah/kurang dari kiri ke kanan</strong>. Aturan ini memastikan setiap kalimat matematika memiliki satu jawaban yang benar dan tidak ambigu.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-3 mt-4">
+        <div class="card-clean">
+          <div class="font-display font-bold text-sm mb-1" style="color: var(--accent);">URUTAN 1</div>
+          <div class="text-sm" style="color: var(--fg-2);">Tanda kurung selalu didahulukan</div>
+        </div>
+        <div class="card-clean">
+          <div class="font-display font-bold text-sm mb-1" style="color: #92400E;">URUTAN 2</div>
+          <div class="text-sm" style="color: var(--fg-2);">Perkalian & pembagian (kiri → kanan)</div>
+        </div>
+        <div class="card-clean">
+          <div class="font-display font-bold text-sm mb-1" style="color: var(--primary);">URUTAN 3</div>
+          <div class="text-sm" style="color: var(--fg-2);">Penjumlahan & pengurangan (kiri → kanan)</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3 class="font-display font-bold text-2xl mb-4">
+        <i class="fa-solid fa-heart mr-2" style="color: var(--accent);"></i>
+        Refleksi Diri
+      </h3>
+      <div class="space-y-5">
+        <div>
+          <label class="block font-display font-semibold mb-2">1. Apa yang sudah kamu pelajari hari ini?</label>
+          <textarea class="reflection-input" id="reflection1" placeholder="Tuliskan hal-hal baru yang kamu pelajari..."></textarea>
+        </div>
+        <div>
+          <label class="block font-display font-semibold mb-2">2. Bagian mana yang paling kamu sukai? Mengapa?</label>
+          <textarea class="reflection-input" id="reflection2" placeholder="Ceritakan bagian favoritmu..."></textarea>
+        </div>
+        <div>
+          <label class="block font-display font-semibold mb-2">3. Apa yang masih kamu anggap sulit? Bagaimana cara mengatasinya?</label>
+          <textarea class="reflection-input" id="reflection3" placeholder="Tuliskan kesulitanmu dan rencana mengatasinya..."></textarea>
+        </div>
+        <div>
+          <label class="block font-display font-semibold mb-2">4. Beri nilai pemahamanmu hari ini (1–5):</label>
+          <div class="flex gap-2" id="ratingStars">
+            <button class="rating-btn" data-rate="1" onclick="setRating(1)"><i class="fa-solid fa-star"></i></button>
+            <button class="rating-btn" data-rate="2" onclick="setRating(2)"><i class="fa-solid fa-star"></i></button>
+            <button class="rating-btn" data-rate="3" onclick="setRating(3)"><i class="fa-solid fa-star"></i></button>
+            <button class="rating-btn" data-rate="4" onclick="setRating(4)"><i class="fa-solid fa-star"></i></button>
+            <button class="rating-btn" data-rate="5" onclick="setRating(5)"><i class="fa-solid fa-star"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: THANKS -->
+<section class="slide" data-slide="thanks">
+  <div class="max-w-5xl mx-auto pt-8 relative">
+    <span class="math-symbol" style="top: 5%; left: 8%; font-size: 80px; color: var(--primary);">+</span>
+    <span class="math-symbol" style="top: 15%; right: 10%; font-size: 90px; color: var(--accent); animation-delay: 1s;">×</span>
+    <span class="math-symbol" style="bottom: 20%; left: 5%; font-size: 70px; color: var(--yellow); animation-delay: 2s;">÷</span>
+    <span class="math-symbol" style="bottom: 10%; right: 8%; font-size: 100px; color: var(--primary); animation-delay: 3s;">−</span>
+    
+    <div class="text-center mb-12">
+      <div class="badge badge-green mb-6">
+        <i class="fa-solid fa-check-circle"></i>
+        Sesi Belajar Selesai
+      </div>
+      <h2 class="font-display font-bold mb-4" style="font-size: clamp(40px, 8vw, 88px);">
+        Thank You<br>
+        <span style="color: var(--accent);">for Today!</span>
+      </h2>
+      <p class="text-2xl font-display font-semibold mb-2" style="color: var(--fg-2);" id="thanksName">
+        Kerja bagus, Siswa!
+      </p>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Kamu telah menyelesaikan seluruh materi operasi hitung campuran. Teruslah berlatih, karena matematika menjadi lebih mudah setiap kali kamu mencoba.
+      </p>
+    </div>
+    
+    <div class="grid sm:grid-cols-3 gap-4 mb-10">
+      <div class="card-clean text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background: var(--primary-light); color: var(--primary-dark);">
+          <i class="fa-solid fa-list-ol text-xl"></i>
+        </div>
+        <div class="text-3xl font-display font-bold mb-1" style="color: var(--primary);" id="thanksExamples">10</div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Contoh dikerjakan</div>
+      </div>
+      <div class="card-clean text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background: var(--accent-light); color: var(--accent-dark);">
+          <i class="fa-solid fa-pencil text-xl"></i>
+        </div>
+        <div class="text-3xl font-display font-bold mb-1" style="color: var(--accent);" id="thanksPractice">0/25</div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Latihan operasi</div>
+      </div>
+      <div class="card-clean text-center">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background: var(--yellow-light); color: #92400E;">
+          <i class="fa-solid fa-book-open text-xl"></i>
+        </div>
+        <div class="text-3xl font-display font-bold mb-1" style="color: #92400E;" id="thanksStory">0/30</div>
+        <div class="text-sm font-semibold" style="color: var(--muted);">Soal cerita</div>
+      </div>
+    </div>
+    
+    <div class="card text-center mb-8" style="background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%); border: none;">
+      <i class="fa-solid fa-quote-left text-3xl mb-3" style="color: var(--primary); opacity: 0.4;"></i>
+      <p class="text-xl font-display font-semibold mb-2" style="color: var(--fg);">
+        "Matematika bukan tentang angka, persamaan, atau algoritma. Matematika tentang pemahaman."
+      </p>
+      <p class="text-sm" style="color: var(--muted);">— William Paul Thurston</p>
+    </div>
+    
+    <div class="flex flex-wrap justify-center gap-3">
+      <button class="btn btn-primary" onclick="goToSlide(1)">
+        <i class="fa-solid fa-rotate-left"></i>
+        Mulai Ulang
+      </button>
+      <button class="btn btn-ghost" onclick="window.print()">
+        <i class="fa-solid fa-print"></i>
+        Cetak Laporan
+      </button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="bottom-nav">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <button class="btn btn-ghost" id="prevBtn" onclick="prevSlide()">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span class="hidden sm:inline">Sebelumnya</span>
+    </button>
+    <div class="text-sm font-display font-semibold flex items-center gap-3" style="color: var(--muted);">
+      <span id="currentSlideNum">1</span>
+      <span style="opacity: 0.4;">/</span>
+      <span id="totalSlides">8</span>
+    </div>
+    <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">
+      <span class="hidden sm:inline">Selanjutnya</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="card max-w-md w-full bounce-in">
+    <div class="text-center mb-4">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background: var(--accent-light); color: var(--accent-dark);">
+        <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+      </div>
+      <h3 class="font-display font-bold text-xl mb-2">Selesai Mengerjakan?</h3>
+      <p class="text-sm" style="color: var(--muted);" id="modalText">Kamu belum menjawab semua soal. Soal yang tidak dijawab akan dianggap salah. Yakin ingin menyelesaikan ujian?</p>
+    </div>
+    <div class="flex gap-3">
+      <button class="btn btn-ghost flex-1" onclick="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+        Batal
+      </button>
+      <button class="btn btn-accent flex-1" onclick="finishExamConfirm()">
+        <i class="fa-solid fa-check"></i>
+        Ya, Selesai
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATA: SCENARIOS ============
+const scenariosData = [
+  {
+    icon: "fa-cart-shopping",
+    color: "#FF6B47",
+    title: "Belanja di Toko",
+    text: "Ibu membeli 3 kg apel seharga Rp 15.000/kg dan 2 kg jeruk seharga Rp 12.000/kg. Ibu membayar dengan Rp 100.000. Berapa kembalian yang diterima ibu?",
+    expression: "100.000 − (3 × 15.000 + 2 × 12.000)",
+    reveal: "Untuk menyelesaikannya, kita harus menghitung total belanjaan dulu (perkalian), menjumlahkannya, lalu mengurangi dari uang yang dibayarkan. Inilah operasi hitung campuran!"
+  },
+  {
+    icon: "fa-school",
+    color: "#0E7C66",
+    title: "Di Sekolah",
+    text: "Di sekolah ada 5 kelas kelompok belajar, masing-masing berisi 6 siswa. Hari ini 8 siswa tidak masuk karena sakit. Berapa siswa yang hadir?",
+    expression: "(5 × 6) − 8",
+    reveal: "Kita mengalikan dulu (5 × 6) untuk mendapatkan total siswa, lalu mengurangi 8 yang sakit. Perkalian dikerjakan sebelum pengurangan."
+  },
+  {
+    icon: "fa-kitchen-set",
+    color: "#F5B82E",
+    title: "Membuat Kue",
+    text: "Resep kue butuh 4 mangkuk tepung, masing-masing 250 gram. Ibu sudah punya 800 gram tepung di dapur. Apakah tepung ibu cukup?",
+    expression: "4 × 250 = 1.000 gram → 1.000 − 800 = 200 gram kurang",
+    reveal: "Kita mengalikan 4 × 250 dulu untuk tahu kebutuhan total, lalu membandingkan dengan yang dimiliki. Operasi campuran sangat membantu dalam memasak!"
+  },
+  {
+    icon: "fa-person-running",
+    color: "#10B981",
+    title: "Lari Olahraga",
+    text: "Pak Budi latihan lari 6 putaran pertama dengan jarak 400 m per putaran, istirahat, lalu 3 putaran lagi. Total berapa meter Pak Budi berlari?",
+    expression: "(6 × 400) + (3 × 400) = (6 + 3) × 400",
+    reveal: "Kita bisa menghitungnya dengan dua cara, dan keduanya memberi jawaban yang sama karena sifat distributif perkalian. Operasi campuran sangat berguna dalam olahraga!"
+  }
+];
+
+// ============ DATA: EXAMPLES ============
+const examplesData = [
+  {
+    title: "Pensil Liam",
+    icon: "fa-pencil",
+    color: "#FF6B47",
+    problem: "Liam membeli 4 kotak pensil warna. Setiap kotak berisi 12 pensil. Ia memberikan 15 pensil kepada adiknya, lalu membeli 8 pensil tambahan. Berapa pensil yang dimiliki Liam sekarang?",
+    expression: "(4 × 12) − 15 + 8",
+    steps: [
+      { q: "Hitung total pensil dari 4 kotak: 4 × 12", a: 48, hint: "4 kotak berisi 12 pensil setiap kotaknya, artinya 4 × 12.", explain: "4 × 12 = 48. Perkalian dikerjakan terlebih dahulu." },
+      { q: "Kurangi dengan 15 pensil yang diberikan: 48 − 15", a: 33, hint: "Setelah memberi 15 pensil kepada adik, berapa sisanya?", explain: "48 − 15 = 33. Sekarang Liam punya 33 pensil." },
+      { q: "Tambahkan 8 pensil baru: 33 + 8", a: 41, hint: "Liam membeli 8 pensil lagi. Tambahkan ke 33.", explain: "33 + 8 = 41. Jadi, Liam sekarang memiliki 41 pensil." }
+    ],
+    finalAnswer: 41,
+    unit: "pensil"
+  },
+  {
+    title: "Uang Sophia",
+    icon: "fa-money-bill-wave",
+    color: "#0E7C66",
+    problem: "Sophia memiliki $150. Ia membeli 3 buku cerita sains seharga $18 setiap buku dan sebuah tas seharga $45. Berapa sisa uang Sophia?",
+    expression: "150 − (3 × 18 + 45)",
+    steps: [
+      { q: "Hitung total harga buku: 3 × 18", a: 54, hint: "3 buku masing-masing $18, berapa totalnya?", explain: "3 × 18 = 54. Total harga buku adalah $54." },
+      { q: "Tambahkan harga tas: 54 + 45", a: 99, hint: "Tambahkan harga tas $45 ke total buku.", explain: "54 + 45 = 99. Total belanjaan Sophia adalah $99." },
+      { q: "Hitung sisa uang: 150 − 99", a: 51, hint: "Uang $150 dikurangi total belanja $99.", explain: "150 − 99 = 51. Sophia memiliki sisa uang $51." }
+    ],
+    finalAnswer: 51,
+    unit: "dolar"
+  },
+  {
+    title: "Buku Perpustakaan",
+    icon: "fa-book",
+    color: "#F5B82E",
+    problem: "Perpustakaan sekolah memiliki 8 rak berisi 45 buku fiksi dan 6 rak berisi 35 buku non-fiksi. Berapa total buku di rak-rak tersebut?",
+    expression: "(8 × 45) + (6 × 35)",
+    steps: [
+      { q: "Hitung total buku fiksi: 8 × 45", a: 360, hint: "8 rak dengan 45 buku per rak.", explain: "8 × 45 = 360. Ada 360 buku fiksi." },
+      { q: "Hitung total buku non-fiksi: 6 × 35", a: 210, hint: "6 rak dengan 35 buku per rak.", explain: "6 × 35 = 210. Ada 210 buku non-fiksi." },
+      { q: "Jumlahkan keduanya: 360 + 210", a: 570, hint: "Tambahkan buku fiksi dan non-fiksi.", explain: "360 + 210 = 570. Total buku di perpustakaan adalah 570." }
+    ],
+    finalAnswer: 570,
+    unit: "buku"
+  },
+  {
+    title: "Apel di Kebun",
+    icon: "fa-apple-whole",
+    color: "#FF6B47",
+    problem: "Sebuah kebun memanen 480 kg apel. Mereka membuang 30 kg apel yang busuk, lalu membagi apel bagus ke dalam kantong berisi 5 kg setiap kantong. Berapa kantong yang terisi?",
+    expression: "(480 − 30) ÷ 5",
+    steps: [
+      { q: "Hitung apel bagus: 480 − 30", a: 450, hint: "Kurangi total panen dengan apel busuk.", explain: "480 − 30 = 450. Ada 450 kg apel bagus." },
+      { q: "Bagi ke dalam kantong 5 kg: 450 ÷ 5", a: 90, hint: "Setiap kantong berisi 5 kg. Bagi 450 dengan 5.", explain: "450 ÷ 5 = 90. Mereka mengisi 90 kantong apel." }
+    ],
+    finalAnswer: 90,
+    unit: "kantong"
+  },
+  {
+    title: "Kelereng Lucas",
+    icon: "fa-circle",
+    color: "#0E7C66",
+    problem: "Ethan memiliki 144 kelereng. Ia membaginya sama rata kepada 6 teman. Salah satu temannya, Lucas, sudah memiliki 28 kelereng. Berapa total kelereng Lucas sekarang?",
+    expression: "(144 ÷ 6) + 28",
+    steps: [
+      { q: "Bagi kelereng ke 6 teman: 144 ÷ 6", a: 24, hint: "144 kelereng dibagi rata ke 6 teman.", explain: "144 ÷ 6 = 24. Setiap teman mendapat 24 kelereng." },
+      { q: "Tambahkan kelereng Lucas yang sudah ada: 24 + 28", a: 52, hint: "Lucas sudah punya 28 kelereng, tambahkan 24 yang baru diterima.", explain: "24 + 28 = 52. Lucas sekarang memiliki 52 kelereng." }
+    ],
+    finalAnswer: 52,
+    unit: "kelereng"
+  },
+  {
+    title: "Stiker Guru",
+    icon: "fa-star",
+    color: "#F5B82E",
+    problem: "Seorang guru memiliki 9 pak stiker berisi 24 stiker setiap pak. Ia ingin membagi semua stiker sama rata kepada 8 kelompok siswa. Berapa stiker yang diterima setiap kelompok?",
+    expression: "(9 × 24) ÷ 8",
+    steps: [
+      { q: "Hitung total stiker: 9 × 24", a: 216, hint: "9 pak dengan 24 stiker per pak.", explain: "9 × 24 = 216. Guru memiliki 216 stiker." },
+      { q: "Bagi ke 8 kelompok: 216 ÷ 8", a: 27, hint: "Bagi 216 stiker ke 8 kelompok.", explain: "216 ÷ 8 = 27. Setiap kelompok mendapat 27 stiker." }
+    ],
+    finalAnswer: 27,
+    unit: "stiker"
+  },
+  {
+    title: "Bola Olahraga",
+    icon: "fa-basketball",
+    color: "#FF6B47",
+    problem: "Sekolah dasar memesan 14 kotak bola olahraga. Setiap kotak berisi 8 bola basket dan 6 bola sepak. Berapa total bola yang dipesan sekolah?",
+    expression: "14 × (8 + 6)",
+    steps: [
+      { q: "Hitung total bola dalam satu kotak: 8 + 6", a: 14, hint: "Setiap kotak berisi 8 bola basket + 6 bola sepak.", explain: "8 + 6 = 14. Setiap kotak berisi 14 bola." },
+      { q: "Kalikan dengan 14 kotak: 14 × 14", a: 196, hint: "Ada 14 kotak, setiap kotak berisi 14 bola.", explain: "14 × 14 = 196. Sekolah memesan 196 bola total." }
+    ],
+    finalAnswer: 196,
+    unit: "bola"
+  },
+  {
+    title: "Tangki Air",
+    icon: "fa-droplet",
+    color: "#0E7C66",
+    problem: "Sebuah tangki air menampung 600 liter. Keran mengisi tangki dengan laju 25 liter per menit, sementara kebocoran menguras 5 liter per menit. Jika tangki awalnya kosong, berapa menit diperlukan untuk mengisi penuh?",
+    expression: "600 ÷ (25 − 5)",
+    steps: [
+      { q: "Hitung debit bersih: 25 − 5", a: 20, hint: "Air masuk 25 liter/menit, bocor 5 liter/menit. Berapa bersihnya?", explain: "25 − 5 = 20. Debit bersih adalah 20 liter per menit." },
+      { q: "Hitung waktu mengisi 600 liter: 600 ÷ 20", a: 30, hint: "Bagi kapasitas tangki dengan debit bersih.", explain: "600 ÷ 20 = 30. Diperlukan 30 menit untuk mengisi penuh tangki." }
+    ],
+    finalAnswer: 30,
+    unit: "menit"
+  },
+  {
+    title: "Pulpen Mia",
+    icon: "fa-pen-nib",
+    color: "#F5B82E",
+    problem: "Mia membeli 5 pak pulpen biru berisi 6 pulpen setiap pak, dan 4 pak pulpen merah berisi 8 pulpen setiap pak. Ia memberikan 22 pulpen kepada teman sekelasnya. Berapa sisa pulpen Mia?",
+    expression: "(5 × 6) + (4 × 8) − 22",
+    steps: [
+      { q: "Hitung total pulpen biru: 5 × 6", a: 30, hint: "5 pak dengan 6 pulpen per pak.", explain: "5 × 6 = 30. Mia punya 30 pulpen biru." },
+      { q: "Hitung total pulpen merah: 4 × 8", a: 32, hint: "4 pak dengan 8 pulpen per pak.", explain: "4 × 8 = 32. Mia punya 32 pulpen merah." },
+      { q: "Jumlahkan semua pulpen: 30 + 32", a: 62, hint: "Tambahkan pulpen biru dan merah.", explain: "30 + 32 = 62. Mia memiliki 62 pulpen total." },
+      { q: "Kurangi yang diberikan: 62 − 22", a: 40, hint: "Mia memberi 22 pulpen. Kurangi dari total.", explain: "62 − 22 = 40. Sisa pulpen Mia adalah 40." }
+    ],
+    finalAnswer: 40,
+    unit: "pulpen"
+  },
+  {
+    title: "Kursi Bioskop",
+    icon: "fa-film",
+    color: "#FF6B47",
+    problem: "Bioskop memiliki 25 baris dengan 18 kursi setiap baris. Untuk pertunjukan malam, terjual 385 tiket. Berapa kursi yang masih kosong?",
+    expression: "(25 × 18) − 385",
+    steps: [
+      { q: "Hitung total kursi: 25 × 18", a: 450, hint: "25 baris dengan 18 kursi per baris.", explain: "25 × 18 = 450. Bioskop memiliki 450 kursi." },
+      { q: "Kurangi dengan tiket terjual: 450 − 385", a: 65, hint: "Kurangi total kursi dengan tiket yang terjual.", explain: "450 − 385 = 65. Ada 65 kursi yang masih kosong." }
+    ],
+    finalAnswer: 65,
+    unit: "kursi"
+  }
+];
+
+// ============ DATA: MCQ PRACTICE ============
+const mcqData = [
+  { q: "12 + 5 × 8 − 6 = ?", options: ["94", "46", "130", "70"], correct: 1, explain: "5 × 8 = 40 → 12 + 40 − 6 = 46. Kerjakan perkalian dulu, lalu tambah/kurang dari kiri ke kanan." },
+  { q: "(15 + 7) × 3 − 12 = ?", options: ["54", "60", "36", "72"], correct: 0, explain: "Kurung dulu: 15 + 7 = 22 → 22 × 3 = 66 → 66 − 12 = 54." },
+  { q: "100 − 4 × 9 + 25 ÷ 5 = ?", options: ["89", "13", "69", "73"], correct: 2, explain: "4 × 9 = 36 dan 25 ÷ 5 = 5 → 100 − 36 + 5 = 69. Kali/bagi dulu, lalu tambah/kurang kiri ke kanan." },
+  { q: "8 × 6 + 12 ÷ 3 − 4 = ?", options: ["52", "56", "28", "48"], correct: 3, explain: "8 × 6 = 48 dan 12 ÷ 3 = 4 → 48 + 4 − 4 = 48. Jawaban yang benar adalah 48 (D)." },
+  { q: "(20 − 6) × 4 + 8 ÷ 2 = ?", options: ["64", "60", "32", "56"], correct: 1, explain: "Kurung: 20 − 6 = 14 → 14 × 4 = 56 dan 8 ÷ 2 = 4 → 56 + 4 = 60." },
+  { q: "7 + 3 × (10 − 4) + 5 = ?", options: ["84", "30", "24", "60"], correct: 1, explain: "Kurung: 10 − 4 = 6 → 3 × 6 = 18 → 7 + 18 + 5 = 30." },
+  { q: "50 ÷ 5 + 4 × 3 − 7 = ?", options: ["28", "15", "33", "10"], correct: 1, explain: "50 ÷ 5 = 10 dan 4 × 3 = 12 → 10 + 12 − 7 = 15." },
+  { q: "9 × 4 + (15 − 6) + 8 = ?", options: ["53", "35", "45", "69"], correct: 0, explain: "Kurung: 15 − 6 = 9 → 9 × 4 = 36 → 36 + 9 + 8 = 53." },
+  { q: "6 + 7 × 3 − 4 × 2 + 5 = ?", options: ["28", "24", "7", "39"], correct: 1, explain: "7 × 3 = 21 dan 4 × 2 = 8 → 6 + 21 − 8 + 5 = 24." },
+  { q: "(18 + 12) ÷ 6 × 4 − 9 = ?", options: ["11", "1", "21", "19"], correct: 0, explain: "Kurung: 18 + 12 = 30 → 30 ÷ 6 = 5 → 5 × 4 = 20 → 20 − 9 = 11." },
+  { q: "5 × 8 − 3 × 6 + 4 × 2 = ?", options: ["30", "34", "38", "66"], correct: 0, explain: "5 × 8 = 40, 3 × 6 = 18, 4 × 2 = 8 → 40 − 18 + 8 = 30. Jawaban 30 (A)." },
+  { q: "100 − (15 + 5) × 3 + 10 = ?", options: ["30", "270", "130", "50"], correct: 3, explain: "Kurung: 15 + 5 = 20 → 20 × 3 = 60 → 100 − 60 + 10 = 50. Jawaban 50 (D)." },
+  { q: "4 × 9 + 6 × 3 − 5 × 2 + 8 = ?", options: ["48", "52", "58", "60"], correct: 1, explain: "4×9=36, 6×3=18, 5×2=10 → 36 + 18 − 10 + 8 = 52. Jawaban 52 (B)." },
+  { q: "(24 ÷ 6 + 8) × 5 − 12 = ?", options: ["48", "28", "12", "52"], correct: 0, explain: "24 ÷ 6 = 4 → 4 + 8 = 12 → 12 × 5 = 60 → 60 − 12 = 48." },
+  { q: "6 × 5 + 4 × 3 − 2 × 6 + 7 × 2 = ?", options: ["44", "60", "72", "56"], correct: 0, explain: "6×5=30, 4×3=12, 2×6=12, 7×2=14 → 30 + 12 − 12 + 14 = 44." }
+];
+
+// ============ DATA: SHORT ANSWER ============
+const shortAnswerData = [
+  { q: "15 + 4 × 6 = ?", a: 39, explain: "4 × 6 = 24 → 15 + 24 = 39." },
+  { q: "(22 − 7) × 3 = ?", a: 45, explain: "22 − 7 = 15 → 15 × 3 = 45." },
+  { q: "8 × 7 − 12 = ?", a: 44, explain: "8 × 7 = 56 → 56 − 12 = 44." },
+  { q: "50 ÷ 5 + 3 × 4 = ?", a: 22, explain: "50 ÷ 5 = 10 dan 3 × 4 = 12 → 10 + 12 = 22." },
+  { q: "(14 + 6) × 2 − 8 = ?", a: 32, explain: "14 + 6 = 20 → 20 × 2 = 40 → 40 − 8 = 32." },
+  { q: "9 × 4 + 15 ÷ 3 = ?", a: 41, explain: "9 × 4 = 36 dan 15 ÷ 3 = 5 → 36 + 5 = 41." },
+  { q: "60 − 5 × 8 + 12 = ?", a: 32, explain: "5 × 8 = 40 → 60 − 40 + 12 = 32." },
+  { q: "(18 ÷ 2) × 5 + 7 = ?", a: 52, explain: "18 ÷ 2 = 9 → 9 × 5 = 45 → 45 + 7 = 52." },
+  { q: "7 × 3 + 4 × 5 − 6 = ?", a: 35, explain: "7 × 3 = 21 dan 4 × 5 = 20 → 21 + 20 − 6 = 35." },
+  { q: "100 − (8 × 4) + 12 ÷ 3 = ?", a: 72, explain: "8 × 4 = 32 dan 12 ÷ 3 = 4 → 100 − 32 + 4 = 72." }
+];
+
+// ============ DATA: STORY PROBLEMS KURIKULUM MERDEKA (EN + ID) ============
+const storyData = [
+  {
+    q_id: "Pak Budi memiliki 4 kotak berisi buku tulis. Setiap kotak berisi 12 buku. Sebanyak 15 buku dibagikan kepada muridnya, kemudian ia membeli lagi 8 buku tulis. Berapa banyak buku tulis Pak Budi sekarang?",
+    q_en: "Mr. Budi has 4 boxes containing notebooks. Each box contains 12 books. A total of 15 books were distributed to his students, then he bought 8 more notebooks. How many notebooks does Mr. Budi have now?",
+    options_id: ["41 buku", "48 buku", "33 buku", "56 buku"],
+    options_en: ["41 books", "48 books", "33 books", "56 books"],
+    correct: 0,
+    explain: "(4 × 12) − 15 + 8 = 48 − 15 + 8 = 41 buku."
+  },
+  {
+    q_id: "Sebuah toko roti membuat 180 kue bolu. Semua kue tersebut dimasukkan sama rata ke dalam 15 kardus. Pada siang hari, 9 kardus kue berhasil terjual. Berapa banyak kue bolu yang sudah terjual?",
+    q_en: "A bakery made 180 cakes. All the cakes were put equally into 15 boxes. In the afternoon, 9 boxes of cakes were sold. How many cakes were sold?",
+    options_id: ["96 kue", "108 kue", "120 kue", "72 kue"],
+    options_en: ["96 cakes", "108 cakes", "120 cakes", "72 cakes"],
+    correct: 1,
+    explain: "(180 ÷ 15) × 9 = 12 × 9 = 108 kue."
+  },
+  {
+    q_id: "Siti membawa uang Rp150.000,00 ke toko perlengkapan sekolah. Ia membeli 3 buku ensiklopedia seharga Rp18.000,00 per buku dan sebuah tempat pensil seharga Rp45.000,00. Berapa sisa uang Siti sekarang?",
+    q_en: "Siti brought Rp150,000.00 to a school supply store. She bought 3 encyclopedias at Rp18,000.00 each and a pencil case for Rp45,000.00. How much money does Siti have left?",
+    options_id: ["Rp51.000,00", "Rp63.000,00", "Rp42.000,00", "Rp69.000,00"],
+    options_en: ["Rp51,000.00", "Rp63,000.00", "Rp42,000.00", "Rp69,000.00"],
+    correct: 0,
+    explain: "150.000 − (3 × 18.000 + 45.000) = 150.000 − 99.000 = Rp51.000,00."
+  },
+  {
+    q_id: "Perpustakaan sekolah memiliki 8 rak buku cerita dengan masing-masing rak berisi 45 buku, serta 6 rak buku pelajaran dengan masing-masing rak berisi 35 buku. Berapa total seluruh buku di rak-rak tersebut?",
+    q_en: "The school library has 8 storybook shelves with 45 books each, and 6 textbook shelves with 35 books each. What is the total number of books on all the shelves?",
+    options_id: ["540 buku", "570 buku", "610 buku", "490 buku"],
+    options_en: ["540 books", "570 books", "610 books", "490 books"],
+    correct: 1,
+    explain: "(8 × 45) + (6 × 35) = 360 + 210 = 570 buku."
+  },
+  {
+    q_id: "Rian memiliki 144 butir kelereng. Kelereng tersebut dibagikan sama banyak kepada 6 temannya. Salah satu temannya, Edo, sebelumnya sudah memiliki 28 butir kelereng. Berapa jumlah kelereng Edo sekarang?",
+    q_en: "Rian has 144 marbles. The marbles were distributed equally among 6 of his friends. One of his friends, Edo, already had 28 marbles. How many marbles does Edo have now?",
+    options_id: ["48 butir", "52 butir", "54 butir", "62 butir"],
+    options_en: ["48 marbles", "52 marbles", "54 marbles", "62 marbles"],
+    correct: 1,
+    explain: "(144 ÷ 6) + 28 = 24 + 28 = 52 butir."
+  },
+  {
+    q_id: "Hasil panen mangga seorang petani adalah 480 kg. Sebanyak 30 kg mangga busuk dibuang. Mangga yang bagus dimasukkan ke dalam beberapa keranjang yang masing-masing memuat 5 kg. Berapa keranjang yang terisi mangga?",
+    q_en: "A farmer's mango harvest is 480 kg. A total of 30 kg of rotten mangoes were discarded. The good mangoes were put into several baskets, each containing 5 kg. How many baskets are filled with mangoes?",
+    options_id: ["85 keranjang", "90 keranjang", "96 keranjang", "102 keranjang"],
+    options_en: ["85 baskets", "90 baskets", "96 baskets", "102 baskets"],
+    correct: 1,
+    explain: "(480 − 30) ÷ 5 = 450 ÷ 5 = 90 keranjang."
+  },
+  {
+    q_id: "Sebuah gedung pertunjukan memiliki 25 baris kursi, dan tiap baris terdiri atas 18 kursi. Jika pada pertunjukan seni terjual 385 tiket penonton, berapa banyak kursi yang masih kosong?",
+    q_en: "A performance hall has 25 rows of seats, and each row consists of 18 seats. If 385 audience tickets were sold for the art show, how many seats are still empty?",
+    options_id: ["55 kursi", "65 kursi", "75 kursi", "85 kursi"],
+    options_en: ["55 seats", "65 seats", "75 seats", "85 seats"],
+    correct: 1,
+    explain: "(25 × 18) − 385 = 450 − 385 = 65 kursi."
+  },
+  {
+    q_id: "Kak Dimas mendapatkan upah mengajar les Rp14.000,00 per jam. Minggu lalu ia mengajar selama 12 jam. Dari uang tersebut, ia gunakan Rp45.000,00 untuk membeli buku dan Rp25.000,00 untuk ongkos angkutan. Berapa sisa uang upah Kak Dimas untuk ditabung?",
+    q_en: "Kak Dimas earns Rp14,000.00 per hour for tutoring. Last week he taught for 12 hours. From that money, he used Rp45,000.00 to buy books and Rp25,000.00 for transportation. How much of his tutoring money is left for savings?",
+    options_id: ["Rp98.000,00", "Rp108.000,00", "Rp112.000,00", "Rp124.000,00"],
+    options_en: ["Rp98,000.00", "Rp108,000.00", "Rp112,000.00", "Rp124,000.00"],
+    correct: 0,
+    explain: "(14.000 × 12) − (45.000 + 25.000) = 168.000 − 70.000 = Rp98.000,00."
+  },
+  {
+    q_id: "Bu Guru membeli 9 pak stiker bintang yang masing-masing pak berisi 24 lembar stiker. Semua stiker tersebut akan dibagikan sama banyak kepada 8 kelompok belajar. Berapa stiker yang didapatkan oleh tiap kelompok?",
+    q_en: "A teacher bought 9 packs of star stickers, each pack containing 24 sheets of stickers. All the stickers will be distributed equally to 8 study groups. How many stickers does each group get?",
+    options_id: ["24 stiker", "27 stiker", "32 stiker", "36 stiker"],
+    options_en: ["24 stickers", "27 stickers", "32 stickers", "36 stickers"],
+    correct: 1,
+    explain: "(9 × 24) ÷ 8 = 216 ÷ 8 = 27 stiker."
+  },
+  {
+    q_id: "Koperasi sekolah membeli 5 pak pulpen biru (isi 6 buah per pak) dan 4 pak pulpen hitam (isi 8 buah per pak). Jika sebanyak 22 pulpen telah dibeli oleh siswa, berapa pulpen yang tersisa di koperasi?",
+    q_en: "The school cooperative bought 5 packs of blue pens (6 pieces per pack) and 4 packs of black pens (8 pieces per pack). If 22 pens have been bought by students, how many pens are left in the cooperative?",
+    options_id: ["38 pulpen", "40 pulpen", "42 pulpen", "46 pulpen"],
+    options_en: ["38 pens", "40 pens", "42 pens", "46 pens"],
+    correct: 1,
+    explain: "(5 × 6) + (4 × 8) − 22 = 30 + 32 − 22 = 40 pulpen."
+  },
+  {
+    q_id: "Sebuah pabrik minuman memproduksi 750 botol sari apel pada hari Senin dan 650 botol pada hari Selasa. Seluruh botol dimasukkan ke dalam kardus yang masing-masing memuat 20 botol. Berapa kardus yang dibutuhkan?",
+    q_en: "A beverage factory produced 750 bottles of apple juice on Monday and 650 bottles on Tuesday. All the bottles were put into boxes, each containing 20 bottles. How many boxes are needed?",
+    options_id: ["65 kardus", "70 kardus", "75 kardus", "80 kardus"],
+    options_en: ["65 boxes", "70 boxes", "75 boxes", "80 boxes"],
+    correct: 1,
+    explain: "(750 + 650) ÷ 20 = 1400 ÷ 20 = 70 kardus."
+  },
+  {
+    q_id: "Dalam lomba cerdas cermat, setiap jawaban benar bernilai +15 dan jawaban salah bernilai -5. Jika regu Ahmad menjawab benar 8 soal dan salah 3 soal, berapa total nilai akhir regu Ahmad?",
+    q_en: "In a quiz competition, each correct answer is worth +15 and each wrong answer is worth -5. If Ahmad's team answers 8 questions correctly and 3 questions wrongly, what is the final score of Ahmad's team?",
+    options_id: ["95", "105", "115", "120"],
+    options_en: ["95", "105", "115", "120"],
+    correct: 1,
+    explain: "(8 × 15) − (3 × 5) = 120 − 15 = 105."
+  },
+  {
+    q_id: "Peternak ayam mengumpulkan 360 butir telur. Sebanyak 8 rak telur (berisi 30 butir per rak) telah terjual ke pasar. Sisa telur dimasukkan sama banyak ke dalam 6 wadah keranjang. Berapa isi telur pada tiap keranjang?",
+    q_en: "A chicken farmer collected 360 eggs. A total of 8 egg racks (containing 30 eggs per rack) were sold to the market. The remaining eggs were put equally into 6 baskets. How many eggs are in each basket?",
+    options_id: ["15 butir", "20 butir", "24 butir", "30 butir"],
+    options_en: ["15 eggs", "20 eggs", "24 eggs", "30 eggs"],
+    correct: 1,
+    explain: "(360 − (8 × 30)) ÷ 6 = (360 − 240) ÷ 6 = 120 ÷ 6 = 20 butir."
+  },
+  {
+    q_id: "Ibu membawa uang Rp200.000,00 saat berbelanja. Ibu membeli 4 meter kain katun seharga Rp16.000,00 per meter dan 2 meter kain sutra seharga Rp22.000,00 per meter. Berapa uang kembalian yang diterima Ibu?",
+    q_en: "Mother brought Rp200,000.00 when shopping. Mother bought 4 meters of cotton fabric at Rp16,000.00 per meter and 2 meters of silk fabric at Rp22,000.00 per meter. How much change did Mother receive?",
+    options_id: ["Rp88.000,00", "Rp92.000,00", "Rp96.000,00", "Rp104.000,00"],
+    options_en: ["Rp88,000.00", "Rp92,000.00", "Rp96,000.00", "Rp104,000.00"],
+    correct: 1,
+    explain: "200.000 − (4 × 16.000 + 2 × 22.000) = 200.000 − 108.000 = Rp92.000,00."
+  },
+  {
+    q_id: "Kegiatan jalan santai diikuti oleh 6 kelompok warga (masing-masing 14 orang) dan 8 kelompok pelajar (masing-masing 12 orang). Jika ada 18 orang yang berhalangan hadir karena sakit, berapa peserta yang sebenarnya mengikuti jalan santai?",
+    q_en: "A walking activity was attended by 6 community groups (14 people each) and 8 student groups (12 people each). If 18 people could not attend due to illness, how many participants actually took part in the walk?",
+    options_id: ["162 orang", "172 orang", "180 orang", "198 orang"],
+    options_en: ["162 people", "172 people", "180 people", "198 people"],
+    correct: 0,
+    explain: "(6 × 14) + (8 × 12) − 18 = 84 + 96 − 18 = 162 orang."
+  },
+  {
+    q_id: "Mesin cetak mampu mencetak 450 lembar brosur per jam dan dioperasikan selama 6 jam. Sebanyak 270 lembar ternyata tintanya buram dan disisihkan. Lembar brosur yang bagus dibundel menjadi paket yang masing-masing berisi 30 lembar. Berapa banyak bundel brosur yang terbentuk?",
+    q_en: "A printing machine can print 450 brochures per hour and was operated for 6 hours. A total of 270 sheets had blurry ink and were set aside. The good brochures were bundled into packages, each containing 30 sheets. How many brochure bundles were formed?",
+    options_id: ["78 bundel", "81 bundel", "85 bundel", "90 bundel"],
+    options_en: ["78 bundles", "81 bundles", "85 bundles", "90 bundles"],
+    correct: 1,
+    explain: "((450 × 6) − 270) ÷ 30 = (2700 − 270) ÷ 30 = 2430 ÷ 30 = 81 bundel."
+  },
+  {
+    q_id: "Fajar memiliki koleksi 250 perangko. Ia membeli 6 lembar perangko baru yang masing-masing lembar berisi 25 perangko. Kemudian ia memberikan 45 perangko gandanya kepada temannya. Berapa banyak perangko Fajar sekarang?",
+    q_en: "Fajar has a collection of 250 stamps. He bought 6 new sheets of stamps, each sheet containing 25 stamps. Then he gave 45 duplicate stamps to his friend. How many stamps does Fajar have now?",
+    options_id: ["345 perangko", "355 perangko", "365 perangko", "375 perangko"],
+    options_en: ["345 stamps", "355 stamps", "365 stamps", "375 stamps"],
+    correct: 1,
+    explain: "250 + (6 × 25) − 45 = 250 + 150 − 45 = 355 perangko."
+  },
+  {
+    q_id: "SD Harapan Bangsa memesan 14 kardus peralatan olahraga. Setiap kardus berisi 8 bola basket dan 6 bola voli. Berapa total seluruh bola yang dipesan sekolah tersebut?",
+    q_en: "SD Harapan Bangsa ordered 14 boxes of sports equipment. Each box contains 8 basketballs and 6 volleyballs. What is the total number of balls ordered by the school?",
+    options_id: ["182 bola", "196 bola", "204 bola", "210 bola"],
+    options_en: ["182 balls", "196 balls", "204 balls", "210 balls"],
+    correct: 1,
+    explain: "14 × (8 + 6) = 14 × 14 = 196 bola."
+  },
+  {
+    q_id: "Seorang penjual bunga memiliki 240 tangkai mawar merah dan 160 tangkai mawar putih. Seluruh mawar dirangkai menjadi buket bunga yang masing-masing berisi 8 tangkai. Tiap buket dijual seharga Rp15.000,00. Berapa uang yang diperoleh jika seluruh buket terjual?",
+    q_en: "A florist has 240 red roses and 160 white roses. All the roses were arranged into bouquets, each containing 8 stems. Each bouquet was sold for Rp15,000.00. How much money was earned if all the bouquets were sold?",
+    options_id: ["Rp650.000,00", "Rp700.000,00", "Rp750.000,00", "Rp800.000,00"],
+    options_en: ["Rp650,000.00", "Rp700,000.00", "Rp750,000.00", "Rp800,000.00"],
+    correct: 2,
+    explain: "((240 + 160) ÷ 8) × 15.000 = (400 ÷ 8) × 15.000 = 50 × 15.000 = Rp750.000,00."
+  },
+  {
+    q_id: "Doni memiliki tabungan Rp120.000,00. Saat ulang tahun, ia mendapat hadiah uang Rp45.000,00 dari kakeknya. Doni lalu membeli 5 miniatur mobil dengan harga Rp19.000,00 per buah. Berapa sisa uang tabungan Doni?",
+    q_en: "Doni has savings of Rp120,000.00. On his birthday, he received a gift of Rp45,000.00 from his grandfather. Doni then bought 5 car miniatures at Rp19,000.00 each. How much money does Doni have left?",
+    options_id: ["Rp60.000,00", "Rp65.000,00", "Rp70.000,00", "Rp75.000,00"],
+    options_en: ["Rp60,000.00", "Rp65,000.00", "Rp70,000.00", "Rp75,000.00"],
+    correct: 2,
+    explain: "(120.000 + 45.000) − (5 × 19.000) = 165.000 − 95.000 = Rp70.000,00."
+  },
+  {
+    q_id: "Sebuah tandon air berkapasitas 600 liter dalam keadaan kosong. Kran air mengisi tandon dengan debit 25 liter per menit, namun ada kebocoran di dasar tandon sebesar 5 liter per menit. Berapa menit waktu yang dibutuhkan hingga tandon terisi penuh?",
+    q_en: "A water tank with a capacity of 600 liters is empty. The tap fills the tank at a rate of 25 liters per minute, but there is a leak at the bottom of the tank of 5 liters per minute. How many minutes does it take to fill the tank completely?",
+    options_id: ["24 menit", "28 menit", "30 menit", "35 menit"],
+    options_en: ["24 minutes", "28 minutes", "30 minutes", "35 minutes"],
+    correct: 2,
+    explain: "600 ÷ (25 − 5) = 600 ÷ 20 = 30 menit."
+  },
+  {
+    q_id: "Dalam pameran seni lukis, 7 rombongan kelas mengirimkan masing-masing 16 lukisan, dan 4 rombongan kelas lainnya mengirimkan masing-masing 12 lukisan. Dari total tersebut, juri memilih 35 lukisan terbaik untuk dipajang di aula. Berapa lukisan yang tidak terpilih?",
+    q_en: "In a painting exhibition, 7 class groups sent 16 paintings each, and 4 other class groups sent 12 paintings each. From the total, the judges selected 35 best paintings to be displayed in the hall. How many paintings were not selected?",
+    options_id: ["120 lukisan", "125 lukisan", "130 lukisan", "135 lukisan"],
+    options_en: ["120 paintings", "125 paintings", "130 paintings", "135 paintings"],
+    correct: 1,
+    explain: "(7 × 16) + (4 × 12) − 35 = 112 + 48 − 35 = 125 lukisan."
+  },
+  {
+    q_id: "Ibu membuat 280 butir nastar. Sebanyak 40 butir disisihkan untuk keluarga di rumah, sedangkan sisanya dimasukkan sama rata ke dalam 12 toples. Jika 5 toples dibagikan kepada tetangga, berapa butir kue nastar yang dibagikan tersebut?",
+    q_en: "Mother made 280 pineapple tarts. A total of 40 tarts were set aside for the family at home, while the rest were put equally into 12 jars. If 5 jars were distributed to neighbors, how many pineapple tarts were distributed?",
+    options_id: ["80 butir", "90 butir", "100 butir", "120 butir"],
+    options_en: ["80 tarts", "90 tarts", "100 tarts", "120 tarts"],
+    correct: 2,
+    explain: "((280 − 40) ÷ 12) × 5 = (240 ÷ 12) × 5 = 20 × 5 = 100 butir."
+  },
+  {
+    q_id: "Pedagang buah menerima kiriman 9 peti jeruk yang masing-masing berisi 48 buah. Setelah diperiksa, terdapat 24 buah jeruk yang busuk dan dibuang. Jeruk yang masih segar dikemas ke dalam kantong plastik yang masing-masing berisi 6 buah. Berapa kantong plastik yang dibutuhkan?",
+    q_en: "A fruit seller received a shipment of 9 crates of oranges, each containing 48 fruits. After checking, there were 24 rotten oranges and were discarded. The fresh oranges were packed into plastic bags, each containing 6 fruits. How many plastic bags are needed?",
+    options_id: ["66 kantong", "68 kantong", "70 kantong", "72 kantong"],
+    options_en: ["66 bags", "68 bags", "70 bags", "72 bags"],
+    correct: 1,
+    explain: "((9 × 48) − 24) ÷ 6 = (432 − 24) ÷ 6 = 408 ÷ 6 = 68 kantong."
+  },
+  {
+    q_id: "Rombongan karya wisata sekolah terdiri atas 28 siswa dan 3 guru pendamping. Biaya tiket masuk untuk setiap siswa adalah Rp15.000,00 sedangkan tiket untuk guru adalah Rp20.000,00. Berapa total biaya tiket masuk untuk seluruh rombongan?",
+    q_en: "A school field trip group consists of 28 students and 3 accompanying teachers. The entrance ticket fee for each student is Rp15,000.00 while the ticket for teachers is Rp20,000.00. What is the total entrance ticket fee for the entire group?",
+    options_id: ["Rp460.000,00", "Rp480.000,00", "Rp500.000,00", "Rp520.000,00"],
+    options_en: ["Rp460,000.00", "Rp480,000.00", "Rp500,000.00", "Rp520,000.00"],
+    correct: 1,
+    explain: "(28 × 15.000) + (3 × 20.000) = 420.000 + 60.000 = Rp480.000,00."
+  },
+  {
+    q_id: "Sebuah buku cerita tebalnya 320 halaman. Lani membaca 25 halaman per hari dari hari Senin sampai Jumat, serta 30 halaman per hari pada hari Sabtu dan Minggu. Berapa halaman buku yang belum dibaca Lani setelah 1 minggu penuh?",
+    q_en: "A storybook is 320 pages thick. Lani reads 25 pages per day from Monday to Friday, and 30 pages per day on Saturday and Sunday. How many pages of the book has Lani not read after 1 full week?",
+    options_id: ["125 halaman", "135 halaman", "145 halaman", "155 halaman"],
+    options_en: ["125 pages", "135 pages", "145 pages", "155 pages"],
+    correct: 1,
+    explain: "320 − ((5 × 25) + (2 × 30)) = 320 − (125 + 60) = 320 − 185 = 135 halaman."
+  },
+  {
+    q_id: "Toko perlengkapan olahraga memiliki stok 210 bola kasti. Pemilik toko menambah pasokan 8 tabung bola baru yang tiap tabung berisi 3 bola. Kemudian seorang pembina pramuka membeli 45 bola. Berapa sisa bola kasti di toko tersebut?",
+    q_en: "A sports equipment store has a stock of 210 kickballs. The store owner added a supply of 8 new tubes of balls, each tube containing 3 balls. Then a scout leader bought 45 balls. How many kickballs are left in the store?",
+    options_id: ["185 bola", "189 bola", "192 bola", "199 bola"],
+    options_en: ["185 balls", "189 balls", "192 balls", "199 balls"],
+    correct: 1,
+    explain: "210 + (8 × 3) − 45 = 210 + 24 − 45 = 189 bola."
+  },
+  {
+    q_id: "Bagas memiliki tabungan Rp85.000,00. Ia membantu ayahnya membersihkan kebun selama 4 jam dan diberi upah Rp12.000,00 per jam. Setelah itu, Bagas membeli sandal baru seharga Rp64.000,00. Berapa sisa uang Bagas sekarang?",
+    q_en: "Bagas has savings of Rp85,000.00. He helped his father clean the garden for 4 hours and was paid Rp12,000.00 per hour. After that, Bagas bought new sandals for Rp64,000.00. How much money does Bagas have now?",
+    options_id: ["Rp65.000,00", "Rp69.000,00", "Rp73.000,00", "Rp77.000,00"],
+    options_en: ["Rp65,000.00", "Rp69,000.00", "Rp73,000.00", "Rp77,000.00"],
+    correct: 1,
+    explain: "85.000 + (4 × 12.000) − 64.000 = 85.000 + 48.000 − 64.000 = Rp69.000,00."
+  },
+  {
+    q_id: "Laboratorium IPA menerima kiriman 3 kotak besar tabung reaksi (berisi 60 tabung per kotak) dan 2 kotak kecil (berisi 45 tabung per kotak). Saat dibuka, 28 tabung reaksi pecah. Berapa tabung reaksi yang utuh dan siap digunakan?",
+    q_en: "The science laboratory received a shipment of 3 large boxes of test tubes (containing 60 tubes per box) and 2 small boxes (containing 45 tubes per box). When opened, 28 test tubes were broken. How many test tubes are intact and ready to use?",
+    options_id: ["232 tabung", "242 tabung", "248 tabung", "252 tabung"],
+    options_en: ["232 tubes", "242 tubes", "248 tubes", "252 tubes"],
+    correct: 1,
+    explain: "(3 × 60) + (2 × 45) − 28 = 180 + 90 − 28 = 242 tabung."
+  },
+  {
+    q_id: "Panitia bakti sosial mengumpulkan 5 karung beras jenis A seberat masing-masing 25 kg dan 4 karung beras jenis B seberat masing-masing 15 kg. Seluruh beras tersebut dibagikan sama rata kepada 37 keluarga penerima manfaat. Berapa kilogram beras yang diterima masing-masing keluarga?",
+    q_en: "The social service committee collected 5 sacks of type A rice weighing 25 kg each and 4 sacks of type B rice weighing 15 kg each. All the rice was distributed equally to 37 beneficiary families. How many kilograms of rice did each family receive?",
+    options_id: ["4 kg", "5 kg", "6 kg", "7 kg"],
+    options_en: ["4 kg", "5 kg", "6 kg", "7 kg"],
+    correct: 1,
+    explain: "((5 × 25) + (4 × 15)) ÷ 37 = (125 + 60) ÷ 37 = 185 ÷ 37 = 5 kg."
+  }
+];
+
+// ============ STATE ============
+const totalSlides = 8;
+let currentSlide = 1;
+let studentName = '';
+
+const demoSteps = [
+  { expr: "( 8 + 4 ) × 3 − 6 ÷ 2", text: "Mulai dari ekspresi awal. Ada kurung, kali, bagi, kurang — kerjakan bertahap.", highlight: 0 },
+  { expr: "12 × 3 − 6 ÷ 2", text: "Langkah 1: Kerjakan kurung terlebih dahulu. (8 + 4) = 12, sehingga ekspresi menjadi 12 × 3 − 6 ÷ 2.", highlight: 1 },
+  { expr: "36 − 3", text: "Langkah 2: Kerjakan kali dan bagi dari kiri ke kanan. 12 × 3 = 36 dan 6 ÷ 2 = 3, sehingga ekspresi menjadi 36 − 3.", highlight: 2 },
+  { expr: "33", text: "Langkah 3: Terakhir, kerjakan tambah/kurang dari kiri ke kanan. 36 − 3 = 33. Selesai!", highlight: 3 }
+];
+let demoStep = 0;
+
+let exampleState = {
+  current: 0,
+  stepsDone: {}
+};
+
+let practiceState = {
+  tab: 'mcq',
+  mcqCurrent: 0,
+  shortCurrent: 0,
+  mcqAnswers: new Array(15).fill(null),
+  mcqSelected: new Array(15).fill(null),
+  shortAnswers: new Array(10).fill(null),
+  shortInput: new Array(10).fill(null),
+  timer: null,
+  startTime: 0,
+  elapsed: 0,
+  running: false
+};
+
+let storyState = {
+  current: 0,
+  answers: new Array(30).fill(null),
+  selected: new Array(30).fill(null),
+  finished: false,
+  lang: 'id', // Default ke Indonesia
+  timer: null,
+  startTime: 0,
+  elapsed: 0,
+  running: false
+};
+
+let reflectionRating = 0;
+
+// ============ INIT ============
+function init() {
+  const dotsContainer = document.getElementById('slideDots');
+  const slideNames = ['Cover', 'Pemantik', 'Materi', 'Contoh', 'Latihan', 'Soal Cerita', 'Hasil', 'Penutup'];
+  for (let i = 1; i <= totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'progress-dot' + (i === 1 ? ' active' : '');
+    dot.title = slideNames[i-1];
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  }
+  
+  renderScenarios();
+  renderExampleNav();
+  renderExample();
+  renderPracticeNav();
+  renderPracticeQuestion();
+  renderStoryNav();
+  renderStoryQuestion();
+  
+  const saved = localStorage.getItem('studentName');
+  if (saved) {
+    document.getElementById('studentName').value = saved;
+    checkName();
+  }
+}
+
+// ============ SLIDE NAVIGATION ============
+function goToSlide(n) {
+  if (n < 1 || n > totalSlides) return;
+  if (n > 1 && !studentName) {
+    showToast('Mohon tuliskan namamu dulu di slide cover!');
+    return;
+  }
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.querySelector(`[data-slide="${getSlideKey(n)}"]`).classList.add('active');
+  document.querySelectorAll('.progress-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n - 1);
+    d.classList.toggle('completed', i < n - 1);
+  });
+  currentSlide = n;
+  document.getElementById('currentSlideNum').textContent = n;
+  document.getElementById('prevBtn').disabled = n === 1;
+  document.getElementById('nextBtn').disabled = n === totalSlides;
+  
+  if (n === 7) updateResults();
+  if (n === 8) updateThanks();
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function getSlideKey(n) {
+  const keys = ['cover', 'trigger', 'material', 'examples', 'practice', 'story', 'result', 'thanks'];
+  return keys[n - 1];
+}
+
+function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+
+// ============ COVER ============
+function checkName() {
+  const name = document.getElementById('studentName').value.trim();
+  const btn = document.getElementById('startBtn');
+  btn.disabled = name.length < 2;
+}
+
+function startSession() {
+  const name = document.getElementById('studentName').value.trim();
+  if (name.length < 2) return;
+  studentName = name;
+  localStorage.setItem('studentName', name);
+  
+  document.getElementById('studentBadge').classList.remove('hidden');
+  document.getElementById('studentBadge').classList.add('inline-flex');
+  document.getElementById('studentNameDisplay').textContent = name;
+  document.getElementById('globalScore').classList.remove('hidden');
+  document.getElementById('globalScore').classList.add('inline-flex');
+  
+  showToast(`Selamat datang, ${name}! Mari belajar.`);
+  goToSlide(2);
+}
+
+// ============ TRIGGER ============
+function renderScenarios() {
+  const container = document.getElementById('scenarioGrid');
+  container.innerHTML = scenariosData.map((s, i) => `
+    <div class="scenario-card" id="scenario${i}" onclick="toggleScenario(${i})">
+      <div class="scenario-icon" style="background: ${s.color};">
+        <i class="fa-solid ${s.icon}"></i>
+      </div>
+      <h3 class="font-display font-bold text-xl mb-2">${s.title}</h3>
+      <p class="text-sm mb-4" style="color: var(--fg-2);">${s.text}</p>
+      <div class="reveal" id="scenarioReveal${i}">
+        <div class="math-expr text-base mb-3" style="font-size: 16px; padding: 12px 16px;">${s.expression}</div>
+        <div class="hint-box"><i class="fa-solid fa-lightbulb mr-2"></i>${s.reveal}</div>
+      </div>
+      <div class="text-sm font-display font-semibold mt-3" style="color: var(--primary);" id="scenarioToggle${i}">
+        <i class="fa-solid fa-chevron-down mr-1"></i> Klik untuk lihat hubungannya
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleScenario(i) {
+  const card = document.getElementById(`scenario${i}`);
+  const reveal = document.getElementById(`scenarioReveal${i}`);
+  const toggle = document.getElementById(`scenarioToggle${i}`);
+  card.classList.toggle('expanded');
+  reveal.classList.toggle('show');
+  if (reveal.classList.contains('show')) {
+    toggle.innerHTML = '<i class="fa-solid fa-chevron-up mr-1"></i> Sembunyikan';
+  } else {
+    toggle.innerHTML = '<i class="fa-solid fa-chevron-down mr-1"></i> Klik untuk lihat hubungannya';
+  }
+}
+
+// ============ MATERIAL DEMO ============
+function nextDemoStep() {
+  if (demoStep < demoSteps.length - 1) demoStep++;
+  else demoStep = 0;
+  updateDemo();
+}
+
+function resetDemo() {
+  demoStep = 0;
+  updateDemo();
+}
+
+function updateDemo() {
+  const step = demoSteps[demoStep];
+  document.getElementById('demoExpression').textContent = step.expr;
+  document.getElementById('demoExplanation').innerHTML = `<div class="explanation-box"><strong>${step.text}</strong></div>`;
+  document.getElementById('demoBtnText').textContent = demoStep === demoSteps.length - 1 ? 'Selesai - Ulangi' : `Langkah ${demoStep + 1}`;
+  for (let i = 1; i <= 3; i++) document.getElementById(`opsStep${i}`).classList.remove('highlight');
+  if (step.highlight > 0) document.getElementById(`opsStep${step.highlight}`).classList.add('highlight');
+}
+
+// ============ EXAMPLES ============
+function renderExampleNav() {
+  const container = document.getElementById('exampleNav');
+  container.innerHTML = examplesData.map((e, i) => {
+    const done = isExampleComplete(i);
+    return `<button class="q-nav-pill ${done ? 'correct' : ''} ${i === exampleState.current ? 'active' : ''}" onclick="goToExample(${i})">${i + 1}</button>`;
+  }).join('');
+}
+
+function isExampleComplete(idx) {
+  const ex = examplesData[idx];
+  if (!ex) return false;
+  return (exampleState.stepsDone[idx] || []).length === ex.steps.length;
+}
+
+function goToExample(i) {
+  exampleState.current = i;
+  renderExample();
+  renderExampleNav();
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+function nextExample() { if (exampleState.current < examplesData.length - 1) goToExample(exampleState.current + 1); }
+function prevExample() { if (exampleState.current > 0) goToExample(exampleState.current - 1); }
+
+function renderExample() {
+  const ex = examplesData[exampleState.current];
+  document.getElementById('exampleNum').textContent = exampleState.current + 1;
+  const doneSteps = exampleState.stepsDone[exampleState.current] || [];
+  
+  const stepsHTML = ex.steps.map((step, i) => {
+    const isDone = doneSteps.includes(i);
+    const isNext = !isDone && (i === 0 || doneSteps.includes(i - 1));
+    return `
+      <div class="step-item ${isDone ? 'done' : (isNext ? 'active' : '')}" id="exampleStep_${exampleState.current}_${i}">
+        <div class="step-number">${isDone ? '<i class="fa-solid fa-check"></i>' : (i + 1)}</div>
+        <div class="flex-1">
+          <div class="font-display font-semibold mb-2">${step.q}</div>
+          <div class="flex flex-wrap items-center gap-3">
+            <input type="number" class="input-field" id="exampleInput_${exampleState.current}_${i}" placeholder="Jawaban..." style="max-width: 200px;" ${isDone ? 'disabled' : ''} value="${isDone ? step.a : ''}" onkeydown="if(event.key==='Enter') checkExampleStep(${exampleState.current}, ${i})">
+            ${!isDone ? `
+              <button class="btn btn-primary" onclick="checkExampleStep(${exampleState.current}, ${i})"><i class="fa-solid fa-check"></i> Periksa</button>
+              <button class="btn btn-ghost" onclick="showHint(${exampleState.current}, ${i})"><i class="fa-solid fa-lightbulb"></i> Petunjuk</button>
+            ` : '<span class="badge badge-green"><i class="fa-solid fa-check-circle"></i> Benar</span>'}
+          </div>
+          <div id="exampleHint_${exampleState.current}_${i}"></div>
+          <div id="exampleFeedback_${exampleState.current}_${i}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  const finalDone = doneSteps.length === ex.steps.length;
+  
+  document.getElementById('exampleContainer').innerHTML = `
+    <div class="flex items-start gap-4 mb-6">
+      <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: ${ex.color}; color: white;">
+        <i class="fa-solid ${ex.icon} text-xl"></i>
+      </div>
+      <div class="flex-1">
+        <div class="text-sm font-display font-semibold mb-1" style="color: ${ex.color};">CONTOH ${exampleState.current + 1} DARI 10</div>
+        <h3 class="font-display font-bold text-2xl mb-3">${ex.title}</h3>
+        <p class="text-base mb-4" style="color: var(--fg-2);">${ex.problem}</p>
+        <div class="math-expr">${ex.expression} = ?</div>
+      </div>
+    </div>
+    <div class="border-t pt-6" style="border-color: var(--border);">
+      <div class="font-display font-bold text-lg mb-4">Kerjakan langkah demi langkah:</div>
+      ${stepsHTML}
+    </div>
+    ${finalDone ? `<div class="mt-6 correct-box bounce-in"><div class="font-display font-bold text-lg mb-2"><i class="fa-solid fa-trophy mr-2"></i>Hebat! Jawaban akhir: <span style="color: var(--green);">${ex.finalAnswer} ${ex.unit}</span></div><div class="text-sm">Kamu telah menyelesaikan contoh ini dengan benar. Lanjut ke contoh berikutnya!</div></div>` : ''}
+  `;
+}
+
+function checkExampleStep(exIdx, stepIdx) {
+  const input = document.getElementById(`exampleInput_${exIdx}_${stepIdx}`);
+  const val = parseInt(input.value);
+  const step = examplesData[exIdx].steps[stepIdx];
+  const feedback = document.getElementById(`exampleFeedback_${exIdx}_${stepIdx}`);
+  
+  if (isNaN(val)) { showToast('Masukkan jawaban dulu!'); return; }
+  
+  if (val === step.a) {
+    input.classList.remove('incorrect');
+    input.classList.add('correct');
+    input.disabled = true;
+    feedback.innerHTML = `<div class="correct-box"><i class="fa-solid fa-check-circle mr-2"></i>${step.explain}</div>`;
+    if (!exampleState.stepsDone[exIdx]) exampleState.stepsDone[exIdx] = [];
+    if (!exampleState.stepsDone[exIdx].includes(stepIdx)) exampleState.stepsDone[exIdx].push(stepIdx);
+    setTimeout(() => { renderExample(); renderExampleNav(); updateGlobalScore(); }, 800);
+  } else {
+    input.classList.add('incorrect');
+    input.classList.add('shake');
+    feedback.innerHTML = `<div class="incorrect-box"><i class="fa-solid fa-circle-xmark mr-2"></i>Belum tepat. Coba lagi atau gunakan petunjuk.</div>`;
+    setTimeout(() => input.classList.remove('shake'), 500);
+  }
+}
+
+function showHint(exIdx, stepIdx) {
+  const step = examplesData[exIdx].steps[stepIdx];
+  document.getElementById(`exampleHint_${exIdx}_${stepIdx}`).innerHTML = `<div class="hint-box"><i class="fa-solid fa-lightbulb mr-2"></i>${step.hint}</div>`;
+}
+
+// ============ PRACTICE ============
+function switchPracticeTab(tab) {
+  practiceState.tab = tab;
+  document.getElementById('tabMcq').classList.toggle('active', tab === 'mcq');
+  document.getElementById('tabShort').classList.toggle('active', tab === 'short');
+  renderPracticeNav();
+  renderPracticeQuestion();
+  resetPracticeTimer();
+  startPracticeTimer();
+}
+
+function renderPracticeNav() {
+  const container = document.getElementById('practiceNav');
+  if (practiceState.tab === 'mcq') {
+    container.innerHTML = mcqData.map((q, i) => {
+      const ans = practiceState.mcqAnswers[i];
+      const cls = ans === null ? 'unanswered' : (ans ? 'correct' : 'incorrect');
+      return `<button class="q-nav-pill ${cls} ${i === practiceState.mcqCurrent ? 'active' : ''}" onclick="goToMcq(${i})">${i + 1}</button>`;
+    }).join('');
+  } else {
+    container.innerHTML = shortAnswerData.map((q, i) => {
+      const ans = practiceState.shortAnswers[i];
+      const cls = ans === null ? 'unanswered' : (ans ? 'correct' : 'incorrect');
+      return `<button class="q-nav-pill ${cls} ${i === practiceState.shortCurrent ? 'active' : ''}" onclick="goToShort(${i})">${i + 1}</button>`;
+    }).join('');
+  }
+}
+
+function goToMcq(i) {
+  practiceState.mcqCurrent = i;
+  renderPracticeQuestion();
+  renderPracticeNav();
+  resetPracticeTimer();
+  startPracticeTimer();
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function goToShort(i) {
+  practiceState.shortCurrent = i;
+  renderPracticeQuestion();
+  renderPracticeNav();
+  resetPracticeTimer();
+  startPracticeTimer();
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function nextPractice() {
+  if (practiceState.tab === 'mcq') {
+    if (practiceState.mcqCurrent < mcqData.length - 1) goToMcq(practiceState.mcqCurrent + 1);
+    else { switchPracticeTab('short'); }
+  } else {
+    if (practiceState.shortCurrent < shortAnswerData.length - 1) goToShort(practiceState.shortCurrent + 1);
+  }
+}
+
+function prevPractice() {
+  if (practiceState.tab === 'mcq') {
+    if (practiceState.mcqCurrent > 0) goToMcq(practiceState.mcqCurrent - 1);
+  } else {
+    if (practiceState.shortCurrent > 0) goToShort(practiceState.shortCurrent - 1);
+    else { switchPracticeTab('mcq'); goToMcq(mcqData.length - 1); }
+  }
+}
+
+function renderPracticeQuestion() {
+  const container = document.getElementById('practiceQuestionContainer');
+  const progress = document.getElementById('practiceProgress');
+  
+  if (practiceState.tab === 'mcq') {
+    const i = practiceState.mcqCurrent;
+    const q = mcqData[i];
+    const answered = practiceState.mcqAnswers[i] !== null;
+    const selected = practiceState.mcqSelected[i];
+    progress.textContent = `Soal PG ${i + 1} dari 15`;
+    
+    container.innerHTML = `
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div class="badge badge-primary">PILIHAN GANDA • ${i + 1}/15</div>
+        ${answered ? `<div class="badge ${practiceState.mcqAnswers[i] ? 'badge-green' : ''}" style="${practiceState.mcqAnswers[i] ? '' : 'background: var(--red-light); color: var(--red);'}"><i class="fa-solid ${practiceState.mcqAnswers[i] ? 'fa-check' : 'fa-xmark'}"></i> ${practiceState.mcqAnswers[i] ? 'Benar' : 'Salah'}</div>` : ''}
+      </div>
+      <div class="text-xl font-display font-semibold mb-6">${q.q}</div>
+      <div class="space-y-3 mb-4">
+        ${q.options.map((opt, idx) => {
+          let cls = '';
+          if (answered) {
+            if (idx === q.correct) cls = 'correct';
+            else if (idx === selected) cls = 'incorrect';
+          } else if (idx === selected) cls = 'selected';
+          return `<button class="option-btn ${cls}" onclick="selectMcq(${idx})" ${answered ? 'disabled' : ''}><div class="option-letter">${String.fromCharCode(65 + idx)}</div><div>${opt}</div></button>`;
+        }).join('')}
+      </div>
+      ${answered ? `<div class="explanation-box"><strong>Pembahasan:</strong> ${q.explain}</div>` : `<button class="btn btn-primary" onclick="checkMcqAnswer()"><i class="fa-solid fa-check"></i> Cek Jawaban</button>`}
+    `;
+    if (answered) stopPracticeTimer();
+  } else {
+    const i = practiceState.shortCurrent;
+    const q = shortAnswerData[i];
+    const answered = practiceState.shortAnswers[i] !== null;
+    const inputVal = practiceState.shortInput[i] !== null ? practiceState.shortInput[i] : '';
+    progress.textContent = `Isian Singkat ${i + 1} dari 10`;
+    
+    container.innerHTML = `
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div class="badge badge-accent">ISIAN SINGKAT • ${i + 1}/10</div>
+        ${answered ? `<div class="badge ${practiceState.shortAnswers[i] ? 'badge-green' : ''}" style="${practiceState.shortAnswers[i] ? '' : 'background: var(--red-light); color: var(--red);'}"><i class="fa-solid ${practiceState.shortAnswers[i] ? 'fa-check' : 'fa-xmark'}"></i> ${practiceState.shortAnswers[i] ? 'Benar' : 'Salah'}</div>` : ''}
+      </div>
+      <div class="text-xl font-display font-semibold mb-6">${q.q}</div>
+      <div class="mb-4">
+        <input type="number" class="input-field ${answered ? (practiceState.shortAnswers[i] ? 'correct' : 'incorrect') : ''}" id="shortInput" placeholder="Tulis jawabanmu..." value="${inputVal}" ${answered ? 'disabled' : ''} onkeydown="if(event.key==='Enter') checkShortAnswer()">
+      </div>
+      ${answered ? `<div class="explanation-box"><strong>Pembahasan:</strong> ${q.explain}</div>` : `<button class="btn btn-primary" onclick="checkShortAnswer()"><i class="fa-solid fa-check"></i> Cek Jawaban</button>`}
+    `;
+    if (answered) stopPracticeTimer();
+  }
+  updatePracticeStats();
+}
+
+function selectMcq(idx) {
+  if (practiceState.mcqAnswers[practiceState.mcqCurrent] !== null) return;
+  practiceState.mcqSelected[practiceState.mcqCurrent] = idx;
+  renderPracticeQuestion();
+}
+
+function checkMcqAnswer() {
+  const i = practiceState.mcqCurrent;
+  if (practiceState.mcqSelected[i] === null) { showToast('Pilih salah satu jawaban dulu!'); return; }
+  practiceState.mcqAnswers[i] = practiceState.mcqSelected[i] === mcqData[i].correct;
+  stopPracticeTimer();
+  renderPracticeQuestion();
+  renderPracticeNav();
+  updateGlobalScore();
+  if (practiceState.mcqAnswers[i]) launchConfetti(8);
+}
+
+function checkShortAnswer() {
+  const i = practiceState.shortCurrent;
+  const input = document.getElementById('shortInput');
+  const val = parseInt(input.value);
+  if (isNaN(val)) { showToast('Tulis jawaban dulu!'); return; }
+  practiceState.shortInput[i] = val;
+  practiceState.shortAnswers[i] = val === shortAnswerData[i].a;
+  stopPracticeTimer();
+  renderPracticeQuestion();
+  renderPracticeNav();
+  updateGlobalScore();
+  if (practiceState.shortAnswers[i]) launchConfetti(8);
+}
+
+function updatePracticeStats() {
+  const correct = practiceState.mcqAnswers.filter(a => a === true).length + practiceState.shortAnswers.filter(a => a === true).length;
+  const wrong = practiceState.mcqAnswers.filter(a => a === false).length + practiceState.shortAnswers.filter(a => a === false).length;
+  const answered = practiceState.mcqAnswers.filter(a => a !== null).length + practiceState.shortAnswers.filter(a => a !== null).length;
+  document.getElementById('practiceCorrect').textContent = correct;
+  document.getElementById('practiceWrong').textContent = wrong;
+  document.getElementById('practiceScore').textContent = correct * 4;
+  document.getElementById('practiceAnswered').innerHTML = `${answered}<span class="text-base" style="color: var(--muted);">/25</span>`;
+}
+
+function startPracticeTimer() {
+  if (practiceState.running) return;
+  practiceState.startTime = Date.now() - practiceState.elapsed;
+  practiceState.running = true;
+  practiceState.timer = setInterval(() => {
+    practiceState.elapsed = Date.now() - practiceState.startTime;
+    updatePracticeTimerDisplay();
+  }, 50);
+}
+
+function stopPracticeTimer() {
+  if (practiceState.timer) clearInterval(practiceState.timer);
+  practiceState.running = false;
+  updatePracticeTimerDisplay();
+}
+
+function resetPracticeTimer() {
+  if (practiceState.timer) clearInterval(practiceState.timer);
+  practiceState.elapsed = 0;
+  practiceState.running = false;
+  updatePracticeTimerDisplay();
+}
+
+function updatePracticeTimerDisplay() {
+  const ms = practiceState.elapsed;
+  const totalSec = Math.floor(ms / 1000);
+  const min = Math.floor(totalSec / 60).toString().padStart(2, '0');
+  const sec = (totalSec % 60).toString().padStart(2, '0');
+  const cs = Math.floor((ms % 1000) / 10).toString().padStart(2, '0');
+  document.getElementById('practiceTimer').textContent = `${min}:${sec}.${cs}`;
+  const wrap = document.getElementById('practiceTimerWrap');
+  wrap.classList.remove('running', 'stopped');
+  if (practiceState.running) wrap.classList.add('running');
+  else if (ms > 0) wrap.classList.add('stopped');
+}
+
+// ============ STORY PROBLEMS ============
+function setStoryLang(lang) {
+  storyState.lang = lang;
+  document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('langBtnId').classList.toggle('active', lang === 'id');
+  renderStoryQuestion();
+  showToast(lang === 'en' ? 'Language: English' : 'Bahasa: Indonesia');
+}
+
+function renderStoryNav() {
+  const container = document.getElementById('storyNav');
+  container.innerHTML = storyData.map((q, i) => {
+    const ans = storyState.answers[i];
+    const cls = ans === null ? 'unanswered' : (ans ? 'correct' : 'incorrect');
+    return `<button class="q-nav-pill ${cls} ${i === storyState.current ? 'active' : ''}" onclick="goToStory(${i})">${i + 1}</button>`;
+  }).join('');
+}
+
+function goToStory(i) {
+  storyState.current = i;
+  renderStoryQuestion();
+  renderStoryNav();
+  resetStoryTimer();
+  startStoryTimer();
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function nextStory() { if (storyState.current < storyData.length - 1) goToStory(storyState.current + 1); }
+function prevStory() { if (storyState.current > 0) goToStory(storyState.current - 1); }
+
+function renderStoryQuestion() {
+  const i = storyState.current;
+  const q = storyData[i];
+  const answered = storyState.answers[i] !== null;
+  const selected = storyState.selected[i];
+  const lang = storyState.lang;
+  
+  const questionText = lang === 'en' ? q.q_en : q.q_id;
+  const options = lang === 'en' ? q.options_en : q.options_id;
+  const langLabel = lang === 'en' ? 'WORD PROBLEM' : 'SOAL CERITA';
+  
+  document.getElementById('storyProgress').textContent = i + 1;
+  
+  document.getElementById('storyQuestionContainer').innerHTML = `
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <div class="badge badge-yellow">${langLabel} • ${i + 1}/30</div>
+      ${answered ? `<div class="badge ${storyState.answers[i] ? 'badge-green' : ''}" style="${storyState.answers[i] ? '' : 'background: var(--red-light); color: var(--red);'}"><i class="fa-solid ${storyState.answers[i] ? 'fa-check' : 'fa-xmark'}"></i> ${storyState.answers[i] ? 'Benar' : 'Salah'}</div>` : ''}
+    </div>
+    <div class="text-lg mb-6 story-text-en" style="color: var(--fg);">${questionText}</div>
+    <div class="space-y-3 mb-4">
+      ${options.map((opt, idx) => {
+        let cls = '';
+        if (answered) {
+          if (idx === q.correct) cls = 'correct';
+          else if (idx === selected) cls = 'incorrect';
+        } else if (idx === selected) cls = 'selected';
+        return `<button class="option-btn ${cls}" onclick="selectStory(${idx})" ${answered ? 'disabled' : ''}><div class="option-letter">${String.fromCharCode(65 + idx)}</div><div>${opt}</div></button>`;
+      }).join('')}
+    </div>
+    ${answered ? `<div class="explanation-box"><strong>Pembahasan:</strong><br>${q.explain}</div>` : `<button class="btn btn-primary" onclick="checkStoryAnswer()"><i class="fa-solid fa-check"></i> Cek Jawaban</button>`}
+  `;
+  
+  if (answered) stopStoryTimer();
+  updateStoryStats();
+}
+
+function selectStory(idx) {
+  if (storyState.answers[storyState.current] !== null) return;
+  storyState.selected[storyState.current] = idx;
+  renderStoryQuestion();
+}
+
+function checkStoryAnswer() {
+  const i = storyState.current;
+  if (storyState.selected[i] === null) { showToast('Pilih salah satu jawaban dulu!'); return; }
+  storyState.answers[i] = storyState.selected[i] === storyData[i].correct;
+  stopStoryTimer();
+  renderStoryQuestion();
+  renderStoryNav();
+  updateGlobalScore();
+  if (storyState.answers[i]) launchConfetti(8);
+}
+
+function updateStoryStats() {
+  const correct = storyState.answers.filter(a => a === true).length;
+  const wrong = storyState.answers.filter(a => a === false).length;
+  const answered = storyState.answers.filter(a => a !== null).length;
+  document.getElementById('storyCorrect').textContent = correct;
+  document.getElementById('storyWrong').textContent = wrong;
+  document.getElementById('storyScore').textContent = correct * 3;
+  document.getElementById('storyAnswered').innerHTML = `${answered}<span class="text-base" style="color: var(--muted);">/30</span>`;
+}
+
+function startStoryTimer() {
+  if (storyState.running) return;
+  storyState.startTime = Date.now() - storyState.elapsed;
+  storyState.running = true;
+  storyState.timer = setInterval(() => {
+    storyState.elapsed = Date.now() - storyState.startTime;
+    updateStoryTimerDisplay();
+  }, 50);
+}
+
+function stopStoryTimer() {
+  if (storyState.timer) clearInterval(storyState.timer);
+  storyState.running = false;
+  updateStoryTimerDisplay();
+}
+
+function resetStoryTimer() {
+  if (storyState.timer) clearInterval(storyState.timer);
+  storyState.elapsed = 0;
+  storyState.running = false;
+  updateStoryTimerDisplay();
+}
+
+function updateStoryTimerDisplay() {
+  const ms = storyState.elapsed;
+  const totalSec = Math.floor(ms / 1000);
+  const min = Math.floor(totalSec / 60).toString().padStart(2, '0');
+  const sec = (totalSec % 60).toString().padStart(2, '0');
+  const cs = Math.floor((ms % 1000) / 10).toString().padStart(2, '0');
+  document.getElementById('storyTimer').textContent = `${min}:${sec}.${cs}`;
+  const wrap = document.getElementById('storyTimerWrap');
+  wrap.classList.remove('running', 'stopped');
+  if (storyState.running) wrap.classList.add('running');
+  else if (ms > 0) wrap.classList.add('stopped');
+}
+
+// ============ FINISH EXAM ============
+function confirmFinishExam() {
+  const unanswered = storyState.answers.filter(a => a === null).length;
+  const modalText = document.getElementById('modalText');
+  if (unanswered > 0) {
+    modalText.textContent = `Kamu masih memiliki ${unanswered} soal yang belum dijawab. Soal yang tidak dijawab akan dianggap salah. Yakin ingin menyelesaikan ujian?`;
+  } else {
+    modalText.textContent = 'Apakah kamu yakin ingin menyelesaikan ujian? Kamu sudah menjawab semua soal.';
+  }
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('confirmModal').classList.remove('show'); }
+
+function finishExamConfirm() {
+  closeModal();
+  storyState.finished = true;
+  goToSlide(7);
+  launchConfetti(50);
+}
+
+// ============ RESULTS ============
+function updateResults() {
+  const pCorrect = practiceState.mcqAnswers.filter(a => a === true).length + practiceState.shortAnswers.filter(a => a === true).length;
+  const pWrong = practiceState.mcqAnswers.filter(a => a === false).length + practiceState.shortAnswers.filter(a => a === false).length;
+  const sCorrect = storyState.answers.filter(a => a === true).length;
+  const sWrong = storyState.answers.filter(a => a === false).length;
+  
+  document.getElementById('resultStudentName').textContent = studentName || 'Siswa';
+  document.getElementById('practiceFinalScore').textContent = pCorrect;
+  document.getElementById('practiceFinalCorrect').textContent = pCorrect;
+  document.getElementById('practiceFinalWrong').textContent = pWrong;
+  document.getElementById('storyFinalScore').textContent = sCorrect;
+  document.getElementById('storyFinalCorrect').textContent = sCorrect;
+  document.getElementById('storyFinalWrong').textContent = sWrong;
+}
+
+function setRating(n) {
+  reflectionRating = n;
+  document.querySelectorAll('.rating-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i < n);
+  });
+}
+
+// ============ THANKS ============
+function updateThanks() {
+  document.getElementById('thanksName').textContent = `Kerja bagus, ${studentName}!`;
+  const examplesDone = Object.values(exampleState.stepsDone).filter(arr => arr && arr.length > 0).length;
+  document.getElementById('thanksExamples').textContent = examplesDone;
+  const pCorrect = practiceState.mcqAnswers.filter(a => a === true).length + practiceState.shortAnswers.filter(a => a === true).length;
+  document.getElementById('thanksPractice').textContent = `${pCorrect}/25`;
+  const sCorrect = storyState.answers.filter(a => a === true).length;
+  document.getElementById('thanksStory').textContent = `${sCorrect}/30`;
+  launchConfetti(30);
+}
+
+// ============ GLOBAL SCORE ============
+function updateGlobalScore() {
+  const pCorrect = practiceState.mcqAnswers.filter(a => a === true).length + practiceState.shortAnswers.filter(a => a === true).length;
+  const sCorrect = storyState.answers.filter(a => a === true).length;
+  const examplesDone = Object.values(exampleState.stepsDone).filter(arr => arr && arr.length > 0).length;
+  const total = pCorrect * 4 + sCorrect * 3 + examplesDone * 2;
+  document.getElementById('globalScoreText').textContent = total;
+}
+
+// ============ UTILITIES ============
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function launchConfetti(count = 20) {
+  const colors = ['#0E7C66', '#FF6B47', '#F5B82E', '#10B981', '#0E7C66'];
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
