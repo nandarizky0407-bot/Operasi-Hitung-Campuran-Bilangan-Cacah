@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Matematika — Perkalian & Pembagian Cerita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fff5e1;
+  --bg-soft: #ffead0;
+  --bg-deep: #ffe0b3;
+  --primary: #f25c05;
+  --primary-light: #ff8c3a;
+  --primary-dark: #c44a04;
+  --accent: #0d8a6e;
+  --accent-light: #2dbf9a;
+  --gold: #ffb627;
+  --dark: #2d1810;
+  --muted: #8b6f5c;
+  --white: #ffffff;
+  --wrong: #d62828;
+  --right: #2a9d3f;
+  --shadow-sm: 0 4px 12px rgba(45, 24, 16, 0.08);
+  --shadow-md: 0 8px 24px rgba(45, 24, 16, 0.12);
+  --shadow-lg: 0 16px 40px rgba(45, 24, 16, 0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.bg-pattern {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(255, 182, 39, 0.18), transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(13, 138, 110, 0.14), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(242, 92, 5, 0.08), transparent 55%);
+}
+.bg-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-shape {
+  position: absolute; font-family: 'Fredoka', sans-serif; font-weight: 700;
+  color: var(--primary); opacity: 0.07; user-select: none;
+}
+@keyframes floatShape {
+  0%, 100% { transform: translate(0, 0) rotate(var(--rot, 0deg)); }
+  33% { transform: translate(25px, -35px) rotate(calc(var(--rot, 0deg) + 12deg)); }
+  66% { transform: translate(-20px, 25px) rotate(calc(var(--rot, 0deg) - 8deg)); }
+}
+
+.screen {
+  position: relative; z-index: 1; min-height: 100vh;
+  padding: 2rem 1rem 4rem; display: none; animation: fadeIn 0.5s ease;
+}
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.container { max-width: 900px; margin: 0 auto; }
+
+.btn {
+  font-family: 'Fredoka', sans-serif; font-weight: 600; border: none; cursor: pointer;
+  padding: 0.9rem 1.8rem; border-radius: 14px; font-size: 1.02rem; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; letter-spacing: 0.02em;
+}
+.btn-primary { background: var(--primary); color: var(--white); box-shadow: 0 4px 0 var(--primary-dark), var(--shadow-sm); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--primary-dark), var(--shadow-md); }
+.btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--primary-dark); }
+.btn-secondary { background: var(--accent); color: var(--white); box-shadow: 0 4px 0 #0a6d56, var(--shadow-sm); }
+.btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #0a6d56, var(--shadow-md); }
+.btn-ghost { background: var(--white); color: var(--dark); box-shadow: var(--shadow-sm); border: 2px solid var(--bg-deep); }
+.btn-ghost:hover { background: var(--bg-soft); border-color: var(--primary-light); }
+.btn-block { width: 100%; justify-content: center; margin-top: 1rem; }
+
+#cover.active { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
+.cover-content { text-align: center; max-width: 720px; position: relative; }
+.cover-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem; background: var(--white); color: var(--primary);
+  padding: 0.5rem 1.2rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em;
+  box-shadow: var(--shadow-sm); margin-bottom: 1.5rem; text-transform: uppercase;
+}
+.cover-badge::before { content: ''; width: 8px; height: 8px; background: var(--right); border-radius: 50%; box-shadow: 0 0 12px var(--right); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.3); } }
+.cover-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.05; color: var(--dark); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.cover-title .accent { color: var(--primary); position: relative; display: inline-block; }
+.cover-title .accent::after { content: ''; position: absolute; bottom: 0.1em; left: 0; width: 100%; height: 0.18em; background: var(--gold); z-index: -1; border-radius: 999px; }
+.cover-subtitle { font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem; font-weight: 600; }
+.cover-illustration { margin: 1.5rem auto; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.float-card {
+  background: var(--white); border-radius: 16px; padding: 1rem 1.2rem; box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 0.6rem; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.1rem;
+  animation: bob 3s ease-in-out infinite; color: var(--dark);
+}
+.float-card:nth-child(1) { animation-delay: 0s; color: var(--primary); }
+.float-card:nth-child(2) { animation-delay: 0.5s; color: var(--accent); }
+.float-card:nth-child(3) { animation-delay: 1s; color: var(--gold); }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.float-card .op { font-size: 1.5rem; font-weight: 700; }
+
+.name-form { background: var(--white); border-radius: 24px; padding: 2rem; box-shadow: var(--shadow-lg); margin: 2rem auto 0; max-width: 480px; border: 3px solid var(--bg-deep); }
+.name-form label { display: block; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.6rem; text-align: left; color: var(--dark); }
+.name-input { width: 100%; padding: 0.9rem 1.2rem; border: 2px solid var(--bg-deep); border-radius: 14px; font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 600; background: var(--bg); color: var(--dark); transition: all 0.2s; }
+.name-input:focus { outline: none; border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 4px rgba(242, 92, 5, 0.15); }
+.name-input::placeholder { color: var(--muted); opacity: 0.7; }
+.name-error { color: var(--wrong); font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; text-align: left; min-height: 1.2rem; display: block; }
+.cover-info { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+.cover-info span { font-size: 0.9rem; font-weight: 700; color: var(--muted); display: inline-flex; align-items: center; gap: 0.4rem; }
+.cover-info span strong { color: var(--primary); font-size: 1.1rem; }
+
+.section-header { text-align: center; margin-bottom: 2.5rem; }
+.section-eyebrow { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+.section-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
+.section-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--dark); letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+.section-subtitle { color: var(--muted); font-weight: 600; max-width: 600px; margin: 0 auto; }
+
+.material-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+@media (max-width: 720px) { .material-grid { grid-template-columns: 1fr; } }
+.material-card { background: var(--white); border-radius: 24px; padding: 2rem; box-shadow: var(--shadow-md); position: relative; overflow: hidden; border: 3px solid transparent; transition: transform 0.2s; }
+.material-card:hover { transform: translateY(-4px); }
+.material-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; }
+.material-card.kali { border-color: #ffe0b3; }
+.material-card.kali::before { background: var(--primary); }
+.material-card.bagi { border-color: #c0eee0; }
+.material-card.bagi::before { background: var(--accent); }
+.material-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-size: 2rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
+.material-card.kali .material-icon { background: var(--primary); }
+.material-card.bagi .material-icon { background: var(--accent); }
+.material-card h3 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.4rem; margin-bottom: 0.8rem; }
+.material-desc { font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--muted); font-weight: 600; }
+.keyword-list { list-style: none; margin-bottom: 1.2rem; }
+.keyword-list li { display: inline-block; background: var(--bg-soft); color: var(--dark); padding: 0.35rem 0.8rem; margin: 0.2rem 0.25rem 0.2rem 0; border-radius: 999px; font-size: 0.85rem; font-weight: 700; }
+.material-card.kali .keyword-list li { background: #ffe8d3; color: var(--primary-dark); }
+.material-card.bagi .keyword-list li { background: #d9f5ec; color: #0a6d56; }
+.example-box { background: var(--bg); border-radius: 14px; padding: 1rem 1.2rem; border-left: 4px solid; font-size: 0.95rem; }
+.material-card.kali .example-box { border-left-color: var(--primary); }
+.material-card.bagi .example-box { border-left-color: var(--accent); }
+.example-box strong { color: var(--dark); }
+.example-box .formula { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: 600; display: block; margin-top: 0.4rem; }
+.material-card.kali .example-box .formula { color: var(--primary-dark); }
+.material-card.bagi .example-box .formula { color: #0a6d56; }
+.material-tip { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; border-left: 4px solid var(--gold); font-weight: 600; }
+.material-tip strong { color: var(--primary-dark); }
+
+.quiz-topbar { background: var(--white); border-radius: 20px; padding: 1rem 1.5rem; box-shadow: var(--shadow-sm); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; position: sticky; top: 0.5rem; z-index: 10; }
+.quiz-user { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 0.95rem; }
+.quiz-user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; }
+.quiz-progress-wrap { flex: 1; min-width: 200px; max-width: 400px; }
+.quiz-progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-bottom: 0.3rem; }
+.quiz-progress-bar { height: 10px; background: var(--bg-deep); border-radius: 999px; overflow: hidden; }
+.quiz-progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--gold)); border-radius: 999px; transition: width 0.5s ease; width: 0; }
+
+.narrative-block { background: linear-gradient(135deg, #fff8eb 0%, #ffeed1 100%); border-radius: 24px; padding: 1.5rem 1.8rem 2rem; margin-bottom: 1.5rem; border: 2px solid var(--bg-deep); }
+.narrative-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: var(--white); padding: 0.4rem 1rem; border-radius: 999px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+.narrative-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--dark); margin-bottom: 0.8rem; line-height: 1.3; }
+.narrative-text { font-size: 1.02rem; line-height: 1.7; color: var(--dark); background: var(--white); padding: 1.2rem 1.4rem; border-radius: 14px; border-left: 4px solid var(--gold); }
+
+.question-card { background: var(--white); border-radius: 20px; padding: 1.5rem 1.5rem 1.8rem; box-shadow: var(--shadow-sm); margin-bottom: 1rem; border: 2px solid var(--bg-deep); transition: border-color 0.3s; animation: slideUp 0.4s ease backwards; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.question-card.answered { border-color: var(--accent-light); }
+.question-card.checked-correct { border-color: var(--right); background: #f0fff4; }
+.question-card.checked-wrong { border-color: var(--wrong); background: #fff5f5; }
+.q-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.q-number { background: var(--primary); color: var(--white); width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+.q-type-badge { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; flex-shrink: 0; }
+.q-type-pg { background: #ffe8d3; color: var(--primary-dark); }
+.q-type-bs { background: #d9f5ec; color: #0a6d56; }
+.q-type-kompleks { background: #fff2c8; color: #8a6500; }
+.q-text { font-weight: 700; font-size: 1.05rem; color: var(--dark); flex: 1; min-width: 200px; line-height: 1.5; }
+
+.options-grid { display: grid; gap: 0.6rem; }
+.option { display: flex; align-items: center; gap: 0.8rem; background: var(--bg); border: 2px solid var(--bg-deep); border-radius: 14px; padding: 0.85rem 1rem; cursor: pointer; transition: all 0.2s; user-select: none; }
+.option:hover { background: var(--bg-soft); border-color: var(--primary-light); transform: translateX(4px); }
+.option.selected { background: #fff3e6; border-color: var(--primary); }
+.option-letter { width: 32px; height: 32px; border-radius: 10px; background: var(--white); border: 2px solid var(--bg-deep); display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1rem; color: var(--muted); flex-shrink: 0; transition: all 0.2s; }
+.option.selected .option-letter { background: var(--primary); color: var(--white); border-color: var(--primary); }
+.option-text { font-weight: 600; font-size: 1rem; color: var(--dark); }
+.option.correct { background: #e6f7ed; border-color: var(--right); color: var(--right); }
+.option.correct .option-letter { background: var(--right); color: var(--white); border-color: var(--right); }
+.option.wrong { background: #ffe6e6; border-color: var(--wrong); color: var(--wrong); }
+.option.wrong .option-letter { background: var(--wrong); color: var(--white); border-color: var(--wrong); }
+
+.bs-grid { display: grid; gap: 0.8rem; }
+.bs-item { background: var(--bg); border: 2px solid var(--bg-deep); border-radius: 14px; padding: 1rem; }
+.bs-statement { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.8rem; color: var(--dark); }
+.bs-choices { display: flex; gap: 0.6rem; }
+.bs-btn { flex: 1; background: var(--white); border: 2px solid var(--bg-deep); border-radius: 10px; padding: 0.55rem 1rem; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; color: var(--muted); }
+.bs-btn:hover { border-color: var(--primary-light); color: var(--dark); }
+.bs-btn.selected.benar { background: var(--right); color: var(--white); border-color: var(--right); }
+.bs-btn.selected.salah { background: var(--wrong); color: var(--white); border-color: var(--wrong); }
+.bs-btn.correct { background: var(--right) !important; color: var(--white) !important; border-color: var(--right) !important; }
+.bs-btn.wrong { background: var(--wrong) !important; color: var(--white) !important; border-color: var(--wrong) !important; }
+
+.kompleks-grid { display: grid; gap: 0.6rem; }
+.kompleks-item { display: flex; align-items: flex-start; gap: 0.8rem; background: var(--bg); border: 2px solid var(--bg-deep); border-radius: 14px; padding: 0.85rem 1rem; cursor: pointer; transition: all 0.2s; user-select: none; }
+.kompleks-item:hover { background: var(--bg-soft); border-color: var(--gold); }
+.kompleks-check { width: 28px; height: 28px; border-radius: 8px; background: var(--white); border: 2px solid var(--bg-deep); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; color: var(--white); font-weight: 700; }
+.kompleks-item.selected { background: #fff8d8; border-color: var(--gold); }
+.kompleks-item.selected .kompleks-check { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+.kompleks-item.selected .kompleks-check::after { content: '✓'; font-family: 'Fredoka', sans-serif; font-size: 1rem; }
+.kompleks-text { font-weight: 600; font-size: 0.98rem; color: var(--dark); line-height: 1.5; }
+.kompleks-item.correct { background: #e6f7ed; border-color: var(--right); }
+.kompleks-item.correct .kompleks-check { background: var(--right); border-color: var(--right); color: var(--white); }
+.kompleks-item.correct .kompleks-check::after { content: '✓'; }
+.kompleks-item.wrong { background: #ffe6e6; border-color: var(--wrong); }
+.kompleks-item.wrong .kompleks-check { background: var(--wrong); border-color: var(--wrong); color: var(--white); }
+.kompleks-item.wrong .kompleks-check::after { content: '✗'; }
+
+.btn-check {
+  font-family: 'Fredoka', sans-serif; font-weight: 600; border: none; cursor: pointer;
+  padding: 0.7rem 1.4rem; border-radius: 12px; font-size: 0.95rem; background: var(--dark);
+  color: var(--white); margin-top: 1rem; transition: all 0.2s; box-shadow: 0 4px 0 #1a0e08;
+}
+.btn-check:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 #1a0e08; }
+.btn-check:disabled { background: #bba99a; cursor: not-allowed; box-shadow: none; transform: none; opacity: 0.7; }
+.btn-success { background: var(--right) !important; box-shadow: 0 4px 0 #1f7a2c !important; }
+.btn-danger { background: var(--wrong) !important; box-shadow: 0 4px 0 #a01e1e !important; }
+
+.feedback-box {
+  margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 12px; background: var(--bg);
+  border-left: 4px solid var(--primary); animation: fadeIn 0.4s;
+}
+.feedback-title { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.feedback-title.correct { color: var(--right); }
+.feedback-title.wrong { color: var(--wrong); }
+.feedback-text { font-size: 0.95rem; line-height: 1.6; color: var(--dark); }
+
+.quiz-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+.result-hero { text-align: center; margin-bottom: 2rem; }
+.result-hero h2 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--dark); margin-bottom: 0.5rem; }
+.result-user-name { color: var(--primary); }
+.score-display { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 2rem 0; }
+.score-card { background: var(--white); border-radius: 24px; padding: 1.5rem 2rem; box-shadow: var(--shadow-md); min-width: 160px; text-align: center; border: 3px solid transparent; }
+.score-card.main { background: linear-gradient(135deg, var(--primary), var(--gold)); color: var(--white); border-color: var(--primary-dark); }
+.score-card.correct { border-color: var(--right); }
+.score-card.wrong { border-color: var(--wrong); }
+.score-card .score-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.85; margin-bottom: 0.4rem; }
+.score-card .score-value { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 2.5rem; line-height: 1; }
+.score-card.main .score-value { font-size: 3rem; }
+.score-card .score-suffix { font-size: 0.9rem; font-weight: 700; opacity: 0.7; margin-top: 0.2rem; }
+.result-message { background: var(--white); border-radius: 20px; padding: 1.5rem 2rem; box-shadow: var(--shadow-sm); margin: 0 auto 2rem; max-width: 600px; text-align: center; font-size: 1.05rem; font-weight: 600; color: var(--dark); line-height: 1.6; }
+.result-message .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+.review-section { margin-top: 2rem; }
+.review-section h3 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; color: var(--dark); }
+.review-item { background: var(--white); border-radius: 16px; padding: 1.2rem 1.4rem; margin-bottom: 0.8rem; box-shadow: var(--shadow-sm); border-left: 5px solid; }
+.review-item.correct { border-left-color: var(--right); }
+.review-item.wrong { border-left-color: var(--wrong); }
+.review-q { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+.review-q-num { background: var(--bg-deep); color: var(--dark); width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+.review-q-text { font-weight: 700; font-size: 0.98rem; color: var(--dark); flex: 1; min-width: 200px; }
+.review-status { margin-left: auto; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.85rem; padding: 0.2rem 0.7rem; border-radius: 999px; flex-shrink: 0; }
+.review-status.correct { background: #d8f3dc; color: var(--right); }
+.review-status.wrong { background: #ffe0e0; color: var(--wrong); }
+.review-answer { font-size: 0.92rem; color: var(--dark); padding-left: 36px; line-height: 1.7; }
+.review-answer .ans-label { font-weight: 700; color: var(--muted); }
+.review-answer .ans-correct { color: var(--right); font-weight: 700; }
+.review-answer .ans-wrong { color: var(--wrong); font-weight: 700; text-decoration: line-through; }
+.review-explain { background: var(--bg); border-radius: 10px; padding: 0.6rem 0.9rem; margin-top: 0.5rem; font-size: 0.9rem; }
+.result-actions { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+
+.game-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; background: var(--white); padding: 1rem 1.5rem; border-radius: 16px; box-shadow: var(--shadow-sm); }
+.game-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.game-stat { text-align: center; }
+.game-stat .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.game-stat .stat-value { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--primary); display: block; }
+
+.memorize-banner {
+  background: linear-gradient(135deg, #fff3d3, #ffe6b3);
+  border: 2px solid var(--gold);
+  color: var(--dark);
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.memorize-banner.active { display: flex; animation: pulseGold 1.5s infinite; }
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 182, 39, 0.6); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 182, 39, 0); }
+}
+.btn-skip {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-skip:hover { transform: scale(1.05); }
+
+.game-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.7rem; max-width: 700px; margin: 0 auto; }
+@media (max-width: 600px) { .game-board { grid-template-columns: repeat(4, 1fr); } }
+.memory-card { aspect-ratio: 1; perspective: 1000px; cursor: pointer; }
+.memory-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.memory-card.flipped .memory-card-inner, .memory-card.matched .memory-card-inner { transform: rotateY(180deg); }
+.memory-card.matched .memory-card-inner { animation: matchedPop 0.5s ease; }
+@keyframes matchedPop { 0%, 100% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.12); } }
+.memory-card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 700; text-align: center; padding: 0.4rem; line-height: 1.2; }
+.memory-card-front { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: var(--white); font-size: 1.8rem; box-shadow: var(--shadow-sm), inset 0 0 0 3px rgba(255,255,255,0.25); }
+.memory-card-back { background: var(--white); color: var(--dark); font-size: 1.1rem; transform: rotateY(180deg); box-shadow: var(--shadow-sm); border: 3px solid var(--bg-deep); }
+.memory-card.matched .memory-card-back { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--white); border-color: var(--accent); }
+
+.game-overlay { position: fixed; inset: 0; background: rgba(45, 24, 16, 0.7); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem; animation: fadeIn 0.3s; }
+.game-overlay.active { display: flex; }
+.game-overlay-content { background: var(--white); border-radius: 24px; padding: 2rem 2.5rem; text-align: center; max-width: 400px; box-shadow: var(--shadow-lg); animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes popIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.game-overlay-content h3 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--primary); }
+.game-overlay-content p { color: var(--muted); font-weight: 600; margin-bottom: 1.5rem; }
+.game-overlay-content .stats { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg); border-radius: 14px; }
+
+.confetti { position: fixed; pointer-events: none; z-index: 1000; width: 12px; height: 12px; border-radius: 2px; animation: confettiFall 3s ease-out forwards; }
+@keyframes confettiFall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+.toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--dark); color: var(--white); padding: 0.9rem 1.5rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-lg); z-index: 200; opacity: 0; transition: all 0.3s; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media (max-width: 600px) {
+  .narrative-block { padding: 1.2rem 1rem 1.5rem; }
+  .question-card { padding: 1.2rem 1rem 1.4rem; }
+  .q-text { font-size: 0.98rem; }
+  .score-card { min-width: 100px; padding: 1rem 1.2rem; }
+  .score-card .score-value { font-size: 1.8rem; }
+  .score-card.main .score-value { font-size: 2.2rem; }
+  .review-answer { padding-left: 0; }
+  .game-stats { gap: 1rem; }
+  .game-stat .stat-value { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+<div class="bg-shapes" id="bgShapes"></div>
+
+<!-- ============== COVER ============== -->
+<section class="screen active" id="cover">
+  <div class="cover-content">
+    <div class="cover-badge">Petualangan Belajar Matematika SD/MI</div>
+    <h1 class="cover-title">
+      <span class="accent">Perkalian</span> &amp;<br>
+      <span class="accent">Pembagian</span> Cerita
+    </h1>
+    <p class="cover-subtitle">Asah logikamu lewat 5 cerita seru, 20 soal mengasyikkan, dan 1 permainan memori yang menantang!</p>
+
+    <div class="cover-illustration">
+      <div class="float-card"><span class="op">×</span> Perkalian</div>
+      <div class="float-card"><span class="op">÷</span> Pembagian</div>
+      <div class="float-card"><span class="op">★</span> Memori</div>
+    </div>
+
+    <div class="name-form">
+      <label for="studentName">Siapa namamu, sobat hebat?</label>
+      <input type="text" id="studentName" class="name-input" placeholder="Tulis namamu di sini..." maxlength="40" autocomplete="off">
+      <small class="name-error" id="nameError"></small>
+      <button class="btn btn-primary btn-block" id="startBtn">Mulai Petualangan →</button>
+    </div>
+
+    <div class="cover-info">
+      <span><strong>5</strong> Cerita</span>
+      <span><strong>20</strong> Soal</span>
+      <span><strong>1</strong> Game Memori</span>
+      <span><strong>3</strong> Tipe Soal</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== MATERI ============== -->
+<section class="screen" id="material">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Materi Singkat</div>
+      <h2 class="section-title">Kata Kunci &amp; Contoh Soal</h2>
+      <p class="section-subtitle">Kenali tanda-tanda dalam soal cerita agar tahu kapan harus mengalikan dan kapan harus membagi.</p>
+    </div>
+
+    <div class="material-grid">
+      <div class="material-card kali">
+        <div class="material-icon">×</div>
+        <h3>Perkalian</h3>
+        <p class="material-desc">Operasi menjumlahkan bilangan yang berulang. Digunakan ketika kita ingin mencari jumlah total dari beberapa kelompok yang sama.</p>
+        <ul class="keyword-list">
+          <li>total</li><li>seluruh</li><li>setiap</li><li>masing-masing</li><li>kali</li><li>dikalikan</li><li>sebanyak ... kali</li><li>hasil kali</li>
+        </ul>
+        <div class="example-box">
+          <strong>Contoh:</strong> Andi punya 3 kotak pensil. Tiap kotak berisi 8 pensil. Berapa total pensil Andi?
+          <span class="formula">3 × 8 = 24 pensil</span>
+        </div>
+      </div>
+
+      <div class="material-card bagi">
+        <div class="material-icon">÷</div>
+        <h3>Pembagian</h3>
+        <p class="material-desc">Operasi membagi sesuatu menjadi bagian-bagian yang sama besar. Digunakan ketika kita ingin membagi jumlah secara merata.</p>
+        <ul class="keyword-list">
+          <li>dibagi</li><li>merata</li><li>dibagikan</li><li>sama banyak</li><li>per</li><li>tiap</li><li>hasil bagi</li><li>masing-masing ... menerima</li>
+        </ul>
+        <div class="example-box">
+          <strong>Contoh:</strong> Ibu punya 24 permen dibagi rata untuk 6 anak. Berapa permen tiap anak?
+          <span class="formula">24 ÷ 6 = 4 permen</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="material-tip">
+      💡 <strong>Tips Cerdas:</strong> Saat membaca soal cerita, tandai angka penting dan kata kunci. Jika soal menyatukan beberapa kelompok sama, gunakan perkalian. Jika soal membagi sesuatu menjadi bagian yang sama, gunakan pembagian.
+    </div>
+
+    <div style="text-align: center;">
+      <button class="btn btn-primary" id="toQuizBtn">Lanjut ke Latihan Soal →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============== QUIZ ============== -->
+<section class="screen" id="quiz">
+  <div class="container">
+    <div class="quiz-topbar">
+      <div class="quiz-user">
+        <div class="quiz-user-avatar" id="userAvatar">A</div>
+        <span id="userNameTop">Sobat</span>
+      </div>
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-info">
+          <span id="progressText">Cerita 1 dari 5</span>
+          <span id="progressCount">0/20 dijawab</span>
+        </div>
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+    <div id="quizContent"></div>
+    <div class="quiz-nav" id="quizNav" style="display: none;">
+      <button class="btn btn-ghost" id="prevBtn">← Cerita Sebelumnya</button>
+      <button class="btn btn-primary" id="nextBtn">Cerita Berikutnya →</button>
+      <button class="btn btn-secondary" id="finishBtn" style="display: none;">Lihat Hasil Akhir 🎯</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============== HASIL ============== -->
+<section class="screen" id="result">
+  <div class="container">
+    <div class="result-hero">
+      <div class="section-eyebrow">Hasil Latihan</div>
+      <h2>Kerja Bagus, <span class="result-user-name" id="resultName">Sobat</span>!</h2>
+      <p style="color: var(--muted); font-weight: 600;">Ini rangkuman petualangan matematikamu.</p>
+    </div>
+
+    <div class="score-display">
+      <div class="score-card main">
+        <div class="score-label">Skor Akhir</div>
+        <div class="score-value" id="finalScore">0</div>
+        <div class="score-suffix">dari 100</div>
+      </div>
+      <div class="score-card correct">
+        <div class="score-label">Jawaban Benar</div>
+        <div class="score-value" id="correctCount" style="color: var(--right);">0</div>
+        <div class="score-suffix">soal</div>
+      </div>
+      <div class="score-card wrong">
+        <div class="score-label">Jawaban Salah</div>
+        <div class="score-value" id="wrongCount" style="color: var(--wrong);">0</div>
+        <div class="score-suffix">soal</div>
+      </div>
+    </div>
+
+    <div class="result-message" id="resultMessage"></div>
+
+    <div class="result-actions">
+      <button class="btn btn-secondary" id="toGameBtn">🎮 Main Game Memori</button>
+      <button class="btn btn-ghost" id="reviewBtn">📖 Lihat Pembahasan</button>
+      <button class="btn btn-ghost" id="retryBtn">🔄 Ulangi Latihan</button>
+    </div>
+
+    <div class="review-section" id="reviewSection" style="display: none;">
+      <h3>Pembahasan Setiap Soal</h3>
+      <div id="reviewContent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== GAME MEMORI ============== -->
+<section class="screen" id="game">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Game Memori Matematika</div>
+      <h2 class="section-title">Padankan Operasi &amp; Hasilnya</h2>
+      <p class="section-subtitle">Hafalkan letak pasangan operasi dan hasilnya selama 30 detik. Lalu cocokkan kartunya!</p>
+    </div>
+
+    <div class="game-header">
+      <button class="btn btn-ghost" id="backToResultBtn">← Kembali</button>
+      <div class="game-stats">
+        <div class="game-stat">
+          <div class="stat-label">Pasangan</div>
+          <span class="stat-value"><span id="matchCount">0</span>/10</span>
+        </div>
+        <div class="game-stat">
+          <div class="stat-label">Langkah</div>
+          <span class="stat-value" id="moveCount">0</span>
+        </div>
+        <div class="game-stat">
+          <div class="stat-label">Waktu</div>
+          <span class="stat-value" id="timeCount">0s</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="restartGameBtn">Mulai Ulang</button>
+    </div>
+
+    <div id="memorizeBanner" class="memorize-banner">
+      ⏳ Waktu Menghafal: <span id="memorizeTime">30</span> detik
+      <button class="btn-skip" id="skipMemorizeBtn">Sudah Hafal!</button>
+    </div>
+
+    <div class="game-board" id="gameBoard"></div>
+  </div>
+</section>
+
+<!-- Overlay Menang Game -->
+<div class="game-overlay" id="gameOverlay">
+  <div class="game-overlay-content">
+    <h3>🎉 Hebat!</h3>
+    <p id="overlayMessage">Kamu berhasil menemukan semua pasangan!</p>
+    <div class="stats">
+      <div class="game-stat">
+        <div class="stat-label">Langkah</div>
+        <span class="stat-value" id="finalMoves" style="color: var(--primary);">0</span>
+      </div>
+      <div class="game-stat">
+        <div class="stat-label">Waktu</div>
+        <span class="stat-value" id="finalTime" style="color: var(--accent);">0s</span>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="overlayCloseBtn">Main Lagi</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= DATA SOAL =================
+const narratives = [
+  {
+    id: 1,
+    title: "Narasi 1: Panen Buah di Perkebunan Pak Rama",
+    text: "Pak Rama memiliki perkebunan jeruk yang baru saja selesai dipanen. Sebanyak 1.440 buah jeruk berhasil dipetik dari kebun dan langsung dimasukkan ke dalam 8 keranjang besar dengan jumlah yang sama banyak. Dari salah satu keranjang tersebut, jeruk dikemas lagi ke dalam kantong plastik kecil di mana masing-masing kantong berisi 6 buah jeruk. Jika harga 1 kantong jeruk kecil dijual seharga Rp15.000, seluruh hasil kebun Pak Rama sangat diminati oleh para pedagang pasar.",
+    questions: [
+      {
+        type: 'pg',
+        question: "Berapa banyak buah jeruk yang terdapat di dalam setiap keranjang besar?",
+        options: ["160 buah", "175 buah", "180 buah", "190 buah"],
+        answer: 2,
+        explanation: "1.440 ÷ 8 = 180 buah jeruk per keranjang."
+      },
+      {
+        type: 'bs',
+        statements: [
+          "Setiap keranjang besar menghasilkan tepat 30 kantong plastik kecil jeruk.",
+          "Jika 4 keranjang besar digabungkan, jumlah jeruknya adalah 700 buah."
+        ],
+        answer: ['benar', 'salah'],
+        explanation: "Pernyataan 1: 180 ÷ 6 = 30 kantong (BENAR). Pernyataan 2: 4 × 180 = 720 buah, bukan 700 (SALAH)."
+      },
+      {
+        type: 'kompleks',
+        question: "Berdasarkan informasi pada Narasi 1, pilihlah pernyataan-pernyataan yang BENAR! (Pilih lebih dari satu jika benar)",
+        statements: [
+          "Pendapatan dari penjualan seluruh kantong jeruk pada 1 keranjang besar adalah Rp450.000.",
+          "Total kantong plastik kecil yang bisa dihasilkan dari seluruh 8 keranjang besar adalah 240 kantong.",
+          "Jika diambil 2 keranjang besar, total buah jeruk yang ada adalah 380 buah.",
+          "Setiap 1 kantong kecil berharga Rp15.000, sehingga 5 kantong berharga Rp75.000."
+        ],
+        answer: [0, 1, 3],
+        explanation: "1) 30 × Rp15.000 = Rp450.000 (BENAR). 2) 8 × 30 = 240 kantong (BENAR). 3) 2 × 180 = 360 buah, bukan 380 (SALAH). 4) 5 × Rp15.000 = Rp75.000 (BENAR)."
+      },
+      {
+        type: 'pg',
+        question: "Jika seorang pedagang membeli 25 kantong jeruk kecil dari perkebunan tersebut, uang yang harus dibayarkan adalah...",
+        options: ["Rp325.000", "Rp350.000", "Rp375.000", "Rp400.000"],
+        answer: 2,
+        explanation: "25 × Rp15.000 = Rp375.000."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Narasi 2: Toko Roti Manis Bu Lani',
+    text: 'Toko Roti "Manis Jaya" milik Bu Lani memproduksi 48 kotak kue sus setiap harinya. Setiap kotak berisi tepat 12 kue sus yang disusun rapi. Seluruh kue sus yang diproduksi hari ini dibagikan secara merata kepada 6 panti asuhan di sekitar kota. Kue-kue tersebut sangat disukai anak-anak panti asuhan karena rasanya yang manis dan lezat.',
+    questions: [
+      {
+        type: 'pg',
+        question: "Berapa jumlah seluruh kue sus yang diproduksi oleh Toko Roti Bu Lani hari ini?",
+        options: ["526 buah", "548 buah", "576 buah", "612 buah"],
+        answer: 2,
+        explanation: "48 × 12 = 576 kue sus."
+      },
+      {
+        type: 'pg',
+        question: "Berapa buah kue sus yang diterima oleh masing-masing panti asuhan?",
+        options: ["84 buah", "96 buah", "104 buah", "112 buah"],
+        answer: 1,
+        explanation: "576 ÷ 6 = 96 kue sus per panti asuhan."
+      },
+      {
+        type: 'bs',
+        statements: [
+          "Masing-masing panti asuhan mendapatkan 8 kotak kue sus.",
+          "Jika Bu Lani memproduksi 15 kotak kue, maka totalnya adalah 170 kue sus."
+        ],
+        answer: ['benar', 'salah'],
+        explanation: "Pernyataan 1: 48 ÷ 6 = 8 kotak (BENAR). Pernyataan 2: 15 × 12 = 180 kue, bukan 170 (SALAH)."
+      },
+      {
+        type: 'kompleks',
+        question: "Pilihlah semua pernyataan yang TEPAT di bawah ini! (Pilihan ganda kompleks)",
+        statements: [
+          "Jika kue dibagikan kepada 8 panti asuhan, masing-masing akan menerima 72 kue sus.",
+          "Jumlah kue dalam 20 kotak adalah 240 kue sus.",
+          "Setiap panti asuhan menerima 96 kue sus dari total 48 kotak.",
+          "Untuk membuat 360 kue sus dibutuhkan 35 kotak."
+        ],
+        answer: [0, 1, 2],
+        explanation: "1) 576 ÷ 8 = 72 kue (BENAR). 2) 20 × 12 = 240 kue (BENAR). 3) Setiap panti asuhan menerima 96 kue (BENAR). 4) 360 ÷ 12 = 30 kotak, bukan 35 (SALAH)."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Narasi 3: Donasi Buku Perpustakaan Sekolah",
+    text: "Komite sekolah menyumbangkan 3.750 buku cerita untuk program literasi perpustakaan. Buku-buku tersebut didistribusikan secara merata ke 5 sekolah dasar binaan. Setiap sekolah yang menerima buku tersebut langsung menyusunnya ke dalam lemari-lemari perpustakaan, di mana setiap lemari mampu menampung 75 buku secara rapi. Para siswa sangat senang membaca buku-buku baru tersebut saat jam istirahat.",
+    questions: [
+      {
+        type: 'pg',
+        question: "Berapa banyak buku cerita yang diterima oleh setiap sekolah dasar binaan?",
+        options: ["650 buku", "725 buku", "750 buku", "800 buku"],
+        answer: 2,
+        explanation: "3.750 ÷ 5 = 750 buku per sekolah."
+      },
+      {
+        type: 'pg',
+        question: "Berapa lemari perpustakaan yang dibutuhkan oleh masing-masing sekolah untuk menampung seluruh buku yang diterima?",
+        options: ["8 lemari", "10 lemari", "12 lemari", "15 lemari"],
+        answer: 1,
+        explanation: "750 ÷ 75 = 10 lemari per sekolah."
+      },
+      {
+        type: 'bs',
+        statements: [
+          "Jika satu lemari diisi 75 buku, maka 4 lemari mampu menampung tepat 300 buku cerita.",
+          "Dua sekolah binaan secara keseluruhan menerima sebanyak 1.450 buku cerita."
+        ],
+        answer: ['benar', 'salah'],
+        explanation: "Pernyataan 1: 4 × 75 = 300 buku (BENAR). Pernyataan 2: 2 × 750 = 1.500 buku, bukan 1.450 (SALAH)."
+      },
+      {
+        type: 'kompleks',
+        question: "Berdasarkan data pada Narasi 3, tentukan pernyataan-pernyataan yang BENAR! (Centang semua yang tepat)",
+        statements: [
+          "Total kebutuhan lemari untuk seluruh 5 sekolah binaan adalah 50 lemari.",
+          "Sebanyak 3 sekolah binaan secara gabungan memperoleh 2.250 buku.",
+          "Jika kapasitas lemari diubah menjadi 50 buku, maka satu sekolah butuh 12 lemari.",
+          "Jika 6 lemari di sebuah sekolah telah terisi penuh, maka jumlah bukunya adalah 450 buku."
+        ],
+        answer: [0, 1, 3],
+        explanation: "1) 5 × 10 = 50 lemari (BENAR). 2) 3 × 750 = 2.250 buku (BENAR). 3) 750 ÷ 50 = 15 lemari, bukan 12 (SALAH). 4) 6 × 75 = 450 buku (BENAR)."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Narasi 4: Pembagian Bibit Pohon Penghijauan",
+    text: "Dalam rangka aksi penghijauan lingkungan, Dinas Lingkungan Hidup menyiapkan 672 bibit pohon mahoni. Bibit pohon tersebut dikelompokkan dan dimasukkan ke dalam 7 bak mobil pick-up dengan isi sama banyak untuk diantar ke desa tujuan. Di lokasi penanaman, bibit dari 1 bak mobil pick-up dibagikan secara merata kepada 24 relawan warga. Setiap relawan langsung menanam bibit pohon di sepanjang bantaran sungai desa.",
+    questions: [
+      {
+        type: 'pg',
+        question: "Berapa banyak bibit pohon yang diangkut dalam 1 bak mobil pick-up?",
+        options: ["86 bibit", "92 bibit", "96 bibit", "104 bibit"],
+        answer: 2,
+        explanation: "672 ÷ 7 = 96 bibit per bak mobil."
+      },
+      {
+        type: 'pg',
+        question: "Berapa banyak bibit pohon yang diterima dan ditanam oleh masing-masing relawan?",
+        options: ["3 bibit", "4 bibit", "5 bibit", "6 bibit"],
+        answer: 1,
+        explanation: "96 ÷ 24 = 4 bibit per relawan."
+      },
+      {
+        type: 'bs',
+        statements: [
+          "Tiga bak mobil pick-up secara bersamaan membawa sebanyak 288 bibit pohon.",
+          "Jika 10 relawan berkumpul, mereka menanam total 50 bibit pohon mahoni."
+        ],
+        answer: ['benar', 'salah'],
+        explanation: "Pernyataan 1: 3 × 96 = 288 bibit (BENAR). Pernyataan 2: 10 × 4 = 40 bibit, bukan 50 (SALAH)."
+      },
+      {
+        type: 'kompleks',
+        question: "Pilihlah pernyataan yang TEPAT terkait pembagian bibit pohon! (Jawaban benar lebih dari satu)",
+        statements: [
+          "Jika seluruh 7 bak mobil dibagikan dengan aturan yang sama (tiap orang dapat 4 bibit), maka dibutuhkan total 168 relawan.",
+          "Sebanyak 5 bak mobil pick-up mengangkut 480 bibit pohon.",
+          "Jika tiap relawan menanam 4 bibit, maka 15 relawan menanam 60 bibit.",
+          "Dua bak mobil membawa total 180 bibit pohon."
+        ],
+        answer: [0, 1, 2],
+        explanation: "1) 672 ÷ 4 = 168 relawan (BENAR). 2) 5 × 96 = 480 bibit (BENAR). 3) 15 × 4 = 60 bibit (BENAR). 4) 2 × 96 = 192 bibit, bukan 180 (SALAH)."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "Narasi 5: Pengadaan Alat Tulis Kantor",
+    text: "Sebuah koperasi sekolah membeli 35 pak pulpen untuk persediaan awal semester baru. Setiap pak berisi 24 buah pulpen bertinta hitam berkualitas tinggi. Pengurus koperasi kemudian membagi seluruh pulpen tersebut ke dalam 8 wadah etalase dengan jumlah sama rata agar mudah ditata di meja kasir. Koperasi menjual setiap pulpen secara eceran dengan harga Rp3.500 kepada para siswa dan guru.",
+    questions: [
+      {
+        type: 'pg',
+        question: "Berapa jumlah keseluruhan pulpen yang dibeli oleh koperasi sekolah?",
+        options: ["740 pulpen", "820 pulpen", "840 pulpen", "860 pulpen"],
+        answer: 2,
+        explanation: "35 × 24 = 840 pulpen."
+      },
+      {
+        type: 'pg',
+        question: "Berapa banyak pulpen yang ditempatkan pada masing-masing wadah etalase?",
+        options: ["95 pulpen", "105 pulpen", "110 pulpen", "115 pulpen"],
+        answer: 1,
+        explanation: "840 ÷ 8 = 105 pulpen per etalase."
+      },
+      {
+        type: 'bs',
+        statements: [
+          "Jika koperasi berhasil menjual habis 1 pak pulpen, uang yang diperoleh adalah Rp84.000.",
+          "Sebanyak 3 wadah etalase menampung total 315 buah pulpen."
+        ],
+        answer: ['benar', 'benar'],
+        explanation: "Pernyataan 1: 24 × Rp3.500 = Rp84.000 (BENAR). Pernyataan 2: 3 × 105 = 315 pulpen (BENAR)."
+      },
+      {
+        type: 'kompleks',
+        question: "Pilihlah semua pernyataan yang BENAR berdasarkan data Narasi 5!",
+        statements: [
+          "Harga untuk 10 buah pulpen adalah Rp35.000.",
+          "Jika terjual 20 pulpen, koperasi memperoleh uang sebesar Rp70.000.",
+          "Jumlah pulpen dalam 4 wadah etalase adalah 420 pulpen.",
+          "Total nilai seluruh 840 pulpen jika laku terjual semua adalah Rp2.800.000."
+        ],
+        answer: [0, 1, 2],
+        explanation: "1) 10 × Rp3.500 = Rp35.000 (BENAR). 2) 20 × Rp3.500 = Rp70.000 (BENAR). 3) 4 × 105 = 420 pulpen (BENAR). 4) 840 × Rp3.500 = Rp2.940.000, bukan Rp2.800.000 (SALAH)."
+      }
+    ]
+  }
+];
+
+// ================= STATE =================
+let studentName = '';
+let currentNarrativeIdx = 0;
+let userAnswers = {};
+let checkedAnswers = {};
+const totalQuestions = 20;
+
+// ================= INIT =================
+function init() {
+  createBgShapes();
+  bindEvents();
+}
+
+function createBgShapes() {
+  const container = document.getElementById('bgShapes');
+  const symbols = ['×', '÷', '=', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?', '★'];
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.className = 'bg-shape';
+    s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.fontSize = (Math.random() * 4 + 2) + 'rem';
+    s.style.setProperty('--rot', (Math.random() * 30 - 15) + 'deg');
+    s.style.animation = `floatShape ${Math.random() * 10 + 10}s ease-in-out infinite`;
+    s.style.animationDelay = Math.random() * 5 + 's';
+    container.appendChild(s);
+  }
+}
+
+function bindEvents() {
+  document.getElementById('startBtn').addEventListener('click', handleStart);
+  document.getElementById('toQuizBtn').addEventListener('click', () => {
+    switchScreen('quiz');
+    currentNarrativeIdx = 0;
+    renderNarrative(0);
+  });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentNarrativeIdx > 0) { currentNarrativeIdx--; renderNarrative(currentNarrativeIdx); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentNarrativeIdx < narratives.length - 1) { currentNarrativeIdx++; renderNarrative(currentNarrativeIdx); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  document.getElementById('finishBtn').addEventListener('click', showResults);
+  document.getElementById('toGameBtn').addEventListener('click', () => { switchScreen('game'); initMemoryGame(); });
+  document.getElementById('reviewBtn').addEventListener('click', () => {
+    const r = document.getElementById('reviewSection');
+    if (r.style.display === 'none') { r.style.display = 'block'; r.scrollIntoView({ behavior: 'smooth' }); document.getElementById('reviewBtn').textContent = '👆 Sembunyikan Pembahasan'; }
+    else { r.style.display = 'none'; document.getElementById('reviewBtn').textContent = '📖 Lihat Pembahasan'; }
+  });
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    userAnswers = {}; checkedAnswers = {}; currentNarrativeIdx = 0;
+    switchScreen('quiz'); renderNarrative(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.getElementById('backToResultBtn').addEventListener('click', () => switchScreen('result'));
+  document.getElementById('restartGameBtn').addEventListener('click', initMemoryGame);
+  document.getElementById('overlayCloseBtn').addEventListener('click', () => { document.getElementById('gameOverlay').classList.remove('active'); initMemoryGame(); });
+  document.getElementById('studentName').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleStart(); });
+  document.getElementById('skipMemorizeBtn').addEventListener('click', finishMemorize);
+}
+
+function handleStart() {
+  const input = document.getElementById('studentName');
+  const err = document.getElementById('nameError');
+  const name = input.value.trim();
+  if (!name) { err.textContent = 'Yuk isi namamu dulu untuk mulai! 😊'; input.focus(); return; }
+  if (name.length < 2) { err.textContent = 'Nama terlalu pendek, minimal 2 huruf ya!'; return; }
+  err.textContent = '';
+  studentName = name;
+  document.getElementById('userNameTop').textContent = name;
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+  switchScreen('material');
+}
+
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ================= RENDER QUIZ =================
+function renderNarrative(idx) {
+  currentNarrativeIdx = idx;
+  const nar = narratives[idx];
+  const content = document.getElementById('quizContent');
+  document.getElementById('progressText').textContent = `Cerita ${idx + 1} dari ${narratives.length}`;
+
+  const parts = nar.title.split(':');
+  const tagPart = parts[0].trim();
+  const titlePart = parts.slice(1).join(':').trim();
+
+  let html = `
+    <div class="narrative-block">
+      <div class="narrative-tag">📖 ${tagPart}</div>
+      <h3 class="narrative-title">${titlePart}</h3>
+      <div class="narrative-text">${nar.text}</div>
+    </div>
+  `;
+
+  let globalStart = 0;
+  for (let i = 0; i < idx; i++) globalStart += narratives[i].questions.length;
+
+  nar.questions.forEach((q, qIdx) => {
+    const globalNum = globalStart + qIdx + 1;
+    const qId = `n${nar.id}_q${qIdx}`;
+    html += renderQuestion(q, qId, globalNum, qIdx);
+  });
+
+  content.innerHTML = html;
+  bindQuestionInteractions();
+  updateProgressBar();
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const finishBtn = document.getElementById('finishBtn');
+  document.getElementById('quizNav').style.display = 'flex';
+  prevBtn.style.display = idx > 0 ? 'inline-flex' : 'none';
+  if (idx === narratives.length - 1) { nextBtn.style.display = 'none'; finishBtn.style.display = 'inline-flex'; }
+  else { nextBtn.style.display = 'inline-flex'; finishBtn.style.display = 'none'; }
+
+  applySavedState(idx);
+}
+
+function renderQuestion(q, qId, globalNum, qIdx) {
+  let badge = '';
+  if (q.type === 'pg') badge = '<span class="q-type-badge q-type-pg">Pilihan Ganda</span>';
+  else if (q.type === 'bs') badge = '<span class="q-type-badge q-type-bs">Benar / Salah</span>';
+  else if (q.type === 'kompleks') badge = '<span class="q-type-badge q-type-kompleks">PG Kompleks</span>';
+
+  let prompt = q.question || 'Tentukan kebenaran dari setiap pernyataan berikut berdasarkan narasi di atas!';
+
+  let body = '';
+  if (q.type === 'pg') {
+    body = '<div class="options-grid">';
+    q.options.forEach((opt, i) => {
+      const letter = String.fromCharCode(65 + i);
+      body += `<label class="option" data-idx="${i}" data-qid="${qId}"><span class="option-letter">${letter}</span><span class="option-text">${opt}</span></label>`;
+    });
+    body += '</div>';
+  } else if (q.type === 'bs') {
+    body = '<div class="bs-grid">';
+    q.statements.forEach((stmt, i) => {
+      body += `<div class="bs-item"><div class="bs-statement">${i + 1}. ${stmt}</div><div class="bs-choices"><button class="bs-btn" data-qid="${qId}" data-stmt="${i}" data-val="benar">BENAR</button><button class="bs-btn" data-qid="${qId}" data-stmt="${i}" data-val="salah">SALAH</button></div></div>`;
+    });
+    body += '</div>';
+  } else if (q.type === 'kompleks') {
+    body = '<div class="kompleks-grid">';
+    q.statements.forEach((stmt, i) => {
+      body += `<label class="kompleks-item" data-idx="${i}" data-qid="${qId}"><span class="kompleks-check"></span><span class="kompleks-text">${i + 1}. ${stmt}</span></label>`;
+    });
+    body += '</div>';
+  }
+
+  return `<div class="question-card" id="card_${qId}" data-qid="${qId}" style="animation-delay: ${0.1 + qIdx * 0.08}s">
+    <div class="q-header"><div class="q-number">${globalNum}</div><div class="q-text">${prompt}</div>${badge}</div>
+    ${body}
+    <button class="btn-check" id="check_${qId}" data-qid="${qId}" disabled>Cek Jawaban</button>
+    <div class="feedback-box" id="feedback_${qId}" style="display: none;"></div>
+  </div>`;
+}
+
+function bindQuestionInteractions() {
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const qid = opt.dataset.qid;
+      if (checkedAnswers[qid]) return;
+      const idx = parseInt(opt.dataset.idx);
+      userAnswers[qid] = idx;
+      document.querySelectorAll(`.option[data-qid="${qid}"]`).forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      document.getElementById(`card_${qid}`).classList.add('answered');
+      document.getElementById(`check_${qid}`).disabled = false;
+      updateProgressBar();
+    });
+  });
+
+  document.querySelectorAll('.bs-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const qid = btn.dataset.qid;
+      if (checkedAnswers[qid]) return;
+      const stmt = parseInt(btn.dataset.stmt);
+      const val = btn.dataset.val;
+      if (!userAnswers[qid]) userAnswers[qid] = {};
+      userAnswers[qid][stmt] = val;
+      document.querySelectorAll(`.bs-btn[data-qid="${qid}"][data-stmt="${stmt}"]`).forEach(b => { b.classList.remove('selected', 'benar', 'salah'); });
+      btn.classList.add('selected', val);
+      const total = document.querySelectorAll(`.bs-btn[data-qid="${qid}"]`).length / 2;
+      const answered = Object.keys(userAnswers[qid]).length;
+      if (answered === total) {
+        document.getElementById(`card_${qid}`).classList.add('answered');
+        document.getElementById(`check_${qid}`).disabled = false;
+      }
+      updateProgressBar();
+    });
+  });
+
+  document.querySelectorAll('.kompleks-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const qid = item.dataset.qid;
+      if (checkedAnswers[qid]) return;
+      const idx = parseInt(item.dataset.idx);
+      if (!userAnswers[qid]) userAnswers[qid] = [];
+      const arr = userAnswers[qid];
+      const pos = arr.indexOf(idx);
+      if (pos === -1) { arr.push(idx); item.classList.add('selected'); }
+      else { arr.splice(pos, 1); item.classList.remove('selected'); }
+      if (arr.length > 0) {
+        document.getElementById(`card_${qid}`).classList.add('answered');
+        document.getElementById(`check_${qid}`).disabled = false;
+      } else {
+        document.getElementById(`card_${qid}`).classList.remove('answered');
+        document.getElementById(`check_${qid}`).disabled = true;
+      }
+      updateProgressBar();
+    });
+  });
+
+  document.querySelectorAll('.btn-check').forEach(btn => {
+    btn.addEventListener('click', () => handleCheckAnswer(btn.dataset.qid));
+  });
+}
+
+function applySavedState(idx) {
+  const nar = narratives[idx];
+  nar.questions.forEach((q, qIdx) => {
+    const qId = `n${nar.id}_q${qIdx}`;
+    const userAns = userAnswers[qId];
+    if (!userAns) return;
+
+    if (q.type === 'pg') {
+      const opt = document.querySelector(`.option[data-qid="${qId}"][data-idx="${userAns}"]`);
+      if (opt) opt.classList.add('selected');
+      const btn = document.getElementById(`check_${qId}`);
+      if (btn) btn.disabled = false;
+    } else if (q.type === 'bs') {
+      Object.keys(userAns).forEach(stmt => {
+        const val = userAns[stmt];
+        const btn = document.querySelector(`.bs-btn[data-qid="${qId}"][data-stmt="${stmt}"][data-val="${val}"]`);
+        if (btn) btn.classList.add('selected', val);
+      });
+      if (Object.keys(userAns).length === q.statements.length) {
+        const btn = document.getElementById(`check_${qId}`);
+        if (btn) btn.disabled = false;
+      }
+    } else if (q.type === 'kompleks') {
+      userAns.forEach(i => {
+        const item = document.querySelector(`.kompleks-item[data-qid="${qId}"][data-idx="${i}"]`);
+        if (item) item.classList.add('selected');
+      });
+      if (userAns.length > 0) {
+        const btn = document.getElementById(`check_${qId}`);
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    if (checkedAnswers[qId]) {
+      handleCheckAnswer(qId, true);
+    }
+  });
+}
+
+function getQuestionData(qId) {
+  const match = qId.match(/n(\d+)_q(\d+)/);
+  if (!match) return null;
+  const nId = parseInt(match[1]);
+  const qIdx = parseInt(match[2]);
+  const nar = narratives.find(n => n.id === nId);
+  return nar.questions[qIdx];
+}
+
+function handleCheckAnswer(qId, isRestoring = false) {
+  if (checkedAnswers[qId] && !isRestoring) return;
+  const q = getQuestionData(qId);
+  const userAns = userAnswers[qId];
+  if (!isAnswered(qId, q.type)) return;
+
+  let isCorrect = false;
+
+  if (q.type === 'pg') {
+    isCorrect = userAns === q.answer;
+    document.querySelector(`.option[data-qid="${qId}"][data-idx="${q.answer}"]`).classList.add('correct');
+    if (!isCorrect) {
+      document.querySelector(`.option[data-qid="${qId}"][data-idx="${userAns}"]`).classList.add('wrong');
+    }
+  } else if (q.type === 'bs') {
+    isCorrect = q.answer.every((v, i) => userAns[i] === v);
+    q.answer.forEach((v, i) => {
+      const correctBtn = document.querySelector(`.bs-btn[data-qid="${qId}"][data-stmt="${i}"][data-val="${v}"]`);
+      if (correctBtn) correctBtn.classList.add('correct');
+      if (userAns[i] !== v && userAns[i]) {
+        const wrongBtn = document.querySelector(`.bs-btn[data-qid="${qId}"][data-stmt="${i}"][data-val="${userAns[i]}"]`);
+        if (wrongBtn) wrongBtn.classList.add('wrong');
+      }
+    });
+  } else if (q.type === 'kompleks') {
+    const cs = new Set(q.answer), us = new Set(userAns);
+    isCorrect = cs.size === us.size && [...cs].every(v => us.has(v));
+    q.answer.forEach(i => {
+      const el = document.querySelector(`.kompleks-item[data-qid="${qId}"][data-idx="${i}"]`);
+      if (el) el.classList.add('correct');
+    });
+    userAns.forEach(i => {
+      if (!cs.has(i)) {
+        const el = document.querySelector(`.kompleks-item[data-qid="${qId}"][data-idx="${i}"]`);
+        if (el) el.classList.add('wrong');
+      }
+    });
+  }
+
+  const card = document.getElementById(`card_${qId}`);
+  card.classList.remove('answered');
+  card.classList.add(isCorrect ? 'checked-correct' : 'checked-wrong');
+
+  document.querySelectorAll(`.option[data-qid="${qId}"]`).forEach(el => el.style.pointerEvents = 'none');
+  document.querySelectorAll(`.bs-btn[data-qid="${qId}"]`).forEach(el => el.style.pointerEvents = 'none');
+  document.querySelectorAll(`.kompleks-item[data-qid="${qId}"]`).forEach(el => el.style.pointerEvents = 'none');
+  
+  const btn = document.getElementById(`check_${qId}`);
+  btn.disabled = true;
+  btn.classList.remove('btn-check');
+  btn.classList.add(isCorrect ? 'btn-success' : 'btn-danger');
+  btn.innerHTML = isCorrect ? '✓ Jawaban Benar' : '✗ Jawaban Kurang Tepat';
+
+  const feedback = document.getElementById(`feedback_${qId}`);
+  feedback.style.display = 'block';
+  feedback.innerHTML = `
+    <div class="feedback-title ${isCorrect ? 'correct' : 'wrong'}">${isCorrect ? '🎉 Tepat sekali!' : '🤔 Belum tepat, yuk pelajari!'}</div>
+    <div class="feedback-text"><strong>Pembahasan:</strong> ${q.explanation}</div>
+  `;
+
+  if (!isRestoring) {
+    checkedAnswers[qId] = true;
+    if (isCorrect) showToast('Mantap! Jawaban benar! 🌟');
+    else showToast('Coba pelajari pembahasannya ya! 💡');
+  }
+}
+
+function updateProgressBar() {
+  let answered = 0;
+  narratives.forEach(nar => {
+    nar.questions.forEach((q, qIdx) => {
+      const qId = `n${nar.id}_q${qIdx}`;
+      if (isAnswered(qId, q.type)) answered++;
+    });
+  });
+  document.getElementById('progressFill').style.width = (answered / totalQuestions) * 100 + '%';
+  document.getElementById('progressCount').textContent = `${answered}/${totalQuestions} dijawab`;
+}
+
+function isAnswered(qId, type) {
+  const a = userAnswers[qId];
+  if (!a) return false;
+  if (type === 'pg') return typeof a === 'number';
+  if (type === 'bs') return typeof a === 'object' && Object.keys(a).length > 0;
+  if (type === 'kompleks') return Array.isArray(a) && a.length > 0;
+  return false;
+}
+
+// ================= HASIL =================
+function showResults() {
+  let unanswered = 0;
+  narratives.forEach(nar => {
+    nar.questions.forEach((q, qIdx) => {
+      const qId = `n${nar.id}_q${qIdx}`;
+      if (!isAnswered(qId, q.type)) unanswered++;
+    });
+  });
+  if (unanswered > 0) {
+    showToast(`Masih ada ${unanswered} soal yang belum dijawab. Yuk lengkapi dulu! 📝`);
+    return;
+  }
+
+  let correct = 0, wrong = 0;
+  narratives.forEach(nar => {
+    nar.questions.forEach((q, qIdx) => {
+      const qId = `n${nar.id}_q${qIdx}`;
+      const userAns = userAnswers[qId];
+      let isCorrect = false;
+      if (q.type === 'pg') isCorrect = userAns === q.answer;
+      else if (q.type === 'bs') isCorrect = q.answer.every((v, i) => userAns[i] === v);
+      else if (q.type === 'kompleks') {
+        const cs = new Set(q.answer), us = new Set(userAns);
+        isCorrect = cs.size === us.size && [...cs].every(v => us.has(v));
+      }
+      isCorrect ? correct++ : wrong++;
+    });
+  });
+
+  const score = Math.round((correct / totalQuestions) * 100);
+  document.getElementById('resultName').textContent = studentName;
+  animateNumber(document.getElementById('finalScore'), score);
+  animateNumber(document.getElementById('correctCount'), correct);
+  animateNumber(document.getElementById('wrongCount'), wrong);
+
+  let msg = '';
+  if (score === 100) msg = `<div class="emoji">🏆</div>Luar biasa, ${studentName}! Skor sempurna! Kamu menguasai perkalian dan pembagian dengan sangat baik. Sekarang uji ketangkasanmu di Game Memori!`;
+  else if (score >= 80) msg = `<div class="emoji">🌟</div>Hebat, ${studentName}! Kamu sudah sangat pintar dalam perkalian dan pembagian. Sedikit lagi untuk sempurna!`;
+  else if (score >= 60) msg = `<div class="emoji">💪</div>Bagus, ${studentName}! Kamu sudah cukup memahami materi. Yuk pelajari kembali pembahasan untuk lebih mahir!`;
+  else if (score >= 40) msg = `<div class="emoji">📚</div>Tetap semangat, ${studentName}! Baca kembali materi dan pembahasan untuk meningkatkan pemahamanmu. Kamu pasti bisa!`;
+  else msg = `<div class="emoji">🌱</div>Jangan menyerah, ${studentName}! Setiap ahli matematika pernah memulai dari sini. Yuk belajar lagi dari pembahasannya!`;
+  document.getElementById('resultMessage').innerHTML = msg;
+
+  renderReview();
+  document.getElementById('reviewSection').style.display = 'none';
+  document.getElementById('reviewBtn').textContent = '📖 Lihat Pembahasan';
+  switchScreen('result');
+  if (score >= 80) launchConfetti();
+}
+
+function animateNumber(el, target, duration = 1200) {
+  const startTime = performance.now();
+  function update(now) {
+    const p = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * eased);
+    if (p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function renderReview() {
+  const c = document.getElementById('reviewContent');
+  let html = '', g = 0;
+  narratives.forEach(nar => {
+    nar.questions.forEach((q, qIdx) => {
+      g++;
+      const qId = `n${nar.id}_q${qIdx}`;
+      const u = userAnswers[qId];
+      let isCorrect = false, userDisp = '', correctDisp = '';
+      if (q.type === 'pg') {
+        isCorrect = u === q.answer;
+        userDisp = (u !== undefined) ? q.options[u] : '(tidak dijawab)';
+        correctDisp = q.options[q.answer];
+      } else if (q.type === 'bs') {
+        isCorrect = q.answer.every((v, i) => u[i] === v);
+        userDisp = q.statements.map((s, i) => `P${i + 1}: ${u[i] ? u[i].toUpperCase() : '-'}`).join(' • ');
+        correctDisp = q.statements.map((s, i) => `P${i + 1}: ${q.answer[i].toUpperCase()}`).join(' • ');
+      } else if (q.type === 'kompleks') {
+        const cs = new Set(q.answer), us = new Set(u);
+        isCorrect = cs.size === us.size && [...cs].every(v => us.has(v));
+        userDisp = u.map(i => `P${i + 1}`).join(', ') || '(tidak ada)';
+        correctDisp = q.answer.map(i => `P${i + 1}`).join(', ');
+      }
+      const prompt = q.question || 'Tentukan kebenaran setiap pernyataan berdasarkan narasi!';
+      html += `<div class="review-item ${isCorrect ? 'correct' : 'wrong'}"><div class="review-q"><div class="review-q-num">${g}</div><div class="review-q-text">${prompt}</div><div class="review-status ${isCorrect ? 'correct' : 'wrong'}">${isCorrect ? '✓ Benar' : '✗ Salah'}</div></div><div class="review-answer"><span class="ans-label">Jawabanmu:</span> <span class="${isCorrect ? 'ans-correct' : 'ans-wrong'}">${userDisp}</span><br><span class="ans-label">Kunci:</span> <span class="ans-correct">${correctDisp}</span><div class="review-explain"><span class="ans-label">Pembahasan:</span> ${q.explanation}</div></div></div>`;
+    });
+  });
+  c.innerHTML = html;
+}
+
+// ================= GAME MEMORI =================
+const memoryPairs = [
+  { problem: "6 × 7", answer: "42" },
+  { problem: "48 ÷ 8", answer: "6" },
+  { problem: "9 × 9", answer: "81" },
+  { problem: "144 ÷ 12", answer: "12" },
+  { problem: "12 × 5", answer: "60" },
+  { problem: "63 ÷ 9", answer: "7" },
+  { problem: "8 × 8", answer: "64" },
+  { problem: "100 ÷ 4", answer: "25" },
+  { problem: "11 × 7", answer: "77" },
+  { problem: "90 ÷ 5", answer: "18" }
+];
+
+let firstFlipped = null, secondFlipped = null, lockBoard = false, moves = 0, matches = 0, timer = null, seconds = 0, memorizeTimer = null, memorizeTimeLeft = 30;
+
+function initMemoryGame() {
+  const board = document.getElementById('gameBoard');
+  board.innerHTML = '';
+  firstFlipped = null; secondFlipped = null; 
+  lockBoard = true; // locked during memorize
+  moves = 0; matches = 0; seconds = 0;
+  
+  if (timer) clearInterval(timer);
+  if (memorizeTimer) clearInterval(memorizeTimer);
+  
+  document.getElementById('moveCount').textContent = '0';
+  document.getElementById('matchCount').textContent = '0';
+  document.getElementById('timeCount').textContent = '0s';
+  document.getElementById('gameOverlay').classList.remove('active');
+
+  const cards = [];
+  memoryPairs.forEach((p, i) => {
+    cards.push({ id: i * 2, text: p.problem, pairId: i });
+    cards.push({ id: i * 2 + 1, text: p.answer, pairId: i });
+  });
+  cards.sort(() => Math.random() - 0.5);
+
+  cards.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'memory-card flipped'; // show text initially
+    el.dataset.pairId = card.pairId;
+    el.innerHTML = `<div class="memory-card-inner"><div class="memory-card-face memory-card-front">?</div><div class="memory-card-face memory-card-back">${card.text}</div></div>`;
+    el.addEventListener('click', () => handleCardClick(el));
+    board.appendChild(el);
+  });
+
+  // Start memorize countdown
+  let memorizeBanner = document.getElementById('memorizeBanner');
+  memorizeBanner.classList.add('active');
+  memorizeTimeLeft = 30;
+  document.getElementById('memorizeTime').textContent = memorizeTimeLeft;
+
+  memorizeTimer = setInterval(() => {
+    memorizeTimeLeft--;
+    document.getElementById('memorizeTime').textContent = memorizeTimeLeft;
+    if (memorizeTimeLeft <= 0) {
+      finishMemorize();
+    }
+  }, 1000);
+}
+
+function finishMemorize() {
+  if (memorizeTimer) clearInterval(memorizeTimer);
+  memorizeTimer = null;
+  document.getElementById('memorizeBanner').classList.remove('active');
+  document.querySelectorAll('.memory-card').forEach(c => c.classList.remove('flipped'));
+  lockBoard = false;
+  timer = setInterval(() => { 
+    seconds++; 
+    document.getElementById('timeCount').textContent = seconds + 's'; 
+  }, 1000);
+}
+
+function handleCardClick(card) {
+  if (lockBoard) return;
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  if (!firstFlipped) { firstFlipped = card; return; }
+  secondFlipped = card;
+  moves++;
+  document.getElementById('moveCount').textContent = moves;
+  if (firstFlipped.dataset.pairId === secondFlipped.dataset.pairId) {
+    setTimeout(() => {
+      firstFlipped.classList.add('matched');
+      secondFlipped.classList.add('matched');
+      firstFlipped = null; secondFlipped = null;
+      matches++;
+      document.getElementById('matchCount').textContent = matches;
+      if (matches === memoryPairs.length) {
+        clearInterval(timer);
+        setTimeout(() => {
+          document.getElementById('finalMoves').textContent = moves;
+          document.getElementById('finalTime').textContent = seconds + 's';
+          document.getElementById('overlayMessage').textContent = `Kamu menyelesaikannya dalam ${moves} langkah dan ${seconds} detik. Ingatanmu hebat!`;
+          document.getElementById('gameOverlay').classList.add('active');
+          launchConfetti();
+        }, 600);
+      }
+    }, 400);
+  } else {
+    lockBoard = true;
+    setTimeout(() => {
+      firstFlipped.classList.remove('flipped');
+      secondFlipped.classList.remove('flipped');
+      firstFlipped = null; secondFlipped = null;
+      lockBoard = false;
+    }, 1000);
+  }
+}
+
+// ================= UTIL =================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function launchConfetti() {
+  const colors = ['#f25c05', '#0d8a6e', '#ffb627', '#2dbf9a', '#ff8c3a'];
+  for (let i = 0; i < 90; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = Math.random() * 0.5 + 's';
+    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
