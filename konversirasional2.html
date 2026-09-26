@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pecahan, Desimal & Persen — Presentasi Interaktif</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F1E6; --card:#FFFDF6; --ink:#2A2420; --line:#E4D9C4;
+  --terra:#D9532B; --green:#3F6B4F; --butter:#F2B33D; --rose:#E2799C; --slate:#4E7A9B;
+  --ok:#3F6B4F; --okbg:#E7EFE2; --bad:#C4402F; --badbg:#F9E2DC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Schibsted Grotesk',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(rgba(120,95,55,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(120,95,55,.07) 1px,transparent 1px);
+  background-size:28px 28px;overflow:hidden;
+}
+::selection{background:var(--butter);color:var(--ink)}
+button{font-family:inherit;color:inherit}
+.ic{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.18em}
+.ic.fill{fill:currentColor;stroke:none}
+
+/* ---------- kerangka ---------- */
+#topbar{position:fixed;inset:0 0 auto 0;height:56px;z-index:40;display:flex;align-items:center;gap:14px;
+  padding:0 18px;background:var(--paper);border-bottom:2px solid var(--ink)}
+#topbar .brand{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+#topbar .brand .ic{width:1.3em;height:1.3em;color:var(--terra)}
+#pgWrap{flex:1;height:8px;border:2px solid var(--ink);border-radius:99px;background:var(--card);overflow:hidden}
+#pgFill{height:100%;width:0;background:var(--terra);transition:width .35s ease}
+.tb-chip{font-size:.8rem;font-weight:700;border:2px solid var(--ink);border-radius:99px;padding:4px 12px;background:var(--card);white-space:nowrap}
+.tb-btn{width:36px;height:36px;border:2px solid var(--ink);border-radius:10px;background:var(--card);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;box-shadow:2px 2px 0 var(--ink);transition:.12s}
+.tb-btn:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.tb-btn .ic{width:1.2em;height:1.2em}
+#deck{position:absolute;inset:56px 0 60px}
+.slide{position:absolute;inset:0;display:none;overflow:auto;flex-direction:column}
+.slide.active{display:flex;animation:slidein .4s ease both}
+@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap{max-width:1100px;width:100%;margin:auto;padding:36px 30px;position:relative}
+.ghostnum{position:absolute;top:6px;right:14px;font-family:'Fraunces',serif;font-style:italic;font-weight:900;
+  font-size:6.5rem;line-height:1;color:rgba(42,36,32,.06);pointer-events:none;user-select:none}
+.kick{display:flex;align-items:center;gap:.7em;font-weight:800;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;color:var(--terra)}
+.kick::before{content:'';width:28px;height:3px;background:var(--terra);border-radius:2px}
+.stitle{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.9rem,4.2vw,3rem);line-height:1.06;letter-spacing:-.01em;margin:.4em 0 .25em}
+.hl{box-shadow:inset 0 -.42em 0 rgba(242,179,61,.55)}
+.lead{max-width:680px;font-size:1.02rem;line-height:1.55;color:#54493F}
+.note{font-family:'Caveat',cursive;font-size:1.25rem;color:var(--terra);transform:rotate(-2deg)}
+
+/* ---------- komponen dasar ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);
+  border-radius:12px;padding:.6em 1.2em;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:3px 3px 0 var(--terra);transition:.12s}
+.btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--terra)}
+.btn:active{transform:translate(3px,3px);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--terra)}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn.ghost:hover{box-shadow:2px 2px 0 var(--ink)}
+.btn.tiny{padding:.42em .85em;font-size:.85rem;border-radius:10px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 var(--ink)}
+.tape{position:absolute;width:96px;height:26px;background:rgba(226,121,156,.75);
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.4) 0 6px,transparent 6px 12px);
+  border-left:2px dashed rgba(42,36,32,.25);border-right:2px dashed rgba(42,36,32,.25)}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1;margin:0 2px;font-size:.82em}
+.fr span{padding:0 4px}
+.fr span+span{border-top:2px solid currentColor}
+
+#navbar{position:fixed;inset:auto 0 0 0;height:60px;z-index:40;display:flex;align-items:center;gap:14px;
+  padding:0 18px;background:var(--paper);border-top:2px solid var(--ink)}
+#dots{flex:1;display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+#dots button{width:10px;height:10px;border-radius:99px;border:2px solid var(--ink);background:transparent;cursor:pointer;padding:0;transition:.15s}
+#dots button.on{width:26px;background:var(--terra)}
+#dots button:hover{background:var(--butter)}
+#pgNum{font-weight:800;font-size:.85rem;min-width:64px;text-align:center}
+.navbtn{width:42px;height:42px;border:2px solid var(--ink);border-radius:12px;background:var(--ink);color:var(--paper);
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--butter);transition:.12s}
+.navbtn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--butter)}
+.navbtn:disabled{opacity:.35;cursor:default}
+.navbtn .ic{width:1.3em;height:1.3em}
+
+#menuOv{position:fixed;inset:0;z-index:60;background:rgba(42,36,32,.45);display:none;align-items:center;justify-content:center;padding:20px}
+#menuOv.open{display:flex}
+#menuCard{max-width:420px;width:100%;padding:26px;position:relative}
+#menuCard h3{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:14px}
+#menuCard button.mi{display:flex;width:100%;text-align:left;gap:12px;align-items:center;background:transparent;border:0;
+  border-bottom:1.5px dashed var(--line);padding:9px 4px;font-size:.95rem;font-weight:600;cursor:pointer}
+#menuCard button.mi:hover{color:var(--terra)}
+#menuCard button.mi b{font-family:'Fraunces',serif;font-style:italic;color:var(--terra);min-width:26px}
+#menuClose{position:absolute;top:14px;right:14px}
+#toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%) translateY(20px);z-index:70;opacity:0;pointer-events:none;
+  background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:10px 18px;font-weight:700;font-size:.9rem;
+  box-shadow:4px 4px 0 var(--butter);transition:.25s;max-width:88vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.bad{background:var(--bad)}
+
+/* ---------- sampul ---------- */
+.s-cover .wrap{min-height:calc(100vh - 200px);display:flex;align-items:center;justify-content:center}
+.cover-num{position:absolute;font-family:'Fraunces',serif;font-style:italic;font-weight:900;color:rgba(42,36,32,.08);user-select:none;pointer-events:none}
+.cover-num.n1{font-size:11rem;top:-30px;left:-10px;transform:rotate(-8deg)}
+.cover-num.n2{font-size:6rem;bottom:10px;right:2%;transform:rotate(6deg)}
+.cover-num.n3{font-size:7.5rem;top:22%;right:6%;transform:rotate(4deg)}
+.cover-card{position:relative;max-width:560px;width:100%;padding:52px 44px 40px;text-align:center}
+.cover-card .tape{top:-14px;left:50%;transform:translateX(-50%) rotate(-3deg)}
+.cover-kick{letter-spacing:.3em;font-weight:800;font-size:.72rem;color:var(--terra);text-transform:uppercase}
+.cover-title{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.3rem,5.5vw,3.6rem);line-height:1.02;margin:.25em 0 .2em}
+.cover-sub{color:#54493F;margin-bottom:26px}
+.namebox{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.namebox input{border:2px solid var(--ink);border-radius:12px;background:#fff;padding:.65em 1em;font:600 1rem 'Schibsted Grotesk';width:min(260px,100%);outline:none}
+.namebox input:focus{border-color:var(--terra);box-shadow:3px 3px 0 rgba(217,83,43,.3)}
+.badge{position:absolute;top:-46px;right:-40px;width:110px;height:110px;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.badge text{font:700 11.5px 'Schibsted Grotesk';letter-spacing:2.5px;fill:var(--ink)}
+.badge .big{font:italic 900 34px 'Fraunces'}
+.cover-note{position:absolute;bottom:-34px;left:8px}
+
+/* ---------- kehidupan sehari-hari ---------- */
+.life-field{display:flex;flex-wrap:wrap;gap:22px;margin-top:30px;justify-content:center}
+.life-card{width:230px;padding:20px 18px 18px;position:relative;transition:.2s}
+.life-card:hover{transform:rotate(0deg) scale(1.04)!important;z-index:2}
+.life-card h4{font-family:'Fraunces',serif;font-size:1.05rem;margin-bottom:4px}
+.life-card p{font-size:.85rem;color:#54493F;line-height:1.45}
+.life-trio{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.life-trio b{font-family:'Fraunces',serif;font-size:1.02rem;border:2px solid var(--ink);border-radius:8px;padding:2px 8px;background:var(--paper)}
+.life-card .dotc{position:absolute;top:-11px;left:16px;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  border:2px solid var(--ink);border-radius:99px;padding:2px 10px}
+.life-card:nth-child(1){transform:rotate(-2.5deg)} .life-card:nth-child(1) .dotc{background:var(--rose)}
+.life-card:nth-child(2){transform:rotate(1.8deg)}  .life-card:nth-child(2) .dotc{background:var(--butter)}
+.life-card:nth-child(3){transform:rotate(-1.2deg)} .life-card:nth-child(3) .dotc{background:#BFD3C0}
+.life-card:nth-child(4){transform:rotate(2.4deg)}  .life-card:nth-child(4) .dotc{background:#C9D9E6}
+.life-card:nth-child(5){transform:rotate(-2deg)}   .life-card:nth-child(5) .dotc{background:var(--terra);color:var(--paper)}
+
+/* ---------- tujuan ---------- */
+.goal{display:flex;gap:22px;align-items:flex-start;padding:20px 0;border-bottom:2px dashed var(--line);max-width:760px}
+.goal:nth-child(odd){margin-left:0}.goal:nth-child(even){margin-left:min(90px,8vw)}
+.goal .gnum{font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:2.6rem;color:var(--terra);line-height:1;min-width:64px}
+.goal h4{font-size:1.12rem;margin-bottom:3px}
+.goal p{font-size:.92rem;color:#54493F;line-height:1.5}
+.keyword{display:inline-block;margin:6px 4px 0 0;border:2px solid var(--ink);border-radius:99px;padding:3px 13px;font-size:.82rem;font-weight:700;background:var(--card)}
+
+/* ---------- peta konversi ---------- */
+.review-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;margin-top:26px;align-items:start}
+.map-wrap{position:relative;aspect-ratio:520/340;max-width:540px}
+.map-wrap svg{position:absolute;inset:0;width:100%;height:100%}
+.ar{fill:none;stroke:var(--ink);stroke-width:2.5}
+.ar-hit{fill:none;stroke:transparent;stroke-width:26;cursor:pointer}
+.ar-hit:hover{stroke:rgba(217,83,43,.16)}
+.ar.on{stroke:var(--terra);marker-end:url(#mT)}
+.node{position:absolute;transform:translate(-50%,-50%);border:2px solid var(--ink);border-radius:99px;background:var(--card);
+  padding:.55em 1.2em;font-weight:800;letter-spacing:.06em;font-size:.92rem;white-space:nowrap;box-shadow:3px 3px 0 var(--ink);display:flex;align-items:center;gap:8px}
+.node i{width:12px;height:12px;border-radius:4px;border:2px solid var(--ink);display:inline-block}
+.node.n-p{left:20%;top:60%}.node.n-p i{background:var(--terra)}
+.node.n-d{left:80%;top:60%}.node.n-d i{background:var(--green)}
+.node.n-c{left:50%;top:20%}.node.n-c i{background:var(--butter)}
+.conv-card{padding:24px;position:relative}
+.conv-card h3{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:8px}
+.conv-card .how{font-size:.98rem;line-height:1.5;margin-bottom:6px}
+.conv-card .hint{font-family:'Caveat',cursive;font-size:1.2rem;color:var(--green);transform:rotate(-1deg);margin-bottom:12px}
+.exbox{border:2px dashed var(--ink);border-radius:12px;padding:14px 16px;background:var(--paper);font-family:'Fraunces',serif;font-size:1.25rem;margin-bottom:14px}
+.exbox .res{color:var(--terra)}
+.conv-default{text-align:center;padding:30px 10px;color:#54493F}
+.trickstrip{margin-top:26px;border:2px solid var(--ink);border-radius:14px;background:var(--butter);padding:14px 20px;
+  display:flex;gap:14px;align-items:center;box-shadow:4px 4px 0 var(--ink);font-weight:600}
+.trickstrip .ic{width:1.6em;height:1.6em;flex:none}
+
+/* ---------- latihan 1 ---------- */
+.l1top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:18px 0 14px}
+.pager{display:flex;align-items:center;gap:8px}
+.pager .pgb{width:34px;height:34px;border:2px solid var(--ink);background:var(--card);border-radius:9px;cursor:pointer;font-weight:800}
+.pager .pgb.on{background:var(--ink);color:var(--paper)}
+.l1score{margin-left:auto;font-weight:800;border:2px solid var(--ink);border-radius:99px;padding:6px 16px;background:var(--okbg)}
+.tscroll{overflow-x:auto}
+table.l1{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:5px 5px 0 var(--ink)}
+table.l1 th{background:var(--ink);color:var(--paper);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:10px 12px;text-align:center}
+table.l1 td{padding:9px 12px;text-align:center;border-top:1.5px dashed var(--line);font-size:1rem}
+table.l1 tr.locked td{background:var(--okbg)}
+.c-given{font-family:'Fraunces',serif;font-weight:700;font-size:1.12rem}
+.inp input{border:0;border-bottom:2px dashed var(--ink);background:transparent;font:700 1.05rem 'Schibsted Grotesk';width:6.5ch;text-align:center;color:var(--ink);outline:none;border-radius:4px 4px 0 0}
+.inp input[data-k="f"]{width:9ch}
+.inp input:focus{border-color:var(--terra);background:#FBEFE9}
+.inp input.ok{border-color:var(--ok);background:var(--okbg)}
+.inp input.bad{border-color:var(--bad);background:var(--badbg)}
+.inp.pct em{font-style:normal;font-weight:800;margin-left:2px}
+tr.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+
+/* ---------- game ---------- */
+.game-stage{margin-top:22px}
+.game-intro{max-width:640px;padding:34px;text-align:center;position:relative;margin:0 auto}
+.game-intro h3{font-family:'Fraunces',serif;font-size:1.7rem;margin-bottom:10px}
+.game-intro p{color:#54493F;line-height:1.55;margin-bottom:20px}
+.game-layout{display:grid;grid-template-columns:250px 1fr 300px;gap:22px;align-items:start}
+.recipe{padding:16px;position:relative}
+.recipe h4{font-family:'Fraunces',serif;margin-bottom:10px;display:flex;gap:8px;align-items:center}
+.rstep{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;border:2px solid transparent;font-size:.86rem}
+.rstep .rn{width:24px;height:24px;flex:none;border:2px solid var(--ink);border-radius:99px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;background:var(--paper)}
+.rstep .rd{margin-left:auto;font-weight:800;white-space:nowrap}
+.rstep.act{border-color:var(--ink);background:#FBEFE9;box-shadow:2px 2px 0 var(--ink)}
+.rstep.done{opacity:.6}
+.rstep.done .rn{background:var(--okbg)}
+.game-scene{position:relative;display:flex;align-items:center;justify-content:center;min-height:250px}
+.blob{position:absolute;top:-20px;width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);animation:fall .7s cubic-bezier(.5,0,.8,.5) forwards;z-index:3}
+@keyframes fall{to{transform:translateY(170px) scale(.7);opacity:.9}}
+.wobble{animation:wob .5s}
+@keyframes wob{25%{transform:rotate(-3deg)}60%{transform:rotate(3deg)}}
+.bakebar{width:min(320px,80%);height:16px;border:2px solid var(--ink);border-radius:99px;background:var(--card);overflow:hidden;margin:14px auto 6px}
+.bakebar i{display:block;height:100%;width:0;background:var(--terra);animation:bake 2.4s linear forwards}
+@keyframes bake{to{width:100%}}
+.flame{transform-origin:120px 60px;animation:flick .4s infinite alternate}
+@keyframes flick{from{transform:scaleY(1)}to{transform:scaleY(1.35) scaleX(.85)}}
+.game-panel{padding:20px;position:relative}
+.game-panel h4{font-family:'Fraunces',serif;font-size:1.15rem;margin-bottom:2px}
+.game-panel .sub{font-size:.85rem;color:#54493F;margin-bottom:14px}
+.ga-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ga{border:2px solid var(--ink);border-radius:12px;background:var(--paper);padding:16px 8px;font-family:'Fraunces',serif;
+  font-weight:700;font-size:1.25rem;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.12s}
+.ga:hover{background:#FBEFE9;transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.ga.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.ga.bad{background:var(--badbg);border-color:var(--bad);color:var(--bad);animation:shake .4s}
+.ga:disabled{cursor:default;opacity:.75}
+.gfeed{margin-top:14px;font-weight:700;min-height:24px;font-size:.92rem}
+.gfeed.good{color:var(--ok)}.gfeed.err{color:var(--bad)}
+.gprog{font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#54493F;margin-top:8px}
+.game-end{text-align:center;max-width:460px;margin:0 auto;padding:30px;position:relative}
+.game-end h3{font-family:'Fraunces',serif;font-size:1.8rem;margin:8px 0 4px}
+.stars{display:flex;justify-content:center;gap:10px;margin:10px 0 16px}
+.stars .ic{width:44px;height:44px;stroke-width:1.6;stroke:var(--ink);fill:transparent;opacity:.3}
+.stars .ic.on{fill:var(--butter);opacity:1;animation:pop .5s both}
+@keyframes pop{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.hidden{display:none!important}
+
+/* ---------- membandingkan ---------- */
+.cmp-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:30px;margin-top:24px;align-items:start}
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+.step .sn{width:38px;height:38px;flex:none;border:2px solid var(--ink);border-radius:99px;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:1.1rem;background:var(--butter);box-shadow:2px 2px 0 var(--ink)}
+.step h4{font-size:1.02rem;margin-bottom:2px}
+.step p{font-size:.9rem;color:#54493F;line-height:1.5}
+.tipline{border:2px solid var(--ink);background:#FBEFE9;border-radius:12px;padding:12px 16px;font-weight:700;display:flex;gap:10px;align-items:center;box-shadow:3px 3px 0 var(--ink)}
+.tipline .ic{color:var(--terra);width:1.5em;height:1.5em;flex:none}
+.numline-card{padding:20px}
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.preset-row button{border:2px solid var(--ink);border-radius:99px;background:var(--paper);padding:6px 14px;font-weight:700;font-size:.85rem;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.preset-row button.on{background:var(--ink);color:var(--paper)}
+#numline svg{width:100%;height:auto}
+.pt{animation:ptin .45s both}
+@keyframes ptin{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+#orderOut{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem}
+#orderOut b{border:2px solid var(--ink);border-radius:8px;padding:2px 10px;background:var(--paper)}
+
+/* ---------- latihan 2 ---------- */
+.l2wrap{max-width:720px;margin:22px auto 0}
+.l2card{padding:26px;position:relative}
+.l2head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.l2no{font-weight:800}
+.l2no em{font-style:normal;font-weight:600;color:#7A6E60;font-size:.85em}
+.l2tag{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border:2px solid var(--ink);border-radius:99px;padding:3px 12px}
+.t-pick{background:#F6DCCE}.t-sign{background:#D8E4DC}.t-order{background:#F8E9C8}
+.l2q{font-size:1.08rem;font-weight:600;margin-bottom:16px}
+.optgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:2px solid var(--ink);border-radius:12px;background:var(--paper);padding:14px 10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.2rem;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.12s}
+.opt:hover:not(:disabled){background:#FBEFE9;transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.opt.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.opt.bad{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.opt.reveal{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.opt:disabled{cursor:default}
+.signrow{display:flex;align-items:center;justify-content:center;gap:18px;margin:12px 0 18px;flex-wrap:wrap}
+.sbig{font-family:'Fraunces',serif;font-weight:900;font-size:2.1rem}
+.sslot{width:76px;height:60px;border:2px dashed var(--ink);border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:2rem;background:#fff}
+.sslot.is-ok{border-style:solid;background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.sslot.is-bad{border-style:solid;background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.signbtns{display:flex;gap:12px;justify-content:center}
+.sbtn{width:70px;font-size:1.6rem}
+.slots{display:flex;gap:12px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.slot{width:170px;min-height:86px;border:2px dashed var(--ink);border-radius:14px;background:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px;cursor:pointer;padding:8px}
+.slot .sl{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7A6E60}
+.slot .sv{font-family:'Fraunces',serif;font-weight:800;font-size:1.35rem}
+.slot.ok{border-style:solid;border-color:var(--ok);background:var(--okbg)}
+.slot.bad{border-style:solid;border-color:var(--bad);background:var(--badbg)}
+.pool{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.chip{border:2px solid var(--ink);border-radius:12px;background:var(--paper);padding:10px 18px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.chip:hover:not(:disabled){transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.chip:disabled{opacity:.25;cursor:default}
+.verdict{display:flex;align-items:center;gap:8px;font-weight:800;margin:10px 0 8px}
+.v-ok{color:var(--ok)}.v-bad{color:var(--bad)}
+.why{display:flex;gap:10px;border:2px solid var(--ink);background:var(--butter);border-radius:12px;padding:12px 14px;font-size:.92rem;line-height:1.5;box-shadow:3px 3px 0 var(--ink)}
+.why .ic{flex:none;margin-top:2px}
+.l2nav{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.l2score{font-weight:800;border:2px solid var(--ink);border-radius:99px;padding:6px 16px;background:var(--okbg);margin-left:auto}
+.l2dots{display:flex;gap:5px;flex-wrap:wrap}
+.l2dots button{width:26px;height:26px;border:2px solid var(--ink);border-radius:8px;background:var(--card);font-size:.68rem;font-weight:800;cursor:pointer}
+.l2dots button.on{background:var(--ink);color:var(--paper)}
+.l2dots button.r-ok{background:var(--okbg)}
+.l2dots button.r-bad{background:var(--badbg)}
+
+/* ---------- soal cerita ---------- */
+.story-list{margin-top:22px;display:flex;flex-direction:column;gap:14px;max-width:820px}
+.scard{overflow:hidden}
+.shead{width:100%;display:flex;align-items:center;gap:12px;background:var(--card);border:0;padding:15px 18px;cursor:pointer;text-align:left}
+.scard{border:2px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);background:var(--card)}
+.sno{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;min-width:74px}
+.stopic{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:2px solid var(--ink);border-radius:99px;padding:3px 11px;background:var(--paper)}
+.sstat{margin-left:auto}
+.sstat .ic{width:1.4em;height:1.4em}
+.sstat .ok{color:var(--ok)}.sstat .no{color:var(--bad)}
+.chev{margin-left:4px;transition:.2s}
+.shead[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.sbody{padding:4px 20px 20px;border-top:1.5px dashed var(--line)}
+.sq{margin:14px 0;line-height:1.6;font-size:.98rem}
+.sopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sopt{border:2px solid var(--ink);border-radius:12px;background:var(--paper);padding:11px 14px;text-align:left;font-size:.92rem;cursor:pointer;line-height:1.45;transition:.12s}
+.sopt b{font-family:'Fraunces',serif;margin-right:6px}
+.sopt:hover:not(:disabled){background:#FBEFE9;transform:translate(1px,1px)}
+.sopt.sel{background:#F8E9C8;box-shadow:2px 2px 0 var(--ink)}
+.sopt.ok{background:var(--okbg);border-color:var(--ok)}
+.sopt.bad{background:var(--badbg);border-color:var(--bad)}
+.sopt:disabled{cursor:default}
+.sacts{display:flex;gap:10px;flex-wrap:wrap}
+.bahas{margin-top:14px;border-left:5px solid var(--butter);background:#FBF4E1;border-radius:0 12px 12px 0;padding:12px 16px;font-size:.92rem;line-height:1.6}
+.story-foot{margin-top:18px;font-weight:800}
+
+/* ---------- hasil ---------- */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:24px;align-items:start}
+.res-name{font-family:'Fraunces',serif;font-weight:900;font-size:1.6rem}
+.res-card{padding:24px}
+.rrow{margin-bottom:16px}
+.rrow .rl{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:5px}
+.rrow .rl span:last-child{font-family:'Fraunces',serif;font-size:1.05rem}
+.rbar{height:14px;border:2px solid var(--ink);border-radius:99px;background:#fff;overflow:hidden}
+.rbar i{display:block;height:100%;width:0;background:var(--terra);transition:width .8s ease}
+.res-total{margin-top:20px;padding-top:16px;border-top:2px dashed var(--line);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.res-pct{font-family:'Fraunces',serif;font-weight:900;font-size:2.6rem;color:var(--terra)}
+.res-pred{font-weight:700;line-height:1.4}
+.res-side{padding:26px;text-align:center;position:relative}
+.res-side .stars .ic{width:52px;height:52px}
+.res-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+
+/* ---------- kesimpulan & refleksi ---------- */
+.bigline{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:1.15;max-width:800px;margin:20px 0}
+.conc-steps{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.conc-steps .cs{border:2px solid var(--ink);border-radius:14px;background:var(--card);padding:14px 18px;font-weight:700;box-shadow:4px 4px 0 var(--ink);max-width:300px;font-size:.92rem}
+.conc-steps .cs b{font-family:'Fraunces',serif;display:block;font-size:1.05rem;margin-bottom:2px}
+.moodrow{display:flex;gap:16px;margin:20px 0}
+.mood{width:78px;height:78px;border:2px solid var(--ink);border-radius:18px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--ink);transition:.15s}
+.mood .ic{width:44px;height:44px;stroke-width:1.7}
+.mood.on{background:var(--butter);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.rfield{margin-bottom:14px}
+.rfield label{display:block;font-weight:800;font-size:.85rem;margin-bottom:6px;letter-spacing:.04em}
+.rfield textarea{width:100%;max-width:560px;border:2px solid var(--ink);border-radius:12px;background:#fff;padding:12px 14px;font:500 .95rem/1.5 'Schibsted Grotesk';min-height:76px;resize:vertical;outline:none}
+.rfield textarea:focus{border-color:var(--terra)}
+.refl-saved{max-width:560px;padding:20px 24px;background:var(--okbg);border-color:var(--ok);margin-top:18px;display:none}
+.refl-saved.show{display:block;animation:slidein .4s both}
+
+/* ---------- penutup ---------- */
+.s-thanks .wrap{min-height:calc(100vh - 200px);display:flex;align-items:center;justify-content:center;text-align:center}
+.thanks-title{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;margin:.2em 0}
+.trio{display:flex;gap:16px;justify-content:center;margin:22px 0 28px}
+.trio b{font-family:'Fraunces',serif;font-size:1.6rem;border:2px solid var(--ink);border-radius:14px;padding:10px 20px;background:var(--card);box-shadow:4px 4px 0 var(--ink)}
+.trio b:nth-child(1){background:#F6DCCE;transform:rotate(-3deg)}
+.trio b:nth-child(2){background:#D8E4DC;transform:rotate(2deg)}
+.trio b:nth-child(3){background:#F8E9C8;transform:rotate(-2deg)}
+
+@media (max-width:920px){
+  .review-grid,.cmp-grid,.res-grid{grid-template-columns:1fr}
+  .game-layout{grid-template-columns:1fr}
+  .recipe{display:flex;flex-wrap:wrap;gap:4px}
+  .rstep{border:1.5px dashed var(--line)}
+  #dots{display:none}
+  .ghostnum{display:none}
+  .sopts,.optgrid{grid-template-columns:1fr}
+  .badge{display:none}
+}
+@media print{
+  body>*:not(#printCard){display:none!important}
+  body{overflow:visible;background:#fff}
+  #printCard{display:block!important;padding:24px;font-family:'Schibsted Grotesk',sans-serif}
+}
+#printCard{display:none}
+</style>
+</head>
+<body>
+
+<!-- sprite ikon -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-arl" viewBox="0 0 24 24"><path d="M14.5 5l-7 7 7 7"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24"><path d="M9.5 5l7 7-7 7"/></symbol>
+  <symbol id="i-arrd" viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-chef" viewBox="0 0 24 24"><path d="M7 12.6A4 4 0 1 1 8.3 5.1a4.4 4.4 0 0 1 7.4 0A4 4 0 1 1 17 12.6V18H7zM7 21.5h10"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.3.9-4.6 4.3 1.1 6.2-5.5-3-5.5 3 1.1-6.2L3 9.5l6.3-.9z"/></symbol>
+  <symbol id="i-snd" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4.5v-13L8 10H4z"/><path d="M16.5 9.5a4 4 0 0 1 0 5.5"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4.5v-13L8 10H4z"/><path d="M16.5 10l5 5M21.5 10l-5 5"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8V4h10v4M7 16.5H5.5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H17M7 13.5h10V20H7z"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v4.5h-4.5"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 1 3.9 10.6c-.7.6-.9 1.4-.9 2.4h-6c0-1-.2-1.8-.9-2.4A6 6 0 0 1 12 3z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 4.5v14c3 0 6 .5 8 2 2-1.5 5-2 8-2v-14c-3 0-6 .5-8 2zM12 6.5v14"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="M7 4.5v15M7 19.5l-3-3M7 19.5l3-3M17 19.5v-15M17 4.5l-3 3M17 4.5l3 3"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.2-4.7-9.4-9.1A5.3 5.3 0 0 1 12 6.6a5.3 5.3 0 0 1 9.4 4.3C19.2 15.3 12 20 12 20z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5l1.9 6.6 6.6 1.9-6.6 1.9L12 19.5l-1.9-6.6-6.6-1.9 6.6-1.9z"/></symbol>
+  <symbol id="i-f1" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.1" fill="currentColor" stroke="none"/><path d="M8.2 13.8a4.8 4.8 0 0 0 7.6 0"/></symbol>
+  <symbol id="i-f2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.1" fill="currentColor" stroke="none"/><path d="M9 15.5h6"/></symbol>
+  <symbol id="i-f3" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.1" fill="currentColor" stroke="none"/><path d="M8.5 16.5c1.2-2.4 5.8-2.4 7 0"/></symbol>
+</svg>
+
+<header id="topbar">
+  <span class="brand"><svg class="ic"><use href="#i-book"/></svg> RasionalKu</span>
+  <div id="pgWrap"><div id="pgFill"></div></div>
+  <span class="tb-chip" id="tbName">Sahabat Matematika</span>
+  <button class="tb-btn" id="btnSnd" title="Suara nyala/mati">
+    <svg class="ic" id="icSndOn"><use href="#i-snd"/></svg>
+    <svg class="ic hidden" id="icSndOff"><use href="#i-mute"/></svg>
+  </button>
+  <button class="tb-btn" id="btnMenu" title="Daftar slide"><svg class="ic"><use href="#i-list"/></svg></button>
+</header>
+
+<main id="deck">
+
+  <!-- 1. SAMPUL -->
+  <section class="slide s-cover active" id="sl-cover" data-title="Sampul">
+    <div class="wrap">
+      <span class="cover-num n1">&frac34;</span>
+      <span class="cover-num n2">0,75</span>
+      <span class="cover-num n3">75%</span>
+      <div class="card cover-card">
+        <div class="tape"></div>
+        <svg class="badge" viewBox="0 0 120 120">
+          <defs><path id="cir" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+          <circle cx="60" cy="60" r="57" fill="#F2B33D" stroke="#2A2420" stroke-width="2.5"/>
+          <text><textPath href="#cir">BILANGAN RASIONAL • MATEMATIKA • SERU • </textPath></text>
+          <text class="big" x="60" y="72" text-anchor="middle">&frac34;</text>
+        </svg>
+        <p class="cover-kick">Matematika &middot; Bilangan Rasional</p>
+        <h1 class="cover-title">Pecahan, Desimal<br>&amp; <span class="hl">Persen</span></h1>
+        <p class="cover-sub">Konversi bentuk &middot; Membandingkan &middot; Mengurutkan<br>dipakai langsung dalam kehidupan sehari-hari.</p>
+        <div class="namebox">
+          <input id="inpName" maxlength="24" placeholder="Tulis namamu di sini&hellip;" aria-label="Nama siswa">
+          <button class="btn" id="btnStart">Mulai Belajar <svg class="ic"><use href="#i-arr"/></svg></button>
+        </div>
+        <p class="note cover-note">psst&hellip; ketik namamu dulu, ya!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. KEHIDUPAN SEHARI-HARI -->
+  <section class="slide" id="sl-life" data-title="Kehidupan Sehari-hari">
+    <div class="wrap">
+      <span class="ghostnum">01</span>
+      <p class="kick">Kenapa ini penting?</p>
+      <h2 class="stitle">Bilangan rasional ada di <span class="hl">mana-mana</span></h2>
+      <p class="lead">Setiap hari kamu bertemu pecahan, desimal, dan persen — kadang dalam tiga bentuk yang berbeda untuk nilai yang sama. Coba perhatikan:</p>
+      <div class="life-field">
+        <div class="card life-card"><span class="dotc">Belanja</span><h4>Diskon Supermarket</h4><p>Potongan 25% artinya seperempat bagian harga dipangkas.</p><div class="life-trio"><b>25%</b><b>&frac14;</b><b>0,25</b></div></div>
+        <div class="card life-card"><span class="dotc">Dapur</span><h4>Resep Kue</h4><p>Resep menulis 0,5 kg tepung — di rumah takaranmu setengah kilogram.</p><div class="life-trio"><b>0,5</b><b>&frac12;</b><b>50%</b></div></div>
+        <div class="card life-card"><span class="dotc">Sekolah</span><h4>Nilai Ulangan</h4><p>Benar 16 dari 20 soal. Nilainya sama dengan 80.</p><div class="life-trio"><b>16/20</b><b>0,8</b><b>80%</b></div></div>
+        <div class="card life-card"><span class="dotc">Gadget</span><h4>Baterai HP</h4><p>Indikator baterai selalu memakai persen, bukan pecahan.</p><div class="life-trio"><b>72%</b><b>0,72</b><b>18/25</b></div></div>
+        <div class="card life-card"><span class="dotc">Perjalanan</span><h4>Tangki BBM</h4><p>Jarum tangki baru menunjukkan tiga per delapan bagian penuh.</p><div class="life-trio"><b>3/8</b><b>0,375</b><b>37,5%</b></div></div>
+      </div>
+      <p class="note" style="margin-top:26px;text-align:center">Karena bentuknya sering berbeda-beda, kita harus jago <b>mengubah, membandingkan, dan mengurutkannya!</b></p>
+    </div>
+  </section>
+
+  <!-- 3. TUJUAN -->
+  <section class="slide" id="sl-goals" data-title="Tujuan Pembelajaran">
+    <div class="wrap">
+      <span class="ghostnum">02</span>
+      <p class="kick"><svg class="ic"><use href="#i-target"/></svg>&nbsp;Tujuan Pembelajaran</p>
+      <h2 class="stitle">Setelah hari ini, kamu bisa&hellip;</h2>
+      <div style="margin-top:18px">
+        <div class="goal"><span class="gnum">1.</span><div><h4>Mengubah bentuk bilangan rasional</h4><p>Mengubah pecahan &harr; desimal &harr; persen dengan langkah yang tepat dan cepat.</p></div></div>
+        <div class="goal"><span class="gnum">2.</span><div><h4>Membandingkan bilangan yang bentuknya berbeda</h4><p>Menentukan mana yang lebih besar atau lebih kecil dari pecahan, desimal, dan persen sekaligus.</p></div></div>
+        <div class="goal"><span class="gnum">3.</span><div><h4>Mengurutkan beberapa bilangan rasional</h4><p>Menyusun urutan dari terkecil ke terbesar (dan sebaliknya) meskipun bentuknya campur aduk.</p></div></div>
+        <div class="goal"><span class="gnum">4.</span><div><h4>Menggunakannya dalam kehidupan nyata</h4><p>Memecahkan soal cerita: diskon, resep, nilai, tabungan, dan banyak lagi.</p></div></div>
+      </div>
+      <div style="margin-top:22px">
+        <span class="keyword">pecahan</span><span class="keyword">desimal</span><span class="keyword">persen</span><span class="keyword">konversi</span><span class="keyword">membandingkan</span><span class="keyword">mengurutkan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. REVIEW: PETA KONVERSI -->
+  <section class="slide" id="sl-review" data-title="Review: Peta Konversi">
+    <div class="wrap">
+      <span class="ghostnum">03</span>
+      <p class="kick">Review materi</p>
+      <h2 class="stitle">Tiga wajah, <span class="hl">satu nilai</span></h2>
+      <p class="lead">Klik salah satu <b>panah</b> pada peta untuk mengingat cara berpindah bentuk — lengkap dengan contoh yang bisa diganti-ganti.</p>
+      <div class="review-grid">
+        <div class="map-wrap">
+          <svg viewBox="0 0 520 340">
+            <defs>
+              <marker id="mI" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0L9,4.5L0,9z" fill="#2A2420"/></marker>
+              <marker id="mT" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0L9,4.5L0,9z" fill="#D9532B"/></marker>
+            </defs>
+            <path class="ar" id="a-p2d" d="M155,185 C210,158 310,158 365,185" marker-end="url(#mI)"/>
+            <path class="ar" id="a-d2p" d="M365,226 C310,253 210,253 155,226" marker-end="url(#mI)"/>
+            <path class="ar" id="a-p2c" d="M88,178 C58,118 120,66 212,60"  marker-end="url(#mI)"/>
+            <path class="ar" id="a-c2p" d="M228,86 C160,102 130,142 113,176" marker-end="url(#mI)"/>
+            <path class="ar" id="a-c2d" d="M292,86 C360,102 390,142 407,176" marker-end="url(#mI)"/>
+            <path class="ar" id="a-d2c" d="M432,178 C462,118 400,66 308,60"  marker-end="url(#mI)"/>
+            <path class="ar-hit" data-k="p2d" d="M155,185 C210,158 310,158 365,185"><title>Pecahan ke Desimal</title></path>
+            <path class="ar-hit" data-k="d2p" d="M365,226 C310,253 210,253 155,226"><title>Desimal ke Pecahan</title></path>
+            <path class="ar-hit" data-k="p2c" d="M88,178 C58,118 120,66 212,60"><title>Pecahan ke Persen</title></path>
+            <path class="ar-hit" data-k="c2p" d="M228,86 C160,102 130,142 113,176"><title>Persen ke Pecahan</title></path>
+            <path class="ar-hit" data-k="c2d" d="M292,86 C360,102 390,142 407,176"><title>Persen ke Desimal</title></path>
+            <path class="ar-hit" data-k="d2c" d="M432,178 C462,118 400,66 308,60"><title>Desimal ke Persen</title></path>
+          </svg>
+          <div class="node n-p"><i></i>PECAHAN</div>
+          <div class="node n-d"><i></i>DESIMAL</div>
+          <div class="node n-c"><i></i>PERSEN</div>
+        </div>
+        <div class="card conv-card" id="convCard">
+          <div class="tape" style="top:-14px;right:24px;left:auto;transform:rotate(3deg)"></div>
+          <div class="conv-default">
+            <svg class="ic" style="width:2.2em;height:2.2em;color:var(--terra)"><use href="#i-spark"/></svg>
+            <p style="margin-top:10px;font-weight:600">Pilih salah satu panah pada peta di sebelah kiri,<br>lalu cara dan contohnya muncul di sini.</p>
+          </div>
+        </div>
+      </div>
+      <div class="trickstrip">
+        <svg class="ic"><use href="#i-bulb"/></svg>
+        <span><b>Trik geser koma:</b>&nbsp; ke persen = koma geser <b>2 langkah ke kanan</b> (0,45 &rarr; 45%) &middot; dari persen = geser <b>2 langkah ke kiri</b> (175% &rarr; 1,75).</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LATIHAN 1 -->
+  <section class="slide" id="sl-l1" data-title="Latihan 1 · Tabel Konversi">
+    <div class="wrap">
+      <span class="ghostnum">04</span>
+      <p class="kick">Latihan 1 &middot; 30 soal</p>
+      <h2 class="stitle">Tabel <span class="hl">Konversi</span></h2>
+      <p class="lead">Setiap baris hanya memberikan <b>satu bentuk</b> bilangan. Lengkapi <b>dua kolom lainnya</b>, lalu tekan <b>Cek</b>. Tulis pecahan dengan tanda garis miring, contoh: <b>3/4</b> atau campuran <b>2 1/4</b> — pecahan setara (misal 6/8 untuk 3/4) juga diterima!</p>
+      <div class="l1top">
+        <div class="pager">
+          <button class="pgb" id="l1PrevP">&larr;</button>
+          <span style="font-weight:800" id="l1PageLbl">1 / 3</span>
+          <button class="pgb" id="l1NextP">&rarr;</button>
+        </div>
+        <button class="btn tiny ghost" id="l1CheckPage">Cek Semua di Halaman Ini</button>
+        <span class="l1score" id="l1Score">0 / 30 benar</span>
+      </div>
+      <div class="tscroll">
+        <table class="l1">
+          <thead><tr>
+            <th style="width:44px">No</th>
+            <th style="width:24%">Pecahan</th>
+            <th style="width:22%">Desimal</th>
+            <th style="width:22%">Persen</th>
+            <th style="width:110px">Cek Jawaban</th>
+          </tr></thead>
+          <tbody id="l1Body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GAME -->
+  <section class="slide" id="sl-game" data-title="Game: Dapur Manis">
+    <div class="wrap">
+      <span class="ghostnum">05</span>
+      <p class="kick"><svg class="ic"><use href="#i-chef"/></svg>&nbsp;Waktunya main</p>
+      <h2 class="stitle">Dapur Manis: <span class="hl">Kue Bilangan Rasional</span></h2>
+      <div class="game-stage" id="gameStage"></div>
+    </div>
+  </section>
+
+  <!-- 7. MEMBANDINGKAN & MENGURUTKAN -->
+  <section class="slide" id="sl-cmp" data-title="Membandingkan & Mengurutkan">
+    <div class="wrap">
+      <span class="ghostnum">06</span>
+      <p class="kick"><svg class="ic"><use href="#i-sort"/></svg>&nbsp;Materi lanjutan</p>
+      <h2 class="stitle">Membandingkan &amp; Mengurutkan</h2>
+      <div class="cmp-grid">
+        <div>
+          <div class="tipline"><svg class="ic"><use href="#i-bulb"/></svg><span>Rahasia praktis: <b>ubah semuanya ke bentuk desimal dulu</b> — desimal paling gampang dibandingkan!</span></div>
+          <div style="margin-top:20px">
+            <div class="step"><span class="sn">1</span><div><h4>Samakan bentuknya</h4><p>Ubah pecahan (bagi pembilang dengan penyebut) dan persen (bagi 100) menjadi desimal.</p></div></div>
+            <div class="step"><span class="sn">2</span><div><h4>Bandingkan seperti desimal biasa</h4><p>Lihat bagian satuan dulu, lalu persepuluhan, lalu perseratusan.</p></div></div>
+            <div class="step"><span class="sn">3</span><div><h4>Urutkan, lalu kembalikan bentuknya</h4><p>Susun urutan naik/turun — tulis kembali dalam bentuk semula bila soal memintanya.</p></div></div>
+          </div>
+          <p class="note" style="margin-top:8px">contoh: 3/8 &rarr; 3 &divide; 8 = 0,375 · 40% &rarr; 0,4 — sekarang tinggal bandingkan!</p>
+        </div>
+        <div class="card numline-card">
+          <h4 style="font-family:'Fraunces',serif;margin-bottom:12px">Garis bilangan interaktif</h4>
+          <div class="preset-row" id="presetRow"></div>
+          <div id="numline"></div>
+          <div id="orderOut"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. LATIHAN 2 -->
+  <section class="slide" id="sl-l2" data-title="Latihan 2 · Banding & Urut">
+    <div class="wrap">
+      <span class="ghostnum">07</span>
+      <p class="kick">Latihan 2 &middot; 20 soal</p>
+      <h2 class="stitle">Banding &amp; Urut <span class="hl">Express</span></h2>
+      <div class="l2wrap">
+        <div class="card l2card" id="l2Stage"></div>
+        <div class="l2nav">
+          <button class="navbtn" id="l2Prev"><svg class="ic"><use href="#i-arl"/></svg></button>
+          <div class="l2dots" id="l2Dots"></div>
+          <button class="navbtn" id="l2Next"><svg class="ic"><use href="#i-arr"/></svg></button>
+          <span class="l2score" id="l2Score">0 / 20</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. SOAL CERITA -->
+  <section class="slide" id="sl-story" data-title="Soal Cerita">
+    <div class="wrap">
+      <span class="ghostnum">08</span>
+      <p class="kick">Soal cerita &middot; 10 soal</p>
+      <h2 class="stitle">Matematika di <span class="hl">kehidupan nyata</span></h2>
+      <p class="lead">Buka setiap soal, pilih jawaban, lalu tekan <b>Cek Jawaban</b>. Pembahasan tersedia untuk setiap soal.</p>
+      <div class="story-list" id="storyList"></div>
+      <p class="story-foot" id="storyScore">Skor: 0 / 10</p>
+    </div>
+  </section>
+
+  <!-- 10. HASIL -->
+  <section class="slide" id="sl-results" data-title="Hasil Pengerjaan">
+    <div class="wrap">
+      <span class="ghostnum">09</span>
+      <p class="kick">Rapor singkat</p>
+      <h2 class="stitle">Hasil Pengerjaanmu</h2>
+      <div id="resBody"></div>
+    </div>
+  </section>
+
+  <!-- 11. KESIMPULAN -->
+  <section class="slide" id="sl-conc" data-title="Kesimpulan">
+    <div class="wrap">
+      <span class="ghostnum">10</span>
+      <p class="kick">Kesimpulan</p>
+      <h2 class="stitle">Yang perlu kamu bawa pulang</h2>
+      <p class="bigline">Bentuk boleh berbeda — <span class="hl">nilainya tetap sama.</span></p>
+      <div class="conc-steps">
+        <div class="cs"><b>Pecahan &rarr; Desimal</b>Bagi pembilang dengan penyebut: 3/8 = 0,375.</div>
+        <div class="cs"><b>&harr; Persen</b>Kali/bagi 100, atau geser koma dua langkah: 0,45 = 45%.</div>
+        <div class="cs"><b>Bandingkan?</b>Samakan dulu bentuknya — paling mudah lewat desimal.</div>
+        <div class="cs"><b>Mengurutkan?</b>Ubah semua ke desimal, susun, lalu tulis balik bentuk aslinya.</div>
+      </div>
+      <p class="note" style="margin-top:26px">Satu nilai, tiga kostum: pecahan, desimal, persen. Pilih kostum yang paling pas untuk setiap situasi!</p>
+    </div>
+  </section>
+
+  <!-- 12. REFLEKSI -->
+  <section class="slide" id="sl-refl" data-title="Refleksi">
+    <div class="wrap">
+      <span class="ghostnum">11</span>
+      <p class="kick"><svg class="ic"><use href="#i-heart"/></svg>&nbsp;Refleksi</p>
+      <h2 class="stitle">Bagaimana perasaanmu hari ini?</h2>
+      <div class="moodrow">
+        <button class="mood" data-mood="Senang dan paham" title="Senang"><svg class="ic"><use href="#i-f1"/></svg></button>
+        <button class="mood" data-mood="Cukup paham" title="Biasa saja"><svg class="ic"><use href="#i-f2"/></svg></button>
+        <button class="mood" data-mood="Masih bingung" title="Bingung"><svg class="ic"><use href="#i-f3"/></svg></button>
+      </div>
+      <div class="rfield"><label>Hal baru yang aku pelajari hari ini:</label><textarea id="rt1" placeholder="Tulis di sini&hellip;"></textarea></div>
+      <div class="rfield"><label>Bagian yang masih membuatku ragu:</label><textarea id="rt2" placeholder="Tulis di sini&hellip;"></textarea></div>
+      <button class="btn" id="btnRefl">Simpan Refleksi <svg class="ic"><use href="#i-check"/></svg></button>
+      <div class="card refl-saved" id="reflSaved"></div>
+    </div>
+  </section>
+
+  <!-- 13. PENUTUP -->
+  <section class="slide s-thanks" id="sl-thanks" data-title="Penutup">
+    <div class="wrap">
+      <span class="cover-num n1" style="font-size:9rem;top:0;right:4%;left:auto">&frac34;</span>
+      <span class="cover-num n2" style="bottom:6%;left:4%;right:auto">0,75</span>
+      <div>
+        <p class="cover-kick">Sampai jumpa di materi berikutnya</p>
+        <h2 class="thanks-title">Thank you<br><span class="hl">for today!</span></h2>
+        <p style="margin-top:10px">Kerja bagus, <b data-name>Sahabat Matematika</b>. Kamu resmi jadi <i style="font-family:'Fraunces',serif">Rasional Master</i> hari ini.</p>
+        <div class="trio"><b>&frac34;</b><b>0,75</b><b>75%</b></div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" id="btnRes2">Lihat Hasilku <svg class="ic"><use href="#i-star"/></svg></button>
+          <button class="btn ghost" id="btnRestart">Ulangi dari Awal <svg class="ic"><use href="#i-redo"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="navbar">
+  <button class="navbtn" id="btnPrev" title="Slide sebelumnya"><svg class="ic"><use href="#i-arl"/></svg></button>
+  <div id="dots"></div>
+  <span id="pgNum">1 / 13</span>
+  <button class="navbtn" id="btnNext" title="Slide berikutnya"><svg class="ic"><use href="#i-arr"/></svg></button>
+</footer>
+
+<div id="menuOv">
+  <div class="card" id="menuCard">
+    <button class="tb-btn" id="menuClose"><svg class="ic"><use href="#i-x"/></svg></button>
+    <h3>Daftar Slide</h3>
+    <div id="menuList"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="printCard"></div>
+
+<script>
+/* ================= util ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>String(Math.round(n*10000)/10000).replace('.',',');
+const parseNum=s=>{if(typeof s!=='string')return NaN;s=s.replace(/%/g,'').trim().replace(/,/g,'.');return s===''?NaN:parseFloat(s);};
+// parser jawaban pecahan siswa: "3/4", "2 1/4", "6/8" (setara diterima)
+function parseFrac(s){
+  s=s.trim().replace(/,/g,'.');
+  if(!s)return NaN;
+  let m=s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/); // campuran
+  if(m){const w=+m[1],a=+m[2],b=+m[3];return b?w+a/b:NaN;}
+  m=s.match(/^(\d+)\s*\/\s*(\d+)$/);             // biasa
+  if(m){const a=+m[1],b=+m[2];return b?a/b:NaN;}
+  return NaN;
+}
+function fr(s){ // '3/8' atau '2 1/4' -> pecahan bertumpuk
+  return s.split(' ').map(w=>{
+    if(w.includes('/')){const[a,b]=w.split('/');return `<span class="fr"><span>${a}</span><span>${b}</span></span>`;}
+    return w;
+  }).join(' ');
+}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- audio kecil (Web Audio, tanpa file) ---------- */
+let AC=null;
+function beep(f,d=.15,type='sine',v=.11,when=0){
+  if(S.muted)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();
+    o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+    o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d);
+  }catch(e){}
+}
+const sOK=()=>{beep(620,.1);beep(930,.16,'sine',.11,.09);};
+const sNO=()=>beep(150,.22,'square',.05);
+const sWIN=()=>[523,659,784,1046].forEach((f,i)=>beep(f,.2,'triangle',.11,i*.12));
+
+/* ---------- toast & confetti ---------- */
+let toastT;
+function toast(msg,good=true){const t=$('#toast');t.textContent=msg;t.className='show'+(good?'':' bad');clearTimeout(toastT);toastT=setTimeout(()=>t.className='',2600);}
+function confetti(n=60){
+  const colors=['#D9532B','#3F6B4F','#F2B33D','#E2799C','#4E7A9B'];
+  for(let i=0;i<n;i++){
+    const e=document.createElement('i'),sh=Math.floor(Math.random()*3);
+    e.style.cssText=`position:fixed;left:${Math.random()*100}vw;top:-24px;width:${7+Math.random()*9}px;height:${7+Math.random()*11}px;background:${colors[i%5]};z-index:99;pointer-events:none;`;
+    if(sh===0)e.style.borderRadius='50%';
+    else if(sh===1)e.style.clipPath='polygon(50% 0,100% 100%,0 100%)';
+    else e.style.borderRadius='3px';
+    document.body.appendChild(e);
+    e.animate([{transform:'translateY(0) rotate(0)'},{transform:`translateY(${innerHeight+60}px) rotate(${540+Math.random()*360}deg) translateX(${-70+Math.random()*140}px)`}],
+      {duration:1500+Math.random()*1500,easing:'cubic-bezier(.2,.6,.4,1)'}).onfinish=()=>e.remove();
+  }
+}
+
+/* ================= state ================= */
+const S={name:'',muted:false,
+  l1:{locked:new Set()},
+  l2:{idx:0,ans:Array(20).fill(null),pick:[null,null,null]},
+  game:{played:false,first:0},
+  story:{pick:Array(10).fill(null),done:Array(10).fill(false),score:0},
+  refl:null};
+
+/* ================= navigasi slide ================= */
+const slides=$$('.slide');
+const TITLES=slides.map(s=>s.dataset.title);
+let cur=0;
+const dotsBox=$('#dots');
+TITLES.forEach((t,i)=>{
+  const b=document.createElement('button');b.title=(i+1)+'. '+t;
+  b.onclick=()=>go(i);dotsBox.appendChild(b);
+});
+const menuList=$('#menuList');
+TITLES.forEach((t,i)=>{
+  const b=document.createElement('button');b.className='mi';
+  b.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b> ${t}`;
+  b.onclick=()=>{go(i);$('#menuOv').classList.remove('open');};
+  menuList.appendChild(b);
+});
+function go(i){
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');
+  cur=i;slides[cur].classList.add('active');slides[cur].scrollTop=0;
+  $$('#dots button').forEach((d,k)=>d.classList.toggle('on',k===cur));
+  $('#pgFill').style.width=(cur/(slides.length-1)*100)+'%';
+  $('#pgNum').textContent=(cur+1)+' / '+slides.length;
+  $('#btnPrev').disabled=cur===0;$('#btnNext').disabled=cur===slides.length-1;
+  if(slides[cur].id==='sl-results')renderResults();
+}
+ $('#btnPrev').onclick=()=>go(cur-1);
+ $('#btnNext').onclick=()=>go(cur+1);
+ $('#btnMenu').onclick=()=>$('#menuOv').classList.add('open');
+ $('#menuClose').onclick=()=>$('#menuOv').classList.remove('open');
+ $('#menuOv').addEventListener('click',e=>{if(e.target.id==='menuOv')$('#menuOv').classList.remove('open');});
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+let tx=0,ty=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)){dx<0?go(cur+1):go(cur-1);}
+},{passive:true});
+ $('#btnSnd').onclick=()=>{
+  S.muted=!S.muted;
+  $('#icSndOn').classList.toggle('hidden',S.muted);
+  $('#icSndOff').classList.toggle('hidden',!S.muted);
+  toast(S.muted?'Suara dimatikan':'Suara dinyalakan');
+};
+
+/* ---------- nama siswa ---------- */
+function setName(n){
+  S.name=n||'Sahabat Matematika';
+  $('#tbName').textContent=S.name;
+  $$('[data-name]').forEach(e=>e.textContent=S.name);
+}
+ $('#btnStart').onclick=()=>{
+  setName($('#inpName').value.trim());
+  go(1);confetti(45);sOK();
+  toast('Selamat datang, '+S.name+'!');
+};
+ $('#inpName').addEventListener('keydown',e=>{if(e.key==='Enter')$('#btnStart').click();});
+ $('#btnRestart').onclick=()=>location.reload();
+ $('#btnRes2').onclick=()=>go(9);
+
+/* ================= SLIDE: peta konversi ================= */
+const CONV={
+  p2d:{t:'Pecahan → Desimal',how:'Bagi pembilang dengan penyebut.',hint:'Penyebutnya 10, 100, atau 1000? Cukup geser koma.',
+    ex:[['3/8','3 ÷ 8','0,375'],['7/20','7 ÷ 20','0,35'],['13/40','13 ÷ 40','0,325'],['2 1/4','2 + (1 ÷ 4)','2,25'],['3/5','3 ÷ 5','0,6']]},
+  d2p:{t:'Desimal → Pecahan',how:'Lihat nilai tempat terakhir, tulis di atas 10 / 100 / 1000, lalu sederhanakan.',hint:'Selalu sederhanakan sampai pembilang dan penyebut tidak punya faktor bersama lagi.',
+    ex:[['0,45','45/100','9/20'],['0,08','8/100','2/25'],['1,2','12/10','6/5 = 1 1/5'],['0,375','375/1000','3/8'],['2,05','205/100','41/20 = 2 1/20']]},
+  p2c:{t:'Pecahan → Persen',how:'Ubah ke desimal dulu, lalu kalikan 100 dan beri tanda %.',hint:'Kali 100 = geser koma dua langkah ke kanan.',
+    ex:[['2/5','0,4 × 100','40%'],['5/8','0,625 × 100','62,5%'],['3/4','0,75 × 100','75%'],['7/50','0,14 × 100','14%'],['9/8','1,125 × 100','112,5%']]},
+  c2p:{t:'Persen → Pecahan',how:'Tulis persen di atas 100, lalu sederhanakan.',hint:'Per boleh lebih dari 100% — nilainya memang bisa lebih dari satu utuh!',
+    ex:[['60%','60/100','3/5'],['85%','85/100','17/20'],['150%','150/100','3/2 = 1 1/2'],['12,5%','125/1000','1/8'],['8%','8/100','2/25']]},
+  d2c:{t:'Desimal → Persen',how:'Kalikan 100 (geser koma dua langkah ke kanan), lalu beri tanda %.',hint:'Contoh cepat: 0,07 → 7% dan 1,45 → 145%.',
+    ex:[['0,3','geser koma 2× ke kanan','30%'],['0,07','geser koma 2× ke kanan','7%'],['1,45','geser koma 2× ke kanan','145%'],['0,625','geser koma 2× ke kanan','62,5%'],['2,5','geser koma 2× ke kanan','250%']]},
+  c2d:{t:'Persen → Desimal',how:'Bagi 100 (geser koma dua langkah ke kiri).',hint:'Lupakan dulu tanda %, geser komanya, baru selesai.',
+    ex:[['45%','geser koma 2× ke kiri','0,45'],['6%','geser koma 2× ke kiri','0,06'],['125%','geser koma 2× ke kiri','1,25'],['37,5%','geser koma 2× ke kiri','0,375'],['200%','geser koma 2× ke kiri','2']]},
+};
+const convIdx={};
+function showConv(k){
+  const c=CONV[k];
+  $$('.ar').forEach(p=>p.classList.remove('on'));
+  $('#a-'+k).classList.add('on');
+  const n=c.ex.length;
+  let idx=Math.floor(Math.random()*n);
+  if(convIdx[k]!==undefined&&n>1)idx=(idx+1+Math.floor(Math.random()*(n-1)))%n;
+  convIdx[k]=idx;
+  const e=c.ex[idx];
+  $('#convCard').innerHTML=`
+    <div class="tape" style="top:-14px;right:24px;left:auto;transform:rotate(3deg)"></div>
+    <h3>${c.t}</h3>
+    <p class="how"><b>Cara:</b> ${c.how}</p>
+    <p class="hint">${c.hint}</p>
+    <div class="exbox">${fr(e[0])} &nbsp;=&nbsp; ${e[1]} &nbsp;=&nbsp; <b class="res">${e[2]}</b></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn tiny ghost" id="convOther"><svg class="ic"><use href="#i-redo"/></svg> Contoh lain</button>
+      <button class="btn tiny" id="convGo">Coba di Latihan 1 <svg class="ic"><use href="#i-arr"/></svg></button>
+    </div>`;
+  $('#convOther').onclick=()=>showConv(k);
+  $('#convGo').onclick=()=>go(4);
+}
+ $$('.ar-hit').forEach(p=>p.addEventListener('click',()=>showConv(p.dataset.k)));
+
+/* ================= SLIDE: latihan 1 (30 soal, 3 kolom) ================= */
+/* g = bentuk yang diberikan: 'f' pecahan, 'd' desimal, 'c' persen */
+const L1=[
+ {f:'1/2',   d:.5,  p:50,   g:'f'},
+ {f:'8/25',  d:.32, p:32,   g:'d'},
+ {f:'11/20', d:.55, p:55,   g:'c'},
+ {f:'3/4',   d:.75, p:75,   g:'f'},
+ {f:'2/25',  d:.08, p:8,    g:'d'},
+ {f:'1 1/5', d:1.2, p:120,  g:'c'},
+ {f:'5/8',   d:.625,p:62.5, g:'f'},
+ {f:'1/8',   d:.125,p:12.5, g:'d'},
+ {f:'7/20',  d:.35, p:35,   g:'c'},
+ {f:'4/5',   d:.8,  p:80,   g:'d'},
+ {f:'2 1/2', d:2.5, p:250,  g:'f'},
+ {f:'3/50',  d:.06, p:6,    g:'c'},
+ {f:'9/20',  d:.45, p:45,   g:'c'},
+ {f:'7/10',  d:.7,  p:70,   g:'f'},
+ {f:'3/8',   d:.375,p:37.5, g:'d'},
+ {f:'3/25',  d:.12, p:12,   g:'c'},
+ {f:'1 1/2', d:1.5, p:150,  g:'d'},
+ {f:'1/4',   d:.25, p:25,   g:'f'},
+ {f:'9/10',  d:.9,  p:90,   g:'c'},
+ {f:'9/50',  d:.18, p:18,   g:'c'},
+ {f:'5/5',   d:1,   p:100,  g:'f'},
+ {f:'1/25',  d:.04, p:4,    g:'d'},
+ {f:'17/20', d:.85, p:85,   g:'c'},
+ {f:'9/8',   d:1.125,p:112.5,g:'f'},
+ {f:'16/25', d:.64, p:64,   g:'d'},
+ {f:'7/50',  d:.14, p:14,   g:'c'},
+ {f:'2/1',   d:2,   p:200,  g:'d'},
+ {f:'1/16',  d:.0625,p:6.25,g:'f'},
+ {f:'1/500', d:.002,p:.2,   g:'f'},
+ {f:'13/20', d:.65, p:65,   g:'d'},
+];
+let l1Page=0;
+function l1ScoreLbl(){$('#l1Score').textContent=S.l1.locked.size+' / 30 benar';}
+function renderL1Page(){
+  const tb=$('#l1Body');tb.innerHTML='';
+  const start=l1Page*10;
+  L1.slice(start,start+10).forEach((q,k)=>{
+    const i=start+k,lock=S.l1.locked.has(i);
+    const tr=document.createElement('tr');
+    if(lock)tr.className='locked';
+    const shown=key=>key==='f'?fr(q.f):key==='d'?fmt(q.d):fmt(q.p)+'%';
+    const cell=key=>{
+      if(lock||q.g===key)return `<b class="c-given">${shown(key)}</b>`;
+      if(key==='f')return `<input data-k="f" placeholder="3/4" aria-label="Pecahan soal ${i+1}">`;
+      if(key==='d')return `<input data-k="d" inputmode="decimal" placeholder="&hellip;" aria-label="Desimal soal ${i+1}">`;
+      return `<input data-k="p" inputmode="decimal" placeholder="&hellip;" aria-label="Persen soal ${i+1}"><em>%</em>`;
+    };
+    tr.innerHTML=`
+      <td style="color:#7A6E60;font-weight:700">${i+1}</td>
+      <td class="inp">${cell('f')}</td>
+      <td class="inp">${cell('d')}</td>
+      <td class="inp pct">${cell('p')}</td>
+      <td><button class="btn tiny ${lock?'ghost':''}" data-check="${i}" ${lock?'disabled':''}>${lock?'<svg class="ic"><use href="#i-check"/></svg> Selesai':'Cek'}</button></td>`;
+    tb.appendChild(tr);
+  });
+  $('#l1PageLbl').textContent=(l1Page+1)+' / 3';
+  $('#l1PrevP').disabled=l1Page===0;$('#l1NextP').disabled=l1Page===2;
+  l1ScoreLbl();
+}
+function validateRow(tr,q){
+  let filled=true,allOk=true,fracBad=false;
+  tr.querySelectorAll('input').forEach(inp=>{
+    inp.classList.remove('ok','bad');
+    const raw=inp.value.trim();
+    if(raw===''){filled=false;inp.classList.add('bad');return;}
+    let ok;
+    if(inp.dataset.k==='f'){
+      const v=parseFrac(raw);
+      if(isNaN(v)){ok=false;fracBad=true;}
+      else ok=Math.abs(v-q.d)<1e-9;   // pecahan setara diterima
+    }else{
+      const v=parseNum(raw);
+      const tgt=inp.dataset.k==='d'?q.d:q.p;
+      ok=!isNaN(v)&&Math.abs(v-tgt)<1e-9;
+    }
+    inp.classList.add(ok?'ok':'bad');
+    if(!ok)allOk=false;
+  });
+  return {filled,allOk,fracBad};
+}
+function checkRow(i,tr){
+  const res=validateRow(tr,L1[i]);
+  if(!res.filled){sNO();toast('Masih ada kolom yang kosong, isi dulu ya!',false);return;}
+  if(res.allOk){
+    S.l1.locked.add(i);sOK();confetti(26);
+    const q=L1[i];
+    toast('Soal '+(i+1)+' benar semua! '+q.f+' = '+fmt(q.d)+' = '+fmt(q.p)+'%');
+    renderL1Page();
+  }else{
+    sNO();tr.classList.add('shake');setTimeout(()=>tr.classList.remove('shake'),450);
+    toast(res.fracBad
+      ? 'Tulis pecahan dengan tanda garis miring: 3/4, atau campuran: 2 1/4.'
+      : 'Ada yang belum tepat — perbaiki lagi, kamu pasti bisa!',false);
+  }
+}
+ $('#l1Body').addEventListener('click',e=>{
+  const b=e.target.closest('[data-check]');
+  if(b&&!b.disabled)checkRow(+b.dataset.check,b.closest('tr'));
+});
+ $('#l1Body').addEventListener('input',e=>{
+  if(e.target.tagName==='INPUT')e.target.classList.remove('ok','bad');
+});
+ $('#l1PrevP').onclick=()=>{if(l1Page>0){l1Page--;renderL1Page();}};
+ $('#l1NextP').onclick=()=>{if(l1Page<2){l1Page++;renderL1Page();}};
+ $('#l1CheckPage').onclick=()=>{
+  const start=l1Page*10;let newly=0;
+  $$('#l1Body tr').forEach((tr,k)=>{
+    const i=start+k;
+    if(!S.l1.locked.has(i)&&validateRow(tr,L1[i]).allOk){S.l1.locked.add(i);newly++;}
+  });
+  renderL1Page();
+  if(newly>0){sOK();confetti(30);toast(newly+' baris benar semua dan terkunci!');}
+  else{sNO();toast('Belum ada baris baru yang benar semua — ayo perbaiki!',false);}
+};
+
+/* ================= SLIDE: game Dapur Manis (soal acak tiap main) ================= */
+const ING=['Tepung terigu','Gula pasir','Mentega','Susu cair','Krim kental','Cokelat bubuk','Sari stroberi','Meses warna','Baking powder','Garam halus','Vanili cair','Keju parut','Selai nanas','Madu murni','Yoghurt','Santan kental','Air jeruk peras','Tepung maizena','Marshmallow mini','Pewarna merah'];
+const PAL=['#EAD9B8','#F6EEDC','#F2C14E','#F7F4E7','#EFE0C2','#F3D9A4','#E8D3B0','#F6E3D5','#DCE8D8','#F9E6EE','#E4ECF4','#F0E0C8','#FBE9B7','#E9D8E8','#F4E2CE'];
+/* kumpulan nilai: f = bentuk pecahan, v = nilai desimal (persen = v × 100) */
+const VALS=[
+ {f:'1/2',v:.5},{f:'1/4',v:.25},{f:'3/4',v:.75},{f:'1/5',v:.2},{f:'2/5',v:.4},{f:'3/5',v:.6},{f:'4/5',v:.8},
+ {f:'1/8',v:.125},{f:'3/8',v:.375},{f:'5/8',v:.625},{f:'7/8',v:.875},
+ {f:'1/10',v:.1},{f:'3/10',v:.3},{f:'7/10',v:.7},{f:'9/10',v:.9},
+ {f:'1/20',v:.05},{f:'3/20',v:.15},{f:'7/20',v:.35},{f:'9/20',v:.45},{f:'11/20',v:.55},{f:'13/20',v:.65},{f:'17/20',v:.85},{f:'19/20',v:.95},
+ {f:'1/25',v:.04},{f:'6/25',v:.24},{f:'9/25',v:.36},{f:'14/25',v:.56},{f:'21/25',v:.84},
+ {f:'1/16',v:.0625},{f:'3/16',v:.1875},{f:'5/16',v:.3125},{f:'7/16',v:.4375},{f:'9/16',v:.5625},{f:'11/16',v:.6875},{f:'13/16',v:.8125},{f:'15/16',v:.9375},
+ {f:'1 1/2',v:1.5},{f:'1 1/4',v:1.25},{f:'1 3/4',v:1.75},{f:'1 1/5',v:1.2},{f:'1 2/5',v:1.4},{f:'1 3/5',v:1.6},
+ {f:'2 1/2',v:2.5},{f:'2 1/4',v:2.25},{f:'1 1/8',v:1.125},{f:'1 3/8',v:1.375},{f:'1 1/16',v:1.0625},
+];
+/* pecahan internal -> string rapi (campuran bila perlu) */
+function toFracStr(n,d){
+  if(d===1||n<=0||n===d)return null;
+  if(n>d){const w=Math.floor(n/d),r=n%d;return r===0?null:w+' '+r+'/'+d;}
+  return n+'/'+d;
+}
+function parseOurFrac(f){
+  const p=f.split(' ');
+  if(p.length===1){const[a,b]=p[0].split('/').map(Number);return[a,b];}
+  const w=+p[0],[a,b]=p[1].split('/').map(Number);return[w*b+a,b];
+}
+/* bangun 1 pilihan jawaban: 1 benar + 3 pengecoh ala kesalahan siswa */
+function makeOptions(e,t){
+  let correct;const cand=[];
+  if(t==='d'){
+    correct=fmt(e.v);
+    [e.v*10,e.v/10,1-e.v,e.v+.1,e.v-.1,e.v+.05,e.v-.05].forEach(x=>{
+      if(x>0&&Math.abs(x-e.v)>1e-9)cand.push(fmt(x));
+    });
+  }else if(t==='c'){
+    correct=fmt(e.v*100)+'%';
+    [e.v,e.v*1000,e.v*100/10,(1-e.v)*100,e.v*100+10,e.v*100-10,e.v*100+5].forEach(x=>{
+      if(x>0&&Math.abs(x-e.v*100)>1e-9)cand.push(fmt(x)+'%');
+    });
+  }else{
+    correct=e.f;
+    const[n,d]=parseOurFrac(e.f);
+    const push=(a,b)=>{const s=toFracStr(a,b);if(s)cand.push(s);};
+    if(n<d)push(d-n,d);   // pelengkap (3/4 -> 1/4)
+    if(n!==1)push(d,n);   // terbalik (3/4 -> 4/3)
+    push(n+1,d);push(n,d+1);push(n,d*2);push(n+2,d);
+    // buang kandidat yang nilainya kebetulan sama dengan jawaban
+    for(let i=cand.length-1;i>=0;i--){
+      const[m,dd]=parseOurFrac(cand[i]);
+      if(Math.abs(m/dd-e.v)<1e-9)cand.splice(i,1);
+    }
+  }
+  const seen=new Set([correct]),dis=[];
+  for(const s of cand){if(!seen.has(s)){seen.add(s);dis.push(s);}}
+  const opts=shuffle([correct,...dis.slice(0,3)]);
+  return {opts,ans:opts.indexOf(correct)};
+}
+/* susun 8 soal acak untuk satu sesi memasak */
+function buildGame(){
+  const names=shuffle(ING).slice(0,8);
+  const vals=shuffle(VALS).slice(0,8);
+  const pal=shuffle(PAL);
+  return vals.map((e,i)=>{
+    const t=shuffle(['f','d','c'])[0];                        // bentuk yang dicari siswa
+    const b=shuffle(['f','d','c'].filter(x=>x!==t))[0];       // bentuk di resep
+    const disp={f:e.f,d:fmt(e.v),c:fmt(e.v*100)+'%'};
+    const {opts,ans}=makeOptions(e,t);
+    const hint={f:'tulis di atas 100 lalu sederhanakan',d:'bagi pembilang dengan penyebut',c:'kali 100'}[t];
+    return {
+      nama:names[i],warna:pal[i%pal.length],
+      butuh:disp[b],butuhHTML:b==='f'?fr(e.f):disp[b],
+      targetLabel:{f:'pecahan',d:'desimal',c:'persen'}[t],
+      opts,ans,
+      note:`${disp[b]} = ${disp[t]} (${hint})`
+    };
+  });
+}
+let QUEST=[];
+const G={step:0,first:0,tried:false};
+const bowlSVG=l=>`
+ <svg viewBox="0 0 240 205" width="240">
+  <defs><clipPath id="bowlClip"><path d="M34 72 a86 86 0 0 0 172 0 z"/></clipPath></defs>
+  <rect x="34" y="${(157-l*10.375).toFixed(1)}" width="172" height="200" fill="${l>=8?'#F0BFCB':'#F3E7C9'}" clip-path="url(#bowlClip)" id="batter"/>
+  <path d="M34 72 a86 86 0 0 0 172 0 z" fill="none" stroke="#2A2420" stroke-width="2.5"/>
+  <ellipse cx="120" cy="72" rx="86" ry="16" fill="#FFFDF6" stroke="#2A2420" stroke-width="2.5"/>
+  <text x="120" y="200" text-anchor="middle" style="font:700 12px 'Schibsted Grotesk'" fill="#7A6E60">Mangkuk ajaib (${l}/8 bahan)</text>
+ </svg>`;
+function gameIntro(){
+  $('#gameStage').innerHTML=`
+   <div class="card game-intro">
+     <div class="tape" style="top:-14px;left:24px;transform:rotate(-4deg)"></div>
+     <svg class="ic" style="width:3em;height:3em;color:var(--terra)"><use href="#i-chef"/></svg>
+     <h3>Halo, Chef <span data-name>Sahabat Matematika</span>!</h3>
+     <p>Kita akan memanggang <b>Kue Stroberi Rasional</b>. Setiap bahan butuh takaran tertentu, tetapi pilihannya ditulis dalam <b>bentuk yang berbeda</b> (pecahan / desimal / persen). Pilihlah takaran yang <b>nilainya sama</b> dengan resep. Salah menuang? Adonan bisa gagal, lho!</p>
+     <p style="font-size:.88rem;margin-bottom:18px"><b>Rahasia dapur:</b> bahan dan takaran diacak setiap kali memasak — jadi kalau main ulang, soalnya pasti berbeda!</p>
+     <button class="btn" id="btnPlay">Mulai Memasak <svg class="ic"><use href="#i-chef"/></svg></button>
+   </div>`;
+  $('#btnPlay').onclick=gameStart;
+}
+function gameStart(){
+  QUEST=buildGame();          // soal baru setiap sesi
+  G.step=0;G.first=0;G.tried=false;
+  S.game.played=true;
+  renderGame();
+}
+function renderGame(){
+  const st=$('#gameStage'),q=QUEST[G.step];
+  G.tried=false;
+  st.innerHTML=`
+   <div class="game-layout">
+     <div class="card recipe">
+       <h4><svg class="ic"><use href="#i-book"/></svg> Resep Kue Stroberi</h4>
+       ${QUEST.map((s,k)=>`
+         <div class="rstep ${k<G.step?'done':k===G.step?'act':''}">
+           <span class="rn">${k<G.step?'<svg class="ic" style="width:.9em;height:.9em"><use href="#i-check"/></svg>':k+1}</span>
+           <span>${s.nama}</span><span class="rd">${s.butuhHTML}</span>
+         </div>`).join('')}
+     </div>
+     <div class="game-scene" id="scene">${bowlSVG(G.step)}</div>
+     <div class="card game-panel">
+       <div class="tape" style="top:-14px;right:20px;left:auto;transform:rotate(4deg);width:70px"></div>
+       <h4>Menuang ${q.nama}</h4>
+       <p class="sub">Resep butuh <b>${q.butuhHTML}</b> — pilih takaran <b>${q.targetLabel}</b> yang nilainya sama!</p>
+       <div class="ga-grid">
+         ${q.opts.map((o,j)=>`<button class="ga" data-j="${j}">${fr(o)}</button>`).join('')}
+       </div>
+       <div class="gfeed" id="gfeed"></div>
+       <p class="gprog">Bahan ${Math.min(G.step+1,8)} dari 8</p>
+     </div>
+   </div>`;
+  st.querySelectorAll('.ga').forEach(b=>b.onclick=()=>pickG(+b.dataset.j,b));
+}
+function pour(color){
+  const sc=$('#scene'),b=document.createElement('i');
+  b.className='blob';b.style.background=color;b.style.left=(34+Math.random()*30)+'%';
+  sc.appendChild(b);
+  b.addEventListener('animationend',()=>{
+    b.remove();G.step++;
+    const svg=sc.querySelector('svg');if(svg)svg.outerHTML=bowlSVG(Math.min(G.step,8));
+    sc.classList.add('wobble');setTimeout(()=>sc.classList.remove('wobble'),520);
+    if(G.step>=8)setTimeout(bake,650);else setTimeout(renderGame,350);
+  });
+}
+function pickG(j,btn){
+  const q=QUEST[G.step],feed=$('#gfeed');
+  if(j===q.ans){
+    btn.classList.add('ok');
+    $$('#gameStage .ga').forEach(b=>b.disabled=true);
+    G.first+=G.tried?0:1;
+    feed.className='gfeed good';
+    feed.innerHTML='Tepat! '+q.note+' — tuang bahannya!';
+    sOK();
+    pour(q.warna);
+  }else{
+    G.tried=true;btn.classList.add('bad');btn.disabled=true;
+    feed.className='gfeed err';
+    feed.innerHTML='Hmm, '+fr(q.opts[j])+' nilainya tidak sama dengan '+q.butuhHTML+'. Coba takaran lain!';
+    sNO();
+  }
+}
+function bake(){
+  $('#gameStage').innerHTML=`
+   <div class="card game-intro" style="max-width:480px">
+     <svg viewBox="0 0 240 200" width="230">
+       <rect x="40" y="30" width="160" height="150" rx="16" fill="#FFFDF6" stroke="#2A2420" stroke-width="2.5"/>
+       <rect x="62" y="56" width="116" height="76" rx="10" fill="#F7EBD8" stroke="#2A2420" stroke-width="2"/>
+       <rect x="100" y="86" width="40" height="46" rx="6" fill="#F0BFCB" stroke="#2A2420" stroke-width="2" class="bakecake" style="transform:scaleY(0);transform-origin:120px 132px;transition:transform 2.1s ease-in-out"/>
+       <circle cx="180" cy="160" r="6" fill="#F2B33D" stroke="#2A2420" stroke-width="2"/>
+       <circle cx="180" cy="160" r="2" fill="#2A2420"/>
+       <text x="120" y="24" text-anchor="middle" style="font:800 13px 'Schibsted Grotesk'" fill="#2A2420">OVEN PIJAR</text>
+     </svg>
+     <div class="bakebar"><i></i></div>
+     <p style="font-weight:700;color:#54493F">Memanggang adonanmu&hellip; jangan dibuka dulu ya!</p>
+   </div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const c=$('.bakecake');if(c)c.style.transform='scaleY(1)';}));
+  setTimeout(gameDone,2700);
+}
+function gameDone(){
+  const stars=G.first>=8?3:G.first>=6?2:1;
+  S.game.first=Math.max(S.game.first,G.first);
+  $('#gameStage').innerHTML=`
+   <div class="card game-end">
+     <div class="tape" style="top:-14px;left:50%;transform:translateX(-50%) rotate(-3deg)"></div>
+     <svg viewBox="0 0 240 205" width="220">
+       <ellipse cx="120" cy="182" rx="92" ry="12" fill="#F7EBD8" stroke="#2A2420" stroke-width="2"/>
+       <rect x="58" y="128" width="124" height="50" rx="10" fill="#F6D8DE" stroke="#2A2420" stroke-width="2.5"/>
+       <path d="M58 138 q10 16 21 0 q10 16 21 0 q10 16 21 0 q10 16 21 0 q10 16 20 0" fill="none" stroke="#2A2420" stroke-width="2"/>
+       <rect x="82" y="88" width="76" height="42" rx="8" fill="#F3C9D3" stroke="#2A2420" stroke-width="2.5"/>
+       <circle cx="120" cy="80" r="11" fill="#E2593C" stroke="#2A2420" stroke-width="2.5"/>
+       <path d="M114 71 q6 -8 12 0" fill="none" stroke="#3F6B4F" stroke-width="2.5"/>
+       <rect x="117" y="56" width="6" height="16" rx="2" fill="#4E7A9B" stroke="#2A2420" stroke-width="2"/>
+       <path class="flame" d="M120 44 q7 8 0 13 q-7 -5 0 -13" fill="#F2B33D" stroke="#2A2420" stroke-width="2"/>
+     </svg>
+     <h3>Taraaa! Kue Stroberi Rasional jadi!</h3>
+     <p style="color:#54493F">Takaran tepat pertama kali: <b>${G.first} dari 8</b> bahan.</p>
+     <div class="stars">
+       ${[0,1,2].map(k=>`<svg class="ic ${k<stars?'on':''}"><use href="#i-star"/></svg>`).join('')}
+     </div>
+     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+       <button class="btn ghost" id="btnAgain"><svg class="ic"><use href="#i-redo"/></svg> Masak Lagi — soal baru!</button>
+       <button class="btn" id="btnToL2">Lanjut Materi <svg class="ic"><use href="#i-arr"/></svg></button>
+     </div>
+   </div>`;
+  confetti(80);sWIN();
+  $('#btnAgain').onclick=gameStart;   // membangun soal yang benar-benar baru
+  $('#btnToL2').onclick=()=>go(6);
+}
+
+/* ================= SLIDE: garis bilangan ================= */
+const PRESETS=[
+ {label:'3/8 · 40% · 0,5',items:[{t:'3/8',v:.375,k:'p'},{t:'40%',v:.4,k:'c'},{t:'0,5',v:.5,k:'d'}],min:.3,max:.55,ticks:[.3,.35,.4,.45,.5,.55]},
+ {label:'7/10 · 0,68 · 72%',items:[{t:'7/10',v:.7,k:'p'},{t:'0,68',v:.68,k:'d'},{t:'72%',v:.72,k:'c'}],min:.6,max:.78,ticks:[.6,.65,.7,.75]},
+ {label:'1 1/2 · 160% · 1,45',items:[{t:'1 1/2',v:1.5,k:'p'},{t:'160%',v:1.6,k:'c'},{t:'1,45',v:1.45,k:'d'}],min:1.3,max:1.7,ticks:[1.3,1.4,1.5,1.6,1.7]},
+];
+const KC={p:{fill:'#E2593C',txt:'#D9532B'},d:{fill:'#5B8F6E',txt:'#3F6B4F'},c:{fill:'#F2B33D',txt:'#A87408'}};
+function numline(p,btn){
+  $$('#presetRow button').forEach(b=>b.classList.toggle('on',b===btn));
+  const W=520,H=160,pad=42,y=98,x=v=>pad+(v-p.min)/(p.max-p.min)*(W-2*pad);
+  let s=`<line x1="${pad-14}" y1="${y}" x2="${W-pad+14}" y2="${y}" stroke="#2A2420" stroke-width="2.5"/>
+   <path d="M${pad-22} ${y} l10 -5 v10 z M${W-pad+22} ${y} l-10 -5 v10 z" fill="#2A2420"/>`;
+  p.ticks.forEach(t=>{
+    s+=`<line x1="${x(t)}" y1="${y-7}" x2="${x(t)}" y2="${y+7}" stroke="#2A2420" stroke-width="2"/>
+        <text x="${x(t)}" y="${y+26}" text-anchor="middle" style="font:600 13px 'Schibsted Grotesk'" fill="#7A6E60">${fmt(t)}</text>`;
+  });
+  p.items.forEach((it,i)=>{
+    const c=KC[it.k],ly=i%2===0?y-58:y-34;
+    s+=`<line x1="${x(it.v)}" y1="${y}" x2="${x(it.v)}" y2="${ly+10}" stroke="${c.txt}" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle class="pt" style="animation-delay:${i*.3}s" cx="${x(it.v)}" cy="${y}" r="8" fill="${c.fill}" stroke="#2A2420" stroke-width="2.5"/>
+        <text class="pt" style="animation-delay:${i*.3+.1}s" x="${x(it.v)}" y="${ly}" text-anchor="middle" style="font:800 15px 'Fraunces'" fill="${c.txt}">${it.t}</text>`;
+  });
+  $('#numline').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+  const asc=[...p.items].sort((a,b)=>a.v-b.v).map(i=>`<b>${i.t}</b>`).join('<span>&lt;</span>');
+  $('#orderOut').innerHTML='<span style="font-weight:800;font-size:.85rem;color:#7A6E60">Urutan naik:</span> '+asc;
+}
+const prow=$('#presetRow');
+PRESETS.forEach((p,i)=>{
+  const b=document.createElement('button');b.textContent=p.label;
+  b.onclick=()=>numline(p,b);prow.appendChild(b);
+});
+
+/* ================= SLIDE: latihan 2 (20 soal) ================= */
+const L2=[
+ {t:'pick',q:'Manakah bilangan yang paling BESAR?',opts:['3/5','0,7','68%','0,66'],ans:1,why:'Ubah ke desimal: 3/5 = 0,6 · 0,7 = 0,70 · 68% = 0,68 · 0,66. Paling besar: 0,7.'},
+ {t:'sign',a:'3/4',b:'0,8',sym:'<',why:'3/4 = 3 ÷ 4 = 0,75. Karena 0,75 < 0,80, maka 3/4 < 0,8.'},
+ {t:'order',items:['3/10','0,2','25%'],ans:[1,2,0],why:'0,2 = 0,20 · 25% = 0,25 · 3/10 = 0,30. Urutan naik: 0,2 → 25% → 3/10.'},
+ {t:'pick',q:'Manakah bilangan yang paling KECIL?',opts:['45%','1/2','2/5','0,48'],ans:2,why:'0,48 · 45% = 0,45 · 1/2 = 0,5 · 2/5 = 0,4. Paling kecil: 2/5.'},
+ {t:'sign',a:'2/5',b:'0,4',sym:'=',why:'2/5 = 4/10 = 0,4, jadi keduanya sama besar.'},
+ {t:'order',items:['0,28','1/4','30%'],ans:[1,0,2],why:'1/4 = 0,25 · 0,28 · 30% = 0,30. Urutan naik: 1/4 → 0,28 → 30%.'},
+ {t:'pick',q:'Bilangan dengan nilai PALING BESAR adalah…',opts:['0,6','62%','5/8','0,61'],ans:2,why:'0,6 · 62% = 0,62 · 5/8 = 0,625 · 0,61. Terbesar: 5/8 = 0,625.'},
+ {t:'sign',a:'7/10',b:'0,07',sym:'>',why:'7/10 = 0,7 jauh lebih besar daripada 0,07 (tujuh persepuluhan vs tujuh perseratusan).'},
+ {t:'order',items:['0,9','7/8','88%'],ans:[1,2,0],why:'7/8 = 0,875 · 88% = 0,88 · 0,9 = 0,90. Urutan naik: 7/8 → 88% → 0,9.'},
+ {t:'pick',q:'Bilangan yang paling KECIL adalah…',opts:['0,2','15%','0,13','1/8'],ans:3,why:'0,2 · 15% = 0,15 · 0,13 · 1/8 = 0,125. Paling kecil: 1/8 = 0,125.'},
+ {t:'sign',a:'60%',b:'3/5',sym:'=',why:'3/5 = 0,6 = 60%. Sama besar!'},
+ {t:'order',items:['1 3/4','145%','1,5'],ans:[1,2,0],why:'1 3/4 = 1,75 · 145% = 1,45 · 1,5. Urutan naik: 145% → 1,5 → 1 3/4.'},
+ {t:'pick',q:'Yang nilainya PALING BESAR…',opts:['2,4','245%','2 1/2','2,05'],ans:2,why:'2,4 · 245% = 2,45 · 2 1/2 = 2,5 · 2,05. Terbesar: 2 1/2.'},
+ {t:'sign',a:'0,05',b:'1/20',sym:'=',why:'1/20 = 1 ÷ 20 = 0,05. Sama besar!'},
+ {t:'order',items:['3/4','0,7','72%'],ans:[1,2,0],why:'3/4 = 0,75 · 0,7 · 72% = 0,72. Urutan naik: 0,7 → 72% → 3/4.'},
+ {t:'pick',q:'Pilih bilangan PALING KECIL.',opts:['0,35','34%','3/8','0,36'],ans:1,why:'0,35 · 34% = 0,34 · 3/8 = 0,375 · 0,36. Paling kecil: 34%.'},
+ {t:'sign',a:'5/4',b:'1,2',sym:'>',why:'5/4 = 1,25 dan 1,25 > 1,2.'},
+ {t:'order',items:['0,5','45%','0,05'],ans:[2,1,0],why:'0,05 · 45% = 0,45 · 0,5. Urutan naik: 0,05 → 45% → 0,5.'},
+ {t:'pick',q:'Bilangan terbesar dari keempat pilihan adalah…',opts:['9/10','0,95','92%','0,9'],ans:1,why:'9/10 = 0,9 · 92% = 0,92 · 0,95. Terbesar: 0,95.'},
+ {t:'sign',a:'3/8',b:'37%',sym:'>',why:'3/8 = 0,375 dan 37% = 0,37. Karena 0,375 > 0,37, tanda yang tepat adalah >.'},
+];
+function l2Score(){return S.l2.ans.filter(a=>a&&a.correct).length;}
+function goL2(i){S.l2.idx=i;S.l2.pick=[null,null,null];renderL2();}
+function renderL2(){
+  const i=S.l2.idx,q=L2[i],stage=$('#l2Stage'),answered=S.l2.ans[i]!==null;
+  const badge={pick:'Pilih bilangan',sign:'Tentukan tanda',order:'Urutkan'}[q.t];
+  let html=`<div class="l2head"><span class="l2no">Soal ${i+1} <em>dari 20</em></span><span class="l2tag t-${q.t}">${badge}</span></div>`;
+  if(q.t==='pick'){
+    html+=`<p class="l2q">${q.q}</p><div class="optgrid">`+q.opts.map((o,j)=>{
+      let cls='opt';
+      if(answered){if(j===q.ans)cls+=' ok';else if(S.l2.ans[i].j===j)cls+=' bad';}
+      return `<button class="${cls}" data-t="pick" data-j="${j}" ${answered?'disabled':''}>${fr(o)}</button>`;
+    }).join('')+`</div>`;
+  }else if(q.t==='sign'){
+    const sym=answered?S.l2.ans[i].sym:null;
+    html+=`<p class="l2q">Pasang tanda <b>&lt;</b>, <b>&gt;</b>, atau <b>=</b> yang tepat di kotak:</p>
+      <div class="signrow"><span class="sbig">${fr(q.a)}</span><span class="sslot ${answered?(S.l2.ans[i].correct?'is-ok':'is-bad'):''}">${sym||'?'}</span><span class="sbig">${fr(q.b)}</span></div>
+      <div class="signbtns">`+['<','=','>'].map(s=>{
+        let cls='opt sbtn';
+        if(answered){if(s===q.sym)cls+=' reveal';}
+        return `<button class="${cls}" data-t="sign" data-s="${s}" ${answered?'disabled':''}>${s}</button>`;
+      }).join('')+`</div>`;
+  }else{
+    const slots=answered?S.l2.ans[i].order:S.l2.pick;
+    html+=`<p class="l2q">Klik kartu di bawah sesuai urutan — dari yang <b>terkecil</b> ke yang <b>terbesar</b>. Klik kotak untuk mengembalikan kartu.</p>
+      <div class="slots">`+slots.map((it,si)=>{
+        const mark=answered?(it===q.ans[si]?'ok':'bad'):'';
+        return `<div class="slot ${mark}" data-slot="${si}"><span class="sl">${si===0?'terkecil':si===2?'terbesar':'urutan '+(si+1)}</span><span class="sv">${it===null?'&middot;&middot;&middot;':fr(q.items[it])}</span></div>`;
+      }).join('')+`</div><div class="pool">`+q.items.map((t,pi)=>{
+        const used=slots.includes(pi);
+        return `<button class="chip" data-t="chip" data-j="${pi}" ${used||answered?'disabled':''}>${fr(t)}</button>`;
+      }).join('')+`</div>`;
+    if(!answered)html+=`<div style="text-align:center"><button class="btn" id="l2Check" ${S.l2.pick.includes(null)?'disabled':''}>Cek Urutan <svg class="ic"><use href="#i-check"/></svg></button></div>`;
+  }
+  if(answered){
+    const ok=S.l2.ans[i].correct;
+    html+=`<div class="verdict ${ok?'v-ok':'v-bad'}"><svg class="ic"><use href="#i-${ok?'check':'x'}"/></svg>${ok?'Benar! Kerja bagus.':'Belum tepat — tidak apa-apa, baca pembahasannya ya.'}</div>
+           <div class="why"><svg class="ic"><use href="#i-bulb"/></svg><span>${q.why}</span></div>`;
+  }
+  stage.innerHTML=html;
+  const dn=$('#l2Dots');dn.innerHTML='';
+  L2.forEach((_,k)=>{
+    const b=document.createElement('button');b.textContent=k+1;
+    const a=S.l2.ans[k];
+    if(a)b.classList.add(a.correct?'r-ok':'r-bad');
+    if(k===i)b.classList.add('on');
+    b.onclick=()=>goL2(k);dn.appendChild(b);
+  });
+  $('#l2Score').textContent=l2Score()+' / 20';
+  $('#l2Prev').disabled=i===0;$('#l2Next').disabled=i===19;
+}
+ $('#l2Prev').onclick=()=>goL2(S.l2.idx-1);
+ $('#l2Next').onclick=()=>goL2(S.l2.idx+1);
+ $('#l2Stage').addEventListener('click',e=>{
+  const i=S.l2.idx,q=L2[i];
+  if(S.l2.ans[i])return;
+  const b=e.target.closest('button[data-t]');
+  if(b){
+    if(b.dataset.t==='pick'){S.l2.ans[i]={correct:+b.dataset.j===q.ans,j:+b.dataset.j};}
+    else if(b.dataset.t==='sign'){S.l2.ans[i]={correct:b.dataset.s===q.sym,sym:b.dataset.s};}
+    else if(b.dataset.t==='chip'){
+      const pi=S.l2.pick.indexOf(null);
+      if(pi>-1){S.l2.pick[pi]=+b.dataset.j;renderL2();}
+      return;
+    }
+  }else if(e.target.closest('#l2Check')){
+    S.l2.ans[i]={correct:S.l2.pick.join()===q.ans.join(),order:[...S.l2.pick]};
+  }else return;
+  const ok=S.l2.ans[i].correct;
+  ok?sOK():sNO();
+  if(ok)confetti(26);
+  renderL2();
+});
+ $('#l2Stage').addEventListener('click',e=>{
+  const sl=e.target.closest('.slot[data-slot]');
+  const i=S.l2.idx;
+  if(sl&&!S.l2.ans[i]){
+    const si=+sl.dataset.slot;
+    if(S.l2.pick[si]!==null){S.l2.pick[si]=null;renderL2();}
+  }
+});
+
+/* ================= SLIDE: soal cerita (10) ================= */
+const STORY=[
+ {topik:'Diskon Belanja',q:'Sebuah baju berharga Rp120.000 sedang didiskon 25%. Berapa rupiah yang harus dibayar Rania di kasir?',
+  o:['Rp80.000','Rp90.000','Rp95.000','Rp30.000'],ans:1,
+  p:'Diskon = 25% × 120.000 = 25/100 × 120.000 = Rp30.000. Harga bayar = 120.000 − 30.000 = <b>Rp90.000</b>.'},
+ {topik:'Nilai Ulangan',q:'Dari 20 soal ulangan, Rina menjawab benar 17 soal. Nilai ulangan Rina jika dinyatakan dalam persen adalah…',
+  o:['75%','80%','85%','90%'],ans:2,
+  p:'Banyak benar = 17/20 = 17 ÷ 20 = 0,85 = <b>85%</b>.'},
+ {topik:'Bahan Kue',q:'Untuk membuat kue, Ibu membutuhkan 0,5 kg tepung terigu. Di dapur tersedia 3/4 kg tepung. Apakah tepungnya cukup?',
+  o:['Cukup, karena 3/4 kg < 0,5 kg','Cukup, karena 3/4 = 0,75 kg > 0,5 kg','Tidak cukup, karena 3/4 < 0,5','Cukup, karena 0,5 = 3/4'],ans:1,
+  p:'Samakan dulu bentuknya: 3/4 = 3 ÷ 4 = 0,75. Karena 0,75 > 0,5, tepung <b>cukup</b> — bahkan sisa 0,25 kg (= 1/4 kg).'},
+ {topik:'Baterai HP',q:'Baterai HP Dinda tersisa 35%. Bentuk desimal dan pecahan paling sederhana dari 35% adalah…',
+  o:['0,35 dan 7/20','3,5 dan 7/20','0,35 dan 35/50','0,035 dan 7/200'],ans:0,
+  p:'35% = 35/100. Sederhanakan dengan ÷5 → <b>7/20</b>. Desimalnya = 35 ÷ 100 = <b>0,35</b>.'},
+ {topik:'Diskon Toko',q:'Tiga toko memberi diskon untuk produk yang sama: Toko A sebesar 1/4, Toko B sebesar 30%, dan Toko C sebesar 0,2. Diskon terbesar ada di…',
+  o:['Toko A','Toko B','Toko C','Semua sama besar'],ans:1,
+  p:'Ubah ke desimal: 1/4 = 0,25 · 30% = 0,30 · 0,2 = 0,20. Terbesar = 0,30, yaitu <b>Toko B</b>.'},
+ {topik:'Gelas Jus',q:'Gelas jus Bayu terisi 3/8 bagian. Berapa persen isi gelas Bayu?',
+  o:['30%','37,5%','38%','3,8%'],ans:1,
+  p:'3/8 = 3 ÷ 8 = 0,375. Lalu 0,375 × 100 = <b>37,5%</b>.'},
+ {topik:'Menabung',q:'Sinta selalu menabung 40% dari uang jajannya. Jika uang jajan Sinta Rp50.000, berapa rupiah yang ia tabungkan?',
+  o:['Rp10.000','Rp15.000','Rp20.000','Rp25.000'],ans:2,
+  p:'Tabungan = 40% × 50.000 = 40/100 × 50.000 = <b>Rp20.000</b>.'},
+ {topik:'Bagian Kue',q:'Dari satu kue yang sama, Ibu memakan 0,25 bagian dan Adik memakan 1/5 bagian. Siapa yang mendapat bagian lebih banyak?',
+  o:['Ibu','Adik','Sama banyak','Tidak dapat ditentukan'],ans:0,
+  p:'Ubah ke desimal: Ibu 0,25 dan Adik 1/5 = 0,2. Karena 0,25 > 0,2, <b>Ibu</b> mendapat bagian lebih banyak.'},
+ {topik:'Mengurutkan Nilai',q:'Urutan naik (dari terkecil) untuk bilangan 3/4 ; 0,8 ; 78% adalah…',
+  o:['0,8 ; 78% ; 3/4','3/4 ; 78% ; 0,8','78% ; 3/4 ; 0,8','3/4 ; 0,8 ; 78%'],ans:1,
+  p:'Ubah semua ke desimal: 3/4 = 0,75 · 78% = 0,78 · 0,8 = 0,80. Karena 0,75 < 0,78 < 0,80, urutannya <b>3/4 ; 78% ; 0,8</b>.'},
+ {topik:'Tangki Motor',q:'Hari ini tangki motor Ayah terisi 62%. Kemarin terisi 3/5 bagian. Kapan tangki lebih penuh?',
+  o:['Hari ini','Kemarin','Sama penuh','Tidak dapat dibandingkan'],ans:0,
+  p:'3/5 = 0,6 = 60%. Karena 62% > 60%, tangki <b>hari ini</b> lebih penuh.'},
+];
+function storyScoreLbl(){$('#storyScore').textContent='Skor: '+S.story.score+' / 10';}
+function buildStory(){
+  const wrap=$('#storyList');
+  wrap.innerHTML=STORY.map((s,i)=>`
+   <article class="scard">
+     <button class="shead" data-toggle="${i}" aria-expanded="false">
+       <span class="sno">Soal ${i+1}</span><span class="stopic">${s.topik}</span>
+       <span class="sstat" id="st${i}"></span>
+       <svg class="ic chev"><use href="#i-arrd"/></svg>
+     </button>
+     <div class="sbody" hidden>
+       <p class="sq">${s.q}</p>
+       <div class="sopts">${s.o.map((o,j)=>`<button class="sopt" data-pick="${i}-${j}"><b>${'ABCD'[j]}.</b> ${o}</button>`).join('')}</div>
+       <div class="sacts">
+         <button class="btn tiny" data-cek="${i}">Cek Jawaban</button>
+         <button class="btn tiny ghost" data-bahas="${i}">Pembahasan</button>
+       </div>
+       <div class="bahas" id="bh${i}" hidden><b>Pembahasan:</b> ${s.p}</div>
+     </div>
+   </article>`).join('');
+}
+ $('#storyList').addEventListener('click',e=>{
+  const tg=e.target.closest('[data-toggle]');
+  if(tg){
+    const body=tg.nextElementSibling,open=body.hidden;
+    body.hidden=!open;tg.setAttribute('aria-expanded',open);
+    return;
+  }
+  const pk=e.target.closest('[data-pick]');
+  if(pk){
+    const[i,j]=pk.dataset.pick.split('-').map(Number);
+    if(S.story.done[i])return;
+    S.story.pick[i]=j;
+    for(let k=0;k<4;k++){$$(`[data-pick="${i}-${k}"]`)[0].classList.toggle('sel',k===j);}
+    return;
+  }
+  const ck=e.target.closest('[data-cek]');
+  if(ck){
+    const i=+ck.dataset.cek,s=STORY[i];
+    if(S.story.done[i])return;
+    if(S.story.pick[i]===null){toast('Pilih salah satu jawaban dulu ya!',false);sNO();return;}
+    S.story.done[i]=true;
+    const pick=S.story.pick[i],ok=pick===s.ans;
+    if(ok)S.story.score++;
+    for(let k=0;k<4;k++){
+      const btn=$$(`[data-pick="${i}-${k}"]`)[0];
+      btn.disabled=true;
+      if(k===s.ans)btn.classList.add('ok');
+      else if(k===pick)btn.classList.add('bad');
+      btn.classList.remove('sel');
+    }
+    $('#st'+i).innerHTML=`<svg class="ic ${ok?'ok':'no'}"><use href="#i-${ok?'check':'x'}"/></svg>`;
+    if(!ok)$('#bh'+i).hidden=false;
+    ok?sOK():sNO();
+    if(ok)confetti(24);
+    storyScoreLbl();
+    toast(ok?'Soal '+(i+1)+' benar! ':'Soal '+(i+1)+' belum tepat — pembahasan sudah dibuka.',ok);
+    return;
+  }
+  const bh=e.target.closest('[data-bahas]');
+  if(bh){const p=$('#bh'+(+bh.dataset.bahas));p.hidden=!p.hidden;}
+});
+
+/* ================= SLIDE: hasil ================= */
+function renderResults(){
+  const rows=[
+    ['Latihan 1 · Tabel Konversi', S.l1.locked.size, 30, 'var(--terra)'],
+    ['Game Dapur Manis', S.game.played?S.game.first:null, 8, 'var(--rose)'],
+    ['Latihan 2 · Banding & Urut', l2Score(), 20, 'var(--green)'],
+    ['Soal Cerita', S.story.score, 10, 'var(--butter)'],
+  ];
+  const done=rows.filter(r=>r[1]!==null);
+  const earn=done.reduce((a,r)=>a+r[1],0), mx=done.reduce((a,r)=>a+r[2],0);
+  const pct=mx?Math.round(earn/mx*100):null;
+  const stars=pct===null?0:pct>=90?3:pct>=70?2:pct>=50?1:0;
+  const pred=pct===null?'Mulai kerjakan latihannya dulu ya!':
+    pct>=90?'Luar biasa! Kamu benar-benar menguasai materi ini.':
+    pct>=70?'Hebat! Sedikit lagi menuju sempurna.':
+    pct>=50?'Bagus! Terus berlatih agar makin percaya diri.':
+    'Jangan menyerah — ulangi latihannya, kamu pasti bisa!';
+  $('#resBody').innerHTML=`
+   <div class="res-grid">
+     <div class="card res-card">
+       <div class="tape" style="top:-14px;left:24px;transform:rotate(-4deg)"></div>
+       <p style="font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#7A6E60">Rapor untuk</p>
+       <p class="res-name" data-name>Sahabat Matematika</p>
+       <p style="font-size:.85rem;color:#54493F;margin:2px 0 18px">Konversi · Membandingkan · Mengurutkan Bilangan Rasional</p>
+       ${rows.map(r=>{
+         const p=r[1]===null?null:Math.round(r[1]/r[2]*100);
+         return `<div class="rrow">
+           <div class="rl"><span>${r[0]}</span><span>${r[1]===null?'<i style="color:#7A6E60;font-size:.8rem">belum dikerjakan</i>':r[1]+' / '+r[2]}</span></div>
+           <div class="rbar"><i style="width:${p===null?0:p}%;background:${r[3]}"></i></div>
+         </div>`;
+       }).join('')}
+       <div class="res-total">
+         <span class="res-pct">${pct===null?'–':pct+'%'}</span>
+         <span class="res-pred">${pred}</span>
+       </div>
+     </div>
+     <div class="card res-side">
+       <h4 style="font-family:'Fraunces',serif;font-size:1.3rem;margin-bottom:6px">Peringkat Bintang</h4>
+       <div class="stars">${[0,1,2].map(k=>`<svg class="ic ${k<stars?'on':''}" style="animation-delay:${k*.15}s"><use href="#i-star"/></svg>`).join('')}</div>
+       <p style="font-size:.9rem;color:#54493F">${stars===3?'Tiga bintang penuh! Rasional Master sejati.':stars===2?'Dua bintang — sangat baik!':stars===1?'Satu bintang — awal yang baik!':'Kumpulkan bintang dengan menyelesaikan latihan.'}</p>
+       <div class="res-actions">
+         <button class="btn" id="btnPrint"><svg class="ic"><use href="#i-print"/></svg> Cetak / Simpan PDF</button>
+         <button class="btn ghost" id="btnRefl2">Lanjut Refleksi <svg class="ic"><use href="#i-arr"/></svg></button>
+       </div>
+     </div>
+   </div>`;
+  $('#btnRefl2').onclick=()=>go(11);
+  $('#btnPrint').onclick=()=>{
+    $('#printCard').innerHTML=`
+     <h2 style="font-family:Fraunces,serif">Rapor Belajar — Pecahan, Desimal & Persen</h2>
+     <p>Nama: <b>${S.name}</b></p>
+     <table border="1" cellspacing="0" cellpadding="8" style="border-collapse:collapse;width:100%;margin-top:12px;font-size:14px">
+       <tr style="background:#F7F1E6"><th align="left">Bagian</th><th>Skor</th><th>Persentase</th></tr>
+       ${rows.map(r=>`<tr><td>${r[0]}</td><td align="center">${r[1]===null?'belum':r[1]+' / '+r[2]}</td><td align="center">${r[1]===null?'-':Math.round(r[1]/r[2]*100)+'%'}</td></tr>`).join('')}
+       <tr><td><b>TOTAL</b></td><td align="center"><b>${earn} / ${mx}</b></td><td align="center"><b>${pct===null?'-':pct+'%'}</b></td></tr>
+     </table>
+     <p style="margin-top:10px">Predikat: <b>${pred}</b> (${stars} dari 3 bintang)</p>`;
+    window.print();
+  };
+  setTimeout(()=>{$$('#resBody .rbar i').forEach(b=>{const w=b.style.width;b.style.width='0';requestAnimationFrame(()=>b.style.width=w);});},60);
+}
+
+/* ================= SLIDE: refleksi ================= */
+ $$('.mood').forEach(m=>m.onclick=()=>{
+  $$('.mood').forEach(x=>x.classList.remove('on'));
+  m.classList.add('on');S.refl=m.dataset.mood;sOK();
+});
+ $('#btnRefl').onclick=()=>{
+  const t1=$('#rt1').value.trim(),t2=$('#rt2').value.trim();
+  if(!S.refl){toast('Pilih dulu wajah perasaanmu ya!',false);sNO();return;}
+  $('#reflSaved').innerHTML=`
+    <b style="font-family:'Fraunces',serif;font-size:1.1rem">Terima kasih, ${S.name}!</b>
+    <p style="margin-top:6px;font-size:.92rem;line-height:1.6">Perasaanmu hari ini: <b>${S.refl}</b>.<br>
+    ${t1?'Pelajaranmu: <i>&ldquo;'+t1+'&rdquo;</i><br>':''}
+    ${t2?'Yang masih ragu: <i>&ldquo;'+t2+'&rdquo;</i><br>':''}
+    Refleksimu sudah tersimpan. Sampai jumpa di materi berikutnya!</p>`;
+  $('#reflSaved').classList.add('show');
+  confetti(40);sOK();
+  toast('Refleksi tersimpan!');
+};
+
+/* ================= init ================= */
+renderL1Page();
+buildStory();
+gameIntro();
+numline(PRESETS[0],prow.firstChild);
+goL2(0);
+go(0);
+</script>
+</body>
+</html>
