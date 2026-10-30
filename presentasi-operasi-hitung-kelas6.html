@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Operasi Hitung — Soal Cerita Kelas 6 SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#2b2d42; --muted:#6b7089; --bg:#fff7e8; --card:#ffffff;
+  --teal:#0aa79c; --coral:#ff5a5f; --purple:#7c5cff; --orange:#ff9f1c;
+  --blue:#2f7cf6; --pink:#ff6fb5; --green:#2fb46c; --red:#e63946; --amber:#f4a300;
+  --line:#2b2d42;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4,.baloo{font-family:'Baloo 2','Comic Sans MS','Trebuchet MS',sans-serif}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+.muted{color:var(--muted)}
+.mini{font-size:13px}
+
+/* ---------- dekorasi latar ---------- */
+#deco span{position:fixed;font-family:'Baloo 2',sans-serif;font-weight:800;opacity:.08;pointer-events:none;z-index:0;animation:floaty 14s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-34px) rotate(8deg)}}
+#deco .teal{color:var(--teal)} #deco .coral{color:var(--coral)} #deco .purple{color:var(--purple)}
+#deco .orange{color:var(--orange)} #deco .blue{color:var(--blue)} #deco .pink{color:var(--pink)}
+
+/* ---------- topbar ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;height:58px;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:3px solid var(--ink)}
+.tb-left{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--purple);color:#fff;font-family:'Baloo 2';font-weight:800;font-size:14px;letter-spacing:1px;box-shadow:3px 3px 0 rgba(43,45,66,.2);flex:none}
+.tb-title{font-family:'Baloo 2';font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-right{display:flex;gap:8px}
+.ico{width:38px;height:38px;border-radius:12px;border:3px solid var(--ink);background:#fff;display:grid;place-items:center;transition:.15s;box-shadow:3px 3px 0 rgba(43,45,66,.15)}
+.ico:hover{transform:translateY(-2px)}
+.ico svg{width:18px;height:18px;fill:var(--ink)}
+
+/* ---------- deck & slide ---------- */
+.deck{position:relative;z-index:1;padding:80px 16px 96px;max-width:1160px;margin:0 auto}
+.slide{display:none}
+.slide.active{display:block;animation:pop .45s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.wrap{max-width:1040px;margin:0 auto}
+.wrap.center{text-align:center}
+.kicker{display:inline-block;background:var(--ink);color:#fff;padding:5px 16px;border-radius:999px;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.h-title{font-size:clamp(26px,4.2vw,42px);margin:12px 0 6px;line-height:1.15}
+.h-sub{color:var(--muted);font-size:clamp(14px,2vw,18px);font-weight:700;margin-bottom:20px}
+.shead{margin-bottom:18px}
+
+/* ---------- kartu & tombol ---------- */
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:20px;box-shadow:6px 6px 0 rgba(43,45,66,.12)}
+.btn{border:3px solid var(--ink);border-radius:16px;padding:10px 18px;font-weight:900;font-size:15px;background:#fff;color:var(--ink);box-shadow:4px 4px 0 rgba(43,45,66,.2);transition:.12s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(43,45,66,.2)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-p{background:var(--purple);color:#fff}
+.btn-t{background:var(--teal);color:#fff}
+.btn-o{background:var(--orange);color:#fff}
+.btn-c{background:var(--coral);color:#fff}
+.btn.big{font-size:18px;padding:14px 30px;border-radius:20px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+/* ---------- cover ---------- */
+.cover-title{font-size:clamp(34px,6vw,58px);line-height:1.08;margin:14px 0 10px}
+.cover-title .c1{color:var(--purple)} .cover-title .c2{color:var(--teal)} .cover-title .c3{color:var(--coral)} .cover-title .c4{color:var(--orange)}
+.cover-sub{max-width:640px;margin:0 auto 22px;color:var(--muted);font-weight:700;font-size:clamp(14px,2vw,18px)}
+.cover-card{max-width:640px;margin:0 auto;text-align:left}
+.cc-title{margin-bottom:14px;font-size:20px}
+.names-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.name-box{position:relative;border:3px solid var(--line);border-radius:16px;padding:20px 10px 10px;text-align:center;background:#fdf3ff}
+.name-box.nb2{background:#e6fbf9}.name-box.nb3{background:#fff3e0}
+.nbadge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-weight:900;font-size:12px;padding:2px 12px;border-radius:999px;border:2px solid var(--ink)}
+.nb2 .nbadge{background:var(--teal)} .nb3 .nbadge{background:var(--orange)}
+.name-box input{width:100%;border:none;background:transparent;text-align:center;font-size:17px;font-weight:900;outline:none;color:var(--ink)}
+.cover-ops{font-family:'Baloo 2';font-weight:800;font-size:26px;margin:18px 0 8px}
+.cover-ops b{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;border:3px solid var(--ink);margin:0 5px;color:#fff;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.cover-ops b:nth-child(1){background:var(--teal)} .cover-ops b:nth-child(2){background:var(--coral);animation-delay:.2s}
+.cover-ops b:nth-child(3){background:var(--purple);animation-delay:.4s} .cover-ops b:nth-child(4){background:var(--orange);animation-delay:.6s}
+
+/* ---------- apersepsi ---------- */
+.story{font-size:clamp(15px,2vw,18px);line-height:1.75;font-weight:600}
+.story .hl{background:#fff3d6;padding:0 6px;border-radius:8px;font-weight:900}
+.pem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:14px}
+.pem{border:3px solid var(--line);border-radius:18px;background:#fff;padding:16px;cursor:pointer;transition:.2s;box-shadow:4px 4px 0 rgba(43,45,66,.12)}
+.pem:hover{transform:translateY(-3px)}
+.pem .pq{font-weight:900;font-size:15px;display:flex;gap:10px;align-items:flex-start}
+.pem .pn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:2px solid var(--ink)}
+.pem .ph{margin-top:10px;font-size:14px;font-weight:700;color:#1b7a44;background:#e6f9ef;border:2px dashed #1b7a44;border-radius:12px;padding:8px 12px;display:none}
+.pem.open .ph{display:block;animation:stepIn .35s ease both}
+.pem:nth-child(1) .pn{background:var(--teal)} .pem:nth-child(2) .pn{background:var(--coral)}
+.pem:nth-child(3) .pn{background:var(--purple)} .pem:nth-child(4) .pn{background:var(--orange)}
+
+/* ---------- tujuan ---------- */
+.tuj{display:flex;flex-direction:column;gap:14px;max-width:760px;margin:0 auto}
+.tuj-it{display:flex;gap:16px;align-items:center;border:3px solid var(--line);border-radius:18px;padding:16px 18px;background:#fff;box-shadow:4px 4px 0 rgba(43,45,66,.12);text-align:left;transition:.2s;cursor:pointer}
+.tuj-it:hover{transform:translateX(6px)}
+.tuj-n{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-family:'Baloo 2';font-size:24px;font-weight:800;color:#fff;border:3px solid var(--ink)}
+.tuj-it:nth-child(1) .tuj-n{background:var(--teal)} .tuj-it:nth-child(2) .tuj-n{background:var(--coral)}
+.tuj-it:nth-child(3) .tuj-n{background:var(--purple)} .tuj-it:nth-child(4) .tuj-n{background:var(--orange)}
+.tuj-it p{font-weight:700;font-size:15.5px;line-height:1.5}
+
+/* ---------- kartu flip kata kunci ---------- */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;margin-bottom:22px}
+.flip{height:290px;perspective:1100px;cursor:pointer}
+.fin{position:relative;width:100%;height:100%;transition:transform .65s;transform-style:preserve-3d}
+.flip.open .fin{transform:rotateY(180deg)}
+.fface{position:absolute;inset:0;backface-visibility:hidden;border:3px solid var(--line);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;box-shadow:5px 5px 0 rgba(43,45,66,.15)}
+.f-teal{background:linear-gradient(155deg,#0aa79c,#087f77);color:#fff}
+.f-coral{background:linear-gradient(155deg,#ff5a5f,#d63a40);color:#fff}
+.f-purple{background:linear-gradient(155deg,#7c5cff,#5a3de0);color:#fff}
+.f-orange{background:linear-gradient(155deg,#ff9f1c,#e07f00);color:#fff}
+.fsym{font-family:'Baloo 2';font-size:64px;font-weight:800;line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,.18)}
+.fface h3{font-size:22px}
+.tap{font-size:12px;font-weight:800;background:rgba(255,255,255,.25);padding:4px 12px;border-radius:999px}
+.fback{transform:rotateY(180deg);background:#fff;color:var(--ink);align-items:flex-start;justify-content:flex-start;overflow:auto}
+.fback h3{font-size:18px;border-bottom:3px solid;padding-bottom:4px;align-self:stretch}
+.f-tealback{background:#e0f7f5}.f-tealback h3{border-color:var(--teal);color:#06726c}
+.f-coralback{background:#ffecec}.f-coralback h3{border-color:var(--coral);color:#c1121f}
+.f-purpleback{background:#f1ecff}.f-purpleback h3{border-color:var(--purple);color:#5a3de0}
+.f-orangeback{background:#fff3e0}.f-orangeback h3{border-color:var(--orange);color:#b56a00}
+.kk-lbl{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#fff;border:2px solid var(--ink);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:800;box-shadow:2px 2px 0 rgba(43,45,66,.15)}
+.kk-ex{font-size:13px;font-weight:800;background:var(--ink);color:#ffd93d;padding:6px 12px;border-radius:10px}
+
+/* ---------- kuis tebak operasi ---------- */
+.qk{max-width:680px;margin:0 auto}
+.qk-n{display:inline-block;background:var(--ink);color:#fff;border-radius:999px;padding:3px 14px;font-size:12px;font-weight:900;margin-bottom:10px}
+.qk-s{font-size:clamp(16px,2.4vw,20px);font-weight:800;line-height:1.55;margin-bottom:14px}
+.opbtns{display:flex;gap:10px;flex-wrap:wrap}
+.opb{width:58px;height:58px;border-radius:16px;border:3px solid var(--ink);font-family:'Baloo 2';font-size:28px;font-weight:800;color:#fff;box-shadow:4px 4px 0 rgba(43,45,66,.2);transition:.12s}
+.opb:hover{transform:translateY(-3px)}
+.opb:active{transform:translate(2px,2px)}
+.opb.b-teal{background:var(--teal)} .opb.b-coral{background:var(--coral)} .opb.b-purple{background:var(--purple)} .opb.b-orange{background:var(--orange)}
+.opb:disabled{opacity:.5}
+.opsrow{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.seq{min-height:52px;border:3px dashed var(--muted);border-radius:14px;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fafafa;margin-bottom:10px}
+.seq .empty{color:var(--muted);font-weight:700;font-size:14px}
+.seqchip{background:var(--ink);color:#fff;font-family:'Baloo 2';font-weight:800;font-size:18px;border-radius:12px;padding:4px 14px;display:inline-flex;gap:8px;align-items:center}
+.seqchip .no{font-size:12px;color:#ffd93d}
+
+/* ---------- contoh soal ---------- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border:3px solid var(--ink);background:#fff;border-radius:999px;padding:8px 20px;font-weight:900;font-size:14px;box-shadow:3px 3px 0 rgba(43,45,66,.15);transition:.15s}
+.tab:hover{transform:translateY(-2px)}
+.tab.on{background:var(--ink);color:#fff}
+.excard{max-width:760px}
+.exbadges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.lvb{border:2px solid var(--ink);border-radius:999px;padding:3px 14px;font-size:12.5px;font-weight:900;letter-spacing:1px}
+.lv-mudah{background:#e6f9ef;color:#1b7a44}.lv-sedang{background:#fff3d6;color:#9a6b00}.lv-sulit{background:#ffe9ec;color:#c1121f}
+.opsb{background:var(--ink);color:#ffd93d;border-radius:999px;padding:3px 14px;font-size:13px;font-weight:900;font-family:'Baloo 2'}
+.keychip{display:inline-block;background:#eef3ff;border:2px solid var(--blue);color:#274690;border-radius:12px;padding:6px 14px;font-weight:800;font-size:14px;margin:6px 0 4px}
+.qtext{font-size:clamp(15.5px,2.2vw,19px);font-weight:800;line-height:1.7}
+.qtext.small{font-size:14.5px}
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.step{display:none;gap:12px;align-items:flex-start;background:#fdf9ef;border:2px solid #e7d9b8;border-radius:14px;padding:10px 14px;font-weight:700;line-height:1.6;font-size:15px}
+.step.show{display:flex;animation:stepIn .45s ease both}
+@keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.step.final{background:#e6f9ef;border-color:#1b7a44}
+.sn{flex:none;width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-weight:900;font-size:14px;border:2px solid var(--ink)}
+.step.final .sn{background:var(--green)}
+
+/* ---------- turnbar ---------- */
+.turnbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:14px 18px}
+.tl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lbl{font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.giliran{background:var(--orange);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:4px 16px;font-weight:900;font-size:15px}
+.ptsnote{font-size:12.5px;font-weight:700;color:var(--muted)}
+
+/* ---------- latihan ---------- */
+.qcard{max-width:780px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.qnum{font-family:'Baloo 2';font-weight:800;font-size:17px;color:var(--purple)}
+.qdots{display:flex;gap:6px;flex-wrap:wrap}
+.qd{width:30px;height:30px;border-radius:10px;border:2px solid var(--ink);background:#fff;font-weight:900;font-size:12.5px;display:grid;place-items:center;transition:.15s}
+.qd.done{background:var(--green);color:#fff}
+.qd.cur{background:var(--ink);color:#fff;transform:scale(1.12)}
+.ansrow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 8px}
+.ain{flex:1;min-width:180px;border:3px solid var(--ink);border-radius:14px;padding:11px 16px;font-size:17px;font-weight:800;outline:none}
+.ain:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(124,92,255,.2)}
+.fb{padding:10px 14px;border-radius:14px;font-weight:900;margin-top:8px;line-height:1.5}
+.fb.ok{background:#e6f9ef;color:#1b7a44;border:2px solid #1b7a44}
+.fb.no{background:#ffe9ec;color:#c1121f;border:2px solid #c1121f}
+.fb.info{background:#eef3ff;color:#274690;border:2px solid #274690}
+.fb.big{font-size:17px}
+.qnav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.qnav .cnt{font-weight:900;color:var(--muted);font-size:14px}
+
+/* ---------- tantangan ---------- */
+.tant .opb{width:64px;height:64px;font-size:32px}
+.tant-hint{font-size:13.5px;font-weight:800;color:var(--muted);margin-bottom:6px}
+.minibtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.minibtn{border:2px solid var(--ink);background:#fff;border-radius:10px;padding:5px 12px;font-weight:800;font-size:12.5px}
+
+/* ---------- permainan kartu ---------- */
+.rules-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.rchip{border:2px solid var(--ink);border-radius:999px;padding:5px 14px;font-weight:800;font-size:13px;background:#fff;box-shadow:2px 2px 0 rgba(43,45,66,.12)}
+.rchip.b{background:var(--teal);color:#fff}.rchip.s{background:#fff3d6}.rchip.h{background:#ffe9ec}.rchip.p{background:var(--purple);color:#fff}
+.orderchips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ochip{border:2px solid var(--ink);border-radius:14px;padding:5px 12px;font-weight:900;font-size:13.5px;background:#fff;box-shadow:2px 2px 0 rgba(43,45,66,.12);display:inline-flex;gap:7px;align-items:center}
+.ochip .onum{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:11px}
+.ochip.cur{background:#fff3d6;transform:scale(1.06);border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,159,28,.35)}
+.ochip.dim{opacity:.45}
+.gwrap{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+.cards-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.pcard{aspect-ratio:3/4;border:3px solid var(--ink);border-radius:16px;background:linear-gradient(160deg,var(--purple),#4c3bb8);color:#fff;display:grid;place-items:center;font-family:'Baloo 2';font-size:clamp(18px,2.6vw,27px);font-weight:800;cursor:pointer;position:relative;box-shadow:4px 4px 0 rgba(43,45,66,.22);transition:.18s}
+.pcard:hover{transform:translateY(-5px) rotate(-2deg)}
+.pcard.used{background:repeating-linear-gradient(45deg,#ececec,#ececec 10px,#e0e0e0 10px,#e0e0e0 20px);color:#9a9a9a;cursor:default;box-shadow:none}
+.pcard.used:hover{transform:none}
+.pcard.used::after{content:'SELESAI';position:absolute;bottom:7px;font-size:9px;font-weight:900;letter-spacing:1px}
+.gpanel{min-height:430px;display:flex;flex-direction:column;gap:12px}
+.gp-hi{font-family:'Baloo 2';font-size:24px;font-weight:800}
+.gp-hi b{color:var(--purple)}
+.gp-p{font-weight:700;color:var(--muted);line-height:1.6;font-size:14.5px}
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend .rchip{align-self:flex-start}
+.readbox{background:#fff8e6;border:2px dashed var(--orange);border-radius:14px;padding:10px 14px;font-weight:800;font-size:13.5px;color:#9a6b00}
+.timerbox{display:flex;align-items:center;gap:14px}
+.ring{width:104px;height:104px;transform:rotate(-90deg);flex:none}
+.rbg{fill:none;stroke:#ececec;stroke-width:11}
+.rfg{fill:none;stroke:var(--teal);stroke-width:11;stroke-linecap:round;stroke-dasharray:326.7;transition:stroke-dashoffset 1s linear,stroke .3s}
+.rfg.low{stroke:var(--red)}
+.tmin{font-family:'Baloo 2';font-size:34px;font-weight:800}
+.timerbox.low .tmin{color:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.45}}
+.stealbtn{border:3px solid var(--ink);border-radius:14px;background:var(--coral);color:#fff;font-weight:900;padding:8px 16px;box-shadow:3px 3px 0 rgba(43,45,66,.2);transition:.12s}
+.stealbtn:hover{transform:translateY(-2px)}
+.gpsteps{display:flex;flex-direction:column;gap:8px}
+.gpsteps .step{display:flex;animation:stepIn .4s ease both}
+
+/* ---------- hasil ---------- */
+.htable{width:100%;border-collapse:separate;border-spacing:0 10px}
+.htable th{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;padding:0 14px}
+.htable td{background:#fff;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:14px;font-weight:800}
+.htable tr td:first-child{border-left:3px solid var(--ink);border-radius:16px 0 0 16px;font-family:'Baloo 2';font-size:17px}
+.htable tr td:last-child{border-right:3px solid var(--ink);border-radius:0 16px 16px 0;font-size:19px;color:var(--purple)}
+.hbar{height:14px;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--green));min-width:6px}
+.champ{margin-top:16px;background:linear-gradient(120deg,var(--orange),var(--coral));color:#fff;border:3px solid var(--ink);border-radius:20px;padding:18px 22px;font-family:'Baloo 2';font-size:22px;font-weight:800;text-align:center;box-shadow:5px 5px 0 rgba(43,45,66,.2)}
+.champ small{display:block;font-family:'Nunito';font-weight:800;font-size:13px;opacity:.9;margin-top:4px}
+
+/* ---------- kesimpulan & refleksi ---------- */
+.kesgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.kesc{display:flex;gap:14px;cursor:pointer;transition:.2s;text-align:left}
+.kesc:hover{transform:translateY(-4px)}
+.kesc .kn{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--teal);color:#fff;font-family:'Baloo 2';font-size:20px;font-weight:800;border:3px solid var(--ink)}
+.kesc:nth-child(2) .kn{background:var(--coral)} .kesc:nth-child(3) .kn{background:var(--purple)}
+.kesc:nth-child(4) .kn{background:var(--orange)} .kesc:nth-child(5) .kn{background:var(--blue)}
+.kesc h3{font-size:17px;margin-bottom:4px}
+.kb{font-size:14px;font-weight:700;color:#4a4e69;line-height:1.55}
+.refl{max-width:680px;margin-bottom:14px}
+.faces{display:flex;gap:12px;margin-top:12px}
+.face{border:3px solid var(--ink);border-radius:18px;background:#fff;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;font-weight:800;font-size:12px;transition:.15s;box-shadow:3px 3px 0 rgba(43,45,66,.15)}
+.face:hover{transform:translateY(-3px)}
+.face.sel{background:#fff3d6;box-shadow:0 0 0 4px rgba(255,159,28,.4);transform:scale(1.07)}
+.face svg{width:44px;height:44px}
+
+/* ---------- thanks ---------- */
+.thanks-title{font-size:clamp(40px,7vw,74px);line-height:1.05;margin:16px 0}
+.thanks-title .t1{color:var(--purple)} .thanks-title .t2{color:var(--teal)}
+.thanks-sub{font-size:clamp(15px,2.4vw,20px);font-weight:800;color:var(--muted);margin-bottom:20px}
+.tnames{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.tnames span{border:3px solid var(--ink);background:#fff;border-radius:999px;padding:8px 22px;font-family:'Baloo 2';font-weight:800;font-size:17px;box-shadow:3px 3px 0 rgba(43,45,66,.15);animation:bob 2.6s ease-in-out infinite}
+.tnames span:nth-child(2){animation-delay:.25s;background:#e6fbf9}
+.tnames span:nth-child(3){animation-delay:.5s;background:#fff3e0}
+
+/* ---------- navigasi bawah ---------- */
+.botbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:center;gap:16px;padding:10px 16px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-top:3px solid var(--ink)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:46vw}
+.dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--ink);background:#fff;padding:0;transition:.15s}
+.dot.on{background:var(--purple);transform:scale(1.3)}
+.navb{font-size:13.5px;padding:8px 16px}
+
+/* ---------- menu overlay ---------- */
+.menu{position:fixed;inset:0;background:rgba(43,45,66,.94);z-index:70;display:none;align-items:center;justify-content:center;padding:20px}
+.menu.open{display:flex}
+.menu-box{background:#fff;border:3px solid var(--ink);border-radius:24px;padding:26px;max-width:560px;width:100%;max-height:82vh;overflow:auto}
+.menu-box h3{margin-bottom:14px;font-size:22px}
+.menu-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.mitem{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:8px 12px;font-weight:800;font-size:13px;text-align:left;display:flex;gap:8px;transition:.12s}
+.mitem:hover{background:#fff3d6;transform:translateX(3px)}
+.mitem .mn{color:var(--purple);font-weight:900}
+
+/* ---------- fx ---------- */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
+.cf{position:fixed;top:-24px;border-radius:4px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:16px;font-weight:800;z-index:95;opacity:0;pointer-events:none;transition:.3s;max-width:88vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+@media (max-width:900px){
+  .gwrap{grid-template-columns:1fr}
+  .names-grid{grid-template-columns:1fr}
+  .name-box{padding-top:22px}
+  .menu-list{grid-template-columns:1fr}
+  .dots{max-width:60vw}
+}
+</style>
+</head>
+<body>
+<div id="deco" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="tb-left">
+    <span class="logo">+−×÷</span>
+    <span class="tb-title" id="tbTitle">Petualangan Operasi Hitung</span>
+  </div>
+  <div class="tb-right">
+    <button class="ico" id="btnMute" title="Hidupkan / matikan suara">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+    </button>
+    <button class="ico" id="btnFull" title="Layar penuh">
+      <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </button>
+    <button class="ico" id="btnHome" title="Kembali ke sampul">
+      <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3l9-8z"/></svg>
+    </button>
+    <button class="ico" id="btnMenu" title="Daftar slide">
+      <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <div class="menu-box">
+    <h3>Daftar Slide</h3>
+    <div class="menu-list" id="menuList"></div>
+    <button class="btn btn-ghost" id="menuClose">Tutup</button>
+  </div>
+</div>
+
+<main class="deck">
+
+<!-- ================= SLIDE 0 : SAMPUL ================= -->
+<section class="slide active" id="s0">
+  <div class="wrap center">
+    <span class="kicker">Matematika &bull; Kelas 6 SD &bull; Bilangan Cacah</span>
+    <h1 class="cover-title">Petualangan <span class="c1">Operasi Hitung</span><br>dalam <span class="c3">Soal Cerita</span></h1>
+    <p class="cover-sub">Belajar menentukan operasi penjumlahan, pengurangan, perkalian, dan pembagian lewat cerita seru, contoh bertahap, dan permainan kartu menantang!</p>
+    <div class="cover-ops" aria-hidden="true"><b>+</b><b>−</b><b>×</b><b>÷</b></div>
+    <div class="card cover-card">
+      <h3 class="cc-title">Tulis Nama 3 Petualang</h3>
+      <div class="names-grid">
+        <div class="name-box nb1"><span class="nbadge">SISWA 1</span><input id="nm1" maxlength="16" placeholder="Nama siswa 1" autocomplete="off"></div>
+        <div class="name-box nb2"><span class="nbadge">SISWA 2</span><input id="nm2" maxlength="16" placeholder="Nama siswa 2" autocomplete="off"></div>
+        <div class="name-box nb3"><span class="nbadge">SISWA 3</span><input id="nm3" maxlength="16" placeholder="Nama siswa 3" autocomplete="off"></div>
+      </div>
+      <div style="text-align:center">
+        <button class="btn btn-o big" id="btnStart">Mulai Petualangan!</button>
+        <p class="mini muted" style="margin-top:10px">Tulis nama, tekan Enter, lalu klik tombol untuk memulai.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 1 : APERSEPSI ================= -->
+<section class="slide" id="s1">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Apersepsi</span>
+      <h2 class="h-title">Cerita di Kantin Sekolah</h2>
+      <p class="h-sub">Matematika ada di sekitar kita. Yuk, amati cerita berikut!</p>
+    </div>
+    <div class="card">
+      <p class="story">Bel sekolah berbunyi tanda istirahat tiba. Gilang berlari ke kantin karena perutnya sudah keroncongan. Ia memesan semangkuk <span class="hl">bakso seharga Rp7.000</span> dan segelas <span class="hl">es teh seharga Rp2.500</span>. Sambil menunggu pesanannya datang, Ibu Kantin bertanya, <i>"Gilang, sudah kamu hitung berapa yang harus dibayar?"</i> Gilang tersenyum, ia tahu persis cara menghitungnya!</p>
+    </div>
+    <h3 style="margin:20px 0 4px">Pertanyaan Pemantik <span class="muted" style="font-size:14px">(klik kartu untuk membuka petunjuk)</span></h3>
+    <div class="pem-grid" id="pemWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 2 : TUJUAN ================= -->
+<section class="slide" id="s2">
+  <div class="wrap center">
+    <div class="shead">
+      <span class="kicker">Tujuan Pembelajaran</span>
+      <h2 class="h-title">Hari Ini Kita Akan Bisa...</h2>
+      <p class="h-sub">Empat misi yang harus kamu taklukkan!</p>
+    </div>
+    <div class="tuj" id="tujWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 3 : KATA KUNCI ================= -->
+<section class="slide" id="s3">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Materi Inti</span>
+      <h2 class="h-title">Kata Kunci Setiap Operasi Hitung</h2>
+      <p class="h-sub">Soal cerita selalu menyembunyikan petunjuk. <b>Klik setiap kartu</b> untuk menemukan kata kuncinya!</p>
+    </div>
+    <div class="fgrid" id="kwWrap"></div>
+    <div class="shead" style="margin-top:6px">
+      <h3 style="font-size:20px;margin-bottom:2px">Tebak Operasinya!</h3>
+      <p class="h-sub" style="margin-bottom:10px">Baca kalimatnya, lalu klik tombol operasi yang paling tepat.</p>
+    </div>
+    <div id="quizWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 4 : CONTOH PENJUMLAHAN ================= -->
+<section class="slide" id="s4">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Contoh Soal &bull; Penjumlahan (+)</span>
+      <h2 class="h-title">Contoh Soal Penjumlahan</h2>
+      <p class="h-sub">Mulai dari mudah, sedang, hingga sulit. Klik tab, lalu buka langkah demi langkahnya!</p>
+    </div>
+    <div id="ex-tambah"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 5 : LATIHAN PENJUMLAHAN ================= -->
+<section class="slide" id="s5">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Latihan &bull; Penjumlahan (+)</span>
+      <h2 class="h-title">Latihan Penjumlahan</h2>
+      <p class="h-sub">10 soal menantang. Jawab benar pada percobaan pertama = poin untukmu!</p>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Giliran menjawab</span><b class="giliran">Siswa 1</b><span class="ptsnote">Jawaban benar (percobaan pertama) = 10 poin</span></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div id="lat-tambah"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 6 : CONTOH PENGURANGAN ================= -->
+<section class="slide" id="s6">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Contoh Soal &bull; Pengurangan (−)</span>
+      <h2 class="h-title">Contoh Soal Pengurangan</h2>
+      <p class="h-sub">Perhatikan kata kuncinya: sisa, selisih, kurang...</p>
+    </div>
+    <div id="ex-kurang"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 7 : LATIHAN PENGURANGAN ================= -->
+<section class="slide" id="s7">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Latihan &bull; Pengurangan (−)</span>
+      <h2 class="h-title">Latihan Pengurangan</h2>
+      <p class="h-sub">Hati-hati, jangan sampai tertukar dengan penjumlahan!</p>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Giliran menjawab</span><b class="giliran">Siswa 2</b><span class="ptsnote">Jawaban benar (percobaan pertama) = 10 poin</span></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div id="lat-kurang"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 8 : CONTOH PERKALIAN ================= -->
+<section class="slide" id="s8">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Contoh Soal &bull; Perkalian (×)</span>
+      <h2 class="h-title">Contoh Soal Perkalian</h2>
+      <p class="h-sub">Penjumlahan berulang itu lambat. Perkalian jauh lebih cepat!</p>
+    </div>
+    <div id="ex-kali"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 9 : LATIHAN PERKALIAN ================= -->
+<section class="slide" id="s9">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Latihan &bull; Perkalian (×)</span>
+      <h2 class="h-title">Latihan Perkalian</h2>
+      <p class="h-sub">Ingat kata kunci: setiap, kali, lipat...</p>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Giliran menjawab</span><b class="giliran">Siswa 3</b><span class="ptsnote">Jawaban benar (percobaan pertama) = 10 poin</span></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div id="lat-kali"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 10 : CONTOH PEMBAGIAN ================= -->
+<section class="slide" id="s10">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Contoh Soal &bull; Pembagian (÷)</span>
+      <h2 class="h-title">Contoh Soal Pembagian</h2>
+      <p class="h-sub">Membagi rata berarti setiap bagian mendapat jumlah yang sama.</p>
+    </div>
+    <div id="ex-bagi"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 11 : LATIHAN PEMBAGIAN ================= -->
+<section class="slide" id="s11">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Latihan &bull; Pembagian (÷)</span>
+      <h2 class="h-title">Latihan Pembagian</h2>
+      <p class="h-sub">Uji jawabanmu dengan mengalikan kembali!</p>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Giliran menjawab</span><b class="giliran">Siswa 1</b><span class="ptsnote">Jawaban benar (percobaan pertama) = 10 poin</span></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div id="lat-bagi"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 12 : OPERASI CAMPURAN ================= -->
+<section class="slide" id="s12">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Materi Inti &bull; Operasi Hitung Campuran</span>
+      <h2 class="h-title">Urutan Operasi: KaBaTaKu!</h2>
+      <p class="h-sub">Kalau satu soal memakai lebih dari satu operasi, urutan pengerjaannya tidak boleh sembarangan.</p>
+    </div>
+    <div id="kabWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 13 : CONTOH CAMPURAN ================= -->
+<section class="slide" id="s13">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Contoh Soal &bull; Operasi Campuran</span>
+      <h2 class="h-title">Contoh Soal Campuran</h2>
+      <p class="h-sub">Perhatikan lencana "Operasi" untuk mengetahui urutan pengerjaannya.</p>
+    </div>
+    <div id="ex-camp"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 14 : TANTANGAN CAMPURAN ================= -->
+<section class="slide" id="s14">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Tantangan &bull; Operasi Campuran</span>
+      <h2 class="h-title">Tentukan Operasinya Dulu!</h2>
+      <p class="h-sub">Sebelum menghitung, <b>tentukan dulu operasi apa saja yang dipakai, sesuai urutan</b> — klik tombol + − × ÷, baru tulis jawaban akhirnya.</p>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Giliran menjawab</span><b class="giliran">Siswa 2</b><span class="ptsnote">Operasi + jawaban tepat pada percobaan pertama = 10 poin</span></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div id="tantWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 15 : PERMAINAN KARTU ================= -->
+<section class="slide" id="s15">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Permainan Seru</span>
+      <h2 class="h-title">Kartu Petualangan 1 - 20</h2>
+      <p class="h-sub">Pilih kartu, baca soal, klik MULAI, jawab sebelum waktu habis!</p>
+    </div>
+    <div class="rules-strip">
+      <span class="rchip b">Mudah: 3 menit &bull; 10 poin</span>
+      <span class="rchip s">Sedang: 5 menit &bull; 20 poin</span>
+      <span class="rchip h">Sulit: 6 menit &bull; 30 poin</span>
+      <span class="rchip">Salah / waktu habis = siswa lain berhak menjawab!</span>
+    </div>
+    <div class="card turnbar">
+      <div class="tl"><span class="lbl">Urutan pemain</span><div class="orderchips" id="gameOrder"></div></div>
+      <button class="btn btn-ghost acak-btn">Acak Urutan Siswa</button>
+    </div>
+    <div class="gwrap">
+      <div class="cards-grid" id="cardsGrid"></div>
+      <div class="card gpanel" id="gamePanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 16 : HASIL ================= -->
+<section class="slide" id="s16">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Laporan Petualangan</span>
+      <h2 class="h-title">Hasil Pengerjaan Setiap Siswa</h2>
+      <p class="h-sub">Skor kartu + (jawaban latihan benar × 10) = Total poin!</p>
+    </div>
+    <div id="hasilWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 17 : KESIMPULAN ================= -->
+<section class="slide" id="s17">
+  <div class="wrap">
+    <div class="shead">
+      <span class="kicker">Kesimpulan</span>
+      <h2 class="h-title">Ingat 5 Kunci Petualangan Ini!</h2>
+      <p class="h-sub">Klik setiap kartu untuk membuka isinya.</p>
+    </div>
+    <div class="kesgrid" id="kesWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 18 : REFLEKSI ================= -->
+<section class="slide" id="s18">
+  <div class="wrap center">
+    <div class="shead">
+      <span class="kicker">Refleksi</span>
+      <h2 class="h-title">Bagaimana Perasaanmu Hari Ini?</h2>
+      <p class="h-sub">Klik wajah yang mewakili perasaanmu, lalu ceritakan alasanmu!</p>
+    </div>
+    <div id="reflWrap"></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 19 : THANK YOU ================= -->
+<section class="slide" id="s19">
+  <div class="wrap center">
+    <span class="kicker">Sampai Jumpa</span>
+    <h1 class="thanks-title"><span class="t1">Thank You</span><br><span class="t2">For Today!</span></h1>
+    <p class="thanks-sub">Kalian luar biasa! Teruslah berlatih soal cerita, karena matematika ada di mana-mana.</p>
+    <div class="tnames" id="thanksNames"></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-p big" id="btnAgain">Ulangi Petualangan</button>
+      <button class="btn btn-ghost big" id="btnHasil2">Lihat Hasil Sekali Lagi</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="botbar">
+  <button class="btn btn-ghost navb" id="btnPrev">&lsaquo; Kembali</button>
+  <div class="dots" id="dots"></div>
+  <button class="btn btn-p navb" id="btnNext">Lanjut &rsaquo;</button>
+</footer>
+
+<div id="fx"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   DATA MATERI & SOAL — Petualangan Operasi Hitung
+   ===================================================== */
+const SLIDES=[
+ ['s0','Sampul & Nama Siswa'],['s1','Apersepsi & Pemantik'],['s2','Tujuan Pembelajaran'],
+ ['s3','Kata Kunci 4 Operasi'],['s4','Contoh: Penjumlahan'],['s5','Latihan: Penjumlahan'],
+ ['s6','Contoh: Pengurangan'],['s7','Latihan: Pengurangan'],['s8','Contoh: Perkalian'],
+ ['s9','Latihan: Perkalian'],['s10','Contoh: Pembagian'],['s11','Latihan: Pembagian'],
+ ['s12','Operasi Hitung Campuran'],['s13','Contoh: Campuran'],['s14','Tantangan Campuran'],
+ ['s15','Permainan Kartu 1-20'],['s16','Hasil Pengerjaan'],['s17','Kesimpulan'],
+ ['s18','Refleksi'],['s19','Thank You']
+];
+
+const KW=[
+ {op:'+',name:'Penjumlahan',color:'teal',back:'tealback',
+  words:['jumlah','total','seluruhnya','keseluruhan','ditambah','bertambah','bergabung','hasil gabungan'],
+  ex:'25 jeruk + 18 apel = 43 buah'},
+ {op:'−',name:'Pengurangan',color:'coral',back:'coralback',
+  words:['sisa','selisih','kurang','berkurang','dikurangi','habis dibelanjakan','berapa lebih','dipakai'],
+  ex:'500 kg − 275 kg = 225 kg'},
+ {op:'×',name:'Perkalian',color:'purple',back:'purpleback',
+  words:['kali','lipat','setiap... berisi...','masing-masing sama banyak','harga satuan','berkelompok'],
+  ex:'8 pensil × 6 kotak = 48 pensil'},
+ {op:'÷',name:'Pembagian',color:'orange',back:'orangeback',
+  words:['dibagi rata','dibagikan','setiap mendapat','sama banyak','masuk ke dalam...','per...'],
+  ex:'48 permen ÷ 6 anak = 8 permen'}
+];
+
+const QUIZKK=[
+ {s:'"Berapa jumlah seluruh siswa yang mengikuti lomba lari?"',a:'+'},
+ {s:'"Berapa sisa kue setelah 25 potong terjual?"',a:'−'},
+ {s:'"Setiap kotak berisi 6 manggis. Ada 10 kotak penuh. Berapa manggis seluruhnya?"',a:'×'},
+ {s:'"60 permen dibagikan sama rata kepada 12 anak. Berapa permen setiap anak?"',a:'÷'},
+ {s:'"Berapa selisih tinggi badan Andi dan Budi?"',a:'−'}
+];
+
+const PEMANTIK=[
+ {q:'Bagaimana cara mengetahui jumlah uang yang harus dibayar Gilang?',
+  h:'Jumlahkan harga bakso dan es tehnya. Kata "jumlah" adalah petunjuk PENJUMLAHAN!'},
+ {q:'Uang Gilang Rp10.000. Berapa kembaliannya setelah membayar?',
+  h:'Uang dikurangi total belanja. Kata "kembalian" atau "sisa" adalah petunjuk PENGURANGAN!'},
+ {q:'Ibu membeli 4 kotak bolu, setiap kotak berisi 8 potong. Bagaimana menghitung seluruh potongnya dengan cepat?',
+  h:'Jangan tambah satu-satu (8+8+8+8)! Gunakan PERKALIAN: 4 × 8 = 32 potong.'},
+ {q:'12 potong bolu dibagikan sama rata kepada 3 teman. Bagaimana menghitung bagian setiap anak?',
+  h:'Gunakan PEMBAGIAN: 12 ÷ 3 = 4 potong setiap anak.'}
+];
+
+const TUJUAN=[
+ 'Menentukan operasi hitung yang tepat berdasarkan kata kunci dalam soal cerita.',
+ 'Menyelesaikan soal cerita dengan satu operasi hitung (penjumlahan, pengurangan, perkalian, dan pembagian) dengan teliti.',
+ 'Menyelesaikan soal cerita operasi hitung campuran sesuai urutan operasi KaBaTaKu.',
+ 'Berlatih dengan jujur, berani, dan sportif melalui permainan kartu soal bersama teman-teman.'
+];
+
+const EX={
+ tambah:[
+  {lv:'Mudah',key:'"seluruhnya" → penjumlahan',
+   q:'Di kantin sekolah terdapat 245 mangkuk bakso dan 318 gelas es teh yang terjual pada hari Senin. Berapa jumlah makanan dan minuman yang terjual seluruhnya?',
+   steps:['Kata kunci "seluruhnya" menandakan PENJUMLAHAN.','Susun: 245 + 318.','Hitung: 245 + 300 = 545, lalu 545 + 18 = 563.','Jadi, yang terjual seluruhnya ada 563.']},
+  {lv:'Sedang',key:'"jumlah seluruh" → penjumlahan',
+   q:'Perpustakaan sekolah memiliki 1.250 buku cerita. Tahun ini sekolah membeli 875 buku pelajaran dan 460 buku ensiklopedia. Berapa jumlah seluruh buku?',
+   steps:['Ada tiga bilangan yang digabung → penjumlahan bertahap.','Langkah 1: 1.250 + 875 = 2.125.','Langkah 2: 2.125 + 460 = 2.585.','Jadi, seluruh buku ada 2.585.']},
+  {lv:'Sulit',key:'"menabung" berulang → penjumlahan',
+   q:'Pak Rahmat menabung Rp35.000 pada bulan pertama, Rp28.500 pada bulan kedua, dan Rp40.000 pada bulan ketiga. Berapa jumlah seluruh tabungan Pak Rahmat?',
+   steps:['Jumlahkan dua bilangan dulu dari kiri: 35.000 + 28.500 = 63.500.','Lalu tambahkan bulan ketiga: 63.500 + 40.000.','Hasilnya 103.500.','Jadi, tabungan Pak Rahmat seluruhnya Rp103.500.']}
+ ],
+ kurang:[
+  {lv:'Mudah',key:'"sisa" → pengurangan',
+   q:'Bu Wati memiliki 350 butir telur. Sebanyak 125 butir digunakan untuk membuat kue. Berapa sisa telur Bu Wati?',
+   steps:['Kata kunci "sisa" menandakan PENGURANGAN.','Susun: 350 − 125.','Hitung: 350 − 100 = 250, lalu 250 − 25 = 225.','Sisa telur Bu Wati 225 butir.']},
+  {lv:'Sedang',key:'"selisih" → pengurangan',
+   q:'Tinggi sebuah menara pemandangan 132 meter, sedangkan tinggi menara televisi di kota itu 96 meter. Berapa meter selisih tinggi kedua menara?',
+   steps:['Kata kunci "selisih" menandakan PENGURANGAN.','Susun: 132 − 96.','Cara pintar: 132 − 100 = 32, lalu kembalikan 4 → 32 + 4 = 36.','Selisih tinggi kedua menara 36 meter.']},
+  {lv:'Sulit',key:'dua langkah → jumlah lalu kurang',
+   q:'Ibu membawa uang Rp100.000 ke pasar. Ia membeli beras seharga Rp42.500 dan minyak goreng seharga Rp19.000. Berapa sisa uang Ibu?',
+   steps:['Hitung dulu total belanja: 42.500 + 19.000 = 61.500.','Kurangi dari uang awal: 100.000 − 61.500.','Hitung: 100.000 − 61.500 = 38.500.','Sisa uang Ibu Rp38.500.']}
+ ],
+ kali:[
+  {lv:'Mudah',key:'"setiap kotak berisi" → perkalian',
+   q:'Sebuah kotak pensil berisi 8 pensil. Berapa jumlah pensil pada 7 kotak pensil?',
+   steps:['Banyak kotak yang sama isi → PERKALIAN.','Susun: 8 × 7.','Ingat: 8 × 7 = 8 × 5 + 8 × 2 = 40 + 16 = 56.','Jadi, ada 56 pensil seluruhnya.']},
+  {lv:'Sedang',key:'harga satuan × banyak',
+   q:'Harga sebuah buku tulis Rp4.500. Berapa harga 15 buku tulis?',
+   steps:['Harga satuan × banyaknya → PERKALIAN.','Pecah: 4.500 × 15 = (4.500 × 10) + (4.500 × 5).','4.500 × 10 = 45.000 dan 4.500 × 5 = 22.500.','45.000 + 22.500 = 67.500. Harga 15 buku Rp67.500.']},
+  {lv:'Sulit',key:'produksi per hari × hari',
+   q:'Sebuah pabrik roti memproduksi 1.250 bungkus roti setiap hari. Berapa bungkus roti yang diproduksi dalam 28 hari?',
+   steps:['Pecah: 1.250 × 28 = (1.250 × 20) + (1.250 × 8).','1.250 × 20 = 25.000 dan 1.250 × 8 = 10.000.','25.000 + 10.000 = 35.000.','Jadi, dalam 28 hari diproduksi 35.000 bungkus roti.']}
+ ],
+ bagi:[
+  {lv:'Mudah',key:'"dibagikan sama rata" → pembagian',
+   q:'48 kue dibagikan sama rata kepada 6 anak. Berapa kue yang diterima setiap anak?',
+   steps:['Kata kunci "dibagikan sama rata" → PEMBAGIAN.','Susun: 48 ÷ 6.','Ingat: 6 × 8 = 48, maka 48 ÷ 6 = 8.','Setiap anak menerima 8 kue.']},
+  {lv:'Sedang',key:'"dibagikan sama rata" → pembagian',
+   q:'Uang Rp96.000 dibagikan sama rata kepada 6 anak yatim. Berapa uang yang diterima setiap anak?',
+   steps:['Susun: 96.000 ÷ 6.','96 ÷ 6 = 16, jadi 96.000 ÷ 6 = 16.000.','Uji: 16.000 × 6 = 96.000 (benar).','Setiap anak menerima Rp16.000.']},
+  {lv:'Sulit',key:'"sama banyak" → pembagian',
+   q:'Sebanyak 1.152 buku tulis dimasukkan ke dalam 24 kotak sama banyak. Berapa buku tulis di dalam setiap kotak?',
+   steps:['Pecah: 1.152 = 960 + 192.','960 ÷ 24 = 40 dan 192 ÷ 24 = 8.','40 + 8 = 48. Uji: 48 × 24 = 1.152 (benar).','Setiap kotak berisi 48 buku tulis.']}
+ ],
+ camp:[
+  {lv:'Mudah',ops:['×','−'],
+   q:'Ibu membeli 3 kg gula pasir seharga Rp15.000 per kg. Ibu membayar dengan uang Rp100.000. Berapa uang kembalian yang diterima Ibu?',
+   steps:['Langkah 1 — harga gula (perkalian): 3 × 15.000 = 45.000.','Langkah 2 — kembalian (pengurangan): 100.000 − 45.000 = 55.000.','Operasi dipakai: × dulu, lalu −.','Kembalian Ibu Rp55.000.']},
+  {lv:'Sedang',ops:['×','×'],
+   q:'Pak Rudi membuat 5 kotak bolu untuk dijual, setiap kotak berisi 8 potong. Setiap potong dijual Rp2.000. Berapa seluruh uang yang diperoleh Pak Rudi?',
+   steps:['Langkah 1 — jumlah potong (perkalian): 5 × 8 = 40 potong.','Langkah 2 — hasil penjualan (perkalian): 40 × 2.000 = 80.000.','Operasi dipakai: × dan ×.','Pak Rudi memperoleh Rp80.000.']},
+  {lv:'Sulit',ops:['×','×','+','−'],
+   q:'Ayah membawa uang Rp250.000. Ia membeli 10 kg beras seharga Rp12.500 per kg dan 2 kg telur seharga Rp28.000 per kg. Berapa sisa uang ayah?',
+   steps:['Langkah 1 — harga beras: 10 × 12.500 = 125.000.','Langkah 2 — harga telur: 2 × 28.000 = 56.000.','Langkah 3 — total belanja: 125.000 + 56.000 = 181.000.','Langkah 4 — sisa uang: 250.000 − 181.000 = 69.000.','Sisa uang ayah Rp69.000.']}
+ ]
+};
+
+const KES=[
+ {t:'Baca dua kali!',b:'Pahami ceritanya: apa yang ditanyakan, dan informasi apa yang diketahui. Jangan buru-buru menghitung sebelum paham.'},
+ {t:'Kenali kata kunci',b:'"seluruhnya/jumlah" → tambah (+). "sisa/selisih" → kurang (−). "setiap/kali/lipat" → kali (×). "dibagi rata/sama banyak" → bagi (÷).'},
+ {t:'Campuran? Ingat KaBaTaKu!',b:'Kali & Bagi dikerjakan lebih dulu, kemudian Tambah & Kurang — dikerjakan dari kiri ke kanan.'},
+ {t:'Tulis langkahmu',b:'Kerjakan bertahap dan rapi, satu langkah satu baris. Langkah yang rapi membuat jawaban mudah diperiksa.'},
+ {t:'Cek kembali',b:'Sebelum menyimpulkan, hitung ulang atau uji jawabanmu dengan operasi kebalikannya. Jawaban yang diuji = jawaban yang yakin!'}
+];
+
+const REFLEKSI=[
+ {q:'Bagaimana perasaanmu belajar soal cerita operasi hitung hari ini?',faces:true},
+ {q:'Seberapa paham kamu dalam menentukan operasi hitung dari kata kunci?',faces:true},
+ {q:'Materi mana yang ingin kamu pelajari lebih dalam lagi?',faces:false,
+  opts:['Kata kunci operasi','KaBaTaKu (campuran)','Soal sulit','Permainan kartu']}
+];
+
+/* ---------- 10 LATIHAN PER OPERASI ---------- */
+const LAT={
+ tambah:[
+  {q:'Hitunglah: 1.234 + 2.565 = ...',a:3799,steps:['Satuan: 4+5=9. Puluhan: 3+6=9. Ratusan: 2+5=7. Ribuan: 1+2=3.','Hasilnya 3.799.']},
+  {q:'Terdapat 125 ekor ayam dan 348 ekor itik di peternakan Pak Slamet. Berapa jumlah seluruh unggas?',a:473,steps:['Kata "jumlah seluruh" → penjumlahan.','125 + 348: 125 + 300 = 425, 425 + 48 = 473.','Seluruh unggas ada 473 ekor.']},
+  {q:'Andi membaca 45 halaman pada hari Senin dan 38 halaman pada hari Selasa. Berapa jumlah halaman yang dibaca Andi?',a:83,steps:['45 + 38: 45 + 30 = 75, 75 + 8 = 83.','Andi membaca 83 halaman.']},
+  {q:'Hitunglah: 3.456 + 2.544 = ...',a:6000,steps:['3.456 + 2.544 = 6.000.','Uji: 6.000 − 2.544 = 3.456 (benar).']},
+  {q:'Kantin sekolah menjual 275 mangkuk bakso pada minggu pertama dan 386 mangkuk pada minggu kedua. Berapa mangkuk yang terjual seluruhnya?',a:661,steps:['275 + 386: 275 + 300 = 575, 575 + 86 = 661.','Terjual 661 mangkuk seluruhnya.']},
+  {q:'Harga sebuah tas Rp45.000 dan sepasang sepatu Rp78.000. Berapa jumlah harga kedua barang tersebut?',a:123000,steps:['"Jumlah harga" → penjumlahan.','45.000 + 78.000 = 123.000.','Jumlah harga kedua barang Rp123.000.']},
+  {q:'Hasil panen Pak Dedi selama tiga bulan berturut-turut: 1.250 kg, 1.500 kg, dan 1.750 kg. Berapa jumlah seluruh hasil panen?',a:4500,steps:['1.250 + 1.500 = 2.750.','2.750 + 1.750 = 4.500.','Seluruh hasil panen 4.500 kg.']},
+  {q:'Jumlah penduduk Desa A 3.875 jiwa dan Desa B 4.125 jiwa. Berapa jumlah penduduk kedua desa?',a:8000,steps:['3.875 + 4.125 = 8.000.','Penduduk kedua desa 8.000 jiwa.']},
+  {q:'Tim panahan memperoleh 125 poin pada babak pertama, 150 poin pada babak kedua, dan 175 poin pada babak ketiga. Berapa jumlah seluruh poin?',a:450,steps:['125 + 150 = 275.','275 + 175 = 450.','Total poin 450.']},
+  {q:'Uang Rina Rp12.500. Ibu memberinya Rp7.500 dan ayah memberinya Rp15.000. Berapa jumlah uang Rina sekarang?',a:35000,steps:['12.500 + 7.500 = 20.000.','20.000 + 15.000 = 35.000.','Uang Rina sekarang Rp35.000.']}
+ ],
+ kurang:[
+  {q:'Sebuah toko kelontong memiliki 850 kg gula. Sebanyak 325 kg telah terjual. Berapa sisa gula toko itu?',a:525,steps:['Kata "sisa" → pengurangan.','850 − 325: 850 − 300 = 550, 550 − 25 = 525.','Sisa gula 525 kg.']},
+  {q:'Perpustakaan memiliki 1.500 buku. Sebanyak 375 buku sedang dipinjam. Berapa buku yang tersedia di perpustakaan?',a:1125,steps:['1.500 − 375 = 1.125.','Tersedia 1.125 buku.']},
+  {q:'Jarak Kota A ke Kota B adalah 245 km. Sebuah bus sudah menempuh 118 km. Berapa sisa jarak yang harus ditempuh?',a:127,steps:['245 − 118: 245 − 100 = 145, 145 − 18 = 127.','Sisa jarak 127 km.']},
+  {q:'Berat sebuah semangka 4.250 gram. Sebanyak 1.800 gram dipotong untuk dibuat jus. Berapa sisa berat semangka?',a:2450,steps:['4.250 − 1.800 = 2.450.','Sisa semangka 2.450 gram.']},
+  {q:'Umur ayah 45 tahun dan umur Raka 12 tahun. Berapa selisih umur mereka?',a:33,steps:['Kata "selisih" → pengurangan.','45 − 12 = 33.','Selisih umur mereka 33 tahun.']},
+  {q:'Gaji Pak Karta Rp2.750.000. Ia menabung Rp1.500.000. Berapa sisa uang untuk belanja rumah tangga?',a:1250000,steps:['2.750.000 − 1.500.000 = 1.250.000.','Sisa uang Rp1.250.000.']},
+  {q:'Toko baju memiliki 675 potong baju. Sebanyak 438 potong telah terjual. Berapa sisa baju di toko?',a:237,steps:['675 − 438: 675 − 400 = 275, 275 − 38 = 237.','Sisa 237 potong baju.']},
+  {q:'Tinggi Gunung A 2.875 meter dan Gunung B 2.300 meter. Berapa selisih tinggi kedua gunung?',a:575,steps:['2.875 − 2.300 = 575.','Selisih tinggi 575 meter.']},
+  {q:'Ibu membawa uang Rp100.000. Ia membeli beras Rp45.000 dan telur Rp32.500. Berapa sisa uang Ibu?',a:22500,steps:['Total belanja: 45.000 + 32.500 = 77.500.','100.000 − 77.500 = 22.500.','Sisa uang Ibu Rp22.500.']},
+  {q:'Pabrik memproduksi 12.500 botol bulan ini, sedangkan bulan lalu 9.800 botol. Berapa botol lebih banyak produksi bulan ini?',a:2700,steps:['Kata "lebih banyak" → pengurangan.','12.500 − 9.800 = 2.700.','Produksi bulan ini lebih banyak 2.700 botol.']}
+ ],
+ kali:[
+  {q:'Dodi berlatih renang 8 menit setiap hari. Berapa menit total latihan Dodi selama 7 hari?',a:56,steps:['"Setiap hari" → perkalian.','8 × 7 = 56.','Total latihan 56 menit.']},
+  {q:'Ada 6 kotak kelereng, setiap kotak berisi 24 butir. Berapa jumlah seluruh kelereng?',a:144,steps:['24 × 6 = 144.','Seluruh kelereng 144 butir.']},
+  {q:'Harga sebuah buku tulis Rp3.500. Berapa harga 12 buku tulis?',a:42000,steps:['3.500 × 12 = (3.500 × 10) + (3.500 × 2).','= 35.000 + 7.000 = 42.000.','Harga 12 buku Rp42.000.']},
+  {q:'Sebuah kelas terdiri atas 32 siswa. Setiap siswa membawa 5 buku. Berapa jumlah semua buku?',a:160,steps:['32 × 5 = 160.','Jumlah semua buku 160.']},
+  {q:'Pak Marsan memiliki 15 pohon mangga. Setiap pohon berbuah 120 buah. Berapa jumlah seluruh mangga?',a:1800,steps:['120 × 15 = (120 × 10) + (120 × 5).','= 1.200 + 600 = 1.800.','Seluruh mangga 1.800 buah.']},
+  {q:'Harga tiket pertunjukan Rp25.000. Berapa uang yang harus dibayar untuk 14 orang?',a:350000,steps:['25.000 × 14 = (25.000 × 10) + (25.000 × 4).','= 250.000 + 100.000 = 350.000.','Total Rp350.000.']},
+  {q:'Sebuah pabrik topi memproduksi 480 topi setiap hari. Berapa topi yang diproduksi selama 25 hari?',a:12000,steps:['480 × 25 = (480 × 20) + (480 × 5).','= 9.600 + 2.400 = 12.000.','Produksi 12.000 topi.']},
+  {q:'Setiap bus berisi 40 penumpang. Ada 18 bus yang penuh. Berapa jumlah seluruh penumpang?',a:720,steps:['40 × 18 = (40 × 10) + (40 × 8).','= 400 + 320 = 720.','Seluruhnya 720 penumpang.']},
+  {q:'Harga kain Rp45.000 setiap meter. Ibu membeli 8 meter. Berapa total harganya?',a:360000,steps:['45.000 × 8 = 360.000.','Total harga Rp360.000.']},
+  {q:'Satu dus berisi 24 bungkus biskuit. Berapa bungkus biskuit pada 35 dus?',a:840,steps:['24 × 35 = (24 × 30) + (24 × 5).','= 720 + 120 = 840.','Ada 840 bungkus biskuit.']}
+ ],
+ bagi:[
+  {q:'36 rautan pensil dibagikan sama rata kepada 4 teman. Berapa rautan pensil setiap teman?',a:9,steps:['"Dibagikan sama rata" → pembagian.','36 ÷ 4 = 9.','Setiap teman mendapat 9 rautan.']},
+  {q:'120 botol dimasukkan ke dalam 8 keranjang sama banyak. Berapa botol setiap keranjang?',a:15,steps:['120 ÷ 8 = 15.','Setiap keranjang berisi 15 botol.']},
+  {q:'Uang Rp64.000 dibagikan sama rata kepada 4 anak. Berapa uang setiap anak?',a:16000,steps:['64 ÷ 4 = 16, jadi 64.000 ÷ 4 = 16.000.','Setiap anak menerima Rp16.000.']},
+  {q:'144 kue dibungkus ke dalam 12 kotak sama banyak. Berapa kue setiap kotak?',a:12,steps:['144 ÷ 12 = 12.','Uji: 12 × 12 = 144 (benar).','Setiap kotak berisi 12 kue.']},
+  {q:'225 siswa dibagi menjadi beberapa kelompok, masing-masing beranggotakan 15 orang. Berapa banyak kelompok?',a:15,steps:['225 ÷ 15 = 15.','Banyak kelompok ada 15.']},
+  {q:'Harga 5 buku yang sama Rp60.000. Berapa harga 1 buku?',a:12000,steps:['60.000 ÷ 5 = 12.000.','Harga 1 buku Rp12.000.']},
+  {q:'960 botol air dikemas ke dalam 30 dus sama banyak. Berapa botol setiap dus?',a:32,steps:['960 ÷ 30 = 32.','Setiap dus berisi 32 botol.']},
+  {q:'1.008 liter air dibagi rata ke dalam 24 tong. Berapa liter air setiap tong?',a:42,steps:['1.008 ÷ 24: 24 × 40 = 960, sisa 48.','24 × 2 = 48, jadi 40 + 2 = 42.','Uji: 42 × 24 = 1.008 (benar).','Setiap tong berisi 42 liter.']},
+  {q:'728 pensil dibagikan rata kepada 26 kelas. Berapa pensil setiap kelas?',a:28,steps:['728 ÷ 26 = 28.','Uji: 28 × 26 = 728 (benar).','Setiap kelas mendapat 28 pensil.']},
+  {q:'Ibu memiliki 3.150 gram tepung untuk membuat 18 kue sama banyak. Berapa gram tepung setiap kue?',a:175,steps:['3.150 ÷ 18: 18 × 100 = 1.800, sisa 1.350.','18 × 75 = 1.350, jadi 100 + 75 = 175.','Setiap kue memakai 175 gram tepung.']}
+ ]
+};
+
+/* ---------- TANTANGAN CAMPURAN (pilih operasi dulu) ---------- */
+const TANT=[
+ {q:'Ibu membeli 4 buku tulis seharga Rp3.000 per buku dan membayar dengan uang Rp50.000. Berapa uang kembalian Ibu?',ops:['×','−'],a:38000,
+  steps:['Hitung dulu harga 4 buku: 4 × 3.000 = 12.000.','Lalu kembalian: 50.000 − 12.000 = 38.000.','Kembalian Ibu Rp38.000.']},
+ {q:'Ada 6 kotak pensil, setiap kotak berisi 12 pensil. Semua pensil dibagi rata kepada 9 anak. Berapa pensil setiap anak?',ops:['×','÷'],a:8,
+  steps:['Jumlah pensil: 6 × 12 = 72.','Dibagi rata: 72 ÷ 9 = 8.','Setiap anak mendapat 8 pensil.']},
+ {q:'Harga satu tiket pertunjukan Rp15.000. Bu Sari membeli 5 tiket dan membayar Rp100.000. Berapa kembaliannya?',ops:['×','−'],a:25000,
+  steps:['Harga 5 tiket: 5 × 15.000 = 75.000.','Kembalian: 100.000 − 75.000 = 25.000.','Kembalian Bu Sari Rp25.000.']},
+ {q:'Sebuah toko memiliki 5 dus botol, setiap dus berisi 24 botol. Sebanyak 70 botol terjual. Berapa sisa botol?',ops:['×','−'],a:50,
+  steps:['Semua botol: 5 × 24 = 120.','Sisa: 120 − 70 = 50.','Sisa botol 50 buah.']},
+ {q:'Pak Doni membeli 3 kg jeruk seharga Rp9.000 per kg dan 2 kg apel seharga Rp15.000 per kg. Berapa jumlah seluruh harga?',ops:['×','+'],a:57000,
+  steps:['Harga jeruk: 3 × 9.000 = 27.000.','Harga apel: 2 × 15.000 = 30.000.','Total: 27.000 + 30.000 = 57.000.','Jumlah seluruh harga Rp57.000.']},
+ {q:'48 kue dibagi rata kepada 6 anak. Setiap anak kemudian memakan 2 kue. Berapa sisa kue setiap anak?',ops:['÷','−'],a:6,
+  steps:['Bagian setiap anak: 48 ÷ 6 = 8.','Sisa setelah dimakan: 8 − 2 = 6.','Sisa kue setiap anak 6 buah.']},
+ {q:'Ayah membawa uang Rp200.000. Ia membeli 4 kg daging ayam seharga Rp32.000 per kg. Sisa uangnya dibagi rata kepada 2 anak. Berapa uang setiap anak?',ops:['×','−','÷'],a:36000,
+  steps:['Harga ayam: 4 × 32.000 = 128.000.','Sisa uang: 200.000 − 128.000 = 72.000.','Dibagi rata: 72.000 ÷ 2 = 36.000.','Setiap anak menerima Rp36.000.']},
+ {q:'Sebuah pabrik membuat 1.200 botol setiap hari. Botol dikemas ke dalam dus berisi 20 botol. Berapa dus yang dihasilkan dalam 3 hari?',ops:['×','÷'],a:180,
+  steps:['Produksi 3 hari: 1.200 × 3 = 3.600 botol.','Jumlah dus: 3.600 ÷ 20 = 180.','Dihasilkan 180 dus.']}
+];
+
+/* ---------- 20 KARTU PETUALANGAN ---------- */
+const CARDS=[
+ {lv:'mudah',pts:10,time:180,ops:['+'],q:'Bu Yanti membeli 45 jeruk dan 38 apel. Berapa jumlah seluruh buah yang dibeli Bu Yanti?',a:83,
+  steps:['Kata "jumlah seluruh" → penjumlahan.','45 + 38 = 83.','Jumlah buah seluruhnya 83.']},
+ {lv:'mudah',pts:10,time:180,ops:['−'],q:'Toko buku memiliki 200 buku cerita. Sebanyak 125 buku terjual. Berapa sisa buku di toko?',a:75,
+  steps:['Kata "sisa" → pengurangan.','200 − 125 = 75.','Sisa buku 75.']},
+ {lv:'mudah',pts:10,time:180,ops:['×'],q:'Sebuah rak berisi 9 kotak, setiap kotak berisi 8 kue. Berapa jumlah seluruh kue di rak itu?',a:72,
+  steps:['Setiap kotak sama isi → perkalian.','9 × 8 = 72.','Jumlah kue 72.']},
+ {lv:'mudah',pts:10,time:180,ops:['÷'],q:'72 permen dibagikan sama rata kepada 8 anak. Berapa permen setiap anak?',a:9,
+  steps:['72 ÷ 8 = 9.','Setiap anak mendapat 9 permen.']},
+ {lv:'mudah',pts:10,time:180,ops:['+'],q:'Harga buku gambar Rp3.500 dan pensil warna Rp2.500. Berapa harga kedua barang itu?',a:6000,
+  steps:['3.500 + 2.500 = 6.000.','Harga kedua barang Rp6.000.']},
+ {lv:'sedang',pts:20,time:300,ops:['×'],q:'Rina menabung Rp5.500 setiap minggu selama 8 minggu. Berapa jumlah seluruh tabungan Rina?',a:44000,
+  steps:['5.500 × 8 = 44.000.','Tabungan Rina Rp44.000.']},
+ {lv:'mudah',pts:10,time:180,ops:['−'],q:'Pak Tono memiliki 150 ekor bebek. Sebanyak 85 ekor dijual. Berapa sisa bebek Pak Tono?',a:65,
+  steps:['150 − 85 = 65.','Sisa bebek 65 ekor.']},
+ {lv:'mudah',pts:10,time:180,ops:['×'],q:'Setiap piring berisi 6 potong kue. Berapa potong kue pada 12 piring?',a:72,
+  steps:['6 × 12 = 72.','Ada 72 potong kue.']},
+ {lv:'sedang',pts:20,time:300,ops:['−','−'],q:'Kantin memiliki 350 roti. Terjual 125 roti pada pagi hari dan 150 roti pada siang hari. Berapa sisa roti?',a:75,
+  steps:['Jumlah terjual: 125 + 150 = 275.','Sisa: 350 − 275 = 75.','Sisa roti 75.']},
+ {lv:'mudah',pts:10,time:180,ops:['÷'],q:'54 siswa dibagi sama banyak menjadi 6 kelompok. Berapa anggota setiap kelompok?',a:9,
+  steps:['54 ÷ 6 = 9.','Setiap kelompok beranggotakan 9 siswa.']},
+ {lv:'sedang',pts:20,time:300,ops:['×','+'],q:'Ada 4 kotak pensil, setiap kotak berisi 12 pensil, ditambah 25 pensil yang terpisah. Berapa semua pensil?',a:73,
+  steps:['Pensil dalam kotak: 4 × 12 = 48.','Tambah yang terpisah: 48 + 25 = 73.','Semua pensil ada 73.']},
+ {lv:'sedang',pts:20,time:300,ops:['×','−'],q:'Harga 1 kg jeruk Rp8.500. Ayah membeli 6 kg jeruk dan membayar Rp60.000. Berapa kembalian ayah?',a:9000,
+  steps:['Harga 6 kg: 6 × 8.500 = 51.000.','Kembalian: 60.000 − 51.000 = 9.000.','Kembalian ayah Rp9.000.']},
+ {lv:'sedang',pts:20,time:300,ops:['×'],q:'Sebuah bus melaju 60 km setiap jam. Berapa km jarak yang ditempuh bus dalam 4 jam?',a:240,
+  steps:['60 × 4 = 240.','Bus menempuh 240 km.']},
+ {lv:'sedang',pts:20,time:300,ops:['÷'],q:'480 siswa ikut lomba dan dibagi rata menjadi 15 kelompok. Berapa anggota setiap kelompok?',a:32,
+  steps:['480 ÷ 15: 15 × 30 = 450, sisa 30.','30 ÷ 15 = 2, jadi 30 + 2 = 32.','Setiap kelompok berisi 32 siswa.']},
+ {lv:'sedang',pts:20,time:300,ops:['×','−'],q:'Sebuah loyang berisi 25 kue. Ibu membuat 8 loyang, lalu memberi 30 kue kepada tetangga. Berapa sisa kue Ibu?',a:170,
+  steps:['Semua kue: 8 × 25 = 200.','Sisa: 200 − 30 = 170.','Sisa kue Ibu 170.']},
+ {lv:'sulit',pts:30,time:360,ops:['×','+','−'],q:'Pak Bagas membawa uang Rp200.000. Ia membeli 5 kg beras seharga Rp12.000 per kg dan 2 liter minyak goreng seharga Rp17.000 per liter. Berapa sisa uang Pak Bagas?',a:106000,
+  steps:['Harga beras: 5 × 12.000 = 60.000.','Harga minyak: 2 × 17.000 = 34.000.','Total belanja: 60.000 + 34.000 = 94.000.','Sisa: 200.000 − 94.000 = 106.000.','Sisa uang Pak Bagas Rp106.000.']},
+ {lv:'sulit',pts:30,time:360,ops:['×','−'],q:'Sebuah toko menjual pensil dalam kotak. Ada 45 kotak, setiap kotak berisi 12 pensil. Sebanyak 180 pensil terjual. Berapa sisa pensil?',a:360,
+  steps:['Semua pensil: 45 × 12 = 540.','Sisa: 540 − 180 = 360.','Sisa pensil 360.']},
+ {lv:'sulit',pts:30,time:360,ops:['−','÷'],q:'Hasil panen Pak Warno 1.250 kg cabai. Terjual 850 kg, sisanya dikemas ke dalam 8 karung sama banyak. Berapa kg cabai setiap karung?',a:50,
+  steps:['Sisa cabai: 1.250 − 850 = 400.','Tiap karung: 400 ÷ 8 = 50.','Setiap karung berisi 50 kg cabai.']},
+ {lv:'sulit',pts:30,time:360,ops:['×','+','−'],q:'Dina membeli 3 buku tulis seharga Rp4.500 per buku dan 2 pensil seharga Rp2.000 per pensil. Ia membayar Rp50.000. Berapa kembalian Dina?',a:32500,
+  steps:['Harga buku: 3 × 4.500 = 13.500.','Harga pensil: 2 × 2.000 = 4.000.','Total: 13.500 + 4.000 = 17.500.','Kembalian: 50.000 − 17.500 = 32.500.','Kembalian Dina Rp32.500.']},
+ {lv:'sulit',pts:30,time:360,ops:['×','÷'],q:'Sebuah pabrik memproduksi 1.200 botol setiap hari. Botol dikemas ke dalam dus berisi 20 botol. Berapa dus yang dihasilkan dalam 3 hari?',a:180,
+  steps:['Produksi 3 hari: 1.200 × 3 = 3.600 botol.','Jumlah dus: 3.600 ÷ 20 = 180.','Dihasilkan 180 dus.']}
+];
+
+/* =====================================================
+   MESIN APLIKASI
+   ===================================================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const norm=v=>String(v==null?'':v).toLowerCase().replace(/rp/g,'').replace(/[\s.\-]/g,'').replace(/,/g,'.');
+function sameNum(a,b){const x=parseFloat(norm(a)),y=parseFloat(norm(b));return !isNaN(x)&&!isNaN(y)&&Math.abs(x-y)<1e-9}
+const OCOLOR={'+':'teal','−':'coral','×':'purple','÷':'orange'};
+
+const G={
+  slide:0,
+  names:['Siswa 1','Siswa 2','Siswa 3'],
+  stu:[{benar:0,kartu:0},{benar:0,kartu:0},{benar:0,kartu:0}],
+  order:[0,1,2],
+  practice:0,
+  mute:false,
+  lat:{},
+  tant:{i:0,done:Array(8).fill(false),tried:Array(8).fill(false),seq:Array.from({length:8},()=>[])},
+  game:{turn:0,phase:'pick',card:-1,remain:0,total:1,tid:null,tried:[],used:Array(20).fill(false),ans:0}
+};
+['tambah','kurang','kali','bagi'].forEach(k=>{
+  G.lat[k]={i:0,done:Array(10).fill(false),att:Array(10).fill(0)};
+});
+
+/* ---------- efek: suara ---------- */
+let AC=null;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}return AC}
+function tone(f,d,type,when,vol){
+  const c=ac();if(!c||G.mute)return;
+  type=type||'sine';when=when||0;vol=vol||.14;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.value=f;o.connect(g);g.connect(c.destination);
+  const t=c.currentTime+when;
+  g.gain.setValueAtTime(.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.start(t);o.stop(t+d+.05);
+}
+const sOK=()=>{tone(660,.12);tone(880,.18,'sine',.12)};
+const sNo=()=>{tone(230,.18,'square',0,.07);tone(170,.25,'square',.12,.07)};
+const sTick=()=>tone(920,.05,'sine',0,.05);
+const sGO=()=>{tone(520,.1);tone(660,.1,'sine',.1);tone(790,.16,'sine',.2)};
+
+/* ---------- efek: konfeti & toast ---------- */
+function party(n){
+  n=n||60;
+  const cols=['#0aa79c','#ff5a5f','#7c5cff','#ff9f1c','#2f7cf6','#ff6fb5','#2fb46c'];
+  const fx=$('#fx');
+  for(let i=0;i<n;i++){
+    const d=document.createElement('i');d.className='cf';
+    d.style.left=(Math.random()*100)+'vw';
+    d.style.background=cols[i%cols.length];
+    d.style.width=(6+Math.random()*8)+'px';
+    d.style.height=(10+Math.random()*10)+'px';
+    d.style.animationDuration=(1.5+Math.random()*1.7)+'s';
+    d.style.animationDelay=(Math.random()*.35)+'s';
+    fx.appendChild(d);
+    setTimeout(()=>d.remove(),3800);
+  }
+}
+let tTid=null;
+function toast(m){
+  const t=$('#toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(tTid);tTid=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ---------- navigasi slide ---------- */
+function go(n){
+  if(n<0||n>=SLIDES.length)return;
+  G.slide=n;
+  $$('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById(SLIDES[n][0]).classList.add('active');
+  $('#tbTitle').textContent=SLIDES[n][1];
+  $$('#dots .dot').forEach((d,i)=>d.classList.toggle('on',i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===15){renderBoard();renderGameOrder();renderGame();}
+  if(n===16)renderHasil();
+  if(n===19)$('#thanksNames').innerHTML=G.names.map(nm=>'<span>'+esc(nm)+'</span>').join('');
+}
+function buildNav(){
+  $('#dots').innerHTML=SLIDES.map((s,i)=>'<button class="dot" data-i="'+i+'" title="'+esc(s[1])+'"></button>').join('');
+  $$('#dots .dot').forEach(d=>d.onclick=()=>go(+d.dataset.i));
+  $('#menuList').innerHTML=SLIDES.map((s,i)=>'<button class="mitem" data-i="'+i+'"><span class="mn">'+(i+1)+'</span><span>'+esc(s[1])+'</span></button>').join('');
+  $$('#menuList .mitem').forEach(b=>b.onclick=()=>{$('#menu').classList.remove('open');go(+b.dataset.i)});
+  $('#btnPrev').onclick=()=>go(G.slide-1);
+  $('#btnNext').onclick=()=>go(G.slide+1);
+  $('#btnMenu').onclick=()=>$('#menu').classList.add('open');
+  $('#menuClose').onclick=()=>$('#menu').classList.remove('open');
+  $('#btnHome').onclick=()=>go(0);
+  $('#btnFull').onclick=()=>{
+    if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+    else{document.exitFullscreen&&document.exitFullscreen()}
+  };
+  $('#btnMute').onclick=()=>{
+    G.mute=!G.mute;
+    $('#btnMute').style.background=G.mute?'#ffd6d8':'#fff';
+    toast(G.mute?'Suara dimatikan':'Suara dihidupkan');
+  };
+  document.addEventListener('keydown',e=>{
+    if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+    if(e.key==='ArrowRight')go(G.slide+1);
+    if(e.key==='ArrowLeft')go(G.slide-1);
+    if(e.key==='Escape')$('#menu').classList.remove('open');
+  });
+}
+
+/* ---------- sampul: nama siswa ---------- */
+function startNames(){
+  G.names=[1,2,3].map(k=>{
+    const v=($('#nm'+k).value||'').trim();
+    return v?v:('Siswa '+k);
+  });
+  updateTurnLabels();renderGameOrder();
+  $('#thanksNames').innerHTML=G.names.map(nm=>'<span>'+esc(nm)+'</span>').join('');
+  go(1);party(45);sOK();
+  toast('Selamat datang, '+G.names.join(', ')+'!');
+}
+
+/* ---------- giliran siswa ---------- */
+function updateTurnLabels(){
+  const nm=G.names[G.order[G.practice]];
+  $$('.giliran').forEach(el=>el.textContent=nm);
+}
+function nextTurn(){
+  G.practice=(G.practice+1)%3;
+  updateTurnLabels();
+}
+function acakUrutan(){
+  if(G.slide===15&&G.game.phase!=='pick'&&G.game.phase!=='done'){
+    toast('Selesaikan dulu kartu yang sedang dimainkan!');return;
+  }
+  const a=[0,1,2];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}
+  G.order=a;G.practice=0;
+  if(G.game.phase==='pick')G.game.turn=0;
+  updateTurnLabels();renderGameOrder();
+  sOK();
+  toast('Urutan baru: '+a.map((si,k)=>(k+1)+'. '+G.names[si]).join('  '));
+}
+
+/* ---------- apersepsi & tujuan ---------- */
+function renderPem(){
+  $('#pemWrap').innerHTML=PEMANTIK.map((p,i)=>
+    '<div class="pem"><div class="pq"><span class="pn">'+(i+1)+'</span><span>'+esc(p.q)+'</span></div><div class="ph">'+esc(p.h)+'</div></div>'
+  ).join('');
+  $$('#pemWrap .pem').forEach(el=>el.onclick=()=>{el.classList.toggle('open');sTick()});
+}
+function renderTuj(){
+  $('#tujWrap').innerHTML=TUJUAN.map((t,i)=>
+    '<div class="tuj-it"><span class="tuj-n">'+(i+1)+'</span><p>'+esc(t)+'</p></div>'
+  ).join('');
+  $$('#tujWrap .tuj-it').forEach(el=>el.onclick=()=>{el.style.transform='';sTick()});
+}
+
+/* ---------- kata kunci: kartu flip ---------- */
+function renderKW(){
+  $('#kwWrap').innerHTML=KW.map(k=>
+    '<div class="flip"><div class="fin">'+
+    '<div class="fface f-'+k.color+'"><span class="fsym">'+k.op+'</span><h3>'+k.name+'</h3><span class="tap">klik untuk membuka!</span></div>'+
+    '<div class="fface fback f-'+k.back+'back"><h3>'+k.name+' ('+k.op+')</h3><span class="kk-lbl">Kata kunci:</span><div class="chips">'+
+    k.words.map(w=>'<span class="chip">'+esc(w)+'</span>').join('')+
+    '</div><span class="kk-ex">'+esc(k.ex)+'</span></div>'+
+    '</div></div>'
+  ).join('');
+  $$('#kwWrap .flip').forEach(f=>f.onclick=()=>{f.classList.toggle('open');sTick()});
+}
+
+/* ---------- kuis tebak operasi ---------- */
+const qkS={i:0,score:0};
+function renderQK(){
+  const box=$('#quizWrap');
+  if(qkS.i>=QUIZKK.length){
+    const msg=qkS.score===QUIZKK.length?'Sempurna! Kamu detektif kata kunci sejati!':'Bagus! Terus berlatih mengenali kata kunci ya.';
+    box.innerHTML='<div class="card qk"><h3>Hasil tebakanmu: '+qkS.score+'/'+QUIZKK.length+'</h3><p class="muted" style="font-weight:700;margin:8px 0 14px">'+msg+'</p><button class="btn btn-p" id="qkAgain">Ulangi Tebakan</button></div>';
+    $('#qkAgain').onclick=()=>{qkS.i=0;qkS.score=0;renderQK()};
+    return;
+  }
+  const it=QUIZKK[qkS.i];
+  box.innerHTML='<div class="card qk"><span class="qk-n">Tebakan '+(qkS.i+1)+' dari '+QUIZKK.length+'</span><p class="qk-s">'+esc(it.s)+'</p>'+
+    '<div class="opbtns">'+['+','−','×','÷'].map(o=>'<button class="opb b-'+OCOLOR[o]+'" data-o="'+o+'">'+o+'</button>').join('')+'</div>'+
+    '<div class="fb" id="qkFb" hidden></div></div>';
+  $$('#quizWrap .opb').forEach(b=>b.onclick=()=>{
+    const fb=$('#qkFb');fb.hidden=false;
+    if(b.dataset.o===it.a){
+      qkS.score++;fb.className='fb ok';fb.textContent='Benar! Operasi yang tepat: '+it.a+' ('+KW.find(k=>k.op===it.a).name+')';
+      sOK();setTimeout(()=>{qkS.i++;renderQK()},950);
+    }else{
+      fb.className='fb no';fb.textContent='Belum tepat, baca lagi kalimatnya dan cari kata kuncinya...';
+      sNo();b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),500);
+    }
+  });
+}
+
+/* ---------- contoh soal bertahap ---------- */
+function renderEX(key,hostSel){
+  const data=EX[key],host=$(hostSel);
+  host.innerHTML='<div class="tabs">'+data.map((e,i)=>'<button class="tab'+(i===0?' on':'')+'" data-i="'+i+'">'+e.lv+'</button>').join('')+'</div><div class="exbody" id="exb-'+key+'"></div>';
+  const paint=i=>{
+    const e=data[i];
+    $('#exb-'+key).innerHTML=
+      '<div class="card excard">'+
+      '<div class="exbadges"><span class="lvb lv-'+e.lv.toLowerCase()+'">'+e.lv+'</span>'+
+      (e.ops?'<span class="opsb">Operasi dipakai: '+e.ops.join(' &rarr; ')+'</span>':'')+'</div>'+
+      '<p class="qtext">'+esc(e.q)+'</p>'+
+      (e.key?'<span class="keychip">Kata kunci: '+esc(e.key)+'</span>':'')+
+      '<div class="steps" id="stx-'+key+'">'+e.steps.map((s,k)=>{
+        const last=(k===e.steps.length-1);
+        return '<div class="step'+(last?' final':'')+'" style="animation-delay:'+(k*0.12)+'s"><span class="sn">'+(k+1)+'</span><span>'+esc(s)+'</span></div>';
+      }).join('')+'</div>'+
+      '<div class="btnrow"><button class="btn btn-p" id="sh-'+key+'">Tampilkan Langkah</button><button class="btn btn-ghost" id="hd-'+key+'" hidden>Sembunyikan Langkah</button></div>'+
+      '</div>';
+    $('#sh-'+key).onclick=()=>{
+      $$('#stx-'+key+' .step').forEach(s=>s.classList.add('show'));
+      $('#sh-'+key).hidden=true;$('#hd-'+key).hidden=false;sTick();
+    };
+    $('#hd-'+key).onclick=()=>{
+      $$('#stx-'+key+' .step').forEach(s=>s.classList.remove('show'));
+      $('#hd-'+key).hidden=true;$('#sh-'+key).hidden=false;
+    };
+  };
+  $$('.tab',host).forEach(t=>t.onclick=()=>{
+    $$('.tab',host).forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');paint(+t.dataset.i);
+  });
+  paint(0);
+}
+
+/* ---------- latihan per operasi ---------- */
+function setFb(op,type,msg){const fb=$('#fb-'+op);if(fb){fb.hidden=false;fb.className='fb '+type;fb.textContent=msg}}
+function renderLat(op){
+  const st=G.lat[op],d=LAT[op],i=st.i,done=st.done[i];
+  $('#lat-'+op).innerHTML=
+    '<div class="card qcard">'+
+    '<div class="qtop"><span class="qnum">Soal '+(i+1)+' dari '+d.length+'</span>'+
+    '<div class="qdots">'+d.map((_,k)=>'<button class="qd'+(st.done[k]?' done':'')+(k===i?' cur':'')+'" data-k="'+k+'">'+(k+1)+'</button>').join('')+'</div></div>'+
+    '<p class="qtext">'+esc(d[i].q)+'</p>'+
+    '<div class="ansrow"><input id="in-'+op+'" class="ain" inputmode="numeric" placeholder="Tulis jawabanmu..."'+(done?' disabled':'')+'>'+
+    '<button class="btn btn-t" id="cek-'+op+'"'+(done?' disabled':'')+'>Cek Jawaban</button>'+
+    '<button class="btn btn-ghost" id="bah-'+op+'">Pembahasan</button></div>'+
+    '<div class="fb" id="fb-'+op+'" hidden></div>'+
+    '<div class="steps" id="st-'+op+'">'+d[i].steps.map((s,k)=>{
+      const last=(k===d[i].steps.length-1);
+      return '<div class="step'+(last?' final':'')+'"><span class="sn">'+(k+1)+'</span><span>'+esc(s)+'</span></div>';
+    }).join('')+'</div>'+
+    '<div class="qnav"><button class="btn btn-ghost" id="pv-'+op+'"'+(i===0?' disabled':'')+'>&lsaquo; Sebelumnya</button>'+
+    '<span class="cnt">Selesai: '+st.done.filter(Boolean).length+'/'+d.length+'</span>'+
+    '<button class="btn btn-ghost" id="nx-'+op+'"'+(i===d.length-1?' disabled':'')+'>Berikutnya &rsaquo;</button></div>'+
+    '</div>';
+  $$('#lat-'+op+' .qd').forEach(b=>b.onclick=()=>{st.i=+b.dataset.k;renderLat(op)});
+  $('#pv-'+op).onclick=()=>{if(st.i>0){st.i--;renderLat(op)}};
+  $('#nx-'+op).onclick=()=>{if(st.i<d.length-1){st.i++;renderLat(op)}};
+  $('#cek-'+op).onclick=()=>latCek(op);
+  $('#bah-'+op).onclick=()=>{
+    const any=$$('#st-'+op+' .step.show').length>0;
+    $$('#st-'+op+' .step').forEach(s=>s.classList.toggle('show',!any));
+    $('#bah-'+op).textContent=any?'Pembahasan':'Tutup Pembahasan';sTick();
+  };
+  $('#in-'+op).addEventListener('keydown',e=>{if(e.key==='Enter')latCek(op)});
+  if(done)setFb(op,'ok','Sudah dikerjakan dan jawabanmu benar. Mantap!');
+}
+function latCek(op){
+  const st=G.lat[op],d=LAT[op],i=st.i;
+  if(st.done[i])return;
+  const v=$('#in-'+op).value.trim();
+  if(!v){setFb(op,'info','Tulis dulu jawabanmu ya!');return}
+  if(sameNum(v,d[i].a)){
+    st.done[i]=true;
+    let credit=false;
+    if(st.att[i]===0){G.stu[G.order[G.practice]].benar++;credit=true}
+    nextTurn();
+    const pemenang=G.names[G.order[(G.practice+2)%3]];
+    sOK();party(50);
+    renderLat(op);
+    setFb(op,'ok',credit?('BENAR! +10 poin untuk '+pemenang+'! Giliran berikutnya: '+G.names[G.order[G.practice]]+'.'):'BENAR! Soal selesai (tanpa poin karena bukan percobaan pertama). Giliran berikutnya: '+G.names[G.order[G.practice]]+'.');
+  }else{
+    st.att[i]++;sNo();
+    $('#in-'+op).classList.add('shake');setTimeout(()=>{const el=$('#in-'+op);el&&el.classList.remove('shake')},500);
+    setFb(op,'no','Belum tepat. Coba baca lagi soalnya dan hitung pelan-pelan!'+(st.att[i]>=2?' Butuh bantuan? Klik tombol Pembahasan.':''));
+  }
+}
+
+/* ---------- KaBaTaKu & demo interaktif ---------- */
+function renderKab(){
+  $('#kabWrap').innerHTML=
+  '<div class="card" style="margin-bottom:14px">'+
+    '<h3 style="font-size:20px;margin-bottom:10px">Aturan KaBaTaKu</h3>'+
+    '<div class="chips" style="margin-bottom:12px">'+
+      '<span class="chip" style="background:#f1ecff">KA-li (×) &amp; BA-gi (÷) &rarr; dikerjakan DULU</span>'+
+      '<span class="chip" style="background:#e0f7f5">TA-mbah (+) &amp; KU-rang (−) &rarr; dikerjakan KEMUDIAN</span>'+
+      '<span class="chip">Jika sederajat &rarr; dari KIRI ke kanan</span>'+
+      '<span class="chip" style="background:#fff3d6">Tanda kurung ( ) &rarr; paling utama!</span>'+
+    '</div>'+
+    '<p class="muted" style="font-weight:700">Contoh: pada <b>4 + 6 × 5</b>, kita menghitung <b>6 × 5</b> lebih dulu, baru menambah 4.</p>'+
+  '</div>'+
+  '<div class="card" style="margin-bottom:14px">'+
+    '<h3 style="font-size:19px;margin-bottom:8px">Demo 1 — Mana yang dihitung dulu?</h3>'+
+    '<div class="qtext" id="kabAExpr" style="font-size:30px;font-family:\'Baloo 2\';margin-bottom:6px">4 + 6 × 5 = ?</div>'+
+    '<div class="btnrow" id="kabABtns"><button class="btn btn-ghost" data-c="0">Tambah dulu (4 + 6)</button><button class="btn btn-p" data-c="1">Kali dulu (6 × 5)</button></div>'+
+    '<div class="fb" id="kabAFb" hidden></div>'+
+    '<div class="steps" id="kabASt">'+
+      '<div class="step"><span class="sn">1</span><span>Kerjakan perkalian dulu: 6 × 5 = 30.</span></div>'+
+      '<div class="step final"><span class="sn">2</span><span>Baru penjumlahan: 4 + 30 = 34. Jadi, 4 + 6 × 5 = 34.</span></div>'+
+    '</div>'+
+  '</div>'+
+  '<div class="card tant">'+
+    '<h3 style="font-size:19px;margin-bottom:8px">Demo 2 — Klik urutan yang benar!</h3>'+
+    '<div class="qtext" id="kabBExpr" style="font-size:30px;font-family:\'Baloo 2\';margin-bottom:6px">12 ÷ 3 + 2 × 4 = ?</div>'+
+    '<p class="tant-hint">Klik tombol sesuai urutan operasi yang dikerjakan lebih dulu.</p>'+
+    '<div class="btnrow" id="kabBBtns">'+
+      '<button class="btn btn-c" data-c="0">÷ dulu (12 ÷ 3)</button>'+
+      '<button class="btn btn-p" data-c="1">× dulu (2 × 4)</button>'+
+      '<button class="btn btn-t" data-c="2">Baru tambah (+)</button>'+
+    '</div>'+
+    '<div class="fb" id="kabBFb" hidden></div>'+
+    '<div class="steps" id="kabBSt">'+
+      '<div class="step" data-s="0"><span class="sn">1</span><span>12 ÷ 3 = 4 (Bagi dulu!)</span></div>'+
+      '<div class="step" data-s="1"><span class="sn">2</span><span>2 × 4 = 8 (Kemudian kali.)</span></div>'+
+      '<div class="step final" data-s="2"><span class="sn">3</span><span>4 + 8 = 12 (Terakhir, tambah.) Jadi, 12 ÷ 3 + 2 × 4 = 12.</span></div>'+
+    '</div>'+
+    '<div class="btnrow"><button class="btn btn-ghost" id="kabBReset">Ulangi Demo</button></div>'+
+  '</div>';
+  // demo 1
+  $$('#kabABtns .btn').forEach(b=>b.onclick=()=>{
+    const fb=$('#kabAFb');fb.hidden=false;
+    if(b.dataset.c==='1'){
+      fb.className='fb ok';fb.textContent='Tepat! KAli dulu sebelum TAmbah.';
+      $$('#kabABtns .btn').forEach(x=>x.disabled=true);
+      $$('#kabASt .step').forEach(s=>s.classList.add('show'));
+      sOK();party(25);
+    }else{
+      fb.className='fb no';fb.textContent='Ups! Ingat KaBaTaKu: KAli dulu, baru TAmbah.';
+      sNo();$('#kabAExpr').classList.add('shake');setTimeout(()=>$('#kabAExpr').classList.remove('shake'),500);
+    }
+  });
+  // demo 2
+  const bState={next:0};
+  $$('#kabBBtns .btn').forEach(b=>b.onclick=()=>{
+    const fb=$('#kabBFb');fb.hidden=false;
+    if(+b.dataset.c===bState.next){
+      b.disabled=true;
+      const st=$$('#kabBSt .step')[bState.next];
+      st&&st.classList.add('show');
+      bState.next++;sTick();
+      if(bState.next===3){fb.className='fb ok';fb.textContent='Sempurna! Hasilnya 12.';sOK();party(30)}
+      else{fb.className='fb info';fb.textContent='Bagus! Lanjutkan ke langkah berikutnya.'}
+    }else{
+      fb.className='fb no';fb.textContent='Urutan belum tepat. Ingat: ÷ dan × dikerjakan lebih dulu, lalu +.';
+      sNo();$('#kabBExpr').classList.add('shake');setTimeout(()=>$('#kabBExpr').classList.remove('shake'),500);
+    }
+  });
+  $('#kabBReset').onclick=()=>{
+    bState.next=0;
+    $$('#kabBBtns .btn').forEach(x=>x.disabled=false);
+    $$('#kabBSt .step').forEach(s=>s.classList.remove('show'));
+    $('#kabBFb').hidden=true;
+  };
+}
+
+/* ---------- tantangan campuran ---------- */
+function renderTant(){
+  const st=G.tant,i=st.i,done=st.done[i],d=TANT[i];
+  $('#tantWrap').innerHTML=
+    '<div class="card qcard tant">'+
+    '<div class="qtop"><span class="qnum">Tantangan '+(i+1)+' dari '+d.length+'</span>'+
+    '<div class="qdots">'+TANT.map((_,k)=>'<button class="qd'+(st.done[k]?' done':'')+(k===i?' cur':'')+'" data-k="'+k+'">'+(k+1)+'</button>').join('')+'</div></div>'+
+    '<p class="qtext">'+esc(d.q)+'</p>'+
+    '<p class="tant-hint" style="margin-top:10px">Langkah 1 — Pilih operasi yang dipakai, sesuai URUTAN pengerjaan:</p>'+
+    '<div class="opsrow">'+['+','−','×','÷'].map(o=>'<button class="opb b-'+OCOLOR[o]+'" data-o="'+o+'"'+(done?' disabled':'')+'>${OP}</button>'.replace('${OP}',o)).join('')+'</div>'+
+    '<div class="seq" id="tseq">'+(st.seq[i].length?st.seq[i].map((o,k)=>'<span class="seqchip"><span class="no">'+(k+1)+'</span>'+o+'</span>').join(''):'<span class="empty">Belum ada operasi dipilih. Klik tombol di atas!</span>')+'</div>'+
+    '<div class="minibtns"><button class="minibtn" id="tUndo"'+(done?' disabled':'')+'>Urungkan</button><button class="minibtn" id="tClear"'+(done?' disabled':'')+'>Hapus Semua</button></div>'+
+    '<p class="tant-hint">Langkah 2 — Hitung, lalu tulis jawaban akhirnya:</p>'+
+    '<div class="ansrow"><input id="tin" class="ain" inputmode="numeric" placeholder="Jawaban akhir..."'+(done?' disabled':'')+'>'+
+    '<button class="btn btn-t" id="tCek"'+(done?' disabled':'')+'>Cek Jawaban</button>'+
+    '<button class="btn btn-ghost" id="tBah">Pembahasan</button></div>'+
+    '<div class="fb" id="tfb" hidden></div>'+
+    '<div class="steps" id="tst">'+d.steps.map((s,k)=>{
+      const last=(k===d.steps.length-1);
+      return '<div class="step'+(last?' final':'')+'"><span class="sn">'+(k+1)+'</span><span>'+esc(s)+'</span></div>';
+    }).join('')+'</div>'+
+    '<div class="qnav"><button class="btn btn-ghost" id="tPv"'+(i===0?' disabled':'')+'>&lsaquo; Sebelumnya</button>'+
+    '<span class="cnt">Selesai: '+st.done.filter(Boolean).length+'/'+TANT.length+'</span>'+
+    '<button class="btn btn-ghost" id="tNx"'+(i===TANT.length-1?' disabled':'')+'>Berikutnya &rsaquo;</button></div>'+
+    '</div>';
+  $$('#tantWrap .qd').forEach(b=>b.onclick=()=>{st.i=+b.dataset.k;renderTant()});
+  $('#tPv').onclick=()=>{if(st.i>0){st.i--;renderTant()}};
+  $('#tNx').onclick=()=>{if(st.i<TANT.length-1){st.i++;renderTant()}};
+  if(!done){
+    $$('#tantWrap .opb').forEach(b=>b.onclick=()=>{
+      if(st.seq[i].length>=4){toast('Maksimal 4 operasi. Urungkan jika salah.');return}
+      st.seq[i].push(b.dataset.o);sTick();renderTant();
+    });
+    $('#tUndo').onclick=()=>{st.seq[i].pop();renderTant()};
+    $('#tClear').onclick=()=>{st.seq[i]=[];renderTant()};
+    $('#tCek').onclick=tantCek;
+    $('#tin').addEventListener('keydown',e=>{if(e.key==='Enter')tantCek()});
+  }
+  $('#tBah').onclick=()=>{
+    const any=$$('#tst .step.show').length>0;
+    $$('#tst .step').forEach(s=>s.classList.toggle('show',!any));
+    $('#tBah').textContent=any?'Pembahasan':'Tutup Pembahasan';sTick();
+  };
+  if(done){setTfb('ok','Sudah selesai dan benar. Kerja bagus!')}
+}
+function setTfb(type,msg){const fb=$('#tfb');if(fb){fb.hidden=false;fb.className='fb '+type;fb.textContent=msg}}
+function tantCek(){
+  const st=G.tant,i=st.i,d=TANT[i];
+  if(st.done[i])return;
+  const got=st.seq[i],v=$('#tin').value.trim();
+  const seqOk=got.length===d.ops.length&&got.every((o,k)=>o===d.ops[k]);
+  if(!seqOk){
+    sNo();
+    if(got.length!==d.ops.length){setTfb('info','Operasi yang kamu pilih berjumlah '+got.length+', padahal soal ini butuh '+d.ops.length+' operasi. Periksa lagi!')}
+    else{setTfb('no','Urutan operasi belum tepat. Ingat KaBaTaKu: kali/bagi dulu, baru tambah/kurang!')}
+    $('#tseq').classList.add('shake');setTimeout(()=>{const el=$('#tseq');el&&el.classList.remove('shake')},500);
+    return;
+  }
+  if(!v){setTfb('info','Operasi sudah tepat! Sekarang tulis jawaban akhirnya.');return}
+  if(sameNum(v,d.a)){
+    st.done[i]=true;
+    let credit=false;
+    if(!st.tried[i]){G.stu[G.order[G.practice]].benar++;credit=true;st.tried[i]=true}
+    nextTurn();
+    const pemenang=G.names[G.order[(G.practice+2)%3]];
+    sOK();party(50);renderTant();
+    setTfb('ok',credit?('BENAR! Operasi dan jawabanmu tepat. +10 poin untuk '+pemenang+'!'):'BENAR! Operasi dan jawabanmu tepat (tanpa poin, bukan percobaan pertama).');
+  }else{
+    st.tried[i]=true;sNo();
+    $('#tin').classList.add('shake');setTimeout(()=>{const el=$('#tin');el&&el.classList.remove('shake')},500);
+    setTfb('no','Operasinya sudah tepat, tapi hitungan akhirnya belum cocok. Hitung ulang pelan-pelan!');
+  }
+}
+
+/* ---------- permainan kartu ---------- */
+function nmOf(i){return G.names[i]}
+function renderBoard(){
+  $('#cardsGrid').innerHTML=CARDS.map((c,n)=>
+    '<button class="pcard'+(G.game.used[n]?' used':'')+'" data-n="'+n+'">'+(n+1)+'</button>'
+  ).join('');
+  $$('#cardsGrid .pcard').forEach(b=>b.onclick=()=>pickCard(+b.dataset.n));
+}
+function renderGameOrder(){
+  const el=$('#gameOrder');if(!el)return;
+  el.innerHTML=G.order.map((si,k)=>{
+    const cur=(k===G.game.turn&&G.game.phase!=='done');
+    const dim=(k<G.game.turn);
+    return '<span class="ochip'+(cur?' cur':'')+(dim?' dim':'')+'"><span class="onum">'+(k+1)+'</span>'+esc(G.names[si])+'</span>';
+  }).join('');
+}
+function stepHTML(steps){
+  return '<div class="gpsteps">'+steps.map((s,k)=>{
+    const last=(k===steps.length-1);
+    return '<div class="step'+(last?' final':'')+'"><span class="sn">'+(k+1)+'</span><span>'+esc(s)+'</span></div>';
+  }).join('')+'</div>';
+}
+function renderGame(){
+  const g=G.game,p=$('#gamePanel');
+  if(g.phase==='done'){
+    p.innerHTML='<p class="gp-hi">Semua 20 kartu sudah dimainkan!</p><p class="gp-p">Petualangan selesai. Ayo lihat hasil kalian!</p><button class="btn btn-o big" id="gHasil">Lihat Hasil</button>';
+    $('#gHasil').onclick=()=>go(16);
+    return;
+  }
+  const drawer=nmOf(G.order[g.turn]);
+  if(g.phase==='pick'){
+    p.innerHTML='<p class="gp-hi">Hai, <b>'+esc(drawer)+'</b>!</p>'+
+      '<p class="gp-p">Pilih satu kartu bernomor di papan. Setiap kartu menyimpan soal cerita dengan tingkat kesulitan yang tersembunyi!</p>'+
+      '<div class="legend"><span class="rchip b">Mudah &bull; 3 menit &bull; 10 poin</span><span class="rchip s">Sedang &bull; 5 menit &bull; 20 poin</span><span class="rchip h">Sulit &bull; 6 menit &bull; 30 poin</span></div>'+
+      '<p class="gp-p">Tips: baca soal dua kali sebelum klik MULAI.</p>';
+    return;
+  }
+  const c=CARDS[g.card];
+  if(g.phase==='read'){
+    p.innerHTML='<div class="exbadges"><span class="lvb lv-'+c.lv+'">'+c.lv.toUpperCase()+'</span><span class="opsb">+'+c.pts+' poin</span><span class="opsb">'+Math.round(c.time/60)+' menit</span></div>'+
+      '<p class="qtext">'+esc(c.q)+'</p>'+
+      '<div class="readbox">Baca soal dengan teliti. Sudah paham dan siap? Klik MULAI WAKTU — timer langsung berjalan!</div>'+
+      '<div class="btnrow"><button class="btn btn-o big" id="gGo">MULAI WAKTU</button><button class="btn btn-ghost" id="gBack">Kembalikan Kartu</button></div>';
+    $('#gGo').onclick=startTimer;
+    $('#gBack').onclick=()=>{g.card=-1;g.phase='pick';renderGame();sTick()};
+    return;
+  }
+  if(g.phase==='run'){
+    let steal='';
+    if(g.tried.length>0){
+      const sisa=G.order.filter(si=>!g.tried.includes(si));
+      steal='<div class="fb no">'+(sisa.length?'Jawaban belum tepat! Kesempatan bagi siswa lain — klik namanya: ':'Jawaban belum tepat! Waktu masih berjalan.')+
+        (sisa.length?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'+sisa.map(si=>'<button class="stealbtn" data-si="'+si+'">'+esc(G.names[si])+'</button>').join('')+'</div>':'')+'</div>';
+    }
+    p.innerHTML='<div class="timerbox" id="tbox"><svg class="ring" viewBox="0 0 120 120"><circle class="rbg" cx="60" cy="60" r="52"/><circle class="rfg" id="rfg" cx="60" cy="60" r="52"/></svg><div><div class="tmin" id="tmin">--:--</div><div class="mini muted" style="font-weight:800">Penjawab: '+esc(nmOf(g.ans))+'</div></div></div>'+
+      '<p class="qtext small">'+esc(c.q)+'</p>'+
+      '<div class="ansrow"><input id="gIn" class="ain" inputmode="numeric" placeholder="Tulis jawabanmu..."><button class="btn btn-t" id="gCek">Cek Jawaban</button><button class="btn btn-ghost" id="gStop">Waktu Habis</button></div>'+
+      steal;
+    updTimer();
+    $('#gCek').onclick=cekKartu;
+    $('#gStop').onclick=()=>timeUp();
+    $('#gIn').addEventListener('keydown',e=>{if(e.key==='Enter')cekKartu()});
+    $$('#gamePanel .stealbtn').forEach(b=>b.onclick=()=>{g.ans=+b.dataset.si;renderGame();$('#gIn').focus()});
+    setTimeout(()=>{const el=$('#gIn');el&&el.focus()},50);
+    return;
+  }
+  if(g.phase==='win'){
+    p.innerHTML='<div class="fb ok big">BENAR! +'+c.pts+' poin untuk '+esc(nmOf(g.ans))+'</div>'+
+      '<p class="gp-p">Kartu '+(g.card+1)+' selesai. Ini pembahasannya:</p>'+
+      stepHTML(c.steps)+
+      '<div class="btnrow"><button class="btn btn-p big" id="gLanjut">Lanjut &rsaquo;</button></div>';
+    $('#gLanjut').onclick=lanjut;
+    return;
+  }
+  if(g.phase==='lose'){
+    p.innerHTML='<div class="fb no big">'+(g.tried.length>=3?'Tidak ada yang menjawab benar.':'Waktu habis!')+'</div>'+
+      '<p class="gp-p">Poin kartu ini hangus. Tidak apa-apa, fokus pada kartu berikutnya. Ini pembahasannya:</p>'+
+      stepHTML(c.steps)+
+      '<div class="btnrow"><button class="btn btn-p big" id="gLanjut">Lanjut &rsaquo;</button></div>';
+    $('#gLanjut').onclick=lanjut;
+    return;
+  }
+}
+function pickCard(n){
+  const g=G.game;
+  if(g.phase==='done')return;
+  if(g.used[n]){toast('Kartu itu sudah dimainkan.');return}
+  if(g.phase!=='pick'){toast('Selesaikan dulu soal yang sedang berjalan!');return}
+  g.card=n;g.phase='read';g.ans=G.order[g.turn];g.tried=[];
+  sTick();renderGame();
+}
+function startTimer(){
+  const g=G.game,c=CARDS[g.card];
+  g.total=c.time;g.remain=c.time;g.phase='run';
+  sGO();renderGame();
+  clearInterval(g.tid);
+  g.tid=setInterval(()=>{
+    g.remain--;
+    if(g.remain<=0){clearInterval(g.tid);timeUp();}
+    else{updTimer();if(g.remain<=10)sTick();}
+  },1000);
+  updTimer();
+}
+function updTimer(){
+  const t=$('#tmin'),r=$('#rfg'),box=$('#tbox');
+  if(!t)return;
+  const g=G.game,m=Math.floor(g.remain/60),s=g.remain%60;
+  t.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  if(r)r.style.strokeDashoffset=(326.7*(1-g.remain/g.total)).toFixed(1);
+  if(g.remain<=30){r&&r.classList.add('low');box&&box.classList.add('low')}
+  else{r&&r.classList.remove('low');box&&box.classList.remove('low')}
+}
+function cekKartu(){
+  const g=G.game,c=CARDS[g.card];
+  const v=$('#gIn').value.trim();
+  if(!v){toast('Tulis dulu jawabanmu!');return}
+  if(sameNum(v,c.a)){
+    clearInterval(g.tid);
+    G.stu[g.ans].kartu+=c.pts;
+    g.phase='win';party(90);sOK();
+    renderGame();renderGameOrder();
+  }else{
+    if(!g.tried.includes(g.ans))g.tried.push(g.ans);
+    sNo();
+    const el=$('#gIn');el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),500);
+    if(g.tried.length>=3){timeUp(true)}
+    else renderGame();
+  }
+}
+function timeUp(all){
+  const g=G.game;
+  clearInterval(g.tid);
+  g.phase='lose';sNo();
+  renderGame();
+}
+function lanjut(){
+  const g=G.game;
+  g.used[g.card]=true;g.card=-1;g.tried=[];
+  if(g.used.every(u=>u)){g.phase='done'}
+  else{g.phase='pick';g.turn=(g.turn+1)%3}
+  renderBoard();renderGameOrder();renderGame();
+  if(g.phase==='done'){party(60);toast('Semua kartu selesai!')}
+}
+
+/* ---------- hasil ---------- */
+function renderHasil(){
+  const rows=G.names.map((nm,i)=>{
+    const st=G.stu[i],total=st.benar*10+st.kartu;
+    return {nm:nm,benar:st.benar,kartu:st.kartu,total:total,i:i};
+  });
+  const max=Math.max(1,...rows.map(r=>r.total));
+  const champ=rows.slice().sort((a,b)=>b.total-a.total)[0];
+  $('#hasilWrap').innerHTML=
+    '<div class="card" style="overflow-x:auto">'+
+    '<table class="htable"><thead><tr><th>Nama Siswa</th><th>Latihan Benar</th><th>Skor Kartu</th><th>Grafik Total</th><th>Total</th></tr></thead><tbody>'+
+    rows.map(r=>
+      '<tr><td>'+esc(r.nm)+'</td><td>'+r.benar+' soal</td><td>'+r.kartu+' poin</td>'+
+      '<td style="min-width:140px"><div class="hbar" style="width:'+Math.round(r.total/max*100)+'%"></div></td>'+
+      '<td>'+r.total+'</td></tr>'
+    ).join('')+
+    '</tbody></table></div>'+
+    (champ.total>0
+      ?'<div class="champ">Juara petualangan hari ini: '+esc(champ.nm)+' ('+champ.total+' poin)<small>Setiap jawaban latihan benar = 10 poin &bull; Kartu: mudah 10, sedang 20, sulit 30</small></div>'
+      :'<div class="champ">Belum ada poin tercatat. Ayo ke slide Permainan Kartu dan latihan!<small>Setiap jawaban latihan benar = 10 poin &bull; Kartu: mudah 10, sedang 20, sulit 30</small></div>')+
+    '<div class="btnrow" style="justify-content:center;margin-top:14px"><button class="btn btn-ghost" id="btnReset">Ulangi dari Awal</button></div>';
+  $('#btnReset').onclick=()=>{if(confirm('Ulangi seluruh petualangan dari awal? Skor akan direset.'))location.reload()};
+}
+
+/* ---------- kesimpulan & refleksi ---------- */
+function renderKes(){
+  $('#kesWrap').innerHTML=KES.map((k,i)=>
+    '<div class="card kesc" data-i="'+i+'"><span class="kn">'+(i+1)+'</span><div><h3>'+esc(k.t)+'</h3><p class="kb" hidden>'+esc(k.b)+'</p></div></div>'
+  ).join('');
+  $$('#kesWrap .kesc').forEach(el=>el.onclick=()=>{
+    const p=el.querySelector('.kb');
+    p.hidden=!p.hidden;sTick();
+  });
+}
+function faceSVG(kind){
+  let mouth='';
+  if(kind==='senang')mouth='<path d="M13 26q9 9 18 0" fill="none" stroke="#2b2d42" stroke-width="3" stroke-linecap="round"/>';
+  else if(kind==='biasa')mouth='<path d="M14 29h16" fill="none" stroke="#2b2d42" stroke-width="3" stroke-linecap="round"/>';
+  else mouth='<path d="M13 31q9 -9 18 0" fill="none" stroke="#2b2d42" stroke-width="3" stroke-linecap="round"/>';
+  return '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="#fff" stroke="#2b2d42" stroke-width="3"/><circle cx="15" cy="17" r="2.6" fill="#2b2d42"/><circle cx="29" cy="17" r="2.6" fill="#2b2d42"/>'+mouth+'</svg>';
+}
+function renderRefl(){
+  $('#reflWrap').innerHTML=REFLEKSI.map((r,i)=>{
+    if(r.faces){
+      return '<div class="card refl"><p class="qtext">'+esc(r.q)+'</p><div class="faces" data-i="'+i+'">'+
+        [['senang','Senang'],['biasa','Biasa'],['bingung','Perlu Bantuan']].map(f=>
+        '<button class="face" data-v="'+f[0]+'">'+faceSVG(f[0])+'<span>'+f[1]+'</span></button>').join('')+'</div></div>';
+    }
+    return '<div class="card refl"><p class="qtext">'+esc(r.q)+'</p><div class="chips" style="margin-top:10px">'+r.opts.map(o=>'<span class="chip">'+esc(o)+'</span>').join('')+'</div><p class="muted" style="font-weight:700;margin-top:10px">Bagikan jawabanmu dengan suara keras ya!</p></div>';
+  }).join('')+'<button class="btn btn-o big" id="reflDone">Refleksi Selesai!</button>';
+  $$('#reflWrap .faces').forEach(box=>{
+    $$('.face',box).forEach(f=>f.onclick=()=>{
+      $$('.face',box).forEach(x=>x.classList.remove('sel'));
+      f.classList.add('sel');sOK();party(18);
+    });
+  });
+  $('#reflDone').onclick=()=>{party(70);sOK();toast('Terima kasih sudah berbagi perasaanmu!');go(19)};
+}
+
+/* ---------- dekorasi & inisialisasi ---------- */
+function buildDeco(){
+  const sy=['+','−','×','÷','=','?'];
+  const cl=['teal','coral','purple','orange','blue','pink'];
+  let h='';
+  for(let i=0;i<14;i++){
+    h+='<span class="'+cl[i%cl.length]+'" style="left:'+(Math.random()*95).toFixed(1)+'%;top:'+(Math.random()*88).toFixed(1)+'%;font-size:'+(26+Math.random()*40).toFixed(0)+'px;animation-delay:'+(Math.random()*10).toFixed(1)+'s">'+sy[i%sy.length]+'</span>';
+  }
+  $('#deco').innerHTML=h;
+}
+function init(){
+  buildDeco();buildNav();
+  renderPem();renderTuj();renderKW();renderQK();renderKab();
+  renderEX('tambah','#ex-tambah');renderEX('kurang','#ex-kurang');
+  renderEX('kali','#ex-kali');renderEX('bagi','#ex-bagi');renderEX('camp','#ex-camp');
+  renderLat('tambah');renderLat('kurang');renderLat('kali');renderLat('bagi');
+  renderTant();renderBoard();renderGameOrder();renderGame();
+  renderHasil();renderKes();renderRefl();
+  updateTurnLabels();
+  $$('.acak-btn').forEach(b=>b.onclick=acakUrutan);
+  $('#btnStart').onclick=startNames;
+  [1,2,3].forEach(k=>$('#nm'+k).addEventListener('keydown',e=>{if(e.key==='Enter')startNames()}));
+  $('#btnAgain').onclick=()=>{if(confirm('Ulangi petualangan dari awal? Skor akan direset.'))location.reload()};
+  $('#btnHasil2').onclick=()=>go(16);
+  go(0);
+}
+init();
+</script>
+</body>
+</html>
