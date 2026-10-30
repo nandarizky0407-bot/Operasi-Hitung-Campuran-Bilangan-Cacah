@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Operasi Hitung — Matematika SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ DASAR ============ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --biru:#3B82F6; --biru-tua:#1D4ED8; --oranye:#F59E0B; --oranye-tua:#B45309;
+  --hijau:#10B981; --hijau-tua:#047857; --pink:#EC4899; --ungu:#8B5CF6;
+  --merah:#EF4444; --teks:#1E293B; --krem:#FFF7E0; --langit:#E0F2FF;
+  --kartu:#FFFFFF; --bayang:6px 6px 0 rgba(30,41,59,.16);
+}
+html,body{height:100%}
+body{
+  font-family:'Nunito','Comic Sans MS','Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#1e3a5f 0%,#2d4a7a 45%,#1e3a5f 100%);
+  color:var(--teks); overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+#stage{
+  width:1280px;height:720px; position:relative; transform-origin:center center;
+  background:linear-gradient(135deg,var(--krem) 0%,#FFFDF4 40%,var(--langit) 100%);
+  border-radius:18px; overflow:hidden;
+  box-shadow:0 0 0 4px rgba(255,255,255,.25), 0 24px 60px rgba(0,0,0,.45);
+}
+/* titik-titik pola latar */
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(30,41,59,.055) 2.2px,transparent 2.2px);
+  background-size:34px 34px; z-index:0;}
+h1,h2,h3,.font-judul{font-family:'Baloo 2','Comic Sans MS',cursive}
+/* ============ PROGRESS & TOPBAR ============ */
+#progressWrap{position:absolute;top:0;left:0;right:0;height:10px;background:rgba(30,41,59,.08);z-index:60}
+#progressBar{height:100%;width:0;background:linear-gradient(90deg,var(--biru),var(--oranye),var(--pink));transition:width .45s cubic-bezier(.22,1,.36,1);border-radius:0 8px 8px 0}
+#topbar{position:absolute;top:10px;left:0;right:0;height:52px;display:flex;align-items:center;gap:14px;
+  padding:0 22px;z-index:55}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Baloo 2';font-weight:800;font-size:19px;
+  background:#fff;border:3px solid var(--teks);border-radius:999px;padding:4px 16px;box-shadow:4px 4px 0 rgba(30,41,59,.14)}
+.brand .logo{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--biru),var(--ungu));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800}
+#slideCounter{margin-left:auto;background:#fff;border:3px solid var(--teks);border-radius:999px;
+  padding:5px 15px;font-weight:900;font-size:15px;box-shadow:4px 4px 0 rgba(30,41,59,.14)}
+.tbtn{width:40px;height:40px;border-radius:12px;border:3px solid var(--teks);background:#fff;font-size:18px;
+  cursor:pointer;box-shadow:3px 3px 0 rgba(30,41,59,.14);transition:transform .12s;display:flex;align-items:center;justify-content:center}
+.tbtn:hover{transform:translateY(-2px) rotate(-3deg)}
+.tbtn:active{transform:translateY(1px)}
+/* ============ DECK & SLIDE ============ */
+#deck{position:absolute;top:62px;bottom:78px;left:0;right:0;z-index:10}
+.slide{position:absolute;inset:0;padding:26px 46px 14px;display:none;flex-direction:column;overflow:hidden}
+.slide.active{display:flex;animation:masuk .55s cubic-bezier(.22,1,.36,1)}
+@keyframes masuk{from{opacity:0;transform:translateX(60px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .45s cubic-bezier(.22,1,.36,1) both}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:var(--teks);color:#fff;
+  font-weight:900;font-size:14px;letter-spacing:1.5px;padding:7px 18px;border-radius:999px;width:max-content;text-transform:uppercase}
+.kicker.biru{background:var(--biru-tua)} .kicker.oranye{background:var(--oranye-tua)}
+.kicker.hijau{background:var(--hijau-tua)} .kicker.pink{background:var(--pink)}
+.kicker.ungu{background:var(--ungu)} .kicker.merah{background:#B91C1C}
+h2.judul{font-size:40px;font-weight:800;line-height:1.12;margin:10px 0 4px}
+.sub{font-size:17.5px;font-weight:700;color:#475569;margin-bottom:12px}
+/* ============ NAV BAWAH ============ */
+#navbar{position:absolute;bottom:0;left:0;right:0;height:78px;display:flex;align-items:center;gap:16px;
+  padding:0 26px;background:rgba(255,255,255,.72);backdrop-filter:blur(6px);border-top:3px solid rgba(30,41,59,.12);z-index:60}
+.navbtn{font-family:'Baloo 2';font-weight:800;font-size:17px;padding:11px 24px;border-radius:999px;
+  border:3px solid var(--teks);cursor:pointer;box-shadow:var(--bayang);transition:transform .12s;background:#fff;display:flex;align-items:center;gap:8px}
+.navbtn:disabled{opacity:.35;cursor:not-allowed}
+.navbtn.utama{background:linear-gradient(135deg,var(--biru),var(--biru-tua));color:#fff}
+.navbtn:hover:not(:disabled){transform:translateY(-3px)}
+#dots{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center;max-width:760px}
+.dot{width:13px;height:13px;border-radius:50%;border:2.5px solid var(--teks);background:#fff;cursor:pointer;transition:all .2s}
+.dot.on{background:var(--oranye);transform:scale(1.35)}
+.dot.tandamateri{border-radius:4px}
+/* ============ KOMPONEN UMUM ============ */
+.kartu{background:var(--kartu);border:3px solid var(--teks);border-radius:22px;box-shadow:var(--bayang)}
+.btn{font-family:'Baloo 2';font-weight:800;border:3px solid var(--teks);border-radius:16px;cursor:pointer;
+  box-shadow:var(--bayang);transition:transform .12s, box-shadow .12s;font-size:19px;padding:12px 26px;background:#fff}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(30,41,59,.18)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(30,41,59,.18)}
+.btn.biru{background:var(--biru);color:#fff}.btn.hijau{background:var(--hijau);color:#fff}
+.btn.oranye{background:var(--oranye);color:#fff}.btn.pink{background:var(--pink);color:#fff}
+.btn.ungu{background:var(--ungu);color:#fff}.btn.merah{background:var(--merah);color:#fff}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:2.5px solid var(--teks);border-radius:999px;
+  padding:5px 13px;font-weight:800;font-size:14.5px;background:#fff;box-shadow:3px 3px 0 rgba(30,41,59,.12)}
+.badge{font-size:12.5px;font-weight:900;letter-spacing:.6px;padding:3px 11px;border-radius:999px;border:2.5px solid var(--teks);text-transform:uppercase}
+.badge.mudah{background:#D1FAE5;color:#065F46}
+.badge.sedang{background:#FEF3C7;color:#92400E}
+.badge.hots{background:#FCE7F3;color:#9D174D}
+/* ============ SLIDE 1: COVER ============ */
+.cover-wrap{display:flex;height:100%;gap:34px;align-items:center}
+.cover-kiri{flex:1.25;z-index:2}
+.cover-kanan{flex:1;z-index:2}
+.cover-emoji{position:absolute;font-size:44px;animation:melayang 5s ease-in-out infinite;opacity:.9;z-index:1;filter:drop-shadow(3px 3px 0 rgba(30,41,59,.15))}
+@keyframes melayang{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-18px) rotate(8deg)}}
+.cover-title{font-size:56px;font-weight:800;line-height:1.05;margin:12px 0 6px}
+.cover-title .grad{background:linear-gradient(90deg,var(--biru),var(--ungu),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover-sub{font-size:17px;font-weight:800;color:#475569;margin-bottom:14px}
+.input-nama{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+.field{display:flex;align-items:center;gap:12px;background:#fff;border:3px solid var(--teks);border-radius:16px;
+  padding:7px 14px;box-shadow:var(--bayang)}
+.field .ava{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;border:2.5px solid var(--teks)}
+.field:nth-child(1) .ava{background:#DBEAFE}.field:nth-child(2) .ava{background:#DCFCE7}.field:nth-child(3) .ava{background:#FCE7F3}
+.field input{border:none;outline:none;font-family:'Nunito';font-size:17.5px;font-weight:800;flex:1;color:var(--teks);background:transparent}
+.field input::placeholder{color:#94A3B8;font-weight:700}
+.field .label{font-size:12px;font-weight:900;color:#64748B;letter-spacing:.5px;text-transform:uppercase}
+.btn-start{font-size:21px;padding:13px 30px;border-radius:18px}
+.hint{font-size:13.5px;font-weight:700;color:#64748B;margin-top:8px}
+.kotak-siswa{padding:26px 28px;text-align:center}
+.kotak-siswa .angka{font-family:'Baloo 2';font-size:40px;font-weight:800}
+.kotak-siswa .ket{font-weight:800;color:#475569;font-size:15.5px}
+.kotak-siswa .mini{display:flex;justify-content:center;gap:8px;margin-top:14px;font-size:30px}
+/* ============ SLIDE 2: APERSEPSI (FLIP) ============ */
+.flip{perspective:1000px;height:100%;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,1.4,.6,1);transform-style:preserve-3d}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;border:3px solid var(--teks);border-radius:22px;
+  box-shadow:var(--bayang);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+.flip-depan{background:#fff}
+.flip-belakang{transform:rotateY(180deg);color:#fff}
+.flip-emoji{font-size:52px}
+.flip-title{font-family:'Baloo 2';font-weight:800;font-size:20px}
+.flip-story{font-size:15.5px;font-weight:700;line-height:1.45}
+.flip-op{font-family:'Baloo 2';font-size:19px;font-weight:800;background:rgba(255,255,255,.25);border-radius:12px;padding:8px 12px}
+.flip-hint{font-size:12.5px;font-weight:800;opacity:.75;margin-top:auto}
+/* ============ SLIDE 3: TUJUAN ============ */
+.tujuan-list{display:flex;flex-direction:column;gap:9px;max-width:1080px}
+.tujuan-item{display:flex;align-items:center;gap:14px;background:#fff;border:3px solid var(--teks);
+  border-radius:16px;padding:8px 16px;box-shadow:var(--bayang)}
+.tujuan-item .no{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2';font-weight:800;font-size:20px;color:#fff;flex-shrink:0;border:3px solid var(--teks)}
+.tujuan-item p{font-size:16px;font-weight:700}
+/* ============ DEMO / STEPPER ============ */
+.demo-layout{display:flex;gap:24px;flex:1;min-height:0;align-items:stretch}
+.demo-panggung{flex:1.15;background:#fff;border:3px solid var(--teks);border-radius:24px;
+  box-shadow:var(--bayang);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;position:relative}
+.demo-panel{flex:1;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel-box{background:#fff;border:3px solid var(--teks);border-radius:20px;box-shadow:var(--bayang);padding:16px 20px}
+.panel-box h3{font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.panel-box p, .panel-box li{font-size:15.5px;font-weight:700;color:#334155;line-height:1.5}
+.panel-box ul{padding-left:20px}
+.cap-box{background:linear-gradient(135deg,#FEF3C7,#FFFBEB);min-height:96px;display:flex;flex-direction:column;justify-content:center}
+.cap-text{font-family:'Baloo 2';font-size:19.5px;font-weight:700;line-height:1.4}
+.cap-text.baru{animation:masukTeks .35s both}
+@keyframes masukTeks{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.cap-count{font-size:13px;font-weight:900;color:#92400E;letter-spacing:1px}
+.st-controls{display:flex;gap:12px;align-items:center}
+.st-btn{font-family:'Baloo 2';font-weight:800;font-size:16.5px;border:3px solid var(--teks);border-radius:14px;
+  padding:10px 18px;cursor:pointer;box-shadow:4px 4px 0 rgba(30,41,59,.16);background:#fff;transition:transform .12s;display:flex;align-items:center;gap:8px}
+.st-btn:hover{transform:translateY(-2px)}
+.st-btn.utama{background:var(--biru);color:#fff}
+.st-btn.selesai{background:var(--hijau);color:#fff}
+/* grid angka bersusun */
+.m-grid{display:grid;gap:4px;align-items:end;justify-items:center;font-family:'Baloo 2';font-weight:800}
+.m-cell{width:100%;text-align:center;font-size:52px;line-height:1.15;position:relative;transition:all .3s}
+.m-cell.tanda{font-size:44px;color:#64748B}
+.m-cell.garis-bawah{border-bottom:5px solid var(--teks)}
+.m-cell.garis-atas{border-top:5px solid var(--teks);border-radius:2px}
+.m-cell.hasil{color:var(--biru-tua)}
+.m-cell.bantu{font-size:26px;color:var(--merah);min-height:34px;opacity:0;transform:scale(.4);transition:all .35s cubic-bezier(.22,1.4,.4,1)}
+.m-cell.bantu.on{opacity:1;transform:scale(1)}
+.rv{opacity:0;transform:scale(.5);transition:all .35s cubic-bezier(.22,1.4,.4,1)}
+.rv.on{opacity:1;transform:scale(1)}
+.hi{animation:kedip 1.1s ease-in-out infinite}
+@keyframes kedip{0%,100%{background:transparent}50%{background:#FDE68A;outline:3px solid #F59E0B;outline-offset:2px;border-radius:10px}}
+.struck{text-decoration:line-through;text-decoration-color:var(--merah);text-decoration-thickness:4px;opacity:.4}
+/* porogapit */
+.pg-grid{display:grid;gap:2px;align-items:end;font-family:'Baloo 2';font-weight:800;font-size:44px;position:relative}
+.pg-cell{text-align:center;line-height:1.2}
+.pg-q{color:var(--hijau-tua);font-size:44px}
+.pg-topline{grid-row:2;height:0;border-top:5px solid var(--teks);align-self:start}
+.pg-hook{grid-row:2;height:0;border-top:5px solid var(--teks);border-right:5px solid var(--teks);border-top-right-radius:10px;align-self:start;width:70%}
+.pg-line{height:0;border-top:3.5px solid rgba(30,41,59,.55);align-self:center}
+.pg-sub{color:#B91C1C;font-size:38px}
+.pg-rem{color:#64748B;font-size:40px}
+.pg-drop{color:var(--biru-tua)}
+.pg-drop .panah{font-size:22px;color:var(--biru);vertical-align:super;margin-right:2px}
+.pg-final{color:var(--hijau-tua);font-size:46px}
+.pg-sisa{font-size:15px;color:#92400E;font-weight:900;align-self:center;justify-self:start;padding-left:8px}
+/* tabs demo */
+.tabrow{display:flex;gap:10px;margin-bottom:10px}
+.tab{font-family:'Baloo 2';font-weight:800;font-size:16px;border:3px solid var(--teks);border-radius:12px 12px 0 0;
+  padding:8px 20px;cursor:pointer;background:#fff;box-shadow:3px 0 0 rgba(30,41,59,.1)}
+.tab.on{background:var(--ungu);color:#fff}
+.stepper.hidden{display:none}
+.hidden{display:none!important}
+/* ============ KUIS ============ */
+.quiz-wrap{flex:1;display:flex;flex-direction:column;gap:14px;min-height:0}
+.quiz-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.quiz-judul{font-family:'Baloo 2';font-size:27px;font-weight:800;display:flex;align-items:center;gap:10px}
+.giliran-chip{margin-left:auto;display:flex;align-items:center;gap:10px;border:3px solid var(--teks);border-radius:999px;
+  padding:7px 16px;font-weight:900;font-size:16.5px;box-shadow:4px 4px 0 rgba(30,41,59,.14)}
+.giliran-ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2.5px solid var(--teks);font-size:17px}
+.fase-kuis{flex:1;background:#fff;border:3px solid var(--teks);border-radius:24px;box-shadow:var(--bayang);
+  padding:20px 26px;display:flex;flex-direction:column;min-height:0;overflow:auto}
+.intro-judul{font-family:'Baloo 2';font-size:23px;font-weight:800;margin-bottom:6px}
+.siswa-row{display:flex;gap:14px;margin:12px 0 16px;flex-wrap:wrap}
+.siswa-chip{display:flex;align-items:center;gap:10px;border:3px solid var(--teks);border-radius:16px;padding:9px 18px;
+  font-weight:900;font-size:18px;box-shadow:4px 4px 0 rgba(30,41,59,.14)}
+.siswa-ava{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:2.5px solid var(--teks)}
+.petanyaan{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0 14px}
+.peta-item{border:2.5px solid var(--teks);border-radius:10px;text-align:center;font-weight:900;font-size:13.5px;padding:6px 4px;background:#fff}
+.peta-item.now{outline:3.5px solid var(--oranye);background:#FEF3C7}
+.soal-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.soal-teks{font-family:'Baloo 2';font-size:29px;font-weight:800;line-height:1.3;margin-bottom:16px}
+.ops{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opt{display:flex;align-items:center;gap:14px;border:3px solid var(--teks);border-radius:16px;padding:13px 18px;
+  font-family:'Baloo 2';font-weight:800;font-size:22px;background:#fff;cursor:pointer;box-shadow:4px 4px 0 rgba(30,41,59,.14);transition:all .15s;text-align:left}
+.opt:hover:not(:disabled){transform:translateY(-3px)}
+.opt .huruf{width:40px;height:40px;border-radius:12px;background:#E2E8F0;display:flex;align-items:center;justify-content:center;
+  font-size:19px;flex-shrink:0;border:2.5px solid var(--teks)}
+.opt.benar{background:var(--hijau);color:#fff;animation:pop .4s}
+.opt.benar .huruf{background:rgba(255,255,255,.3);color:#fff;border-color:#fff}
+.opt.salah{background:var(--merah);color:#fff;animation:goyang .45s}
+.opt.salah .huruf{background:rgba(255,255,255,.3);color:#fff;border-color:#fff}
+.opt.terbuka{background:#D1FAE5}
+.opt:disabled{cursor:default;opacity:1}
+@keyframes goyang{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pembahasan{margin-top:14px;border:3px solid var(--teks);border-radius:16px;padding:13px 18px;background:#EFF6FF;
+  font-size:16.5px;font-weight:700;line-height:1.5;display:none;animation:masukTeks .35s both}
+.pembahasan.show{display:block}
+.pembahasan b{color:var(--biru-tua)}
+.kuis-aksi{margin-top:auto;padding-top:14px;display:flex;justify-content:flex-end;gap:12px}
+.timer-bar{height:12px;border:2.5px solid var(--teks);border-radius:999px;background:#fff;overflow:hidden;flex:1;min-width:120px;max-width:260px}
+.timer-isi{height:100%;background:linear-gradient(90deg,var(--hijau),var(--oranye));width:100%;transition:width 1s linear}
+.timer-chip{cursor:pointer;user-select:none}
+/* rekap */
+.rekap-skor{font-family:'Baloo 2';font-size:58px;font-weight:800;text-align:center}
+.rekap-tabel{width:100%;border-collapse:collapse;margin:12px 0}
+.rekap-tabel th,.rekap-tabel td{border:2.5px solid var(--teks);padding:9px 14px;font-size:16.5px;font-weight:800;text-align:left}
+.rekap-tabel th{background:#FEF3C7;font-family:'Baloo 2'}
+.bar-nilai{height:14px;background:#E2E8F0;border-radius:999px;border:2px solid var(--teks);overflow:hidden;width:180px;display:inline-block;vertical-align:middle}
+.bar-isi{height:100%;background:linear-gradient(90deg,var(--hijau),#34D399)}
+/* ============ TRIK MENTAL ============ */
+.trik-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex:1;min-height:0;align-content:center}
+.trik{border:3px solid var(--teks);border-radius:18px;background:#fff;box-shadow:var(--bayang);overflow:hidden;display:flex;flex-direction:column}
+.trik-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;font-family:'Baloo 2';font-weight:800;font-size:16.5px;user-select:none}
+.trik-head .em{font-size:26px}
+.trik-body{display:none;padding:0 14px 13px;font-size:14.5px;font-weight:700;color:#334155;line-height:1.5;border-top:2.5px dashed rgba(30,41,59,.2)}
+.trik.open .trik-body{display:block;animation:masukTeks .3s both}
+.trik.open{background:#FFFBEB}
+.trik-body .rumus{font-family:'Baloo 2';background:#DBEAFE;border:2.5px solid var(--teks);border-radius:10px;padding:6px 10px;margin:8px 0;display:block;font-size:16px}
+/* ============ CAMPURAN ============ */
+.tangga{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.tangga-step{display:flex;align-items:center;gap:10px;border:3px solid var(--teks);border-radius:14px;padding:7px 12px;
+  font-weight:800;box-shadow:var(--bayang);background:#fff}
+.tangga-step .lvl{width:32px;height:32px;border-radius:10px;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';font-size:17px;border:2.5px solid var(--teks);flex-shrink:0}
+.tangga-step p{font-size:14px;line-height:1.3}
+.ekspresi{font-family:'Baloo 2';font-size:24px;font-weight:800;padding:5px 12px;border-radius:12px;border:3px solid var(--teks);
+  background:#fff;box-shadow:3px 3px 0 rgba(30,41,59,.12);width:max-content}
+.ekspresi .aksen{color:var(--merah)}
+.vs-box{display:flex;gap:10px}
+.vs-item{flex:1;border:3px solid var(--teks);border-radius:14px;padding:7px;text-align:center;font-family:'Baloo 2';font-weight:800;font-size:15px;box-shadow:3px 3px 0 rgba(30,41,59,.12)}
+/* ============ ULAR TANGGA / PENUTUP ============ */
+.game-kartu{max-width:860px;margin:auto;text-align:center;padding:38px 44px}
+.game-kartu .emoji-row{font-size:58px;display:flex;justify-content:center;gap:18px;margin-bottom:10px}
+.game-link{display:inline-flex;align-items:center;gap:14px;text-decoration:none;font-family:'Baloo 2';font-weight:800;
+  font-size:25px;color:#fff;background:linear-gradient(135deg,var(--pink),var(--ungu));border:3px solid var(--teks);
+  border-radius:20px;padding:18px 40px;box-shadow:var(--bayang);transition:transform .15s;margin-top:16px}
+.game-link:hover{transform:translateY(-4px) scale(1.03)}
+.kesimpulan-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;flex:1;align-content:center}
+.kesimpulan-item{border:3px solid var(--teks);border-radius:20px;background:#fff;box-shadow:var(--bayang);
+  padding:16px 14px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.kesimpulan-item .em{font-size:40px}
+.kesimpulan-item h3{font-size:17px}
+.kesimpulan-item p{font-size:13.5px;font-weight:700;color:#475569;line-height:1.45}
+.refleksi-wrap{display:flex;gap:24px;flex:1;min-height:0}
+.mood-row{display:flex;gap:14px;justify-content:center;margin:14px 0}
+.mood{font-size:44px;width:86px;height:86px;border-radius:22px;border:3px solid var(--teks);background:#fff;cursor:pointer;
+  box-shadow:var(--bayang);transition:all .15s;display:flex;align-items:center;justify-content:center}
+.mood:hover{transform:translateY(-5px) rotate(-4deg)}
+.mood.on{background:#FDE68A;outline:4px solid var(--oranye)}
+.bintang{font-size:40px;cursor:pointer;filter:grayscale(1);transition:all .15s;display:inline-block}
+.bintang.on{filter:none;transform:scale(1.18)}
+.thanks-wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
+.thanks-title{font-size:72px;font-weight:800;background:linear-gradient(90deg,var(--pink),var(--ungu),var(--biru));-webkit-background-clip:text;background-clip:text;color:transparent}
+.thanks-nama{font-family:'Baloo 2';font-size:25px;font-weight:800}
+/* ============ MENU OVERLAY & TOAST & KONFETI ============ */
+#menuOverlay{position:absolute;inset:0;background:rgba(15,23,42,.72);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#menuOverlay.show{display:flex}
+.menu-box{background:var(--krem);border:4px solid var(--teks);border-radius:26px;padding:26px 30px;width:660px;max-height:82%;overflow:auto;box-shadow:10px 10px 0 rgba(0,0,0,.3)}
+.menu-box h3{font-size:24px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.menu-item{display:flex;align-items:center;gap:10px;border:2.5px solid var(--teks);border-radius:12px;padding:9px 12px;
+  background:#fff;cursor:pointer;font-weight:800;font-size:14.5px;text-align:left;font-family:'Nunito';transition:all .12s}
+.menu-item:hover{background:#FEF3C7;transform:translateX(3px)}
+.menu-item .mn{width:26px;height:26px;border-radius:8px;background:var(--teks);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Baloo 2';flex-shrink:0}
+#toast{position:absolute;bottom:92px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--teks);color:#fff;
+  padding:12px 26px;border-radius:999px;font-weight:800;font-size:16px;z-index:300;opacity:0;pointer-events:none;transition:all .35s}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.cf{position:fixed;top:-24px;z-index:500;pointer-events:none;animation:jatuh linear forwards}
+@keyframes jatuh{to{transform:translateY(110vh) rotate(720deg)}}
+.dice-anim{display:inline-block;animation:putar .5s ease}
+@keyframes putar{0%{transform:rotate(0) scale(1)}50%{transform:rotate(200deg) scale(1.4)}100%{transform:rotate(360deg) scale(1)}}
+@media print{#navbar,#topbar,#progressWrap{display:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="progressWrap"><div id="progressBar"></div></div>
+  <div id="topbar">
+    <div class="brand"><span class="logo">÷</span> Operasi Hitung <span style="font-size:13px;color:#64748B">• Kelas 6 SD</span></div>
+    <div id="slideCounter">1 / 21</div>
+    <button class="tbtn" id="soundBtn" title="Suara nyala/mati">🔊</button>
+    <button class="tbtn" id="fsBtn" title="Layar penuh">🖥️</button>
+    <button class="tbtn" id="menuBtn" title="Menu daftar slide">☰</button>
+  </div>
+  <main id="deck">
+<!-- ============ SLIDE 1: COVER ============ -->
+<section class="slide" data-title="🏠 Cover & Nama Siswa">
+  <span class="cover-emoji" style="top:6%;left:3%;font-size:34px">➕</span>
+  <span class="cover-emoji" style="top:16%;right:5%;animation-delay:.8s">✖️</span>
+  <span class="cover-emoji" style="bottom:9%;left:4%;animation-delay:1.6s">➗</span>
+  <span class="cover-emoji" style="bottom:14%;right:3%;animation-delay:2.2s;font-size:36px">➖</span>
+  <span class="cover-emoji" style="top:45%;left:2%;animation-delay:1.1s;font-size:34px">🎲</span>
+  <span class="cover-emoji" style="top:55%;right:4%;animation-delay:2.8s;font-size:34px">🐍</span>
+  <div class="cover-wrap">
+    <div class="cover-kiri">
+      <span class="kicker oranye">📚 Matematika • Kelas 6 SD • Bilangan Cacah</span>
+      <h1 class="cover-title font-judul">Petualangan<br><span class="grad">Operasi Hitung</span> 🚀</h1>
+      <p class="cover-sub">Penjumlahan • Pengurangan • Perkalian • Pembagian • Porogapit • Trik Mental • Hitung Campuran</p>
+      <div class="input-nama">
+        <div class="field"><div class="ava">🧑‍🎓</div><div style="flex:1"><div class="label">Siswa 1</div><input id="nama1" placeholder="Tulis nama siswa 1..." maxlength="18"></div></div>
+        <div class="field"><div class="ava">👧</div><div style="flex:1"><div class="label">Siswa 2</div><input id="nama2" placeholder="Tulis nama siswa 2..." maxlength="18"></div></div>
+        <div class="field"><div class="ava">👦</div><div style="flex:1"><div class="label">Siswa 3</div><input id="nama3" placeholder="Tulis nama siswa 3..." maxlength="18"></div></div>
+      </div>
+      <button class="btn oranye btn-start" id="btnMulai">🚀 Mulai Petualangan!</button>
+      <p class="hint">💡 Nama kalian akan dipakai untuk <b>giliran menjawab</b> di setiap latihan!</p>
+    </div>
+    <div class="cover-kanan kartu kotak-siswa">
+      <div class="angka">＋ －</div>
+      <div class="angka" style="color:var(--pink)">× ÷</div>
+      <div class="ket">4 operasi • 6 latihan • <b>60 soal</b><br>1 game ular tangga 🐍</div>
+      <div class="mini">🧠 ⚡ 🏆 🎯</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: APERSEPSI ============ -->
+<section class="slide" data-title="🔎 Apersepsi: Matematika di Sekitar Kita">
+  <span class="kicker biru">Apersepsi</span>
+  <h2 class="judul">Matematika Ada di Sekitar Kita! 🌍</h2>
+  <p class="sub">Setiap hari kita tanpa sadar memakai operasi hitung. <b>Klik kartu</b> untuk menemukan operasinya!</p>
+  <div class="grid4" style="flex:1;align-content:center">
+    <div class="flip" id="flip1">
+      <div class="flip-inner">
+        <div class="flip-face flip-depan"><div class="flip-emoji">🛒</div><div class="flip-title">Belanja di Pasar</div>
+          <p class="flip-story">Bu Ani membeli sayur seharga <b>Rp12.500</b> dan buah <b>Rp8.750</b>. Berapa yang harus dibayar?</p>
+          <div class="flip-hint">👆 Klik untuk jawaban</div></div>
+        <div class="flip-face flip-belakang" style="background:var(--biru)"><div class="flip-emoji">➕</div>
+          <div class="flip-title">Penjumlahan!</div><div class="flip-op">12.500 + 8.750 = <b>Rp21.250</b></div>
+          <p class="flip-story">Menggabungkan dua harga menjadi total belanja.</p></div>
+      </div>
+    </div>
+    <div class="flip" id="flip2">
+      <div class="flip-inner">
+        <div class="flip-face flip-depan"><div class="flip-emoji">🍕</div><div class="flip-title">Membagi Pizza</div>
+          <p class="flip-story">Pizza dipotong <b>8 bagian</b>, dibagi rata ke <b>4 anak</b>. Tiap anak dapat berapa?</p>
+          <div class="flip-hint">👆 Klik untuk jawaban</div></div>
+        <div class="flip-face flip-belakang" style="background:var(--hijau)"><div class="flip-emoji">➗</div>
+          <div class="flip-title">Pembagian!</div><div class="flip-op">8 ÷ 4 = <b>2 potong</b></div>
+          <p class="flip-story">Membagi rata ke dalam kelompok yang sama besar.</p></div>
+      </div>
+    </div>
+    <div class="flip" id="flip3">
+      <div class="flip-inner">
+        <div class="flip-face flip-depan"><div class="flip-emoji">📚</div><div class="flip-title">Rak Perpustakaan</div>
+          <p class="flip-story">Ada <b>6 rak</b> buku, setiap rak berisi <b>25 buku</b>. Berapa semua bukunya?</p>
+          <div class="flip-hint">👆 Klik untuk jawaban</div></div>
+        <div class="flip-face flip-belakang" style="background:var(--pink)"><div class="flip-emoji">✖️</div>
+          <div class="flip-title">Perkalian!</div><div class="flip-op">6 × 25 = <b>150 buku</b></div>
+          <p class="flip-story">Penjumlahan yang berulang-ulang jadi lebih cepat!</p></div>
+      </div>
+    </div>
+    <div class="flip" id="flip4">
+      <div class="flip-inner">
+        <div class="flip-face flip-depan"><div class="flip-emoji">🎧</div><div class="flip-title">Menabung</div>
+          <p class="flip-story">Uang Rina <b>Rp50.000</b>, terpakai <b>Rp27.500</b> untuk membeli headphone. Sisanya?</p>
+          <div class="flip-hint">👆 Klik untuk jawaban</div></div>
+        <div class="flip-face flip-belakang" style="background:var(--ungu)"><div class="flip-emoji">➖</div>
+          <div class="flip-title">Pengurangan!</div><div class="flip-op">50.000 − 27.500 = <b>Rp22.500</b></div>
+          <p class="flip-story">Mengambil sebagian, mencari sisa atau selisih.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="kartu" style="margin-top:16px;padding:13px 22px;background:linear-gradient(135deg,#FEF3C7,#FFFBEB);align-self:center">
+    <p style="font-weight:900;font-size:17px;text-align:center">💬 <b>Belanja, berbagi, menghitung, menabung…</b> semuanya butuh operasi hitung. Hari ini kita akan menguasainya sampai tuntas! 💪</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: TUJUAN ============ -->
+<section class="slide" data-title="🎯 Tujuan Pembelajaran">
+  <span class="kicker hijau">Tujuan Pembelajaran</span>
+  <h2 class="judul" style="font-size:33px">Setelah Pelajaran Ini, Kalian Bisa… 🎯</h2>
+  <div class="tujuan-list" style="flex:1;justify-content:center">
+    <div class="tujuan-item"><div class="no" style="background:var(--biru)">1</div>
+      <p>Menjelaskan <b>konsep</b> penjumlahan, pengurangan, perkalian, dan pembagian beserta istilahnya.</p></div>
+    <div class="tujuan-item"><div class="no" style="background:var(--oranye)">2</div>
+      <p>Melakukan <b>penjumlahan & pengurangan bersusun</b> dengan teknik <b>menyimpan</b> dan <b>meminjam</b> hingga ratusan ribu.</p></div>
+    <div class="tujuan-item"><div class="no" style="background:var(--pink)">3</div>
+      <p>Melakukan <b>perkalian bersusun</b>: puluhan × satuan dan puluhan × puluhan dengan langkah yang runtut.</p></div>
+    <div class="tujuan-item"><div class="no" style="background:var(--ungu)">4</div>
+      <p>Melakukan <b>pembagian bersusun (porogapit)</b> bilangan ratusan sampai ribuan terhadap bilangan satuan.</p></div>
+    <div class="tujuan-item"><div class="no" style="background:var(--hijau)">5</div>
+      <p>Menggunakan <b>trik perhitungan mental</b> dan menentukan <b>urutan operasi hitung campuran</b> dengan tepat.</p></div>
+    <div class="tujuan-item"><div class="no" style="background:var(--merah)">⭐</div>
+      <p>Menyelesaikan soal <b>mudah sampai HOTS</b> dengan percaya diri, lalu bermain <b>ular tangga</b>! 🐍</p></div>
+  </div>
+</section>
+<!-- ============ SLIDE 4: KONSEP DASAR ============ -->
+<section class="slide" data-title="🧠 Konsep Dasar Operasi Hitung">
+  <span class="kicker ungu">Materi 0</span>
+  <h2 class="judul" style="font-size:34px">Apa Itu Operasi Hitung? 🤔</h2>
+  <p class="sub">Operasi hitung = cara mengolah bilangan. <b>Klik kartu</b> untuk mempelajari setiap operasi!</p>
+  <div class="grid4" style="margin-bottom:14px">
+    <button class="btn" data-op="0" style="font-size:20px">➕ Penjumlahan</button>
+    <button class="btn" data-op="1" style="font-size:20px">➖ Pengurangan</button>
+    <button class="btn" data-op="2" style="font-size:20px">✖️ Perkalian</button>
+    <button class="btn" data-op="3" style="font-size:20px">➗ Pembagian</button>
+  </div>
+  <div class="kartu" id="opDetail" style="flex:1;padding:20px 28px;display:flex;gap:26px;align-items:center"></div>
+</section>
+
+<!-- ============ SLIDE 5: PENJUMLAHAN BERSUSUN ============ -->
+<section class="slide" data-title="➕ Penjumlahan Bersusun">
+  <div class="quiz-head">
+    <span class="kicker biru">Materi 1 • Bersusun</span>
+    <span class="quiz-judul">Penjumlahan Bersusun 48.756 + 27.489</span>
+    <span class="chip" style="margin-left:auto">🔑 Kunci: <b>&nbsp;satuan di bawah satuan!</b></span>
+  </div>
+  <div class="demo-layout" style="margin-top:12px">
+    <div class="demo-panggung">
+      <div class="m-grid" style="grid-template-columns:46px repeat(5,84px)">
+        <div></div><div class="m-cell bantu rv" id="jc1">1</div><div class="m-cell bantu rv" id="jc2">1</div><div class="m-cell bantu rv" id="jc3">1</div><div class="m-cell bantu rv" id="jc4">1</div><div></div>
+        <div></div><div class="m-cell" id="ja1">4</div><div class="m-cell" id="ja2">8</div><div class="m-cell" id="ja3">7</div><div class="m-cell" id="ja4">5</div><div class="m-cell" id="ja5">6</div>
+        <div class="m-cell tanda">+</div><div class="m-cell" id="jb1">2</div><div class="m-cell" id="jb2">7</div><div class="m-cell" id="jb3">4</div><div class="m-cell" id="jb4">8</div><div class="m-cell" id="jb5">9</div>
+        <div style="grid-column:1/7;height:0;border-bottom:5px solid var(--teks)"></div>
+        <div></div><div class="m-cell hasil rv" id="jr1">7</div><div class="m-cell hasil rv" id="jr2">6</div><div class="m-cell hasil rv" id="jr3">2</div><div class="m-cell hasil rv" id="jr4">4</div><div class="m-cell hasil rv" id="jr5">5</div>
+      </div>
+      <div style="margin-top:10px;font-weight:900;color:#64748B;font-size:14px">angka <b style="color:var(--merah)">merah kecil</b> = simpanan (carry)</div>
+    </div>
+    <div class="demo-panel">
+      <div class="panel-box cap-box">
+        <div class="cap-count" id="jumlahCnt"></div>
+        <div class="cap-text" id="jumlahCap"></div>
+      </div>
+      <div class="panel-box">
+        <h3>📝 Aturan Penjumlahan Bersusun</h3>
+        <ul>
+          <li>Susun sejajar: <b>satuan–puluhan–ratusan–ribuan…</b></li>
+          <li>Jumlahkan <b>dari satuan dulu</b>, bergerak ke kiri.</li>
+          <li>Jika hasil ≥ 10 → <b>tulis sisanya, simpan 1</b> ke kolom kiri.</li>
+          <li>Jangan lupa tambahkan simpanan di kolom berikutnya!</li>
+        </ul>
+      </div>
+      <div class="st-controls">
+        <button class="st-btn" data-st-reset="jumlah">↺ Ulangi</button>
+        <button class="st-btn utama" data-st-next="jumlah">▶ Langkah berikutnya</button>
+        <button class="st-btn" data-st-finish="jumlah">⏭ Hasil akhir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: LATIHAN 1 ============ -->
+<section class="slide" data-title="✏️ Latihan 1: Penjumlahan">
+  <div class="quiz-wrap" id="quizJumlah" data-quiz="jumlah"></div>
+</section>
+
+<!-- ============ SLIDE 7: PENGURANGAN BERSUSUN ============ -->
+<section class="slide" data-title="➖ Pengurangan Bersusun">
+  <div class="quiz-head">
+    <span class="kicker oranye">Materi 2 • Bersusun</span>
+    <span class="quiz-judul">Pengurangan Bersusun 62.315 − 28.748</span>
+    <span class="chip" style="margin-left:auto">🔑 Kunci: <b>&nbsp;tidak bisa? Pinjam 1 dari kiri!</b></span>
+  </div>
+  <div class="demo-layout" style="margin-top:12px">
+    <div class="demo-panggung">
+      <div class="m-grid" style="grid-template-columns:46px repeat(5,84px)">
+        <div></div><div class="m-cell bantu rv" id="kc1">5</div><div class="m-cell bantu rv" id="kc2">11</div><div class="m-cell bantu rv" id="kc3">12</div><div class="m-cell bantu rv" id="kc4">10</div><div class="m-cell bantu rv" id="kc5">15</div>
+        <div></div><div class="m-cell" id="km1">6</div><div class="m-cell" id="km2">2</div><div class="m-cell" id="km3">3</div><div class="m-cell" id="km4">1</div><div class="m-cell" id="km5">5</div>
+        <div class="m-cell tanda">−</div><div class="m-cell" id="kn1">2</div><div class="m-cell" id="kn2">8</div><div class="m-cell" id="kn3">7</div><div class="m-cell" id="kn4">4</div><div class="m-cell" id="kn5">8</div>
+        <div style="grid-column:1/7;height:0;border-bottom:5px solid var(--teks)"></div>
+        <div></div><div class="m-cell hasil rv" id="kr1">3</div><div class="m-cell hasil rv" id="kr2">3</div><div class="m-cell hasil rv" id="kr3">5</div><div class="m-cell hasil rv" id="kr4">6</div><div class="m-cell hasil rv" id="kr5">7</div>
+      </div>
+      <div style="margin-top:10px;font-weight:900;color:#64748B;font-size:14px">angka <b style="color:var(--merah)">merah kecil</b> = hasil setelah dipinjam</div>
+    </div>
+    <div class="demo-panel">
+      <div class="panel-box cap-box">
+        <div class="cap-count" id="kurangCnt"></div>
+        <div class="cap-text" id="kurangCap"></div>
+      </div>
+      <div class="panel-box">
+        <h3>📝 Aturan Pengurangan Bersusun</h3>
+        <ul>
+          <li>Mulai dari <b>satuan</b>, bergerak ke kiri.</li>
+          <li>Angka atas <b>lebih kecil</b>? → <b>Pinjam 1</b> dari kolom kirinya (nilainya +10).</li>
+          <li>Kolom yang dipinjam <b>berkurang 1</b>. Kalau kolomnya 0 → pinjam berantai!</li>
+          <li>Cek jawaban: <b>hasil + pengurang = bilangan awal</b> ✓</li>
+        </ul>
+      </div>
+      <div class="st-controls">
+        <button class="st-btn" data-st-reset="kurang">↺ Ulangi</button>
+        <button class="st-btn utama" data-st-next="kurang">▶ Langkah berikutnya</button>
+        <button class="st-btn" data-st-finish="kurang">⏭ Hasil akhir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8: LATIHAN 2 ============ -->
+<section class="slide" data-title="✏️ Latihan 2: Pengurangan">
+  <div class="quiz-wrap" id="quizKurang" data-quiz="kurang"></div>
+</section>
+<!-- ============ SLIDE 9: PERKALIAN 1 ============ -->
+<section class="slide" data-title="✖️ Perkalian Bersusun 1 (Puluhan × Satuan)">
+  <div class="quiz-head">
+    <span class="kicker pink">Materi 3a • Perkalian</span>
+    <span class="quiz-judul">Puluhan × Satuan: 47 × 8</span>
+    <span class="chip" style="margin-left:auto">💡 Perkalian = penjumlahan berulang: 47+47+47+47+47+47+47+47</span>
+  </div>
+  <div data-stepper="kali1" style="flex:1;display:flex;min-height:0">
+  <div class="demo-layout" style="margin-top:12px">
+    <div class="demo-panggung">
+      <div class="m-grid" style="grid-template-columns:46px repeat(3,92px)">
+        <div></div><div></div><div class="m-cell bantu rv" id="k1c3">5</div><div></div>
+        <div></div><div></div><div class="m-cell" id="k1a3">4</div><div class="m-cell" id="k1a4">7</div>
+        <div class="m-cell tanda">×</div><div></div><div></div><div class="m-cell" id="k1b4">8</div>
+        <div style="grid-column:1/5;height:0;border-bottom:5px solid var(--teks)"></div>
+        <div></div><div class="m-cell hasil rv" id="k1r2">3</div><div class="m-cell hasil rv" id="k1r3">7</div><div class="m-cell hasil rv" id="k1r4">6</div>
+      </div>
+    </div>
+    <div class="demo-panel">
+      <div class="panel-box cap-box">
+        <div class="cap-count" id="kali1Cnt"></div>
+        <div class="cap-text" id="kali1Cap"></div>
+      </div>
+      <div class="panel-box">
+        <h3>📝 Langkah Puluhan × Satuan</h3>
+        <ul>
+          <li>Kalikan <b>satuan atas × satuan bawah</b> dulu.</li>
+          <li>Hasilnya ≥ 10? → <b>tulis angka satuan, simpan puluhan</b>.</li>
+          <li>Kalikan <b>puluhan atas × satuan bawah</b>, lalu <b>tambah simpanan</b>.</li>
+          <li>Tulis seluruh hasilnya di depan.</li>
+        </ul>
+      </div>
+      <div class="st-controls">
+        <button class="st-btn" data-st-reset="kali1">↺ Ulangi</button>
+        <button class="st-btn utama" data-st-next="kali1">▶ Langkah berikutnya</button>
+        <button class="st-btn" data-st-finish="kali1">⏭ Hasil akhir</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10: PERKALIAN 2 ============ -->
+<section class="slide" data-title="✖️ Perkalian Bersusun 2 (Puluhan × Puluhan)">
+  <div class="quiz-head">
+    <span class="kicker pink">Materi 3b • Perkalian</span>
+    <span class="quiz-judul">Puluhan × Puluhan: 47 × 63</span>
+    <span class="chip" style="margin-left:auto">🔑 Pecah 63 = <b>&nbsp;3 + 60</b>, kalikan dua kali lalu jumlahkan!</span>
+  </div>
+  <div data-stepper="kali2" style="flex:1;display:flex;min-height:0">
+  <div class="demo-layout" style="margin-top:12px">
+    <div class="demo-panggung">
+      <div class="m-grid" style="grid-template-columns:46px repeat(4,86px)">
+        <div></div><div></div><div class="m-cell bantu rv" id="k2c3">4</div><div class="m-cell bantu rv" id="k2c4">2</div><div></div>
+        <div></div><div></div><div></div><div class="m-cell" id="k2a4">4</div><div class="m-cell" id="k2a5">7</div>
+        <div class="m-cell tanda">×</div><div></div><div></div><div class="m-cell" id="k2b4">6</div><div class="m-cell" id="k2b5">3</div>
+        <div style="grid-column:1/6;height:0;border-bottom:5px solid var(--teks)"></div>
+        <div></div><div></div><div class="m-cell rv" id="k2p3">1</div><div class="m-cell rv" id="k2p4">4</div><div class="m-cell rv" id="k2p5">1</div>
+        <div></div><div class="m-cell rv" id="k2q2">2</div><div class="m-cell rv" id="k2q3">8</div><div class="m-cell rv" id="k2q4">2</div><div class="m-cell rv" id="k2q5" style="color:#94A3B8">0</div>
+        <div style="grid-column:1/6;height:0;border-bottom:5px solid var(--teks)"></div>
+        <div></div><div class="m-cell hasil rv" id="k2r2">2</div><div class="m-cell hasil rv" id="k2r3">9</div><div class="m-cell hasil rv" id="k2r4">6</div><div class="m-cell hasil rv" id="k2r5">1</div>
+      </div>
+      <div style="margin-top:6px;font-weight:900;color:#64748B;font-size:13.5px">baris 1 = 47 × 3 = <b>141</b> • baris 2 = 47 × 60 = <b>2.820</b> (angka 0 = hasil digeser)</div>
+    </div>
+    <div class="demo-panel">
+      <div class="panel-box cap-box">
+        <div class="cap-count" id="kali2Cnt"></div>
+        <div class="cap-text" id="kali2Cap"></div>
+      </div>
+      <div class="panel-box">
+        <h3>📝 Langkah Puluhan × Puluhan</h3>
+        <ul>
+          <li><b>Pecah</b> bilangan bawah: 63 = 3 + 60.</li>
+          <li>Kalikan dengan <b>satuan</b> (3) → baris pertama.</li>
+          <li>Kalikan dengan <b>puluhan</b> (60) → baris kedua, <b>digeser satu tempat ke kiri</b>.</li>
+          <li><b>Jumlahkan</b> kedua baris dengan penjumlahan bersusun.</li>
+        </ul>
+      </div>
+      <div class="st-controls">
+        <button class="st-btn" data-st-reset="kali2">↺ Ulangi</button>
+        <button class="st-btn utama" data-st-next="kali2">▶ Langkah berikutnya</button>
+        <button class="st-btn" data-st-finish="kali2">⏭ Hasil akhir</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11: LATIHAN 3 ============ -->
+<section class="slide" data-title="✏️ Latihan 3: Perkalian">
+  <div class="quiz-wrap" id="quizKali" data-quiz="kali"></div>
+</section>
+
+<!-- ============ SLIDE 12: POROGAPIT ============ -->
+<section class="slide" data-title="➗ Pembagian Bersusun (Porogapit)">
+  <div class="quiz-head">
+    <span class="kicker ungu">Materi 4 • Porogapit</span>
+    <div class="chip" style="margin-left:auto;background:#EDE9FE">🧠 Jembatan keledai: <b>&nbsp;Ba</b>gi → <b>Ka</b>likan → <b>Ku</b>rankan → <b>Tu</b>runkan!</div>
+  </div>
+  <div class="tabrow" style="margin-top:10px">
+    <button class="tab on" data-tab="bagi1">🔢 Contoh Ratusan: 856 ÷ 4</button>
+    <button class="tab" data-tab="bagi2">🔢 Contoh Ribuan: 6.348 ÷ 7</button>
+  </div>
+  <div data-stepper="bagi1" style="flex:1;display:flex;min-height:0">
+    <div class="demo-layout">
+      <div class="demo-panggung" style="flex:1.3">
+        <div class="pg-grid" style="grid-template-columns:64px 30px repeat(3,84px) 26px">
+          <div class="pg-cell pg-q rv" id="bq1" style="grid-area:1/3">2</div>
+          <div class="pg-cell pg-q rv" id="bq2" style="grid-area:1/4">1</div>
+          <div class="pg-cell pg-q rv" id="bq3" style="grid-area:1/5">4</div>
+          <div class="pg-cell" style="grid-area:2/1;font-size:40px;color:#64748B">4</div>
+          <div class="pg-cell" style="grid-area:2/2;font-size:40px">)</div>
+          <div class="pg-cell" style="grid-area:2/3;border-top:5px solid var(--teks)" id="bd1">8</div>
+          <div class="pg-cell" style="grid-area:2/4;border-top:5px solid var(--teks)" id="bd2">5</div>
+          <div class="pg-cell" style="grid-area:2/5;border-top:5px solid var(--teks)" id="bd3">6</div>
+          <div class="pg-hook" style="grid-area:2/6"></div>
+          <div class="pg-cell pg-sub rv" id="b1s1" style="grid-area:3/3">− 8</div>
+          <div class="pg-line rv" id="b1l1" style="grid-area:4/3;grid-column:3/4"></div>
+          <div class="pg-cell pg-rem rv" id="b1r1" style="grid-area:5/3">0</div>
+          <div class="pg-cell pg-drop rv" id="b1d2" style="grid-area:5/4"><span class="panah">↘</span>5</div>
+          <div class="pg-cell pg-sub rv" id="b1s2" style="grid-area:6/4">− 4</div>
+          <div class="pg-line rv" id="b1l2" style="grid-area:7/4;grid-column:4/5"></div>
+          <div class="pg-cell pg-rem rv" id="b1r2" style="grid-area:8/4">1</div>
+          <div class="pg-cell pg-drop rv" id="b1d3" style="grid-area:8/5"><span class="panah">↘</span>6</div>
+          <div class="pg-cell pg-sub rv" id="b1s3a" style="grid-area:9/4">− 1</div>
+          <div class="pg-cell pg-sub rv" id="b1s3b" style="grid-area:9/5">6</div>
+          <div class="pg-line rv" id="b1l3" style="grid-area:10/4;grid-column:4/6"></div>
+          <div class="pg-cell pg-final rv" id="b1f" style="grid-area:11/5">0</div>
+        </div>
+      </div>
+      <div class="demo-panel" style="flex:1">
+        <div class="panel-box cap-box">
+          <div class="cap-count" id="bagi1Cnt"></div>
+          <div class="cap-text" id="bagi1Cap"></div>
+        </div>
+        <div class="panel-box">
+          <h3>📝 Chant Porogapit</h3>
+          <p><b>① Bagi</b> → tulis di kuota • <b>② Kalikan</b> → kebalikan dari bagi<br>
+          <b>③ Kurangkan</b> → cari sisa • <b>④ Turunkan</b> → angka berikutnya<br>
+          Ulangi sampai semua angka diturunkan. <b>Sisa 0 = habis dibagi!</b></p>
+        </div>
+        <div class="st-controls">
+          <button class="st-btn" data-st-reset="bagi1">↺ Ulangi</button>
+          <button class="st-btn utama" data-st-next="bagi1">▶ Langkah berikutnya</button>
+          <button class="st-btn" data-st-finish="bagi1">⏭ Hasil akhir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-stepper="bagi2" class="hidden" style="flex:1;display:flex;min-height:0">
+    <div class="demo-layout">
+      <div class="demo-panggung" style="flex:1.3">
+        <div class="pg-grid" style="grid-template-columns:64px 30px repeat(4,80px) 46px">
+          <div class="pg-cell pg-q rv" id="cq1" style="grid-area:1/4">9</div>
+          <div class="pg-cell pg-q rv" id="cq2" style="grid-area:1/5">0</div>
+          <div class="pg-cell pg-q rv" id="cq3" style="grid-area:1/6">6</div>
+          <div class="pg-cell" style="grid-area:2/1;font-size:40px;color:#64748B">7</div>
+          <div class="pg-cell" style="grid-area:2/2;font-size:40px">)</div>
+          <div class="pg-cell" style="grid-area:2/3;border-top:5px solid var(--teks)" id="cd1">6</div>
+          <div class="pg-cell" style="grid-area:2/4;border-top:5px solid var(--teks)" id="cd2">3</div>
+          <div class="pg-cell" style="grid-area:2/5;border-top:5px solid var(--teks)" id="cd3">4</div>
+          <div class="pg-cell" style="grid-area:2/6;border-top:5px solid var(--teks)" id="cd4">8</div>
+          <div class="pg-hook" style="grid-area:2/7"></div>
+          <div class="pg-cell pg-sub rv" id="b2s1a" style="grid-area:3/3">− 6</div>
+          <div class="pg-cell pg-sub rv" id="b2s1b" style="grid-area:3/4">3</div>
+          <div class="pg-line rv" id="b2l1" style="grid-area:4/3;grid-column:3/5"></div>
+          <div class="pg-cell pg-rem rv" id="b2r1" style="grid-area:5/4">0</div>
+          <div class="pg-cell pg-drop rv" id="b2d3" style="grid-area:5/5"><span class="panah">↘</span>4</div>
+          <div class="pg-cell pg-sub rv" id="b2s2" style="grid-area:6/5">− 0</div>
+          <div class="pg-line rv" id="b2l2" style="grid-area:7/5;grid-column:5/6"></div>
+          <div class="pg-cell pg-rem rv" id="b2r2" style="grid-area:8/5">4</div>
+          <div class="pg-cell pg-drop rv" id="b2d4" style="grid-area:8/6"><span class="panah">↘</span>8</div>
+          <div class="pg-cell pg-sub rv" id="b2s3a" style="grid-area:9/5">− 4</div>
+          <div class="pg-cell pg-sub rv" id="b2s3b" style="grid-area:9/6">2</div>
+          <div class="pg-line rv" id="b2l3" style="grid-area:10/5;grid-column:5/7"></div>
+          <div class="pg-cell pg-final rv" id="b2f" style="grid-area:11/6">6</div>
+          <div class="pg-sisa rv" id="b2sisa" style="grid-area:11/7">← sisa</div>
+        </div>
+      </div>
+      <div class="demo-panel" style="flex:1">
+        <div class="panel-box cap-box">
+          <div class="cap-count" id="bagi2Cnt"></div>
+          <div class="cap-text" id="bagi2Cap"></div>
+        </div>
+        <div class="panel-box">
+          <h3>⚠️ Kasus Istimewa</h3>
+          <p>Jika angka yang diturunkan <b>tidak cukup dibagi</b>, tetap tulis <b style="color:var(--merah)">0 di kuota</b> — jangan dilewati! Ini kesalahan paling sering terjadi. Sisa boleh ada, asal <b>sisa &lt; pembagi</b>.</p>
+        </div>
+        <div class="st-controls">
+          <button class="st-btn" data-st-reset="bagi2">↺ Ulangi</button>
+          <button class="st-btn utama" data-st-next="bagi2">▶ Langkah berikutnya</button>
+          <button class="st-btn" data-st-finish="bagi2">⏭ Hasil akhir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13: LATIHAN 4 ============ -->
+<section class="slide" data-title="✏️ Latihan 4: Pembagian">
+  <div class="quiz-wrap" id="quizBagi" data-quiz="bagi"></div>
+</section>
+<!-- ============ SLIDE 14: TRIK MENTAL ============ -->
+<section class="slide" data-title="⚡ Trik Perhitungan Mental">
+  <div class="quiz-head">
+    <span class="kicker oranye">Materi 5 • Trik Cepat</span>
+    <span class="quiz-judul">Jago Hitung Tanpa Kertas! 🧠⚡</span>
+    <span class="chip" style="margin-left:auto">👆 <b>&nbsp;Klik kartu</b> untuk membuka rahasianya</span>
+  </div>
+  <div class="trik-grid" style="margin-top:12px">
+    <div class="trik"><div class="trik-head"><span class="em">🌉</span>Jembatan 10</div>
+      <div class="trik-body">Dekatkan salah satu bilangan ke 10 (atau kelipatannya) dulu.<span class="rumus">198 + 47 = 198 + 2 + 45 = 200 + 45 = <b>245</b></span>Cocok untuk menjumlah bilangan yang hampir ratusan.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">🪜</span>Hitung Naik</div>
+      <div class="trik-body">Untuk pengurangan yang dekat, naiki "tangga" dari bilangan kecil.<span class="rumus">503 − 497 → 497 + 3 = 500, 500 + 3 = 503 → naik <b>6</b></span>Cepat tanpa meminjam sama sekali!</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">🎯</span>Kompensasi</div>
+      <div class="trik-body">Bulatkan dulu, lalu koreksi selisihnya.<span class="rumus">297 + 156 = 300 + 156 − 3 = <b>453</b></span>Kalau dibulatkan +3, hasilnya dikurangi 3.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">✋</span>Trik × 5</div>
+      <div class="trik-body">Kalikan 10 dulu, lalu bagi 2.<span class="rumus">34 × 5 = 340 ÷ 2 = <b>170</b></span>Karena 5 = 10 ÷ 2.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">🎱</span>Trik × 9</div>
+      <div class="trik-body">Kalikan 10, lalu kurangi bilangannya sekali.<span class="rumus">46 × 9 = 460 − 46 = <b>414</b></span>Karena 9 = 10 − 1.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">🚀</span>Trik × 11</div>
+      <div class="trik-body">Kalikan 10, lalu tambah bilangannya sekali.<span class="rumus">34 × 11 = 340 + 34 = <b>374</b></span>Karena 11 = 10 + 1.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">💎</span>Trik × 25</div>
+      <div class="trik-body">Kalikan 100, lalu bagi 4.<span class="rumus">24 × 25 = 2.400 ÷ 4 = <b>600</b></span>Karena 25 = 100 ÷ 4.</div></div>
+    <div class="trik"><div class="trik-head"><span class="em">✂️</span>Memecah Bilangan</div>
+      <div class="trik-body">Pecah menjadi bilangan yang mudah dibagi.<span class="rumus">156 ÷ 4 = 120÷4 + 36÷4 = 30 + 9 = <b>39</b></span>Pilih pecahan yang habis dibagi!</div></div>
+  </div>
+  <div class="kartu" style="margin-top:12px;padding:11px 20px;background:linear-gradient(135deg,#FEF3C7,#FFFBEB);align-self:center">
+    <p style="font-weight:900;font-size:15.5px;text-align:center">🔥 Rahasia master: trik mental = <b>melihat bilangan dari sudut lain</b>. Pilih trik yang paling cocok dengan bilangannya!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15: LATIHAN 5 ============ -->
+<section class="slide" data-title="✏️ Latihan 5: Trik Mental">
+  <div class="quiz-wrap" id="quizMental" data-quiz="mental"></div>
+</section>
+
+<!-- ============ SLIDE 16: HITUNG CAMPURAN ============ -->
+<section class="slide" data-title="🔢 Operasi Hitung Campuran">
+  <div class="quiz-head">
+    <span class="kicker merah">Materi 6 • Campuran</span>
+    <span class="quiz-judul">Urutan Operasi Hitung Campuran</span>
+    <span class="chip" style="margin-left:auto">⚠️ Urutan salah = hasil salah!</span>
+  </div>
+  <div class="demo-layout" style="margin-top:6px">
+    <div class="demo-panel" style="flex:1.05">
+      <div class="tangga">
+        <div class="tangga-step" style="margin-left:0;background:#FCE7F3"><div class="lvl" style="background:var(--merah)">1</div>
+          <p><b>TANDA KURUNG ( )</b><br>Kerjakan paling dulu — selalu!</p></div>
+        <div class="tangga-step" style="margin-left:34px;background:#FEF3C7"><div class="lvl" style="background:var(--oranye)">2</div>
+          <p><b>× dan ÷</b> — dari KIRI ke kanan<br>(jika ada pangkat, kerjakan di sini juga)</p></div>
+        <div class="tangga-step" style="margin-left:68px;background:#DBEAFE"><div class="lvl" style="background:var(--biru)">3</div>
+          <p><b>+ dan −</b> — dari KIRI ke kanan<br>yang paling terakhir</p></div>
+      </div>
+      <div class="vs-box" style="margin-top:4px">
+        <div class="vs-item" style="background:#ECFDF5">Tanpa kurung<br><b style="font-size:21px">5 + 3 × 4 = 17</b><br><span style="font-size:13px;color:#64748B">kali dulu: 12, lalu +5</span></div>
+        <div class="vs-item" style="background:#FFF1F2">Dengan kurung<br><b style="font-size:21px">(5 + 3) × 4 = 32</b><br><span style="font-size:13px;color:#64748B">kurung dulu: 8, lalu ×4</span></div>
+      </div>
+    </div>
+    <div data-stepper="campur" style="flex:1.2;display:flex;min-height:0">
+      <div class="demo-panel" style="flex:1">
+        <div class="panel-box" style="background:linear-gradient(135deg,#FFF1F2,#FFF7E0);padding:12px 16px">
+          <h3 style="font-size:16.5px">🎮 Simulasikan: 45 − 18 ÷ (6 − 3) × 2 = ?</h3>
+          <p style="margin-bottom:5px;font-size:14px">Tekan tombol dan lihat urutannya!</p>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start">
+            <div class="ekspresi">45 − 18 ÷ <span class="aksen">(6 − 3)</span> × 2</div>
+            <div class="ekspresi rv" id="cx1">= 45 − 18 ÷ <span class="aksen">3</span> × 2</div>
+            <div class="ekspresi rv" id="cx2">= 45 − <span class="aksen">6</span> × 2</div>
+            <div class="ekspresi rv" id="cx3">= 45 − <span class="aksen">12</span></div>
+            <div class="ekspresi rv" id="cx4" style="background:var(--hijau);color:#fff">= <b>33</b> 🎉</div>
+          </div>
+        </div>
+        <div class="panel-box cap-box" style="min-height:46px;padding:8px 16px">
+          <div class="cap-count" id="campurCnt"></div>
+          <div class="cap-text" id="campurCap" style="font-size:17px"></div>
+        </div>
+        <div class="st-controls">
+          <button class="st-btn" data-st-reset="campur">↺ Ulangi</button>
+          <button class="st-btn utama" data-st-next="campur">▶ Langkah berikutnya</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 17: LATIHAN 6 ============ -->
+<section class="slide" data-title="✏️ Latihan 6: Hitung Campuran">
+  <div class="quiz-wrap" id="quizCampur" data-quiz="campur"></div>
+</section>
+
+<!-- ============ SLIDE 18: GAME ULAR TANGGA ============ -->
+<section class="slide" data-title="🐍 Game: Ular Tangga">
+  <div class="kartu game-kartu" style="flex:1;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,#FDF2F8,#EDE9FE)">
+    <div class="emoji-row">🐍 🎲 🪜</div>
+    <h2 class="judul" style="text-align:center;font-size:44px">Saatnya Bermain Ular Tangga! 🎉</h2>
+    <p class="sub" style="text-align:center;max-width:640px;margin:6px auto 0">Uji kecepatan operasi hitung <b>bilangan ratusan ribuan</b> kalian!
+      Lebihi ular 🐍, panjat tangga 🪜, dan jadilah juara kelas!</p>
+    <a class="game-link" href="https://nandarizky0407-bot.github.io/Bilangan-Cacah/ulartanggabilratusanribu.html" target="_blank" rel="noopener" id="btnGame">🎮 Mainkan Ular Tangga Sekarang!</a>
+    <p style="margin-top:18px;font-weight:800;color:#64748B;font-size:15px">🔗 Permainan terbuka di tab baru — kembali ke sini setelah bermain, lalu lanjut ke kesimpulan!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 19: KESIMPULAN ============ -->
+<section class="slide" data-title="🏆 Kesimpulan">
+  <span class="kicker hijau">Kesimpulan</span>
+  <h2 class="judul" style="font-size:36px">Hari Ini Kalian Telah Menguasai… 🏆</h2>
+  <div class="kesimpulan-grid" style="margin-top:8px">
+    <div class="kesimpulan-item" style="border-color:var(--biru)"><div class="em">➕</div>
+      <h3>4 Operasi Dasar</h3><p>Penjumlahan menggabungkan, pengurangan mencari selisih, perkalian = penjumlahan berulang, pembagian = membagi rata.</p></div>
+    <div class="kesimpulan-item" style="border-color:var(--oranye)"><div class="em">📝</div>
+      <h3>Bersusun & Sejajar</h3><p>Mulai dari satuan! Simpan 1 jika ≥10, pinjam 1 jika kurang — bisa berantai melewati angka 0.</p></div>
+    <div class="kesimpulan-item" style="border-color:var(--pink)"><div class="em">✖️</div>
+      <h3>Perkalian 2 Tingkat</h3><p>Pecah bilangan bawah, kalikan satuan & puluhan, geser satu tempat, lalu jumlahkan hasilnya.</p></div>
+    <div class="kesimpulan-item" style="border-color:var(--ungu)"><div class="em">➗</div>
+      <h3>Porogapit</h3><p><b>Ba-Ka-Ku-Tu:</b> Bagi, Kalikan, Kurangkan, Turunkan. Tulis 0 di kuota jika tidak cukup dibagi!</p></div>
+    <div class="kesimpulan-item" style="border-color:var(--hijau)"><div class="em">🧠</div>
+      <h3>Trik & Campuran</h3><p>Trik mental mempercepat hitungan. Urutan campuran: <b>Kurung → ×÷ → +−</b> (kiri ke kanan).</p></div>
+  </div>
+  <div class="kartu" style="margin-top:12px;padding:12px 20px;background:linear-gradient(135deg,#ECFDF5,#EFF6FF);align-self:center">
+    <p style="font-weight:900;font-size:16px;text-align:center">🌟 Matematika = keterampilan. Semakin sering berlatih, semakin jago. Jangan takut salah — salah itu bagian dari belajar!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 20: REFLEKSI ============ -->
+<section class="slide" data-title="💭 Refleksi">
+  <span class="kicker ungu">Refleksi</span>
+  <h2 class="judul" style="font-size:36px">Bagaimana Perasaanmu Hari Ini? 💭</h2>
+  <div class="refleksi-wrap" style="margin-top:8px">
+    <div class="kartu" style="flex:1;padding:22px 26px;display:flex;flex-direction:column;justify-content:center">
+      <h3 style="font-size:21px;margin-bottom:6px">😊 Bagaimana perasaanmu tentang operasi hitung?</h3>
+      <div class="mood-row">
+        <button class="mood" data-mood="0" title="Mantap!">😄</button>
+        <button class="mood" data-mood="1" title="Cukup paham">🙂</button>
+        <button class="mood" data-mood="2" title="Masih perlu latihan">🤔</button>
+      </div>
+      <p id="moodMsg" style="font-weight:800;font-size:16.5px;text-align:center;min-height:26px;color:var(--biru-tua)"></p>
+    </div>
+    <div class="kartu" style="flex:1;padding:22px 26px;display:flex;flex-direction:column;justify-content:center;gap:10px">
+      <h3 style="font-size:21px">🗣️ Diskusikan dengan teman sebangkumu:</h3>
+      <p style="font-weight:700;font-size:16.5px;line-height:1.6">1️⃣ Materi mana yang paling seru menurutmu?<br>
+      2️⃣ Bagian mana yang masih membuatmu bingung?<br>
+      3️⃣ Di mana kamu bisa memakai operasi hitung minggu ini?</p>
+      <div style="margin-top:6px">
+        <h3 style="font-size:19px;margin-bottom:4px">⭐ Seberapa seru pelajaran hari ini?</h3>
+        <div id="starRow">
+          <span class="bintang" data-s="1">⭐</span><span class="bintang" data-s="2">⭐</span><span class="bintang" data-s="3">⭐</span><span class="bintang" data-s="4">⭐</span><span class="bintang" data-s="5">⭐</span>
+        </div>
+        <p id="starMsg" style="font-weight:800;color:var(--oranye-tua);font-size:15.5px;min-height:22px"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 21: THANK YOU ============ -->
+<section class="slide" data-title="👋 Thank You!">
+  <div class="thanks-wrap">
+    <div style="font-size:60px">🌟 🎓 🌟</div>
+    <h1 class="thanks-title font-judul">Thank You for Today!</h1>
+    <p class="thanks-nama">Kerja bagus, <span id="thanksNama" style="color:var(--pink)">para petualang angka</span>! 👏</p>
+    <p style="font-weight:800;font-size:18.5px;color:#475569;max-width:720px;text-align:center">
+      Kalian telah menjelajah 4 operasi hitung, menguasai bersusun & porogapit, menemukan trik mental,
+      dan memenangkan ular tangga. Terus berlatih, sampai jumpa di petualangan berikutnya! 🚀</p>
+    <div style="display:flex;gap:16px;margin-top:14px">
+      <span class="chip" style="font-size:17px;padding:9px 20px">➕ ➖ ✖️ ➗</span>
+      <span class="chip" style="font-size:17px;padding:9px 20px">🧠 Trik Mental</span>
+      <span class="chip" style="font-size:17px;padding:9px 20px">🐍 Ular Tangga</span>
+    </div>
+    <button class="btn ungu" id="btnConfetti" style="margin-top:18px;font-size:18px">🎉 Ledakkan Perayaan!</button>
+  </div>
+</section>
+
+
+
+  </main>
+  <div id="navbar">
+    <button class="navbtn" id="prevBtn">◀ Sebelumnya</button>
+    <div id="dots"></div>
+    <button class="navbtn utama" id="nextBtn">Berikutnya ▶</button>
+  </div>
+  <div id="menuOverlay">
+    <div class="menu-box">
+      <h3>🗺️ Peta Petualangan <button class="tbtn" id="menuClose">✕</button></h3>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </div>
+  <div id="toast"></div>
+</div>
+<script>
+'use strict';
+/* ================= STATE & UTIL ================= */
+const state={names:[]};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NAMA_DEFAULT=['Siswa 1','Siswa 2','Siswa 3'];
+const AVA_BG=['#DBEAFE','#DCFCE7','#FCE7F3'];
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function namaSiswa(){ return (state.names&&state.names.length===3)?state.names:NAMA_DEFAULT; }
+let toastT=null;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+/* ================= SUARA (WebAudio) ================= */
+let AC=null,muted=false;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return AC;}
+function tone(f,dur,type,vol,when){const a=ac();if(!a)return;const t=a.currentTime+(when||0);
+  const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.15,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+.05);}
+function sfx(n){if(muted)return;
+  if(n==='klik')tone(520,.08,'triangle',.12);
+  else if(n==='geser'){tone(392,.09,'sine',.07);tone(523,.1,'sine',.07,.06);}
+  else if(n==='benar'){tone(523,.12,'triangle',.18);tone(659,.12,'triangle',.18,.1);tone(784,.22,'triangle',.2,.2);}
+  else if(n==='salah'){tone(220,.25,'sawtooth',.13);tone(175,.3,'sawtooth',.11,.13);}
+  else if(n==='acak'){[440,494,523,587,659].forEach((f,i)=>tone(f,.09,'square',.09,i*.07));}
+  else if(n==='menang'){[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.18,i*.13));}
+  else if(n==='timer')tone(880,.07,'square',.1);}
+/* ================= KONFETI ================= */
+const CFL=['#3B82F6','#F59E0B','#10B981','#EC4899','#8B5CF6','#EF4444','#0EA5E9'];
+function confetti(n){n=n||80;for(let i=0;i<n;i++){const d=document.createElement('div');d.className='cf';
+  d.style.left=Math.random()*100+'vw';d.style.background=CFL[i%CFL.length];
+  const s=8+Math.random()*9;d.style.width=s+'px';d.style.height=Math.round(s*1.4)+'px';
+  d.style.borderRadius=Math.random()>.5?'50%':'2px';
+  d.style.animationDuration=(1.7+Math.random()*1.5)+'s';d.style.animationDelay=(Math.random()*.35)+'s';
+  document.body.appendChild(d);setTimeout(()=>d.remove(),3600);}}
+/* ================= DECK ================= */
+const slides=$$('#deck > section.slide');
+let cur=0;
+function buildDots(){const box=$('#dots');box.innerHTML='';slides.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='dot'+(s.dataset.title.includes('Latihan')?' tandamateri':'');
+  d.title=(i+1)+'. '+s.dataset.title;d.addEventListener('click',()=>goTo(i));box.appendChild(d);});}
+function goTo(i){if(i<0||i>=slides.length||i===cur&&slides[cur].classList.contains('active'))if(i===cur)return;
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');
+  $('#progressBar').style.width=((cur+1)/slides.length*100)+'%';
+  $('#slideCounter').textContent=(cur+1)+' / '+slides.length;
+  $$('.dot').forEach((d,j)=>d.classList.toggle('on',j===cur));
+  $('#prevBtn').disabled=cur===0;$('#nextBtn').disabled=cur===slides.length-1;
+  if(slides[cur].dataset.title.indexOf('Thank')>-1)updateThanks();
+  sfx('geser');}
+function updateThanks(){$('#thanksNama').textContent=namaSiswa().join(', ');}
+$('#prevBtn').addEventListener('click',()=>goTo(cur-1));
+$('#nextBtn').addEventListener('click',()=>goTo(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea'))return;
+  if(e.key==='ArrowRight'||e.key==='PageDown')goTo(cur+1);
+  else if(e.key==='ArrowLeft'||e.key==='PageUp')goTo(cur-1);
+  else if(e.key==='Home')goTo(0);else if(e.key==='End')goTo(slides.length-1);
+  else if(e.key==='Escape')$('#menuOverlay').classList.remove('show');});
+/* ================= FIT STAGE ================= */
+function fit(){const s=Math.min(innerWidth/1310,innerHeight/756,1.35);
+  $('#stage').style.transform='scale('+s+')';}
+addEventListener('resize',fit);
+/* ================= MENU OVERLAY ================= */
+function buildMenu(){const g=$('#menuGrid');g.innerHTML='';slides.forEach((s,i)=>{
+  const b=document.createElement('button');b.className='menu-item';
+  b.innerHTML='<span class="mn">'+(i+1)+'</span><span>'+esc(s.dataset.title)+'</span>';
+  b.addEventListener('click',()=>{$('#menuOverlay').classList.remove('show');goTo(i);});g.appendChild(b);});}
+$('#menuBtn').addEventListener('click',()=>{$('#menuOverlay').classList.add('show');sfx('klik');});
+$('#menuClose').addEventListener('click',()=>$('#menuOverlay').classList.remove('show'));
+$('#menuOverlay').addEventListener('click',e=>{if(e.target.id==='menuOverlay')e.target.classList.remove('show');});
+/* ================= TOMBOL ATAS ================= */
+$('#soundBtn').addEventListener('click',()=>{muted=!muted;$('#soundBtn').textContent=muted?'🔇':'🔊';
+  toast(muted?'Suara dimatikan':'Suara dinyalakan');if(!muted)sfx('klik');});
+$('#fsBtn').addEventListener('click',()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  else{document.exitFullscreen&&document.exitFullscreen();}});
+/* ================= COVER ================= */
+function ambilNama(){
+  state.names=[$('#nama1').value.trim(),$('#nama2').value.trim(),$('#nama3').value.trim()]
+    .map((n,i)=>n||NAMA_DEFAULT[i]);
+}
+$('#btnMulai').addEventListener('click',()=>{ambilNama();sfx('menang');confetti(60);
+  toast('🚀 Siap berkirim, '+state.names.join(', ')+'!');goTo(1);});
+['nama1','nama2','nama3'].forEach((id,i)=>{$('#'+id).addEventListener('keydown',e=>{
+  if(e.key==='Enter'){if(i<2)$('#nama'+(i+2)).focus();else $('#btnMulai').click();}});});
+/* ================= FLIP APERSEPSI ================= */
+$$('.flip').forEach(f=>f.addEventListener('click',()=>{f.classList.toggle('flipped');sfx('klik');}));
+/* ================= KONSEP DASAR ================= */
+const OPS=[
+ {em:'➕',c:'#3B82F6',bg:'#DBEAFE',t:'Penjumlahan (+)',
+  d:'Menggabungkan dua kelompok benda, atau menambah bilangan baru ke bilangan yang sudah ada.',
+  i:'<b>Istilah:</b> bilangan yang dijumlahkan + bilangan yang dijumlahkan = <b>jumlah</b>',
+  x:'Contoh: 12.500 + 8.750 = 21.250 → total belanja Bu Ani.',
+  k:'Kebalikannya adalah pengurangan. Cek: 21.250 − 8.750 = 12.500 ✓'},
+ {em:'➖',c:'#F59E0B',bg:'#FEF3C7',t:'Pengurangan (−)',
+  d:'Mengambil sebagian dari kelompok, mencari <b>sisa</b>, atau mencari <b>selisih</b> dua bilangan.',
+  i:'<b>Istilah:</b> bilangan awal − bilangan yang dikurangkan = <b>selisih/sisa</b>',
+  x:'Contoh: 50.000 − 27.500 = 22.500 → sisa uang Rina.',
+  k:'Kebalikannya adalah penjumlahan. Cek: 22.500 + 27.500 = 50.000 ✓'},
+ {em:'✖️',c:'#EC4899',bg:'#FCE7F3',t:'Perkalian (×)',
+  d:'<b>Penjumlahan berulang</b> yang cepat: 6 × 25 artinya menjumlah 25 sebanyak 6 kali.',
+  i:'<b>Istilah:</b> faktor × faktor = <b>hasil kali</b>',
+  x:'Contoh: 6 × 25 = 25+25+25+25+25+25 = 150 buku.',
+  k:'Kebalikannya adalah pembagian. Cek: 150 ÷ 25 = 6 ✓'},
+ {em:'➗',c:'#8B5CF6',bg:'#EDE9FE',t:'Pembagian (÷)',
+  d:'Membagi bilangan menjadi <b>kelompok sama besar</b>, atau membagi rata ke banyak orang.',
+  i:'<b>Istilah:</b> bilangan yang dibagi ÷ pembagi = <b>hasil bagi</b> (boleh ada <b>sisa</b>)',
+  x:'Contoh: 150 ÷ 6 = 25 → setiap rak berisi 25 buku.',
+  k:'Kebalikannya adalah perkalian. Cek: 25 × 6 = 150 ✓'}];
+function showOp(i){const o=OPS[i];const el=$('#opDetail');
+  el.innerHTML='<div style="font-size:64px;flex-shrink:0">'+o.em+'</div>'+
+  '<div style="flex:1;min-width:0"><h3 class="font-judul" style="font-size:26px;color:'+o.c+'">'+o.t+'</h3>'+
+  '<p style="font-size:16.5px;font-weight:700;margin:6px 0">'+o.d+'</p>'+
+  '<p style="font-size:15.5px;font-weight:700;background:'+o.bg+';border-radius:12px;padding:8px 14px;margin:6px 0">'+o.i+'</p>'+
+  '<p style="font-size:15.5px;font-weight:700">'+o.x+'</p>'+
+  '<p style="font-size:15.5px;font-weight:800;color:'+o.c+'">'+o.k+'</p></div>';
+  $$('.grid4 [data-op]').forEach((b,j)=>b.style.outline=(j===i)?'4px solid '+o.c:'none');}
+$$('.grid4 [data-op]').forEach(b=>b.addEventListener('click',()=>{showOp(+b.dataset.op);sfx('klik');}));
+/* ================= TRIK MENTAL (AKORDEON) ================= */
+$$('.trik-head').forEach(h=>h.addEventListener('click',()=>{h.parentElement.classList.toggle('open');sfx('klik');}));
+/* ================= GAME LINK ================= */
+$('#btnGame').addEventListener('click',()=>{sfx('menang');toast('🎮 Selamat bermain! Kembali lagi setelah selesai.');});
+/* ================= REFLEKSI ================= */
+const MOODMSG=['🎉 MANTAP! Kamu siap jadi master operasi hitung!','💪 KEREN! Sedikit lagi sempurna — terus berlatih ya!','🌱 TIDAK APA-APA! Minta guru mengulang bagian yang sulit, besok pasti lebih paham!'];
+$$('.mood').forEach(m=>m.addEventListener('click',()=>{$$('.mood').forEach(x=>x.classList.remove('on'));
+  m.classList.add('on');$('#moodMsg').textContent=MOODMSG[+m.dataset.mood];sfx('benar');
+  if(+m.dataset.mood===0)confetti(50);}));
+const STARMSG=['','Terima kasih! ⭐','Senang dengarnya! ⭐⭐','Seru sekali! ⭐⭐⭐','Wah, menyenangkan! ⭐⭐⭐⭐','LUAR BIASA SERUNYA! ⭐⭐⭐⭐⭐'];
+$$('.bintang').forEach(s=>s.addEventListener('click',()=>{const v=+s.dataset.s;
+  $$('.bintang').forEach((x,i)=>x.classList.toggle('on',i<v));
+  $('#starMsg').textContent=STARMSG[v];sfx('benar');if(v>=4)confetti(45);}));
+$('#btnConfetti').addEventListener('click',()=>{confetti(120);sfx('menang');updateThanks();});
+/* ================= DEMO LANGKAH-DEMI-LANGKAH ================= */
+const DEMOS={
+jumlah:[
+ {cap:'Susun kedua bilangan SEJAJAR: satuan di bawah satuan, puluhan di bawah puluhan. Kita mulai dari kolom satuan!'},
+ {show:['jr5','jc4'],hi:['ja5','jb5'],cap:'Satuan: 6 + 9 = 15 → tulis <b>5</b> di hasil, SIMPAN <b>1</b> di kolom puluhan (angka merah kecil).'},
+ {show:['jr4','jc3'],hi:['ja4','jb4','jc4'],cap:'Puluhan: 5 + 8 = 13, ditambah simpanan 1 = <b>14</b> → tulis 4, SIMPAN 1 di ratusan.'},
+ {show:['jr3','jc2'],hi:['ja3','jb3','jc3'],cap:'Ratusan: 7 + 4 = 11, plus simpanan 1 = <b>12</b> → tulis 2, SIMPAN 1 di ribuan.'},
+ {show:['jr2','jc1'],hi:['ja2','jb2','jc2'],cap:'Ribuan: 8 + 7 = 15, plus simpanan 1 = <b>16</b> → tulis 6, SIMPAN 1 di puluhan ribuan.'},
+ {show:['jr1'],hi:['ja1','jb1','jc1'],cap:'Puluhan ribu: 4 + 2 = 6, plus simpanan 1 = <b>7</b> → tulis 7. Selesai!'},
+ {hi:['jr1','jr2','jr3','jr4','jr5'],cap:'🎉 48.756 + 27.489 = <b>76.245</b> — Polanya: mulai dari satuan, sisanya disimpan ke kolom kiri!'}
+],
+kurang:[
+ {cap:'Susun sejajar, mulai dari satuan. Jika angka atas lebih kecil → PINJAM 1 dari kolom kirinya (nilai +10)!'},
+ {show:['kc5','kr5'],strike:['km4'],hi:['km5','kn5'],cap:'Satuan: 5 − 8 tidak bisa! Pinjam 1 puluhan → 15 − 8 = <b>7</b>. (Puluhan 1 jadi 0)'},
+ {show:['kc4','kr4'],strike:['km3'],hi:['km4','kn4'],cap:'Puluhan: 0 − 4 masih kurang! Pinjam 1 ratusan → 10 − 4 = <b>6</b>. (Ratusan 3 jadi 2)'},
+ {show:['kc3','kr3'],strike:['km2'],hi:['km3','kn3'],cap:'Ratusan: 2 − 7 kurang! Pinjam 1 ribuan → 12 − 7 = <b>5</b>. (Ribuan 2 jadi 1)'},
+ {show:['kc2','kr2'],strike:['km1'],hi:['km2','kn2'],cap:'Ribuan: 1 − 8 kurang! Pinjam 1 puluhan ribu → 11 − 8 = <b>3</b>. (Puluhan ribu 6 jadi 5)'},
+ {show:['kc1','kr1'],hi:['km1','kn1'],cap:'Puluhan ribu: 5 − 2 = <b>3</b>. Tidak perlu pinjam lagi!'},
+ {hi:['kr1','kr2','kr3','kr4','kr5'],cap:'🎉 62.315 − 28.748 = <b>33.567</b> — Cek kebalikan: 33.567 + 28.748 = 62.315 ✓'}
+],
+kali1:[
+ {cap:'Susun 47 × 8. Mulai kalikan dari SATUAN: 7 × 8 = ?'},
+ {show:['k1r4','k1c3'],hi:['k1a4','k1b4'],cap:'Satuan: 7 × 8 = 56 → tulis <b>6</b> di hasil, SIMPAN <b>5</b> di kolom puluhan.'},
+ {show:['k1r2','k1r3'],hi:['k1a3','k1b4','k1c3'],cap:'Puluhan: 4 × 8 = 32, ditambah simpanan 5 = <b>37</b> → tulis 37 di depan.'},
+ {hi:['k1r2','k1r3','k1r4'],cap:'🎉 47 × 8 = <b>376</b> — Cek mental: (50 − 3) × 8 = 400 − 24 = 376 ✓'}
+],
+kali2:[
+ {cap:'Pecah 63 = 3 + 60. Kalikan 47 dengan 3 dulu, lalu dengan 60, terakhir jumlahkan!'},
+ {show:['k2p5','k2c4'],hi:['k2a5','k2b5'],cap:'① 47 × 3 — Satuan: 7 × 3 = 21 → tulis 1, SIMPAN 2.'},
+ {show:['k2p4','k2p3'],hi:['k2a4','k2b5'],cap:'① Lanjut: 4 × 3 = 12, plus simpanan 2 = <b>14</b> → tulis 14. Baris pertama: <b>141</b>.'},
+ {show:['k2q5'],hi:['k2b4'],cap:'② Sekarang 47 × 60: kalikan dengan 6 puluhan. Hasilnya DIGESER satu tempat ke kiri — tulis 0 di satuan dulu!'},
+ {show:['k2q4','k2c3'],hi:['k2a5','k2b4'],cap:'② Satuan: 7 × 6 = 42 → tulis 2 di PULUHAN, simpan 4.'},
+ {show:['k2q3','k2q2'],hi:['k2a4','k2b4'],cap:'② Puluhan: 4 × 6 = 24, plus simpanan 4 = <b>28</b> → tulis 28. Baris kedua: <b>2.820</b>.'},
+ {hi:['k2p3','k2p4','k2p5','k2q2','k2q3','k2q4','k2q5'],cap:'③ Terakhir: jumlahkan kedua baris — 141 + 2.820 dengan penjumlahan bersusun!'},
+ {show:['k2r2','k2r3','k2r4','k2r5'],cap:'1+0=1 · 4+2=6 · 1+8=9 · 2 → 🎉 47 × 63 = <b>2.961</b>!'}
+],
+bagi1:[
+ {cap:'Susun porogapit 856 ÷ 4. Nyanyikan chant-nya: Ba-gi → Ka-likan → Ku-rangkan → Tu-runkan!'},
+ {show:['bq1'],hi:['bd1'],cap:'① BAGI: 8 ÷ 4 = 2 → tulis <b>2</b> di kuota, tepat di atas angka 8.'},
+ {show:['b1s1','b1l1'],cap:'② KALIKAN: 2 × 4 = 8. ③ KURANGKAN: 8 − 8 = <b>0</b>.'},
+ {show:['b1d2','bq2'],hi:['b1d2'],cap:'④ TURUNKAN angka 5! ① BAGI lagi: 5 ÷ 4 = 1 → tulis <b>1</b> di kuota.'},
+ {show:['b1s2','b1l2'],cap:'② KALIKAN: 1 × 4 = 4. ③ KURANGKAN: 5 − 4 = <b>1</b>.'},
+ {show:['b1d3','bq3'],hi:['b1d3'],cap:'④ TURUNKAN angka 6! ① BAGI: 16 ÷ 4 = 4 → tulis <b>4</b> di kuota.'},
+ {show:['b1s3a','b1s3b','b1l3','b1f'],cap:'② KALIKAN: 4 × 4 = 16. ③ KURANGKAN: 16 − 16 = <b>0</b> → SISA 0, habis dibagi sempurna!'},
+ {hi:['bq1','bq2','bq3'],cap:'🎉 856 ÷ 4 = <b>214</b> — Cek kebalikan: 214 × 4 = 856 ✓'}
+],
+bagi2:[
+ {cap:'6.348 ÷ 7 → angka 6 sendirian tidak cukup dibagi 7, jadi ambil DUA digit: 63!'},
+ {show:['cq1'],hi:['cd1','cd2'],cap:'① BAGI: 63 ÷ 7 = 9 → tulis <b>9</b> di kuota (di atas angka 3).'},
+ {show:['b2s1a','b2s1b','b2l1'],cap:'② KALIKAN: 9 × 7 = 63. ③ KURANGKAN: 63 − 63 = <b>0</b>.'},
+ {show:['b2d3','cq2'],hi:['b2d3'],cap:'④ TURUNKAN 4! 4 ÷ 7 masih tidak cukup → tulis <b>0 di kuota</b>! ⚠️ Jangan pernah melewatkan nol ini!'},
+ {show:['b2s2','b2l2'],cap:'② KALIKAN: 0 × 7 = 0. ③ KURANGKAN: 4 − 0 = <b>4</b>.'},
+ {show:['b2d4','cq3'],hi:['b2d4'],cap:'④ TURUNKAN 8! ① BAGI: 48 ÷ 7 = 6 (karena 6 × 7 = 42, paling dekat dengan 48).'},
+ {show:['b2s3a','b2s3b','b2l3','b2f','b2sisa'],cap:'② KALIKAN: 6 × 7 = 42. ③ KURANGKAN: 48 − 42 = <b>6</b> → SISA 6 (sisa harus lebih kecil dari 7 ✓).'},
+ {hi:['cq1','cq2','cq3'],cap:'🎉 6.348 ÷ 7 = <b>906 sisa 6</b> — Cek: 906 × 7 = 6.342, lalu 6.342 + 6 = 6.348 ✓'}
+],
+campur:[
+ {cap:'Perhatikan: ada tanda kurung! Kerjakan sesuai tangga: ① Kurung → ② × dan ÷ → ③ + dan −.'},
+ {show:['cx1'],cap:'① TANDA KURUNG dulu: (6 − 3) = <b>3</b>. Ekspresi menjadi lebih sederhana.'},
+ {show:['cx2'],cap:'② KALI & BAGI dari KIRI: 18 ÷ 3 = <b>6</b>.'},
+ {show:['cx3'],cap:'② Masih urutan × ÷: lanjut 6 × 2 = <b>12</b>.'},
+ {show:['cx4'],cap:'③ TERAKHIR: 45 − 12 = <b>33</b> 🎉 Urutan yang benar menyelamatkan hasil!'}
+]};
+/* ================= MESIN STEPPER ================= */
+const stepState={};
+function initSteppers(){
+  $$('[data-st-next]').forEach(b=>{
+    const k=b.dataset.stNext;if(stepState[k])return;
+    const root=document.querySelector('[data-stepper="'+k+'"]')||b.closest('section.slide');
+    const capEl=document.getElementById(k+'Cap'),cntEl=document.getElementById(k+'Cnt');
+    const demo=DEMOS[k];if(!root||!demo||!capEl)return;
+    stepState[k]={root,capEl,cntEl,demo,idx:0,nextBtn:b};
+    applyStep(k,0);});
+}
+function applyStep(k,n){
+  const st=stepState[k];if(!st)return;st.idx=n;
+  const show=new Set(),strike=new Set();
+  for(let i=1;i<=n;i++){(st.demo[i].show||[]).forEach(x=>show.add(x));(st.demo[i].strike||[]).forEach(x=>strike.add(x));}
+  st.root.querySelectorAll('.rv').forEach(el=>{if(el.id)el.classList.toggle('on',show.has(el.id));});
+  st.root.querySelectorAll('.struck').forEach(el=>{if(el.id&&!strike.has(el.id))el.classList.remove('struck');});
+  strike.forEach(id=>{const el=st.root.querySelector('#'+CSS.escape(id));if(el)el.classList.add('struck');});
+  st.root.querySelectorAll('.hi').forEach(el=>el.classList.remove('hi'));
+  (st.demo[n].hi||[]).forEach(id=>{const el=st.root.querySelector('#'+CSS.escape(id));if(el)el.classList.add('hi');});
+  st.capEl.innerHTML=st.demo[n].cap;
+  st.capEl.classList.remove('baru');void st.capEl.offsetWidth;st.capEl.classList.add('baru');
+  if(st.cntEl)st.cntEl.textContent='LANGKAH '+n+' / '+(st.demo.length-1);
+  const done=n>=st.demo.length-1;
+  st.nextBtn.classList.toggle('selesai',done);
+  st.nextBtn.innerHTML=done?'🎉 Selesai!':'▶ Langkah berikutnya';
+}
+document.addEventListener('click',e=>{
+  const nx=e.target.closest('[data-st-next]');
+  if(nx){const k=nx.dataset.stNext,st=stepState[k];
+    if(st&&st.idx<st.demo.length-1){applyStep(k,st.idx+1);sfx('klik');}return;}
+  const rs=e.target.closest('[data-st-reset]');
+  if(rs){applyStep(rs.dataset.stReset,0);sfx('klik');return;}
+  const fs=e.target.closest('[data-st-finish]');
+  if(fs){const k=fs.dataset.stFinish,st=stepState[k];
+    if(st)applyStep(k,st.demo.length-1);sfx('klik');return;}
+});
+/* tab porogapit */
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  ['bagi1','bagi2'].forEach(k=>{
+    const w=document.querySelector('[data-stepper="'+k+'"]');
+    if(w){w.style.display=(k===t.dataset.tab)?'flex':'none';}});
+  sfx('klik');}));
+/* ================= BANK SOAL (60 PG) ================= */
+/* format soal: [tingkat(0=Mudah,1=Sedang,2=HOTS), teks, [opsi A-D], indeksJawaban, pembahasan] */
+const TINGKAT=['Mudah','Sedang','HOTS'];
+const QUIZ={
+jumlah:{judul:'Latihan Penjumlahan',icon:'➕',qs:[
+ [0,'2.456 + 1.322 = …',['3.778','3.678','3.878','3.776'],0,'Jumlahkan tiap kolom dari satuan: 6+2=8, 5+2=7, 4+3=7, 2+1=3 → <b>3.778</b>.'],
+ [0,'12.340 + 21.523 = …',['33.873','33.863','33.763','34.863'],1,'Satuan 0+3=3, puluhan 4+2=6, ratusan 3+5=8, ribuan 2+1=3, puluhan ribu 1+2=3 → <b>33.863</b>.'],
+ [0,'345 + 268 = …',['603','513','613','623'],2,'5+8=13 (tulis 3 simpan 1), 4+6+1=11 (tulis 1 simpan 1), 3+2+1=6 → <b>613</b>.'],
+ [0,'25.478 + 36.856 = …',['61.334','62.434','62.244','62.334'],3,'Hampir semua kolom menyimpan! 8+6=14, 7+5+1=13, 4+8+1=13, 5+6+1=12, 2+3+1=6 → <b>62.334</b>.'],
+ [1,'148.375 + 256.895 = …',['405.260','405.270','404.270','405.370'],1,'Hati-hati dengan angka 0: 5+5=10, 7+9+1=17, 3+8+1=12, 8+6+1=15, 4+5+1=10, 1+2+1=4 → <b>405.270</b>.'],
+ [1,'76.845 + 18.975 = …',['95.720','94.820','95.820','95.810'],2,'5+5=10, 4+7+1=12, 8+9+1=18, 6+8+1=15, 7+1+1=9 → <b>95.820</b>.'],
+ [1,'Hari pertama pameran dikunjungi 34.256 orang, hari kedua 28.978 orang. Jumlah seluruh pengunjung adalah …',['62.234','63.234','63.224','63.334'],1,'34.256 + 28.978: 6+8=14, 5+7+1=13, 2+9+1=12, 4+8+1=13, 3+2+1=6 → <b>63.234 orang</b>.'],
+ [2,'Hasil dari 99.995 + 12.345 adalah …',['112.330','111.340','112.340','112.350'],2,'Trik: 99.995 hampir 100.000 → 100.000 + 12.345 = 112.345, lalu koreksi −5 = <b>112.340</b>.'],
+ [2,'47.□84 + 35.726 = 83.210. Angka pada kotak adalah …',['5','6','3','4'],3,'Cari bilangan yang hilang: 83.210 − 35.726 = <b>47.484</b>. Jadi kotak diisi angka 4.'],
+ [2,'Jumlah dua bilangan adalah 250.000. Jika bilangan pertama 148.750, bilangan kedua adalah …',['101.150','102.250','111.250','101.250'],3,'Bilangan kedua = 250.000 − 148.750 = <b>101.250</b>. Cek: 148.750 + 101.250 = 250.000 ✓']
+]},
+kurang:{judul:'Latihan Pengurangan',icon:'➖',qs:[
+ [0,'3.864 − 1.532 = …',['2.232','2.342','2.332','2.432'],2,'Tanpa meminjam: 4−2=2, 6−3=3, 8−5=3, 3−1=2 → <b>2.332</b>.'],
+ [0,'56.789 − 23.456 = …',['34.333','33.333','33.343','34.333'],1,'9−6=3, 8−5=3, 7−4=3, 6−3=3, 5−2=3 → <b>33.333</b> (semua angkanya 3!).'],
+ [0,'875 − 349 = …',['536','426','516','526'],3,'5−9 tidak bisa → 15−9=6; 6−4=2; 8−3=5 → <b>526</b>.'],
+ [0,'40.215 − 17.876 = …',['22.339','22.349','23.339','22.239'],0,'Pinjam berantai melewati 0: 15−6=9, 10−7=3, 11−8=3, 3−1=2 → <b>22.339</b>.'],
+ [1,'200.000 − 85.642 = …',['115.358','114.348','114.358','114.258'],2,'Pinjam berantai dari banyak angka 0: 10−2=8, 9−4=5, 9−6=3, 9−5=4, 9−8=1, 1−0=1 → <b>114.358</b>.'],
+ [1,'73.506 − 29.158 = …',['44.348','44.358','45.358','44.458'],1,'6−8→16−8=8; 0−5→pinjam: 9−5=4; 4−1=3; 3−9→13−9=4; 6−2=4 → <b>44.358</b>.'],
+ [1,'Perpustakaan memiliki 128.450 buku dan 39.875 di antaranya sedang dipinjam. Buku yang ada di perpustakaan sebanyak …',['88.585','89.575','88.475','88.575'],3,'128.450 − 39.875 = <b>88.575 buku</b>. Cek: 88.575 + 39.875 = 128.450 ✓'],
+ [2,'8□4.562 − 371.245 = 473.317. Angka pada kotak adalah …',['5','4','3','6'],1,'Cari bilangan awal: 473.317 + 371.245 = <b>844.562</b>. Jadi kotak diisi angka 4.'],
+ [2,'Bilangan yang jika dikurangi 156.789 hasilnya 243.211 adalah …',['399.000','400.001','400.000','389.000'],2,'Bilangan awal = 243.211 + 156.789 = <b>400.000</b>.'],
+ [2,'Selisih antara 1.000.000 dan 684.325 adalah …',['316.675','315.675','315.775','325.675'],1,'Pinjam berantai melewati lima angka 0: 1.000.000 − 684.325 = <b>315.675</b>.']
+]},
+kali:{judul:'Latihan Perkalian',icon:'✖️',qs:[
+ [0,'34 × 6 = …',['184','204','214','244'],1,'4×6=24 (tulis 4 simpan 2), 3×6=18+2=20 → <b>204</b>.'],
+ [0,'57 × 4 = …',['218','238','248','228'],3,'7×4=28 (tulis 8 simpan 2), 5×4=20+2=22 → <b>228</b>.'],
+ [0,'25 × 30 = …',['705','750','650','755'],1,'25×3=75, tambahkan satu angka 0 → <b>750</b>.'],
+ [0,'68 × 7 = …',['466','486','476','426'],2,'8×7=56 (tulis 6 simpan 5), 6×7=42+5=47 → <b>476</b>.'],
+ [1,'47 × 63 = …',['2.871','2.951','2.961','2.861'],2,'47×3=141; 47×60=2.820; 141+2.820=<b>2.961</b>.'],
+ [1,'86 × 45 = …',['3.770','3.860','3.970','3.870'],3,'86×5=430; 86×40=3.440; 430+3.440=<b>3.870</b>.'],
+ [2,'125 × 48 = …',['5.900','6.100','6.000','5.000'],2,'125×8=1.000; 125×40=5.000; 1.000+5.000=<b>6.000</b>.'],
+ [1,'Toko buku menjual 145 buku setiap hari. Banyak buku yang terjual dalam 24 hari adalah …',['3.380','3.480','3.580','2.480'],1,'145×4=580; 145×20=2.900; 580+2.900=<b>3.480 buku</b>.'],
+ [2,'3□ × 56 = 2.072. Angka pada kotak adalah …',['8','6','5','7'],3,'Pakai operasi kebalikan: 2.072 ÷ 56 = <b>37</b>. Jadi kotak diisi angka 7.'],
+ [2,'Lahan persegi panjang berukuran panjang 85 m dan lebar 42 m. Luas lahan tersebut adalah …',['3.470 m²','3.560 m²','3.570 m²','3.670 m²'],2,'Luas = panjang × lebar = 85 × 42: 85×2=170, 85×40=3.400 → <b>3.570 m²</b>.']
+]},
+bagi:{judul:'Latihan Pembagian',icon:'➗',qs:[
+ [0,'144 ÷ 12 = …',['11','14','12','16'],2,'Karena 12 × 12 = 144, maka 144 ÷ 12 = <b>12</b>.'],
+ [0,'96 ÷ 8 = …',['12','10','11','14'],0,'Karena 8 × 12 = 96, maka 96 ÷ 8 = <b>12</b>.'],
+ [0,'2.400 ÷ 6 = …',['40','300','400','4.000'],2,'24 ÷ 6 = 4, lalu tambahkan dua angka 0 → <b>400</b>.'],
+ [0,'435 ÷ 5 = …',['87','86','78','88'],0,'43÷5=8 sisa 3; turunkan 5 → 35÷5=7 → <b>87</b>.'],
+ [1,'1.264 ÷ 4 = …',['314','316','326','306'],1,'12÷4=3; 6÷4=1 sisa 2; turunkan 4 → 24÷4=6 → <b>316</b>.'],
+ [1,'2.785 ÷ 5 = …',['567','547','558','557'],3,'27÷5=5 sisa 2; turunkan 8 → 28÷5=5 sisa 3; turunkan 5 → 35÷5=7 → <b>557</b>.'],
+ [2,'4.215 ÷ 7 = …',['620 sisa 1','602 sisa 1','602','62 sisa 1'],1,'42÷7=6; 1÷7 tidak cukup → <b>tulis 0</b>; turunkan 5 → 15÷7=2 sisa 1 → <b>602 sisa 1</b>.'],
+ [1,'12.348 ÷ 6 = …',['2.580','2.056','2.058','2.508'],2,'12÷6=2; 3÷6→tulis 0; turunkan 4 → 34÷6=5 sisa 4; turunkan 8 → 48÷6=8 → <b>2.058</b>.'],
+ [2,'250.000 ÷ 8 = …',['31.500','30.250','31.050','31.250'],3,'25÷8=3 sisa 1; 10÷8=1 sisa 2; 20÷8=2 sisa 4; 40÷8=5; 0 → <b>31.250</b>.'],
+ [2,'Sebuah bilangan jika dikalikan 7 hasilnya 5.439. Bilangan tersebut adalah …',['787','778','767','777'],3,'Pakai operasi kebalikan: 5.439 ÷ 7 = <b>777</b>.']
+]},
+mental:{judul:'Latihan Trik Mental',icon:'⚡',qs:[
+ [0,'Dengan trik jembatan 10: 9 + 7 = 9 + 1 + 6 = …',['15','16','17','14'],1,'9 dekat dengan 10: 9+1=10, lalu 10+6 = <b>16</b>.'],
+ [0,'Trik ×5 (kalikan 10 lalu bagi 2): 34 × 5 = 340 ÷ 2 = …',['170','160','180','70'],0,'34×10=340, lalu 340÷2 = <b>170</b>.'],
+ [0,'Trik ×9 (kalikan 10 lalu kurangi bilangannya): 8 × 9 = 80 − 8 = …',['73','62','72','81'],2,'8×10=80, lalu 80−8 = <b>72</b>.'],
+ [1,'Menghitung naik: 503 − 497 = … (497 naik berapa sampai 503?)',['7','3','4','6'],3,'497 naik 3 ke 500, naik 3 lagi ke 503 → total naik <b>6</b>.'],
+ [0,'Kompensasi: 297 + 156 = 300 + 156 − 3 = …',['456','453','459','446'],1,'297 dibulatkan menjadi 300 (tambah 3), jadi hasilnya dikoreksi −3: 456−3 = <b>453</b>.'],
+ [1,'Memecah bilangan: 156 ÷ 4 = (120 ÷ 4) + (36 ÷ 4) = …',['39','38','40','36'],0,'120÷4=30 dan 36÷4=9 → 30+9 = <b>39</b>.'],
+ [2,'Trik ×25 (kalikan 100 lalu bagi 4): 24 × 25 = 2.400 ÷ 4 = …',['500','620','600','2.400'],2,'24×100=2.400, lalu 2.400÷4 = <b>600</b>.'],
+ [2,'Trik bilangan dekat 1.000: 999 + 456 = 1.000 + 456 − 1 = …',['1.456','1.455','1.445','1.545'],1,'999 hampir 1.000: 1.000+456=1.456, koreksi −1 → <b>1.455</b>.'],
+ [2,'Trik ×11: 34 × 11 = (34 × 10) + 34 = …',['374','364','384','340'],0,'34×10=340, lalu 340+34 = <b>374</b>.'],
+ [1,'Kompensasi perkalian: 195 × 4 = (200 × 4) − (5 × 4) = …',['800','790','780','760'],2,'195 = 200−5 → 800−20 = <b>780</b>.']
+]},
+campur:{judul:'Latihan Hitung Campuran',icon:'🔢',qs:[
+ [0,'6 + 4 × 5 = …',['50','44','10','26'],3,'Kerjakan kali dulu: 4×5=20, lalu 6+20 = <b>26</b>.'],
+ [0,'(6 + 4) × 5 = …',['26','50','30','20'],1,'Kurung dulu: 6+4=10, lalu 10×5 = <b>50</b>.'],
+ [0,'30 − 12 ÷ 3 = …',['6','10','26','24'],2,'Bagi dulu: 12÷3=4, lalu 30−4 = <b>26</b>.'],
+ [1,'48 ÷ 6 × 3 = …',['16','8','24','40'],2,'Sejenis dikerjakan kiri ke kanan: 48÷6=8, lalu 8×3 = <b>24</b>.'],
+ [1,'25 − 5 × 2 + 8 = …',['43','16','8','23'],3,'Kali dulu: 5×2=10. Lalu kiri ke kanan: 25−10=15, 15+8 = <b>23</b>.'],
+ [0,'7 × (11 − 3) − 14 = …',['56','42','28','14'],1,'Kurung: 11−3=8. Kali: 7×8=56. Kurang: 56−14 = <b>42</b>.'],
+ [1,'60 ÷ (4 + 8) × 5 = …',['25','9','30','15'],0,'Kurung: 4+8=12. Lalu kiri ke kanan: 60÷12=5, 5×5 = <b>25</b>.'],
+ [2,'100 − 6 × 7 + 48 ÷ 8 = …',['106','64','68','6'],1,'Kerjakan × dan ÷ dulu: 6×7=42 dan 48÷8=6. Lalu kiri ke kanan: 100−42=58, 58+6 = <b>64</b>.'],
+ [2,'(45 − 3 × 6) ÷ 9 + 5 = …',['12','8','10','5'],1,'Dalam kurung, kali dulu: 3×6=18 → 45−18=27. Lalu 27÷9=3, 3+5 = <b>8</b>.'],
+ [2,'Rina membeli 5 buku tulis seharga Rp3.500 per buku dan 2 pensil seharga Rp2.500 per pensil. Ia membayar Rp30.000. Kembalian Rina adalah …',['Rp8.500','Rp7.000','Rp9.500','Rp7.500'],3,'5×3.500=17.500 dan 2×2.500=5.000 → total belanja 22.500. Kembalian: 30.000−22.500 = <b>Rp7.500</b>.']
+]}
+};
+/* ================= MESIN KUIS ================= */
+const qz={};
+function makeQuiz(hostId,key){
+  const host=document.getElementById(hostId);if(!host||!QUIZ[key])return;
+  qz[key]={host,key,data:QUIZ[key],order:null,cur:0,answers:[],tLeft:60,tInt:null,timerOn:true};
+  renderIntro(key);
+}
+function chipSiswa(nm,i){return '<div class="siswa-chip"><span class="siswa-ava" style="background:'+AVA_BG[i]+'">🧑‍🎓</span><span>'+esc(nm)+'</span></div>';}
+function renderIntro(key){const s=qz[key],d=s.data;
+  let html='<div class="fase-kuis">';
+  html+='<div class="intro-judul">'+d.icon+' '+d.judul+' — 10 Soal Pilihan Ganda</div>';
+  html+='<p style="font-weight:700;font-size:15.5px;margin-bottom:4px">Tingkat soal: <span class="badge mudah">4 Mudah</span> <span class="badge sedang">3 Sedang</span> <span class="badge hots">3 HOTS</span></p>';
+  html+='<p style="font-weight:700;font-size:15.5px;margin:8px 0">Sebelum mulai, <b>acak urutan siswa</b>! Soal 1 dijawab siswa pertama, soal 2 siswa kedua, soal 3 siswa ketiga, soal 4 kembali ke siswa pertama, dan seterusnya.</p>';
+  html+='<div class="siswa-row">'+namaSiswa().map((n,i)=>chipSiswa(n,i)).join('')+'</div>';
+  html+='<div id="peta-'+key+'"></div>';
+  html+='<div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap">';
+  html+='<button class="btn oranye" id="acak-'+key+'">🎲 Acak Urutan Siswa</button>';
+  html+='<button class="btn hijau" id="mulai-'+key+'" style="display:none">✅ Mulai Mengerjakan</button></div>';
+  html+='</div>';
+  s.host.innerHTML=html;
+  $('#acak-'+key).addEventListener('click',()=>acakUrutan(key));
+  $('#mulai-'+key).addEventListener('click',()=>{sfx('kuis');renderSoal(key);});
+}
+function acakUrutan(key){const s=qz[key];
+  s.order=[0,1,2];
+  for(let i=2;i>0;i--){const j=Math.floor(Math.random()*(i+1));[s.order[i],s.order[j]]=[s.order[j],s.order[i]];}
+  sfx('acak');
+  const nm=namaSiswa();
+  let peta='<div class="intro-judul" style="font-size:19px">📋 Urutan Menjawab (contoh: 1,3,2 → soal 1 siswa 1, soal 2 siswa 3, soal 3 siswa 2…)</div><div class="petanyaan">';
+  for(let i=0;i<10;i++){const st=s.order[i%3];
+    peta+='<div class="peta-item" style="background:'+AVA_BG[st]+'">Soal '+(i+1)+'<br>'+esc(nm[st])+'</div>';}
+  peta+='</div>';
+  $('#peta-'+key).innerHTML=peta;
+  $('#mulai-'+key).style.display='inline-flex';
+  $('#acak-'+key).innerHTML='<span class="dice-anim">🎲</span> Acak Lagi';}
+function renderSoal(key){const s=qz[key],d=s.data,q=d.qs[s.cur],nm=namaSiswa(),st=s.order[s.cur%3];
+  clearInterval(s.tInt);s.tLeft=60;
+  const badges=['mudah','sedang','hots'];
+  let html='<div class="fase-kuis">';
+  html+='<div class="soal-bar"><span class="chip">Soal '+(s.cur+1)+' / 10</span>';
+  html+='<span class="badge '+badges[q[0]]+'">'+TINGKAT[q[0]]+'</span>';
+  html+='<div class="timer-bar"><div class="timer-isi" id="tbar-'+key+'"></div></div>';
+  html+='<span class="chip timer-chip" id="ttog-'+key+'">⏱ 60s: ON</span>';
+  html+='<div class="giliran-chip">Giliran: <b>'+esc(nm[st])+'</b><span class="giliran-ava" style="background:'+AVA_BG[st]+'">🎯</span></div></div>';
+  html+='<div class="petanyaan">';
+  for(let i=0;i<10;i++){const si=s.order[i%3];
+    html+='<div class="peta-item'+(i===s.cur?' now':'')+'" style="background:'+(i===s.cur?AVA_BG[si]:'#fff')+'">'+(i+1)+'. '+esc(nm[si])+'</div>';}
+  html+='</div>';
+  html+='<div class="soal-teks">'+q[1]+'</div>';
+  html+='<div class="ops">';
+  const huruf=['A','B','C','D'];
+  q[2].forEach((o,i)=>{html+='<button class="opt" data-opt="'+i+'"><span class="huruf">'+huruf[i]+'</span><span>'+esc(o)+'</span></button>';});
+  html+='</div>';
+  html+='<div class="pembahasan" id="bah-'+key+'"></div>';
+  html+='<div class="kuis-aksi"><button class="btn biru" id="lanjut-'+key+'" style="display:none"></button></div></div>';
+  s.host.innerHTML=html;
+  $('#ttog-'+key).addEventListener('click',()=>{s.timerOn=!s.timerOn;
+    $('#ttog-'+key).textContent='⏱ 60s: '+(s.timerOn?'ON':'OFF');sfx('klik');});
+  $$('#'+s.host.id+' .opt').forEach(b=>b.addEventListener('click',()=>jawab(key,+b.dataset.opt)));
+  if(s.timerOn){s.tInt=setInterval(()=>tickTimer(key),1000);$('#tbar-'+key).style.width='100%';}
+  else{$('#tbar-'+key).style.width='100%';}
+}
+function tickTimer(key){const s=qz[key];
+  const slide=s.host.closest('section.slide');
+  if(!slide||!slide.classList.contains('active'))return;
+  s.tLeft--;
+  const bar=$('#tbar-'+key);if(bar)bar.style.width=Math.max(0,s.tLeft/60*100)+'%';
+  if(s.tLeft===10)sfx('timer');
+  if(s.tLeft<=0){clearInterval(s.tInt);
+    const q=s.data.qs[s.cur];
+    tandaiJawaban(key,-1);
+    const bah=$('#bah-'+key);bah.innerHTML='⏰ <b>Waktu habis!</b> Jawaban yang benar: <b>'+esc(q[2][q[3]])+'</b>. 💡 '+q[4];bah.classList.add('show');
+    s.answers.push({s:s.order[s.cur%3],ok:false,to:true});
+    tampilLanjut(key);}}
+function jawab(key,pilih){const s=qz[key],q=s.data.qs[s.cur];
+  clearInterval(s.tInt);
+  const ok=pilih===q[3];
+  s.answers.push({s:s.order[s.cur%3],ok:ok,to:false});
+  tandaiJawaban(key,pilih);
+  const bah=$('#bah-'+key);
+  bah.innerHTML=(ok?'🎉 <b>Benar!</b> ':'😅 <b>Belum tepat.</b> Jawaban yang benar: <b>'+esc(q[2][q[3]])+'</b>. 💡 ')+q[4];
+  bah.classList.add('show');
+  if(ok){sfx('benar');confetti(46);}else{sfx('salah');}
+  tampilLanjut(key);}
+function tandaiJawaban(key,pilih){const s=qz[key],q=s.data.qs[s.cur];
+  $$('#'+s.host.id+' .opt').forEach((b,i)=>{b.disabled=true;
+    if(i===q[3])b.classList.add('benar');
+    else if(i===pilih)b.classList.add('salah');});}
+function tampilLanjut(key){const s=qz[key];
+  const b=$('#lanjut-'+key);b.style.display='inline-flex';
+  b.textContent=(s.cur>=9)?'🏁 Lihat Rekap Skor':'Soal berikutnya →';
+  b.onclick=()=>{if(s.cur>=9){renderRekap(key);}else{s.cur++;sfx('kuis');renderSoal(key);}};}
+function renderRekap(key){const s=qz[key],nm=namaSiswa();
+  clearInterval(s.tInt);
+  const skor=s.answers.filter(a=>a.ok).length;
+  let emo,pesan;
+  if(skor===10){emo='🏆';pesan='SEMPURNA! Kalian benar-benar juara operasi hitung!';}
+  else if(skor>=8){emo='🌟';pesan='Luar biasa! Hampir sempurna, pertahankan!';}
+  else if(skor>=6){emo='💪';pesan='Hebat! Sedikit lagi menuju mahir, ayo coba lagi soal yang salah!';}
+  else if(skor>=4){emo='📚';pesan='Bagus! Mari pelajari lagi materinya lalu ulangi latihannya!';}
+  else{emo='🚀';pesan='Jangan menyerah! Buka lagi slidemateri, lalu acak ulang dan coba lagi!';}
+  let html='<div class="fase-kuis" style="align-items:center;text-align:center;justify-content:center">';
+  html+='<div style="font-size:52px">'+emo+'</div><div class="rekap-skor">'+skor+' / 10</div>';
+  html+='<p style="font-weight:900;font-size:18.5px;margin-bottom:6px">'+pesan+'</p>';
+  html+='<table class="rekap-tabel" style="max-width:560px"><tr><th>Siswa</th><th>Menjawab</th><th>Benar</th><th>Akurasi</th></tr>';
+  nm.forEach((n,i)=>{const tot=s.answers.filter(a=>a.s===i).length,bn=s.answers.filter(a=>a.s===i&&a.ok).length;
+    const pct=tot?Math.round(bn/tot*100):0;
+    html+='<tr><td>'+esc(n)+'</td><td>'+tot+' soal</td><td>'+bn+'</td><td><span class="bar-nilai"><span class="bar-isi" style="width:'+pct+'%"></span></span> '+pct+'%</td></tr>';});
+  html+='</table>';
+  html+='<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">';
+  html+='<button class="btn oranye" id="ulang-'+key+'">🔁 Acak Ulang & Ulangi Latihan</button></div></div>';
+  s.host.innerHTML=html;
+  $('#ulang-'+key).addEventListener('click',()=>{s.order=null;s.cur=0;s.answers=[];sfx('klik');renderIntro(key);});
+  if(skor>=7){confetti(90);sfx('menang');}}
+/* ================= INISIALISASI ================= */
+buildDots();buildMenu();showOp(0);
+makeQuiz('quizJumlah','jumlah');makeQuiz('quizKurang','kurang');
+makeQuiz('quizKali','kali');makeQuiz('quizBagi','bagi');
+makeQuiz('quizMental','mental');makeQuiz('quizCampur','campur');
+initSteppers();fit();updateThanks();
+slides[0].classList.add('active');
+$('#slideCounter').textContent='1 / '+slides.length;
+$('#progressBar').style.width=(1/slides.length*100)+'%';
+
+
+</script>
+</body>
+</html>
