@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathQuest — Penjumlahan &amp; Pengurangan Puluhan Ribuan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1e293b; --muted:#64748b; --card:#ffffff;
+  --yellow:#fbbf24; --yellow-d:#b45309;
+  --green:#22c55e; --green-d:#15803d;
+  --red:#ef4444; --cyan:#06b6d4;
+  --indigo:#4f46e5; --violet:#7c3aed;
+}
+html,body{height:100%}
+body{
+  font-family:'Baloo 2','Comic Sans MS','Segoe UI',Tahoma,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(135deg,#312e81 0%,#4f46e5 45%,#7c3aed 100%);
+  background-attachment:fixed;
+  overflow:hidden;
+}
+/* dekorasi latar */
+.blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;pointer-events:none;z-index:0}
+.blob.b1{width:340px;height:340px;background:#22d3ee;top:-80px;left:-80px}
+.blob.b2{width:300px;height:300px;background:#f472b6;bottom:-60px;right:-60px}
+.blob.b3{width:220px;height:220px;background:#fbbf24;top:40%;right:8%;opacity:.18}
+
+/* ===== header & progress ===== */
+#topbar{position:fixed;top:0;left:0;right:0;height:58px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);color:#fff}
+#topbar .logo{font-weight:800;font-size:1.15rem;letter-spacing:.5px}
+.userbox{display:flex;align-items:center;gap:10px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 12px;border-radius:999px;font-size:.92rem;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.chip.diamond{background:linear-gradient(135deg,#164e63,#0e7490);border-color:#22d3ee}
+.chip.diamond.pop{animation:pop .5s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+#btnSuara{background:none;border:none;font-size:1.1rem;cursor:pointer;color:#fff}
+#progress{position:fixed;top:58px;left:0;right:0;height:6px;background:rgba(255,255,255,.15);z-index:40}
+#progressFill{height:100%;width:0;background:linear-gradient(90deg,#fbbf24,#22d3ee);transition:width .35s}
+
+/* ===== deck & slide ===== */
+#deck{height:100vh;position:relative;z-index:1}
+.slide{display:none;height:100%;overflow-y:auto;padding:88px 18px 92px}
+.slide.active{display:block}
+.wrap{max-width:1020px;margin:0 auto;animation:rise .45s ease}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+h2.title{color:#fff;text-align:center;font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:6px;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.kicker{display:block;text-align:center;color:#fde68a;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:.85rem;margin-bottom:4px}
+.sub{color:#e0e7ff;text-align:center;margin-bottom:18px;font-size:1.02rem}
+
+.panel{background:var(--card);border-radius:22px;padding:20px 22px;box-shadow:0 10px 30px rgba(0,0,0,.22);margin-bottom:16px}
+.panel h3{font-size:1.2rem;margin-bottom:10px;color:#3730a3}
+.panel p{line-height:1.55}
+
+/* ===== tombol ===== */
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;border-radius:16px;padding:11px 20px;font-size:1rem;box-shadow:0 4px 0 rgba(0,0,0,.22);transition:transform .12s,box-shadow .12s,filter .12s;color:#1f2937;background:#e5e7eb}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(180deg,#fcd34d,#f59e0b);color:#452a03}
+.btn-success{background:linear-gradient(180deg,#4ade80,#16a34a);color:#052e16}
+.btn-info{background:linear-gradient(180deg,#67e8f9,#0891b2);color:#083344}
+.btn-danger{background:linear-gradient(180deg,#fca5a5,#ef4444);color:#450a0a}
+.btn-ghost{background:#fff;color:#4f46e5;border:2px solid #c7d2fe;box-shadow:0 3px 0 #c7d2fe}
+.btn-big{font-size:1.15rem;padding:14px 28px;border-radius:18px}
+
+/* ===== input ===== */
+.inp{border:3px solid #c7d2fe;border-radius:14px;padding:11px 14px;font-size:1.08rem;font-family:inherit;font-weight:700;width:230px;max-width:100%;text-align:center;background:#f8fafc}
+.inp:focus{outline:none;border-color:var(--indigo);background:#fff}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+/* ===== cover ===== */
+.cover{min-height:calc(100vh - 190px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+.badge-kelas{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 16px;border-radius:999px;font-weight:700;font-size:.95rem}
+h1.judul{color:#fff;font-size:clamp(1.9rem,5vw,3rem);line-height:1.15;text-shadow:0 3px 10px rgba(0,0,0,.4);margin:6px 0}
+.cover .sub{font-size:clamp(.95rem,2.2vw,1.15rem)}
+.kartu-nama{background:#fff;border-radius:24px;padding:24px;max-width:470px;width:100%;margin-top:14px;box-shadow:0 14px 40px rgba(0,0,0,.3);display:grid;gap:12px}
+.kartu-nama label{font-weight:800;color:#3730a3}
+.kartu-nama .inp{width:100%}
+.resume-note{font-size:.9rem;color:#0e7490;font-weight:700}
+
+/* ===== apersepsi & grid mini ===== */
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+.mini{background:#fff;border-radius:18px;padding:14px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.mini .ico{font-size:2rem}
+.mini b{display:block;color:#4338ca;margin-top:4px}
+.tebak{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.tebak-card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.18);display:grid;gap:10px;align-content:start}
+.jawab{background:#dcfce7;border:2px dashed #22c55e;border-radius:12px;padding:10px 12px;font-weight:700;color:#166534}
+
+/* ===== tujuan ===== */
+.tujuan-list{display:grid;gap:10px}
+.tujuan-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;padding:13px 16px;box-shadow:0 5px 16px rgba(0,0,0,.16)}
+.tujuan-item .no{flex:0 0 34px;height:34px;display:grid;place-items:center;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border-radius:12px;font-weight:800}
+.alur{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.alur span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;padding:5px 13px;border-radius:999px;font-size:.88rem;font-weight:700}
+
+/* ===== nilai tempat ===== */
+.pv4{color:#8b5cf6}.pv3{color:#2563eb}.pv2{color:#16a34a}.pv1{color:#ea580c}.pv0{color:#db2779}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.legend span{color:#fff;font-size:.8rem;font-weight:800;padding:4px 10px;border-radius:999px}
+.lg4{background:#8b5cf6}.lg3{background:#2563eb}.lg2{background:#16a34a}.lg1{background:#ea580c}.lg0{background:#db2779}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.pv-demo{font-size:2rem;font-weight:800;letter-spacing:3px;margin-top:6px}
+
+/* ===== perkalian kolom (kolum) ===== */
+.flex-row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.kolum{border-collapse:collapse;margin:8px auto;font-family:'Consolas','Courier New',monospace;font-size:clamp(1.4rem,3vw,2rem);line-height:1.25;background:#f8fafc;border-radius:14px;padding:6px}
+.kolum td{width:1.35em;text-align:center;padding:1px 4px;position:relative}
+.kolum .op{width:auto;color:#4f46e5;font-weight:800}
+.kolum .kecil td{font-size:.85rem;height:1.15em;color:#2563eb;font-weight:800}
+.kolum .kecil td.trik-baru{color:#0891b2}
+.kolum .hasil td{border-top:4px solid #312e81;font-weight:800}
+.coret::after{content:"";position:absolute;left:12%;right:12%;top:52%;height:3px;background:#ef4444;transform:rotate(-14deg);border-radius:2px}
+.trik-morf{background:#ecfeff;border:2px solid #67e8f9;border-radius:16px;padding:14px 16px;margin:10px 0}
+.trik-morf .morf{font-family:'Consolas',monospace;font-size:1.5rem;font-weight:800;letter-spacing:4px}
+.morf-old{color:#94a3b8;text-decoration:line-through;text-decoration-color:#ef4444}
+.morf-new{color:#0891b2}
+.morf-rules{margin:8px 0 0 20px;line-height:1.7}
+.rhyme{background:linear-gradient(135deg,#ecfeff,#cffafe);border:2px solid #22d3ee;border-radius:16px;padding:14px 18px;margin:12px 0;font-weight:800;color:#155e75;text-align:center;font-size:1.05rem}
+
+/* ===== langkah ===== */
+.steps{flex:1;min-width:280px}
+.step{background:#f8fafc;border:2px dashed #c7d2fe;border-radius:14px;padding:11px 14px;margin:9px 0;line-height:1.5}
+.step b.stepno{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 4px;background:#4f46e5;color:#fff;border-radius:50%;margin-right:8px;font-size:.9rem}
+.hidden{display:none!important}
+
+.tips{background:#fffbeb;border:2px solid #fcd34d;border-radius:16px;padding:13px 16px;margin:12px 0;line-height:1.5}
+.kata-kunci span{display:inline-block;background:#eef2ff;border:2px solid #c7d2fe;color:#4338ca;border-radius:999px;padding:4px 12px;margin:3px;font-weight:700;font-size:.92rem}
+
+/* ===== latihan ===== */
+.lat-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.lat-no{font-weight:800;color:#4338ca;font-size:1.05rem}
+.lat-dots span{width:15px;height:15px;border-radius:50%;background:#e2e8f0;display:inline-block;margin-left:5px;border:2px solid #cbd5e1}
+.lat-dots span.cur{border-color:#4f46e5;transform:scale(1.15)}
+.lat-dots span.on{background:#22c55e;border-color:#16a34a}
+.lat-q{background:#eef2ff;border-radius:16px;padding:16px 18px;font-size:clamp(1.15rem,2.6vw,1.45rem);font-weight:800;line-height:1.5;white-space:pre-line}
+.lat-ans{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 8px;align-items:center}
+.fb{padding:11px 14px;border-radius:12px;font-weight:700;min-height:24px;line-height:1.45}
+.fb.ok{background:#dcfce7;color:#166534}
+.fb.no{background:#fee2e2;color:#991b1b}
+.sol{background:#f1f5f9;border-left:5px solid #6366f1;border-radius:10px;padding:12px 14px;margin-top:10px;white-space:pre-line;line-height:1.65;font-size:.98rem}
+.lat-nav{display:flex;justify-content:space-between;margin-top:14px}
+
+/* ===== game ===== */
+.game-box{background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.22);text-align:center}
+.game-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-weight:800;color:#4338ca;margin-bottom:10px}
+.game-timer{height:14px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:8px 0 14px}
+.game-timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#22c55e,#84cc16);transition:width .1s linear}
+.game-q{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;margin:12px 0 18px}
+.ops{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px;margin:0 auto}
+.op-btn{border:3px solid #c7d2fe;background:#f8fafc;border-radius:16px;padding:14px;font-size:1.25rem;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:.15s}
+.op-btn:hover{background:#eef2ff}
+.op-btn:disabled{cursor:default}
+.op-btn.benar{background:#22c55e;border-color:#16a34a;color:#fff}
+.op-btn.salah{background:#ef4444;border-color:#dc2626;color:#fff}
+.game-fb{min-height:32px;font-weight:800;font-size:1.1rem;margin-top:14px}
+.game-fb.ok{color:#16a34a}.game-fb.no{color:#dc2626}
+.streak{color:#d97706}
+
+/* ===== kuis kartu ===== */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:13px;margin-top:14px}
+.kartu{position:relative;aspect-ratio:1;border:none;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#fff;font-family:inherit;font-weight:800;box-shadow:0 6px 16px rgba(0,0,0,.25);transition:transform .15s}
+.kartu:hover{transform:translateY(-4px) scale(1.02)}
+.kartu.m{background:linear-gradient(160deg,#34d399,#059669)}
+.kartu.s{background:linear-gradient(160deg,#fcd34d,#f59e0b);color:#4a2b00}
+.kartu.h{background:linear-gradient(160deg,#f472b6,#db2777)}
+.kartu.done{outline:4px solid #facc15;filter:saturate(.85)}
+.kartu .nomor{font-size:1.7rem;line-height:1}
+.kartu .lvl{font-size:.78rem}
+.kartu .reward{font-size:.8rem;background:rgba(255,255,255,.28);padding:2px 9px;border-radius:999px}
+.kartu .ceklis{position:absolute;top:6px;right:6px;background:#fff;color:#16a34a;border-radius:50%;width:27px;height:27px;display:grid;place-items:center;font-weight:900;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.kartu .didapat{position:absolute;bottom:6px;left:6px;font-size:.72rem;background:rgba(0,0,0,.35);color:#fff;padding:2px 8px;border-radius:999px}
+
+/* ===== tabel aturan & hasil ===== */
+.tabel{width:100%;border-collapse:collapse;margin:8px 0}
+.tabel th,.tabel td{padding:9px 12px;text-align:left;border-bottom:2px solid #e2e8f0}
+.tabel th{background:#eef2ff;color:#3730a3}
+.tabel tr.total td{background:#fef9c3;font-weight:800;border-top:3px solid #f59e0b}
+.hasil-big{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;margin:10px 0}
+.hasil-diamond{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;color:#0e7490}
+.bintang{font-size:2.1rem;letter-spacing:4px}
+.pesan-hasil{text-align:center;font-weight:800;color:#4338ca;font-size:1.1rem;margin:8px 0}
+
+/* ===== refleksi ===== */
+.mood-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.mood{font-size:2.1rem;background:#f8fafc;border:3px solid #e2e8f0;border-radius:16px;padding:8px 14px;cursor:pointer;transition:.15s}
+.mood:hover{transform:scale(1.08)}
+.mood.pilih{border-color:#f59e0b;background:#fffbeb;transform:scale(1.1)}
+.chip-sulit{background:#eef2ff;border:2px solid #c7d2fe;color:#4338ca;border-radius:999px;padding:8px 16px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.95rem}
+.chip-sulit.pilih{background:#4f46e5;color:#fff;border-color:#4f46e5}
+textarea.ta{width:100%;min-height:90px;border:3px solid #c7d2fe;border-radius:14px;padding:12px;font-family:inherit;font-size:1rem;resize:vertical}
+textarea.ta:focus{outline:none;border-color:#4f46e5}
+
+/* ===== modal kuis ===== */
+.modal-wrap{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-wrap[hidden]{display:none!important}
+.modal{background:#fff;border-radius:24px;max-width:660px;width:100%;max-height:88vh;overflow-y:auto;padding:22px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.modal-close{position:absolute;top:12px;right:12px;background:#fee2e2;border:none;width:36px;height:36px;border-radius:50%;font-size:1rem;font-weight:800;color:#991b1b;cursor:pointer}
+.modal-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.badge-lvl{color:#fff;font-weight:800;padding:5px 14px;border-radius:999px;font-size:.9rem}
+.badge-lvl.m{background:#059669}.badge-lvl.s{background:#d97706}.badge-lvl.h{background:#db2777}
+.timer-chip{font-size:1.45rem;font-weight:800;background:#0f172a;color:#4ade80;padding:4px 16px;border-radius:12px;font-variant-numeric:tabular-nums}
+.timer-chip.kritis{color:#f87171;animation:pop 1s infinite}
+.modal-q{background:#eef2ff;border-radius:16px;padding:16px;font-size:1.15rem;font-weight:700;line-height:1.6;margin:10px 0;white-space:pre-line}
+.modal-jawab{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+
+/* ===== toast & confetti ===== */
+#toast{position:fixed;top:74px;left:50%;transform:translateX(-50%) translateY(-20px);background:#0f172a;color:#fff;font-weight:800;padding:10px 22px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:70;box-shadow:0 8px 20px rgba(0,0,0,.35);white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti-zone{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.confetti-zone i{position:absolute;top:-24px;width:11px;height:16px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+
+/* ===== footer nav ===== */
+#navbar{position:fixed;bottom:0;left:0;right:0;height:66px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;background:rgba(15,23,42,.6);backdrop-filter:blur(8px)}
+#navbar .btn{padding:9px 16px;font-size:.95rem}
+#slideNo{color:#fff;font-weight:800;white-space:nowrap}
+#menuJump{max-width:280px;font-family:inherit;font-weight:700;border-radius:12px;padding:8px 10px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;cursor:pointer}
+#menuJump option{color:#1e293b}
+
+/* ===== thankyou ===== */
+.thanks-emoji{font-size:3.4rem;text-align:center;animation:float 2.5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+@media (max-width:640px){
+  .slide{padding:82px 10px 88px}
+  .ops{grid-template-columns:1fr}
+  #menuJump{display:none}
+  .chip{font-size:.8rem;padding:4px 9px}
+  .qgrid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<header id="topbar">
+  <div class="logo">💎 MathQuest</div>
+  <div class="userbox">
+    <span class="chip">👦 <b id="namaHeader">?</b></span>
+    <span class="chip diamond" id="chipDiamond">💎 <b id="jmlDiamond">0</b></span>
+    <button id="btnSuara" title="Hidupkan/matikan suara">🔊</button>
+  </div>
+</header>
+<div id="progress"><div id="progressFill"></div></div>
+
+<main id="deck">
+
+<!-- ============ SLIDE 1: COVER ============ -->
+<section class="slide active" id="s1">
+  <div class="cover">
+    <span class="badge-kelas">Matematika • SD Kelas 4 • Bilangan Cacah</span>
+    <h1 class="judul">Penjumlahan &amp; Pengurangan<br>Bilangan Cacah Puluhan Ribuan</h1>
+    <p class="sub">Bersusun ke bawah • Trik Angka Nol • Soal Cerita • Game • Kuis 20 Kartu Berhadiah Diamond</p>
+    <div class="kartu-nama">
+      <label for="inputNama">👋 Tuliskan namamu untuk memulai petualangan:</label>
+      <input class="inp" id="inputNama" placeholder="Nama lengkapmu..." maxlength="30" autocomplete="off">
+      <button class="btn btn-primary btn-big" id="btnMulai">🚀 Mulai Belajar</button>
+      <div class="resume-note hidden" id="resumeNote"></div>
+      <button class="btn btn-ghost hidden" id="btnResetCover" style="font-size:.85rem;padding:7px 14px">🔄 Mulai Baru (hapus progres)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: APERSEPSI ============ -->
+<section class="slide" id="s2">
+  <div class="wrap">
+    <span class="kicker">Apersepsi</span>
+    <h2 class="title">🤔 Pernahkah Kamu Memperhatikan...?</h2>
+    <p class="sub">Di sekitar kita, banyak bilangan besar yang mencapai <b>puluhan ribuan</b>!</p>
+    <div class="grid4">
+      <div class="mini"><span class="ico">🏟️</span>Stadion<br><b>45.000 kursi</b></div>
+      <div class="mini"><span class="ico">🚲</span>Harga sepeda<br><b>Rp48.500</b></div>
+      <div class="mini"><span class="ico">📚</span>Perpustakaan<br><b>23.750 buku</b></div>
+      <div class="mini"><span class="ico">🎪</span>Pengunjung pameran<br><b>61.250 orang</b></div>
+    </div>
+    <div class="tebak">
+      <div class="tebak-card">
+        <p>💸 Ibu membawa uang <b>Rp50.000</b>, lalu membeli sepeda seharga <b>Rp48.500</b>. Apakah uang Ibu cukup? Berapa kembaliannya?</p>
+        <button class="btn btn-info" data-reveal="rev1">👀 Lihat Jawaban</button>
+        <div class="jawab hidden" id="rev1">Cukup! Kembaliannya: 50.000 − 48.500 = <b>Rp1.500</b></div>
+      </div>
+      <div class="tebak-card">
+        <p>🏟️ Stadion berkapasitas <b>45.000 kursi</b>. Sudah terisi <b>27.500 penonton</b>. Berapa kursi yang masih kosong?</p>
+        <button class="btn btn-info" data-reveal="rev2">👀 Lihat Jawaban</button>
+        <div class="jawab hidden" id="rev2">Kursi kosong: 45.000 − 27.500 = <b>17.500 kursi</b></div>
+      </div>
+    </div>
+    <div class="tips" style="margin-top:16px">🎯 Nah, hari ini kita akan belajar <b>menjumlahkan</b> dan <b>mengurangkan</b> bilangan cacah puluhan ribuan dengan cara yang mudah dan menyenangkan!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: TUJUAN ============ -->
+<section class="slide" id="s3">
+  <div class="wrap">
+    <span class="kicker">Tujuan Pembelajaran</span>
+    <h2 class="title">🎯 Hari Ini Kita Akan Bisa...</h2>
+    <div class="tujuan-list" style="margin-top:14px">
+      <div class="tujuan-item"><span class="no">1</span><p><b>Menjumlahkan</b> bilangan cacah puluhan ribuan dengan cara bersusun ke bawah dan teknik <b>menyimpan</b> angka. 💠</p></div>
+      <div class="tujuan-item"><span class="no">2</span><p><b>Mengurangkan</b> bilangan cacah puluhan ribuan dengan cara bersusun dan teknik <b>meminjam</b>. ➖</p></div>
+      <div class="tujuan-item"><span class="no">3</span><p>Menggunakan <b>trik khusus angka nol</b> untuk pengurangan seperti 20.000 − 15.123. 💡</p></div>
+      <div class="tujuan-item"><span class="no">4</span><p>Menyelesaikan <b>soal cerita</b> penjumlahan dan pengurangan dalam kehidupan sehari-hari. 📖</p></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3>💎 Cara Mengumpulkan Diamond Hari Ini</h3>
+      <p>✏️ <b>Latihan</b>: benar pada percobaan pertama = +1 💎 &nbsp;|&nbsp; 🎮 <b>Game</b>: tiap jawaban benar = +1 💎 &nbsp;|&nbsp; 🃏 <b>Kuis</b>: mudah = 💎2, sedang = 💎4, sulit = 💎5 &nbsp;|&nbsp; 🪞 <b>Refleksi</b>: bonus +2 💎</p>
+    </div>
+    <div class="alur">
+      <span>1. Materi</span><span>→</span><span>2. Latihan</span><span>→</span><span>3. Game</span><span>→</span><span>4. Kuis 20 Kartu</span><span>→</span><span>5. Hasil</span><span>→</span><span>6. Kesimpulan &amp; Refleksi</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: MATERI 1 PENJUMLAHAN BERSUSUN ============ -->
+<section class="slide" id="s4">
+  <div class="wrap">
+    <span class="kicker">Materi 1</span>
+    <h2 class="title">➕ Penjumlahan Bersusun Puluhan Ribuan</h2>
+    <div class="info-grid" style="margin-top:14px">
+      <div class="panel" style="margin:0">
+        <h3>🔢 Ingat Nilai Tempat!</h3>
+        <div class="pv-demo">34.567</div>
+        <div class="legend">
+          <span class="lg4">3 puluhan ribuan</span><span class="lg3">4 ribuan</span><span class="lg2">5 ratusan</span><span class="lg1">6 puluhan</span><span class="lg0">7 satuan</span>
+        </div>
+        <p style="margin-top:10px">Urutan tempat dari kiri: <b>puluhan ribuan → ribuan → ratusan → puluhan → satuan</b>.</p>
+      </div>
+      <div class="panel" style="margin:0">
+        <h3>📌 Aturan Cara Bersusun</h3>
+        <p>1. Tulis bilangan secara <b>bersusun ke bawah</b>.<br>
+           2. Luruskan satuan dengan satuan, puluhan dengan puluhan, dan seterusnya.<br>
+           3. Mulai menjumlahkan dari <b>satuan</b> (paling kanan).<br>
+           4. Jika hasil 10 atau lebih → tulis sisanya, <b>simpan 1</b> ke kolom sebelah kiri!</p>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>✨ Contoh: 34.567 + 25.386 = ...?</h3>
+      <div class="flex-row">
+        <table class="kolum"><tbody>
+          <tr class="kecil"><td class="op"></td><td></td><td></td><td>1</td><td>1</td><td></td></tr>
+          <tr><td class="op"></td><td class="pv4">3</td><td class="pv3">4</td><td class="pv2">5</td><td class="pv1">6</td><td class="pv0">7</td></tr>
+          <tr><td class="op">+</td><td class="pv4">2</td><td class="pv3">5</td><td class="pv2">3</td><td class="pv1">8</td><td class="pv0">6</td></tr>
+          <tr class="hasil"><td class="op">=</td><td class="pv4">5</td><td class="pv3">9</td><td class="pv2">9</td><td class="pv1">5</td><td class="pv0">3</td></tr>
+        </tbody></table>
+        <div class="steps" data-steps>
+          <div class="step"><b class="stepno">1</b>Tulis ke bawah dan luruskan: <b>satuan</b> di bawah satuan, <b>puluhan</b> di bawah puluhan, dst.</div>
+          <div class="step hidden"><b class="stepno">2</b>Satuan: 7 + 6 = 13 → tulis <b>3</b>, simpan <b class="pv1">1</b> di kolom puluhan.</div>
+          <div class="step hidden"><b class="stepno">3</b>Puluhan: 6 + 8 + 1 (simpanan) = 15 → tulis <b>5</b>, simpan <b class="pv2">1</b>.</div>
+          <div class="step hidden"><b class="stepno">4</b>Ratusan: 5 + 3 + 1 = 9 → tulis <b>9</b>.</div>
+          <div class="step hidden"><b class="stepno">5</b>Ribuan: 4 + 5 = 9. Puluhan ribuan: 3 + 2 = 5.</div>
+          <div class="step hidden"><b class="stepno">6</b>🎉 Jadi, <b>34.567 + 25.386 = 59.953</b></div>
+          <button class="btn btn-ghost" data-step-btn>👀 Tampilkan Langkah Berikutnya</button>
+        </div>
+      </div>
+    </div>
+    <div class="tips">💡 <b>Tips:</b> Selalu mulai dari satuan dan jangan lupa menuliskan angka simpanan kecil di atas kolom berikutnya!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: LATIHAN 1 ============ -->
+<section class="slide" id="s5">
+  <div class="wrap">
+    <span class="kicker">Latihan 1</span>
+    <h2 class="title">✏️ Latihan Penjumlahan Bersusun</h2>
+    <p class="sub">Tulis jawabanmu, tekan <b>Cek Jawaban</b>. Benar pada percobaan pertama = <b>+1 💎</b>!</p>
+    <div class="latihan-app" data-lat="l1"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: MATERI 2 PENGURANGAN BERSUSUN ============ -->
+<section class="slide" id="s6">
+  <div class="wrap">
+    <span class="kicker">Materi 2</span>
+    <h2 class="title">➖ Pengurangan Bersusun &amp; Teknik Meminjam</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>✨ Contoh: 57.482 − 23.917 = ...?</h3>
+      <div class="flex-row">
+        <div>
+          <table class="kolum"><tbody>
+            <tr class="kecil"><td class="op"></td><td></td><td>6</td><td>14</td><td>7</td><td>12</td></tr>
+            <tr><td class="op"></td><td class="pv4">5</td><td class="pv3 coret">7</td><td class="pv2 coret">4</td><td class="pv1 coret">8</td><td class="pv0 coret">2</td></tr>
+            <tr><td class="op">−</td><td class="pv4">2</td><td class="pv3">3</td><td class="pv2">9</td><td class="pv1">1</td><td class="pv0">7</td></tr>
+            <tr class="hasil"><td class="op">=</td><td class="pv4">3</td><td class="pv3">3</td><td class="pv2">5</td><td class="pv1">6</td><td class="pv0">5</td></tr>
+          </tbody></table>
+          <p style="text-align:center;font-size:.85rem;color:#64748b">Angka biru kecil = hasil setelah meminjam</p>
+        </div>
+        <div class="steps" data-steps>
+          <div class="step"><b class="stepno">1</b>Susun ke bawah, satuan di bawah satuan.</div>
+          <div class="step hidden"><b class="stepno">2</b>Satuan: 2 − 7 tidak bisa → <b>pinjam 1</b> dari puluhan (8 menjadi 7, 2 menjadi 12) → 12 − 7 = <b>5</b>.</div>
+          <div class="step hidden"><b class="stepno">3</b>Puluhan: 7 − 1 = <b>6</b>.</div>
+          <div class="step hidden"><b class="stepno">4</b>Ratusan: 4 − 9 tidak bisa → pinjam dari ribuan (7 menjadi 6, 4 menjadi 14) → 14 − 9 = <b>5</b>.</div>
+          <div class="step hidden"><b class="stepno">5</b>Ribuan: 6 − 3 = <b>3</b>. Puluhan ribuan: 5 − 2 = <b>2</b>.</div>
+          <div class="step hidden"><b class="stepno">6</b>🎉 Jadi, <b>57.482 − 23.917 = 33.565</b></div>
+          <button class="btn btn-ghost" data-step-btn>👀 Tampilkan Langkah Berikutnya</button>
+        </div>
+      </div>
+    </div>
+    <div class="tips">💡 <b>Tips jitu:</b> Cek jawabanmu dengan operasi kebalikan → 33.565 + 23.917 = 57.482 ✓ Jika cocok, jawabanmu pasti benar!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: LATIHAN 2 ============ -->
+<section class="slide" id="s7">
+  <div class="wrap">
+    <span class="kicker">Latihan 2</span>
+    <h2 class="title">✏️ Latihan Pengurangan Bersusun</h2>
+    <p class="sub">Hati-hati dengan teknik meminjam ya! Benar pada percobaan pertama = <b>+1 💎</b></p>
+    <div class="latihan-app" data-lat="l2"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8: MATERI 3 TRIK ANGKA NOL ============ -->
+<section class="slide" id="s8">
+  <div class="wrap">
+    <span class="kicker">Materi 3</span>
+    <h2 class="title">💡 Trik Jitu: Pengurangan Banyak Angka Nol</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>😱 Masalah: 20.000 − 15.123 = ...?</h3>
+      <p>Satuan: 0 − 3 tidak bisa. Tetangganya? <b>Nol, nol, dan nol semua!</b> Meminjam berantai itu ribet... Pakai <b>trik nol</b>!</p>
+      <div class="trik-morf">
+        <div class="morf"><span class="morf-old">2 0 0 0 0</span> &nbsp;→&nbsp; <span class="morf-new">1 9 9 9 10</span></div>
+        <ul class="morf-rules">
+          <li>Angka <b>terdepan turun 1</b>: 2 → 1</li>
+          <li>Semua <b>nol di tengah berubah 9</b></li>
+          <li><b>Nol terakhir</b> (satuan) <b>berubah 10</b></li>
+        </ul>
+      </div>
+      <div class="flex-row">
+        <table class="kolum"><tbody>
+          <tr class="kecil"><td class="op"></td><td class="trik-baru">1</td><td class="trik-baru">9</td><td class="trik-baru">9</td><td class="trik-baru">9</td><td class="trik-baru">10</td></tr>
+          <tr><td class="op">−</td><td class="pv4">1</td><td class="pv3">5</td><td class="pv2">1</td><td class="pv1">2</td><td class="pv0">3</td></tr>
+          <tr class="hasil"><td class="op">=</td><td>0</td><td>4</td><td>8</td><td>7</td><td>7</td></tr>
+        </tbody></table>
+        <div class="steps" data-steps>
+          <div class="step"><b class="stepno">1</b>Ubah 20.000 menjadi <b>1 9 9 9 10</b> dengan trik di atas.</div>
+          <div class="step hidden"><b class="stepno">2</b>Satuan: 10 − 3 = <b>7</b></div>
+          <div class="step hidden"><b class="stepno">3</b>Puluhan: 9 − 2 = <b>7</b> &nbsp;•&nbsp; Ratusan: 9 − 1 = <b>8</b></div>
+          <div class="step hidden"><b class="stepno">4</b>Ribuan: 9 − 5 = <b>4</b> &nbsp;•&nbsp; Puluhan ribuan: 1 − 1 = <b>0</b></div>
+          <div class="step hidden"><b class="stepno">5</b>Hasilnya 04877 → <b>20.000 − 15.123 = 4.877</b> 🎉 Tanpa meminjam berantai!</div>
+          <button class="btn btn-ghost" data-step-btn>👀 Tampilkan Langkah Berikutnya</button>
+        </div>
+      </div>
+    </div>
+    <div class="rhyme">🎵 "Nol di tengah jadi SEMBILAN, nol terakhir jadi SEPULUH, angka depan turun SATU!" 🎵</div>
+    <div class="panel">
+      <h3>✅ Cara Cek: Melengkapi ke Atas</h3>
+      <p>Berapa yang harus ditambahkan ke 15.123 agar menjadi 20.000?<br>
+      15.123 + <b>7</b> = 15.130 → + <b>870</b> = 16.000 → + <b>4.000</b> = 20.000<br>
+      Maka: 7 + 870 + 4.000 = <b>4.877</b> ✓ (cocok dengan trik nol!)</p>
+      <h3 style="margin-top:14px">✨ Contoh Kedua: 40.000 − 25.678</h3>
+      <div class="flex-row">
+        <table class="kolum"><tbody>
+          <tr class="kecil"><td class="op"></td><td class="trik-baru">3</td><td class="trik-baru">9</td><td class="trik-baru">9</td><td class="trik-baru">9</td><td class="trik-baru">10</td></tr>
+          <tr><td class="op">−</td><td class="pv4">2</td><td class="pv3">5</td><td class="pv2">6</td><td class="pv1">7</td><td class="pv0">8</td></tr>
+          <tr class="hasil"><td class="op">=</td><td>1</td><td>4</td><td>3</td><td>2</td><td>2</td></tr>
+        </tbody></table>
+        <p style="flex:1;min-width:240px">40.000 → <b>3 9 9 9 10</b><br>
+        10 − 8 = 2; 9 − 7 = 2; 9 − 6 = 3; 9 − 5 = 4; 3 − 2 = 1<br>
+        Jadi <b>40.000 − 25.678 = 14.322</b> ✓</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9: LATIHAN 3 ============ -->
+<section class="slide" id="s9">
+  <div class="wrap">
+    <span class="kicker">Latihan 3</span>
+    <h2 class="title">✏️ Latihan Trik Angka Nol</h2>
+    <p class="sub">Gunakan trik: <b>depan turun 1, nol tengah jadi 9, nol terakhir jadi 10</b>. Benar pertama kali = <b>+1 💎</b></p>
+    <div class="latihan-app" data-lat="l3"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10: MATERI 4 SOAL CERITA PENJUMLAHAN ============ -->
+<section class="slide" id="s10">
+  <div class="wrap">
+    <span class="kicker">Materi 4</span>
+    <h2 class="title">📖 Soal Cerita Penjumlahan</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>🗝️ 3 Langkah Menyelesaikan Soal Cerita</h3>
+      <p><b>1. Diketahui</b> → tulis bilangan-bilangan yang diketahui.<br>
+         <b>2. Ditanya</b> → tentukan apa yang ditanyakan.<br>
+         <b>3. Jawab</b> → pilih operasi, hitung, lalu tulis kalimat jawaban.</p>
+      <p style="margin-top:8px"><b>Kata kunci penjumlahan:</b></p>
+      <div class="kata-kunci"><span>jumlah seluruh</span><span>total</span><span>semuanya</span><span>bertambah</span><span>digabung</span></div>
+    </div>
+    <div class="panel">
+      <h3>✨ Contoh Dikerjakan</h3>
+      <p><b>Soal:</b> Ayah membeli sepeda motor seharga <b>Rp32.500</b> dan sepeda gunung seharga <b>Rp18.750</b>. Berapa jumlah seluruh uang yang dibayar ayah?</p>
+      <div class="flex-row" style="margin-top:10px">
+        <table class="kolum"><tbody>
+          <tr class="kecil"><td class="op"></td><td>1</td><td>1</td><td></td><td></td><td></td></tr>
+          <tr><td class="op"></td><td class="pv4">3</td><td class="pv3">2</td><td class="pv2">5</td><td class="pv1">0</td><td class="pv0">0</td></tr>
+          <tr><td class="op">+</td><td class="pv4">1</td><td class="pv3">8</td><td class="pv2">7</td><td class="pv1">5</td><td class="pv0">0</td></tr>
+          <tr class="hasil"><td class="op">=</td><td class="pv4">5</td><td class="pv3">1</td><td class="pv2">2</td><td class="pv1">5</td><td class="pv0">0</td></tr>
+        </tbody></table>
+        <div style="flex:1;min-width:250px">
+          <p><b>Diketahui:</b> motor = 32.500, sepeda = 18.750<br>
+          <b>Ditanya:</b> jumlah seluruh uang?<br>
+          <b>Jawab:</b> 32.500 + 18.750 = 51.250<br>
+          Jadi, jumlah uang yang dibayar ayah <b>Rp51.250</b>. ✓</p>
+        </div>
+      </div>
+    </div>
+    <div class="tips">💡 <b>Ingat:</b> jika bilangan digabung atau bertambah, gunakan <b>penjumlahan</b>. Setelah selesai, cek lagi dengan pengurangan!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11: LATIHAN 4 ============ -->
+<section class="slide" id="s11">
+  <div class="wrap">
+    <span class="kicker">Latihan 4</span>
+    <h2 class="title">✏️ Latihan Soal Cerita Penjumlahan</h2>
+    <p class="sub">Temukan bilangan yang diketahui, lalu jumlahkan! Benar pertama kali = <b>+1 💎</b></p>
+    <div class="latihan-app" data-lat="l4"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12: MATERI 5 SOAL CERITA PENGURANGAN ============ -->
+<section class="slide" id="s12">
+  <div class="wrap">
+    <span class="kicker">Materi 5</span>
+    <h2 class="title">📖 Soal Cerita Pengurangan</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>🗝️ Kata Kunci Pengurangan</h3>
+      <div class="kata-kunci"><span>sisa</span><span>selisih</span><span>kurang</span><span>berkurang</span><span>diambil</span><span>terpakai</span><span>pergi/hilang</span></div>
+      <p style="margin-top:10px">Jika sesuatu <b>diambil, terpakai, pergi, atau bertanya "berapa selisih/sisa/kurang"</b> → gunakan <b>pengurangan</b>!</p>
+    </div>
+    <div class="panel">
+      <h3>✨ Contoh Dikerjakan</h3>
+      <p><b>Soal:</b> Sekolah memiliki <b>65.750 lembar kertas</b>. Sebanyak <b>24.380 lembar</b> sudah dipakai untuk ujian. Berapa sisa kertas sekolah?</p>
+      <div class="flex-row" style="margin-top:10px">
+        <table class="kolum"><tbody>
+          <tr class="kecil"><td class="op"></td><td></td><td></td><td>6</td><td>15</td><td></td></tr>
+          <tr><td class="op"></td><td class="pv4">6</td><td class="pv3">5</td><td class="pv2 coret">7</td><td class="pv1 coret">5</td><td class="pv0">0</td></tr>
+          <tr><td class="op">−</td><td class="pv4">2</td><td class="pv3">4</td><td class="pv2">3</td><td class="pv1">8</td><td class="pv0">0</td></tr>
+          <tr class="hasil"><td class="op">=</td><td class="pv4">4</td><td class="pv3">1</td><td class="pv2">3</td><td class="pv1">7</td><td class="pv0">0</td></tr>
+        </tbody></table>
+        <div style="flex:1;min-width:250px">
+          <p><b>Diketahui:</b> kertas = 65.750, dipakai = 24.380<br>
+          <b>Ditanya:</b> sisa kertas?<br>
+          <b>Jawab:</b> 65.750 − 24.380 = 41.370<br>
+          Jadi, sisa kertas sekolah <b>41.370 lembar</b>. ✓</p>
+          <p style="margin-top:8px;font-size:.92rem;color:#64748b">Cek: 41.370 + 24.380 = 65.750 ✓</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13: LATIHAN 5 ============ -->
+<section class="slide" id="s13">
+  <div class="wrap">
+    <span class="kicker">Latihan 5</span>
+    <h2 class="title">✏️ Latihan Soal Cerita Pengurangan</h2>
+    <p class="sub">Waspadai soal dengan banyak angka nol — pakai trik nol jika perlu! Benar pertama kali = <b>+1 💎</b></p>
+    <div class="latihan-app" data-lat="l5"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14: GAME ============ -->
+<section class="slide" id="s14">
+  <div class="wrap">
+    <span class="kicker">Waktunya Bermain</span>
+    <h2 class="title">🎮 Game: Diamond Rush</h2>
+    <p class="sub">Pilih jawaban benar sebelum waktu habis. Tiap jawaban benar = <b>+1 💎</b> (diamond hanya diambil sekali, tapi boleh main berulang!)</p>
+    <div class="game-box" id="gameApp"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15: KUIS 20 KARTU ============ -->
+<section class="slide" id="s15">
+  <div class="wrap">
+    <span class="kicker">Tantangan Terakhir</span>
+    <h2 class="title">🃏 Kuis 20 Kartu — Soal Cerita</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>📜 Aturan Main</h3>
+      <table class="tabel">
+        <tr><th>Tingkat</th><th>Waktu</th><th>Hadiah</th></tr>
+        <tr><td>⭐ Mudah</td><td>3 menit</td><td>💎 2</td></tr>
+        <tr><td>⭐⭐ Sedang</td><td>4 menit</td><td>💎 4</td></tr>
+        <tr><td>⭐⭐⭐ Sulit</td><td>6 menit</td><td>💎 5</td></tr>
+      </table>
+      <p style="margin-top:8px">1️⃣ Klik kartu &nbsp;→&nbsp; 2️⃣ Tekan <b>▶ Mulai Waktu</b> &nbsp;→&nbsp; 3️⃣ Tulis jawabanmu &nbsp;→&nbsp; 4️⃣ Tekan <b>✅ Cek Jawaban</b>.<br>
+      Jawab sebelum waktu habis untuk mendapat diamond! Jika waktu habis, kamu masih bisa belajar dari <b>📖 Pembahasan</b>.</p>
+    </div>
+    <div id="quizGrid" class="qgrid"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 16: HASIL ============ -->
+<section class="slide" id="s16">
+  <div class="wrap">
+    <span class="kicker">Laporan Belajarmu</span>
+    <h2 class="title">📊 Hasil Pengerjaan Siswa</h2>
+    <div id="hasilApp" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 17: KESIMPULAN ============ -->
+<section class="slide" id="s17">
+  <div class="wrap">
+    <span class="kicker">Kesimpulan</span>
+    <h2 class="title">📝 Apa yang Kita Pelajari Hari Ini?</h2>
+    <div class="tujuan-list" style="margin-top:14px">
+      <div class="tujuan-item"><span class="no">➕</span><p><b>Penjumlahan bersusun</b>: tulis ke bawah, luruskan tempatnya, mulai dari satuan, dan jangan lupa <b>simpanan</b>.</p></div>
+      <div class="tujuan-item"><span class="no">➖</span><p><b>Pengurangan bersusun</b>: jika angkanya tidak cukup, <b>pinjam 1</b> dari tetangga kirinya.</p></div>
+      <div class="tujuan-item"><span class="no">💡</span><p><b>Trik angka nol</b>: angka depan turun 1, nol di tengah menjadi 9, nol terakhir menjadi 10. Contoh: 20.000 − 15.123 = 4.877.</p></div>
+      <div class="tujuan-item"><span class="no">📖</span><p><b>Soal cerita</b>: temukan <b>diketahui</b> dan <b>ditanya</b>, kenali kata kuncinya (jumlah/sisa/selisih), hitung, lalu tulis kalimat jawaban.</p></div>
+      <div class="tujuan-item"><span class="no">✅</span><p><b>Selalu periksa</b> jawabanmu dengan operasi kebalikan: penjumlahan ↔ pengurangan.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 18: REFLEKSI ============ -->
+<section class="slide" id="s18">
+  <div class="wrap">
+    <span class="kicker">Refleksi</span>
+    <h2 class="title">🪞 Bagaimana Perasaanmu Hari Ini?</h2>
+    <div class="panel" style="margin-top:14px">
+      <h3>1️⃣ Pilih emoji perasaanmu:</h3>
+      <div class="mood-row">
+        <button class="mood" data-m="😟 Masih bingung">😟</button>
+        <button class="mood" data-m="😐 Cukup paham">😐</button>
+        <button class="mood" data-m="🙂 Paham">🙂</button>
+        <button class="mood" data-m="🤩 Sangat paham">🤩</button>
+      </div>
+      <h3 style="margin-top:14px">2️⃣ Materi mana yang paling menantang?</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+        <button class="chip-sulit" data-s="Penjumlahan bersusun">➕ Penjumlahan bersusun</button>
+        <button class="chip-sulit" data-s="Pengurangan bersusun">➖ Pengurangan bersusun</button>
+        <button class="chip-sulit" data-s="Trik angka nol">💡 Trik angka nol</button>
+        <button class="chip-sulit" data-s="Soal cerita">📖 Soal cerita</button>
+      </div>
+      <h3 style="margin-top:16px">3️⃣ Tulis hal menarik yang kamu pelajari hari ini:</h3>
+      <textarea class="ta" id="refTeks" placeholder="Contoh: Aku baru tahu trik angka nol, jadi 20.000 - 15.123 jadi mudah!..."></textarea>
+      <div style="text-align:center;margin-top:12px">
+        <button class="btn btn-success btn-big" id="btnRef">📨 Kirim Refleksi (+2 💎)</button>
+        <div class="jawab hidden" id="refOk" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 19: TERIMA KASIH ============ -->
+<section class="slide" id="s19">
+  <div class="cover">
+    <div class="thanks-emoji">🌟🙏🌟</div>
+    <h1 class="judul">Thank You for Today!</h1>
+    <p class="sub">Terima kasih sudah belajar dengan semangat,<br><b id="thanksNama" style="font-size:1.3em">Siswa Hebat</b>!</p>
+    <div class="kartu-nama" style="text-align:center">
+      <div style="font-size:1.15rem">Total diamond yang kamu kumpulkan:</div>
+      <div style="font-size:2.6rem;font-weight:800;color:#0e7490">💎 <span id="thanksDiamond">0</span></div>
+      <p style="font-weight:700;color:#4338ca">Kamu hebat! Teruslah berlatih, calon juara matematika! 🏆</p>
+      <button class="btn btn-danger" id="btnUlangi">🔁 Ulangi dari Awal</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ MODAL KUIS ============ -->
+<div class="modal-wrap" id="modalWrap" hidden>
+  <div class="modal">
+    <button class="modal-close" id="btnModalClose" title="Tutup">✕</button>
+    <div class="modal-top">
+      <span class="badge-lvl" id="modalBadge">Kartu 1</span>
+      <span class="timer-chip" id="modalTimer">03:00</span>
+    </div>
+    <div class="modal-q" id="modalQ"></div>
+    <div class="modal-jawab">
+      <input class="inp" id="modalInput" placeholder="Jawabanmu..." inputmode="numeric" autocomplete="off" disabled>
+      <button class="btn btn-primary" id="btnModalMulai">▶ Mulai Waktu</button>
+      <button class="btn btn-success" id="btnModalCek" disabled>✅ Cek Jawaban</button>
+      <button class="btn btn-info" id="btnModalSol" disabled>📖 Pembahasan</button>
+    </div>
+    <div class="fb" id="modalFb"></div>
+    <div class="sol hidden" id="modalSol"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+      <button class="btn btn-ghost hidden" id="btnModalRetry">🔁 Coba Lagi (tanpa 💎)</button>
+      <button class="btn btn-danger" id="btnModalTutup">Tutup Kartu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NAV BAWAH ============ -->
+<footer id="navbar">
+  <button class="btn btn-ghost" id="btnPrev">◀ Sebelumnya</button>
+  <span id="slideNo">1 / 19</span>
+  <select id="menuJump" title="Lompat ke slide"></select>
+  <button class="btn btn-primary" id="btnNext">Berikutnya ▶</button>
+</footer>
+
+<div id="toast"></div>
+<script>
+"use strict";
+/* ================= DATA LATIHAN (5 set x 5 soal) ================= */
+const LAT = {
+l1: { judul:"Penjumlahan Bersusun", soal:[
+ {q:"12.345 + 23.456 = ...", a:35801,
+  sol:"Satuan: 5+6=11 → tulis 1, simpan 1\nPuluhan: 4+5+1=10 → tulis 0, simpan 1\nRatusan: 3+4+1=8\nRibuan: 2+3=5. Puluhan ribuan: 1+2=3\nHasil: 35.801"},
+ {q:"34.218 + 15.372 = ...", a:49590,
+  sol:"Satuan: 8+2=10 → tulis 0, simpan 1\nPuluhan: 1+7+1=9\nRatusan: 2+3=5\nRibuan: 4+5=9. Puluhan ribuan: 3+1=4\nHasil: 49.590"},
+ {q:"45.678 + 32.215 = ...", a:77893,
+  sol:"Satuan: 8+5=13 → tulis 3, simpan 1\nPuluhan: 7+1+1=9\nRatusan: 6+2=8\nRibuan: 5+2=7. Puluhan ribuan: 4+3=7\nHasil: 77.893"},
+ {q:"23.456 + 41.544 = ...", a:65000,
+  sol:"Satuan: 6+4=10 → tulis 0, simpan 1\nPuluhan: 5+4+1=10 → tulis 0, simpan 1\nRatusan: 4+5+1=10 → tulis 0, simpan 1\nRibuan: 3+1+1=5. Puluhan ribuan: 2+4=6\nHasil: 65.000"},
+ {q:"17.892 + 25.618 = ...", a:43510,
+  sol:"Satuan: 2+8=10 → tulis 0, simpan 1\nPuluhan: 9+1+1=11 → tulis 1, simpan 1\nRatusan: 8+6+1=15 → tulis 5, simpan 1\nRibuan: 7+5+1=13 → tulis 3, simpan 1\nPuluhan ribuan: 1+2+1=4\nHasil: 43.510"}
+]},
+l2: { judul:"Pengurangan Bersusun", soal:[
+ {q:"48.532 − 25.217 = ...", a:23315,
+  sol:"Satuan: 2−7 tidak bisa → pinjam: 12−7=5 (puluhan 3 jadi 2)\nPuluhan: 2−1=1\nRatusan: 5−2=3\nRibuan: 8−5=3. Puluhan ribuan: 4−2=2\nHasil: 23.315"},
+ {q:"62.471 − 38.156 = ...", a:24315,
+  sol:"Satuan: 1−6 → pinjam: 11−6=5\nPuluhan: 6−5=1\nRatusan: 4−1=3\nRibuan: 2−8 → pinjam: 12−8=4 (puluhan ribuan 6 jadi 5)\nPuluhan ribuan: 5−3=2\nHasil: 24.315"},
+ {q:"71.305 − 46.879 = ...", a:24426,
+  sol:"Satuan: 5−9 → pinjam berantai: 15−9=6\nPuluhan: 0 jadi 9 setelah dipinjam → 9−7=2\nRatusan: 3 jadi 2 → 2−8 → pinjam: 12−8=4\nRibuan: 1 jadi 0 → 0−6 → pinjam: 10−6=4 (puluhan ribuan 7 jadi 6)\nPuluhan ribuan: 6−4=2\nHasil: 24.426"},
+ {q:"90.000 − 34.567 = ...", a:55433,
+  sol:"Pakai trik nol! 90.000 → 8 9 9 9 10\n10−7=3; 9−6=3; 9−5=4; 9−4=5; 8−3=5\nHasil: 55.433"},
+ {q:"84.156 − 47.289 = ...", a:36867,
+  sol:"Satuan: 6−9 → 16−9=7\nPuluhan: 5 jadi 4 → 4−8 → 14−8=6\nRatusan: 1 jadi 0 → 0−2 → 10−2=8 (ribuan 4 jadi 3)\nRibuan: 3−7 → 13−7=6 (puluhan ribuan 8 jadi 7)\nPuluhan ribuan: 7−4=3\nHasil: 36.867"}
+]},
+l3: { judul:"Trik Angka Nol", soal:[
+ {q:"30.000 − 12.456 = ...", a:17544,
+  sol:"Trik: 30.000 → 2 9 9 9 10\n10−6=4; 9−5=4; 9−4=5; 9−2=7; 2−1=1\nHasil: 17.544"},
+ {q:"50.000 − 27.318 = ...", a:22682,
+  sol:"Trik: 50.000 → 4 9 9 9 10\n10−8=2; 9−1=8; 9−3=6; 9−7=2; 4−2=2\nHasil: 22.682"},
+ {q:"60.000 − 43.509 = ...", a:16491,
+  sol:"Trik: 60.000 → 5 9 9 9 10\n10−9=1; 9−0=9; 9−5=4; 9−3=6; 5−4=1\nHasil: 16.491"},
+ {q:"70.000 − 8.999 = ...", a:61001,
+  sol:"Trik: 70.000 → 6 9 9 9 10 (tulis 8.999 sebagai 08.999)\n10−9=1; 9−9=0; 9−9=0; 9−8=1; 6−0=6\nHasil: 61.001"},
+ {q:"40.000 − 16.085 = ...", a:23915,
+  sol:"Trik: 40.000 → 3 9 9 9 10\n10−5=5; 9−8=1; 9−0=9; 9−6=3; 3−1=2\nHasil: 23.915"}
+]},
+l4: { judul:"Soal Cerita Penjumlahan", soal:[
+ {q:"🏟️ Pada pertandingan pertama hadir 24.350 penonton dan pada pertandingan kedua hadir 19.625 penonton. Berapa jumlah seluruh penonton pada kedua pertandingan itu?", a:43975,
+  sol:"Diketahui: 24.350 dan 19.625 penonton\nDitanya: jumlah seluruh penonton\n24.350 + 19.625 = 43.975\nJadi, jumlah seluruh penonton 43.975 orang"},
+ {q:"📚 Toko Buku Maju menjual 15.480 buku tulis pada bulan Juni dan 23.655 buku tulis pada bulan Juli. Berapa jumlah buku tulis yang terjual pada kedua bulan itu?", a:39135,
+  sol:"15.480 + 23.655 = 39.135\nJadi, terjual 39.135 buku tulis"},
+ {q:"🚲 Harga sebuah sepeda Rp28.500 dan harga sebuah helm Rp15.750. Berapa uang yang harus dibayar untuk membeli keduanya?", a:44250,
+  sol:"28.500 + 15.750 = 44.250\nJadi, uang yang harus dibayar Rp44.250"},
+ {q:"📖 Perpustakaan memiliki 21.350 buku. Kemudian sekolah membeli 12.875 buku baru. Berapa jumlah buku perpustakaan sekarang?", a:34225,
+  sol:"21.350 + 12.875 = 34.225\nJadi, jumlah buku sekarang 34.225 buku"},
+ {q:"🍊 Kebun Pak Dedi memetik 16.750 kg jeruk dan 14.890 kg apel. Berapa jumlah seluruh buah yang dipetik?", a:31640,
+  sol:"16.750 + 14.890 = 31.640\nJadi, seluruh buah yang dipetik 31.640 kg"}
+]},
+l5: { judul:"Soal Cerita Pengurangan", soal:[
+ {q:"🏦 Di bank tersimpan uang milik ayah sebesar Rp85.000. Diambil Rp37.500. Berapa sisa uang ayah di bank?", a:47500,
+  sol:"Diketahui: 85.000, diambil 37.500\nDitanya: sisa\n85.000 − 37.500 = 47.500\nJadi, sisa uang Rp47.500"},
+ {q:"🏙️ Kota A berpenduduk 62.400 orang dan Kota B berpenduduk 45.780 orang. Berapa selisih penduduk kedua kota?", a:16620,
+  sol:"62.400 − 45.780 = 16.620\nJadi, selisihnya 16.620 orang"},
+ {q:"🏭 Pabrik botol memiliki 73.500 botol. Sebanyak 28.675 botol sudah terjual. Berapa botol yang tersisa?", a:44825,
+  sol:"73.500 − 28.675 = 44.825\nJadi, tersisa 44.825 botol"},
+ {q:"🪑 Ibu menabung untuk membeli lemari seharga Rp56.000. Tabungan ibu Rp48.250. Berapa uang yang masih kurang?", a:7750,
+  sol:"56.000 − 48.250 = 7.750\nJadi, uang yang kurang Rp7.750"},
+ {q:"📚 Perpustakaan memiliki 40.000 buku. Sebanyak 12.345 buku sedang dipinjam. Berapa buku yang ada di perpustakaan sekarang?", a:27655,
+  sol:"Pakai trik nol: 40.000 → 3 9 9 9 10\n10−5=5; 9−4=5; 9−3=6; 9−2=7; 3−1=2\nJadi, 40.000 − 12.345 = 27.655 buku"}
+]}
+};
+
+/* ================= DATA KUIS 20 KARTU ================= */
+/* lvl: 1=mudah (3 mnt, 2💎) 2=sedang (4 mnt, 4💎) 3=sulit (6 mnt, 5💎) */
+const LVL = {
+ 1:{nama:"Mudah", bintang:"⭐", waktu:180, d:2, cls:"m"},
+ 2:{nama:"Sedang", bintang:"⭐⭐", waktu:240, d:4, cls:"s"},
+ 3:{nama:"Sulit", bintang:"⭐⭐⭐", waktu:360, d:5, cls:"h"}
+};
+const QUIZ = [
+ {lvl:1, q:"📚 Toko Buku Ceria memiliki 25.000 buku. Pak Rudi membeli lagi 12.000 buku. Berapa jumlah buku di toko sekarang?", a:37000,
+  sol:"Diketahui: 25.000 buku dan 12.000 buku\nDitanya: jumlah buku sekarang\n25.000 + 12.000 = 37.000\nJadi, jumlah buku di toko sekarang 37.000 buku"},
+ {lvl:1, q:"🏟️ Sebuah stadion dikunjungi 46.000 penonton. Setelah jeda, 15.000 penonton meninggalkan stadion. Berapa penonton yang masih bertahan?", a:31000,
+  sol:"46.000 − 15.000 = 31.000\nJadi, penonton yang bertahan 31.000 orang"},
+ {lvl:1, q:"🎒 Harga sebuah tas Rp23.500 dan harga sepasang sepatu Rp31.000. Berapa uang yang harus dibayar untuk kedua barang itu?", a:54500,
+  sol:"23.500 + 31.000 = 54.500\nJadi, uang yang harus dibayar Rp54.500"},
+ {lvl:1, q:"📖 Perpustakaan sekolah memiliki 34.500 buku. Tahun ini dibeli 14.500 buku baru. Berapa jumlah buku sekarang?", a:49000,
+  sol:"34.500 + 14.500 = 49.000\nJadi, jumlah buku sekarang 49.000 buku"},
+ {lvl:1, q:"🧸 Pabrik mainan memproduksi 55.000 kelereng. Sebanyak 23.000 kelereng dikirim ke toko. Berapa kelereng yang tersisa di pabrik?", a:32000,
+  sol:"55.000 − 23.000 = 32.000\nJadi, tersisa 32.000 kelereng"},
+ {lvl:1, q:"🏡 Desa Sukamaju berpenduduk 21.750 orang dan Desa Sukaharjo berpenduduk 13.250 orang. Berapa jumlah penduduk kedua desa?", a:35000,
+  sol:"21.750 + 13.250 = 35.000\nJadi, jumlah penduduk kedua desa 35.000 orang"},
+ {lvl:1, q:"🥭 Kebun mangga memanen 42.000 kg mangga. Sebanyak 17.500 kg sudah dijual. Berapa kg mangga yang belum terjual?", a:24500,
+  sol:"42.000 − 17.500 = 24.500\nJadi, yang belum terjual 24.500 kg"},
+ {lvl:2, q:"🏟️ Stadion Segiri memiliki 45.000 kursi. Pada sebuah pertandingan, 27.845 kursi terisi penonton. Berapa kursi yang masih kosong?", a:17155,
+  sol:"45.000 − 27.845\nPinjam berantai: nol terakhir jadi 10, nol di tengah jadi 9, angka 5 jadi 4.\n10−5=5; 9−4=5; 9−8=1; lalu 4−7 tidak bisa → pinjam lagi dari puluhan ribu: 14−7=7; 3−2=1\nJadi, kursi kosong 17.155"},
+ {lvl:2, q:"🏘️ Penduduk Kota Baru tahun lalu 36.500 orang. Tahun ini bertambah 8.775 orang. Berapa jumlah penduduk tahun ini?", a:45275,
+  sol:"36.500 + 8.775 = 45.275\nJadi, jumlah penduduk tahun ini 45.275 orang"},
+ {lvl:2, q:"🥐 Bu Ani menjual 14.250 roti bulan ini dan 18.675 roti bulan lalu. Berapa jumlah roti yang terjual pada dua bulan itu?", a:32925,
+  sol:"14.250 + 18.675 = 32.925\nJadi, terjual 32.925 roti"},
+ {lvl:2, q:"📦 Gudang memuat 63.250 kotak. Sebanyak 24.750 kotak dikirim ke supermarket. Berapa kotak yang tersisa di gudang?", a:38500,
+  sol:"63.250 − 24.750 = 38.500\nJadi, tersisa 38.500 kotak"},
+ {lvl:2, q:"💵 Uang tabungan Pak Budi Rp47.500. Ia membeli mesin potong rumput seharga Rp29.850. Berapa sisa tabungannya?", a:17650,
+  sol:"47.500 − 29.850 = 17.650\nJadi, sisa tabungan Rp17.650"},
+ {lvl:2, q:"🍃 Kebun teh A menghasilkan 23.480 kg daun teh dan kebun teh B menghasilkan 19.760 kg. Berapa jumlah hasil kedua kebun?", a:43240,
+  sol:"23.480 + 19.760 = 43.240\nJadi, jumlah hasil kedua kebun 43.240 kg"},
+ {lvl:2, q:"📕 Penerbit mencetak 40.000 buku. Setelah diperiksa, 3.456 buku rusak. Berapa buku yang masih baik?", a:36544,
+  sol:"Gunakan trik nol: 40.000 → 3 9 9 9 10\n10−6=4; 9−5=4; 9−4=5; 9−3=6; 3−0=3\nJadi, 40.000 − 3.456 = 36.544 buku yang baik"},
+ {lvl:3, q:"👥 Penduduk kecamatan Sukamaju berjumlah 78.450 orang. Jika 23.975 di antaranya laki-laki, berapa jumlah penduduk perempuan?", a:54475,
+  sol:"78.450 − 23.975 = 54.475\nJadi, penduduk perempuan 54.475 orang"},
+ {lvl:3, q:"🏪 Toko menjual 18.500 buku pada bulan Januari, 21.750 buku pada bulan Februari, dan 15.250 buku pada bulan Maret. Berapa jumlah buku yang terjual selama tiga bulan?", a:55500,
+  sol:"18.500 + 21.750 = 40.250\n40.250 + 15.250 = 55.500\nJadi, terjual 55.500 buku"},
+ {lvl:3, q:"💝 Warga mengumpulkan dana Rp68.000 untuk santunan. Terpakai Rp25.500 untuk penerima pertama dan Rp19.750 untuk penerima kedua. Berapa sisa dana?", a:22750,
+  sol:"68.000 − 25.500 = 42.500\n42.500 − 19.750 = 22.750\nJadi, sisa dana Rp22.750"},
+ {lvl:3, q:"👟 Pabrik sepatu menargetkan 90.000 pasang sepatu. Bulan pertama tercapai 31.500 pasang dan bulan kedua 28.750 pasang. Berapa pasang lagi yang harus diproduksi?", a:29750,
+  sol:"31.500 + 28.750 = 60.250\n90.000 − 60.250 = 29.750\nJadi, harus diproduksi 29.750 pasang lagi"},
+ {lvl:3, q:"✈️ Bandara melayani 42.350 penumpang pada hari Senin dan 38.775 penumpang pada hari Selasa. Berapa selisih penumpang kedua hari itu?", a:3575,
+  sol:"42.350 − 38.775 = 3.575\nJadi, selisihnya 3.575 penumpang"},
+ {lvl:3, q:"🌾 Petani menyimpan 57.000 kg padi di dua lumbung: 24.680 kg dan 17.320 kg. Sisanya disimpan di rumah. Berapa kg padi yang disimpan di rumah?", a:15000,
+  sol:"24.680 + 17.320 = 42.000\n57.000 − 42.000 = 15.000\nJadi, padi di rumah 15.000 kg"}
+];
+
+/* ================= DATA GAME ================= */
+const GAME = [
+ {q:"12.000 + 25.000 = ...", a:37000, o:[36000,37000,37500,38000]},
+ {q:"45.000 − 12.000 = ...", a:33000, o:[32000,33000,34000,23000]},
+ {q:"23.400 + 15.600 = ...", a:39000, o:[38000,39500,39000,40000]},
+ {q:"60.000 − 25.000 = ...", a:35000, o:[30000,35000,36000,45000]},
+ {q:"14.500 + 26.500 = ...", a:41000, o:[40000,41000,41500,42000]},
+ {q:"70.000 − 34.000 = ...", a:36000, o:[34000,36000,35000,46000]},
+ {q:"32.750 + 18.250 = ...", a:51000, o:[50000,51000,50500,51500]},
+ {q:"50.000 − 17.500 = ...", a:32500, o:[31500,32500,33000,33500]},
+ {q:"21.300 + 38.700 = ...", a:60000, o:[59000,60000,59500,61000]},
+ {q:"80.000 − 45.250 = ...", a:34750, o:[33750,34750,34250,35750]}
+];
+const JUDUL_SLIDE = ["Cover","Apersepsi","Tujuan Pembelajaran","Materi: Penjumlahan Bersusun","Latihan 1","Materi: Pengurangan Bersusun","Latihan 2","Materi: Trik Angka Nol","Latihan 3","Materi: Soal Cerita Penjumlahan","Latihan 4","Materi: Soal Cerita Pengurangan","Latihan 5","Game: Diamond Rush","Kuis 20 Kartu","Hasil Pengerjaan","Kesimpulan","Refleksi","Terima Kasih"];
+/* ================= STATE & UTIL ================= */
+const KUNCI_DB = "mathquestPuluhanRibu";
+let S = {name:"", diamonds:0, mute:false, lat:{}, game:{score:null, d:0, claimed:false}, quiz:{}, ref:{mood:"", sulit:"", teks:"", done:false}};
+function save(){ try{ localStorage.setItem(KUNCI_DB, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const r = localStorage.getItem(KUNCI_DB); if(r){ S = Object.assign(S, JSON.parse(r)); } }catch(e){} }
+function lat(k){ if(!S.lat[k]) S.lat[k] = {ok:[false,false,false,false,false], aw:[false,false,false,false,false], att:[false,false,false,false,false], in:["","","","",""]}; return S.lat[k]; }
+const fmt = n => n.toLocaleString("id-ID");
+function num(v){ const t = String(v).replace(/[.\s,]/g, ""); return t === "" ? NaN : parseInt(t, 10); }
+const $ = id => document.getElementById(id);
+const fmtT = s => String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0");
+
+/* ---- suara ---- */
+let AC = null;
+function tone(f, d, t, type, v){
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type || "sine"; o.frequency.value = f; o.connect(g); g.connect(AC.destination);
+  const s = AC.currentTime + (t || 0), vol = v || 0.13;
+  g.gain.setValueAtTime(0.0001, s);
+  g.gain.exponentialRampToValueAtTime(vol, s + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, s + d);
+  o.start(s); o.stop(s + d + 0.05);
+}
+function beep(kind){
+  if(S.mute) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if(AC.state === "suspended") AC.resume();
+    if(kind === "ok"){ tone(660,.12,0); tone(880,.18,.12); }
+    else if(kind === "no"){ tone(200,.25,0,"square",.07); }
+    else if(kind === "diamond"){ tone(1200,.1,0); tone(1600,.14,.08); }
+    else if(kind === "click"){ tone(520,.06,0,"triangle",.06); }
+  }catch(e){}
+}
+
+/* ---- toast & diamond & confetti ---- */
+let toastTimer = null;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+function updateDiamondUI(){
+  $("jmlDiamond").textContent = S.diamonds;
+  const c = $("chipDiamond"); c.classList.remove("pop"); void c.offsetWidth; c.classList.add("pop");
+}
+function addD(n, label){
+  S.diamonds += n; save(); updateDiamondUI();
+  toast("+" + n + " 💎 " + (label || "")); beep("diamond");
+}
+function confetti(){
+  const c = document.createElement("div"); c.className = "confetti-zone";
+  const warna = ["#fbbf24","#22d3ee","#f472b6","#a78bfa","#34d399","#fb923c"];
+  for(let i = 0; i < 44; i++){
+    const s = document.createElement("i");
+    s.style.left = Math.random()*100 + "%";
+    s.style.background = warna[i % warna.length];
+    s.style.animationDelay = (Math.random()*1.2) + "s";
+    s.style.animationDuration = (2.2 + Math.random()*1.8) + "s";
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(), 4600);
+}
+
+/* ================= NAVIGASI SLIDE ================= */
+const slides = () => Array.from(document.querySelectorAll(".slide"));
+let cur = 0;
+function updateNav(){
+  const n = slides().length;
+  $("slideNo").textContent = (cur+1) + " / " + n;
+  $("progressFill").style.width = (cur/(n-1)*100) + "%";
+  $("btnPrev").disabled = (cur === 0);
+  $("btnNext").disabled = (cur === n-1);
+  $("menuJump").value = String(cur);
+}
+function go(i){
+  const list = slides();
+  if(i < 0 || i >= list.length) return;
+  if(cur === 0 && i > 0 && !S.name){
+    toast("Isi namamu dulu ya! 😊");
+    const inp = $("inputNama");
+    inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+    inp.focus();
+    return;
+  }
+  list[cur].classList.remove("active");
+  cur = i;
+  list[cur].classList.add("active");
+  list[cur].scrollTop = 0;
+  beep("click");
+  updateNav();
+  hooks();
+  save();
+}
+function hooks(){
+  if(cur === 14) buildQuizGrid();
+  if(cur === 15) renderHasil();
+  if(cur === 18){ $("thanksNama").textContent = S.name || "Siswa Hebat"; $("thanksDiamond").textContent = S.diamonds; }
+}
+
+/* ================= STEPS & REVEAL ================= */
+function initSteps(){
+  document.querySelectorAll("[data-steps]").forEach(box => {
+    const btn = box.querySelector("[data-step-btn]");
+    if(!btn) return;
+    btn.addEventListener("click", () => {
+      const steps = Array.from(box.querySelectorAll(".step"));
+      const next = steps.find(s => s.classList.contains("hidden"));
+      if(next){
+        next.classList.remove("hidden");
+        next.scrollIntoView({behavior:"smooth", block:"nearest"});
+        beep("click");
+      }
+      if(!box.querySelector(".step.hidden")) btn.hidden = true;
+    });
+  });
+}
+function initReveal(){
+  document.querySelectorAll("[data-reveal]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const t = $(btn.dataset.reveal);
+      if(!t) return;
+      t.classList.toggle("hidden");
+      btn.textContent = t.classList.contains("hidden") ? "👀 Lihat Jawaban" : "🙈 Sembunyikan";
+      beep("click");
+    });
+  });
+}
+
+/* ================= LATIHAN ================= */
+const LI = {}; // index soal aktif per set
+function buildLatihan(key){
+  LI[key] = LI[key] || 0;
+  const app = document.querySelector('[data-lat="' + key + '"]');
+  if(!app) return;
+  renderLat(key, app);
+}
+function renderLat(key, app){
+  const st = lat(key);
+  const i = LI[key] || 0;
+  const data = LAT[key];
+  const q = data.soal[i];
+  const dots = data.soal.map((_, j) =>
+    '<span class="' + (st.ok[j] ? "on" : "") + (j === i ? " cur" : "") + '"></span>').join("");
+  const sudahBenar = st.ok[i];
+  const bisaPembahasan = st.att[i] || st.ok[i];
+  app.innerHTML =
+    '<div class="panel">' +
+      '<div class="lat-top"><span class="lat-no">Soal ' + (i+1) + ' dari 5 — ' + data.judul + '</span><span class="lat-dots">' + dots + '</span></div>' +
+      '<div class="lat-q">' + q.q + '</div>' +
+      '<div class="lat-ans">' +
+        '<input class="inp lat-inp" placeholder="Jawabanmu..." inputmode="numeric" autocomplete="off" value="' + st.in[i] + '"' + (sudahBenar ? " disabled" : "") + '>' +
+        '<button class="btn btn-success lat-cek"' + (sudahBenar ? " disabled" : "") + '>✅ Cek Jawaban</button>' +
+        '<button class="btn btn-info lat-sol"' + (bisaPembahasan ? "" : " disabled") + '>📖 Pembahasan</button>' +
+      '</div>' +
+      '<div class="fb"></div>' +
+      '<div class="sol hidden"></div>' +
+      '<div class="lat-nav">' +
+        '<button class="btn btn-ghost lat-prev"' + (i === 0 ? " disabled" : "") + '>◀ Sebelumnya</button>' +
+        '<button class="btn btn-ghost lat-next"' + (i === 4 ? " disabled" : "") + '>Berikutnya ▶</button>' +
+      '</div>' +
+    '</div>';
+  const inp = app.querySelector(".lat-inp");
+  const fb = app.querySelector(".fb");
+  const sol = app.querySelector(".sol");
+  const btnCek = app.querySelector(".lat-cek");
+  const btnSol = app.querySelector(".lat-sol");
+  if(sudahBenar){ fb.className = "fb ok"; fb.textContent = "🎉 Benar! Jawaban: " + fmt(q.a); }
+  if(!bisaPembahasan) btnSol.disabled = true;
+  btnCek.addEventListener("click", () => {
+    const v = num(inp.value);
+    st.in[i] = inp.value;
+    if(isNaN(v)){
+      fb.className = "fb no"; fb.textContent = "Tulis jawabanmu dulu ya! 😊";
+      inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+      return;
+    }
+    if(v === q.a){
+      const firstTry = !st.att[i];
+      st.ok[i] = true;
+      let msg = "🎉 Benar! Jawaban: " + fmt(q.a);
+      if(firstTry && !st.aw[i]){ st.aw[i] = true; addD(1, "Latihan " + data.judul); msg += " (+1 💎)"; }
+      else if(!st.aw[i]){ msg += " — karena sudah pernah salah, 💎 tidak didapat. Tetap semangat!"; }
+      fb.className = "fb ok"; fb.textContent = msg;
+      inp.disabled = true; btnCek.disabled = true; btnSol.disabled = false;
+      beep("ok");
+      if(data.soal.every((_, j) => st.ok[j])) setTimeout(()=>toast("🏆 Semua soal " + data.judul + " selesai!"), 400);
+    } else {
+      st.att[i] = true;
+      fb.className = "fb no"; fb.textContent = "❌ Belum tepat. Periksa lagi hitunganmu, lalu coba lagi! (Pembahasan sudah bisa dibuka)";
+      btnSol.disabled = false;
+      inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+      beep("no");
+    }
+    save();
+    // refresh dots
+    const dotsEl = app.querySelector(".lat-dots");
+    dotsEl.innerHTML = data.soal.map((_, j) =>
+      '<span class="' + (st.ok[j] ? "on" : "") + (j === i ? " cur" : "") + '"></span>').join("");
+  });
+  btnSol.addEventListener("click", () => {
+    if(sol.classList.contains("hidden")){ sol.textContent = "📖 Pembahasan:\n" + q.sol; sol.classList.remove("hidden"); btnSol.textContent = "🙈 Tutup Pembahasan"; }
+    else { sol.classList.add("hidden"); btnSol.textContent = "📖 Pembahasan"; }
+    beep("click");
+  });
+  inp.addEventListener("input", () => { st.in[i] = inp.value; save(); });
+  inp.addEventListener("keydown", e => { if(e.key === "Enter") btnCek.click(); });
+  app.querySelector(".lat-prev").addEventListener("click", () => { if(LI[key] > 0){ LI[key]--; renderLat(key, app); } });
+  app.querySelector(".lat-next").addEventListener("click", () => { if(LI[key] < 4){ LI[key]++; renderLat(key, app); } });
+}
+
+/* ================= KUIS 20 KARTU ================= */
+const M = {i:-1, iv:null, end:0, started:false, finished:false, practice:false};
+function buildQuizGrid(){
+  const g = $("quizGrid");
+  g.innerHTML = QUIZ.map((q, i) => {
+    const st = S.quiz[i] || {};
+    const L = LVL[q.lvl];
+    let status = "";
+    if(st.st === "ok") status = '<span class="ceklis">✓</span>';
+    else if(st.st === "timeout") status = '<span class="ceklis" style="color:#dc2626">⏰</span>';
+    const didapat = st.st ? '<span class="didapat">' + (st.d > 0 ? "+" + st.d + " 💎" : "0 💎") + "</span>" : "";
+    return '<button class="kartu ' + L.cls + (st.st ? " done" : "") + '" data-q="' + i + '">' + status +
+      '<span class="nomor">' + (i+1) + "</span>" +
+      '<span class="lvl">' + L.bintang + " " + L.nama + "</span>" +
+      '<span class="reward">💎 ' + L.d + " • " + (L.waktu/60) + " mnt</span>" + didapat + "</button>";
+  }).join("");
+}
+function openCard(i){
+  const q = QUIZ[i], L = LVL[q.lvl];
+  M.i = i; M.started = false; M.finished = false; M.practice = false;
+  clearInterval(M.iv); M.iv = null;
+  $("modalBadge").textContent = "Kartu " + (i+1) + " • " + L.bintang + " " + L.nama;
+  $("modalBadge").className = "badge-lvl " + L.cls;
+  $("modalTimer").textContent = fmtT(L.waktu);
+  $("modalTimer").className = "timer-chip";
+  $("modalQ").textContent = q.q;
+  $("modalInput").value = ""; $("modalInput").disabled = true;
+  $("btnModalMulai").hidden = false;
+  $("btnModalCek").disabled = true;
+  $("btnModalSol").disabled = true;
+  $("modalFb").className = "fb"; $("modalFb").textContent = "Baca soalnya dulu. Tekan ▶ Mulai Waktu untuk memulai waktu " + (L.waktu/60) + " menit.";
+  $("modalSol").classList.add("hidden");
+  $("btnModalRetry").classList.add("hidden");
+  $("modalWrap").hidden = false;
+}
+function mulaiWaktu(){
+  if(M.started) return;
+  M.started = true;
+  const L = LVL[QUIZ[M.i].lvl];
+  M.end = Date.now() + L.waktu * 1000;
+  $("modalInput").disabled = false;
+  $("btnModalCek").disabled = false;
+  $("btnModalMulai").hidden = true;
+  $("modalFb").className = "fb"; $("modalFb").textContent = "⏱ Waktu berjalan! Tulis jawaban lalu tekan Cek Jawaban.";
+  $("modalInput").focus();
+  M.iv = setInterval(tickKuis, 250);
+  tickKuis();
+  beep("click");
+}
+function tickKuis(){
+  const sisa = Math.max(0, Math.round((M.end - Date.now())/1000));
+  const t = $("modalTimer");
+  t.textContent = fmtT(sisa);
+  t.classList.toggle("kritis", sisa <= 30 && sisa > 0);
+  if(sisa <= 0){
+    clearInterval(M.iv); M.iv = null;
+    waktuHabis();
+  }
+}
+function markCard(i, stt, d){
+  S.quiz[i] = {st: stt, d: d};
+  save();
+  buildQuizGrid();
+}
+function cekKuis(){
+  if(!M.started || M.finished) return;
+  const q = QUIZ[M.i], L = LVL[q.lvl];
+  const inp = $("modalInput");
+  const v = num(inp.value);
+  const fb = $("modalFb");
+  if(isNaN(v)){
+    fb.className = "fb no"; fb.textContent = "Tulis jawabanmu dulu ya! 😊";
+    return;
+  }
+  if(v === q.a){
+    M.finished = true;
+    clearInterval(M.iv); M.iv = null;
+    const d = M.practice ? 0 : L.d;
+    markCard(M.i, "ok", d);
+    if(d > 0) addD(d, "Kuis Kartu " + (M.i+1));
+    fb.className = "fb ok";
+    fb.textContent = d > 0
+      ? "🎉 Benar sekali! Jawaban: " + fmt(q.a) + " → +" + d + " 💎"
+      : "🎉 Benar! Jawaban: " + fmt(q.a) + " (latihan ulang, tanpa 💎)";
+    $("btnModalCek").disabled = true;
+    $("btnModalSol").disabled = false;
+    $("btnModalRetry").classList.add("hidden");
+    beep("ok");
+  } else {
+    fb.className = "fb no";
+    fb.textContent = "❌ Belum tepat. Cek lagi, waktu terus berjalan!";
+    inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+    beep("no");
+  }
+}
+function waktuHabis(){
+  const q = QUIZ[M.i];
+  const st = S.quiz[M.i];
+  if(!st || st.st !== "ok") markCard(M.i, "timeout", 0);
+  M.finished = true;
+  const fb = $("modalFb");
+  fb.className = "fb no";
+  fb.textContent = "⏰ Waktu habis! Jawaban yang benar: " + fmt(q.a) + ". Buka 📖 Pembahasan untuk belajar, atau coba lagi tanpa diamond.";
+  $("btnModalCek").disabled = true;
+  $("modalInput").disabled = true;
+  $("btnModalSol").disabled = false;
+  $("btnModalRetry").classList.remove("hidden");
+  beep("no");
+}
+function retryCard(){
+  const L = LVL[QUIZ[M.i].lvl];
+  M.practice = true; M.finished = false;
+  $("modalInput").value = ""; $("modalInput").disabled = false;
+  $("btnModalCek").disabled = false;
+  $("btnModalRetry").classList.add("hidden");
+  $("modalSol").classList.add("hidden");
+  $("btnModalSol").disabled = true;
+  M.end = Date.now() + L.waktu * 1000;
+  $("modalFb").className = "fb";
+  $("modalFb").textContent = "🔁 Latihan ulang! Waktu direset, tetapi tanpa hadiah diamond.";
+  clearInterval(M.iv);
+  M.iv = setInterval(tickKuis, 250);
+}
+function tutupModal(){
+  if(M.started && !M.finished && !confirm("Waktu masih berjalan. Tutup kartu ini?")) return;
+  clearInterval(M.iv); M.iv = null;
+  $("modalWrap").hidden = true;
+  buildQuizGrid();
+}
+function initQuiz(){
+  $("quizGrid").addEventListener("click", e => {
+    const k = e.target.closest(".kartu");
+    if(k) openCard(parseInt(k.dataset.q, 10));
+  });
+  $("btnModalMulai").addEventListener("click", mulaiWaktu);
+  $("btnModalCek").addEventListener("click", cekKuis);
+  $("btnModalTutup").addEventListener("click", tutupModal);
+  $("btnModalClose").addEventListener("click", tutupModal);
+  $("btnModalRetry").addEventListener("click", retryCard);
+  $("btnModalSol").addEventListener("click", () => {
+    const sol = $("modalSol");
+    if(sol.classList.contains("hidden")){
+      const q = QUIZ[M.i];
+      sol.textContent = "📖 Pembahasan Kartu " + (M.i+1) + " (Jawaban: " + fmt(q.a) + ")\n" + q.sol;
+      sol.classList.remove("hidden");
+    } else sol.classList.add("hidden");
+    beep("click");
+  });
+  $("modalInput").addEventListener("keydown", e => { if(e.key === "Enter") cekKuis(); });
+}
+
+/* ================= GAME ================= */
+const G = {on:false, i:0, score:0, lock:false, iv:null, end:0};
+function gameIntro(){
+  stopGameTimer();
+  G.on = false;
+  $("gameApp").innerHTML =
+    '<div class="ico" style="font-size:3rem">🎮💎</div>' +
+    '<h3 style="margin:8px 0">Diamond Rush — 10 Soal Kilat!</h3>' +
+    '<p style="margin-bottom:6px">⏱ 15 detik per soal • 4 pilihan jawaban • benar = +1 💎</p>' +
+    '<p style="margin-bottom:14px;color:#64748b">Hadiah diamond hanya diberikan pada permainan pertama. Main lagi untuk memecahkan rekormu!</p>' +
+    '<button class="btn btn-primary btn-big" id="btnGameMulai">▶ Mulai Game</button>';
+  $("btnGameMulai").addEventListener("click", startGame);
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function startGame(){
+  G.on = true; G.i = 0; G.score = 0; G.lock = false;
+  renderGameQ();
+  beep("click");
+}
+function renderGameQ(){
+  const g = GAME[G.i];
+  const ops = shuffle(g.o);
+  $("gameApp").innerHTML =
+    '<div class="game-head"><span>Soal ' + (G.i+1) + " / " + GAME.length + '</span><span>💎 Skor: ' + G.score + '</span></div>' +
+    '<div class="game-timer"><i id="gameBar" style="width:100%"></i></div>' +
+    '<div class="game-q">' + g.q + '</div>' +
+    '<div class="ops">' + ops.map((o, j) =>
+      '<button class="op-btn" data-v="' + o + '">' + fmt(o) + "</button>").join("") + "</div>" +
+    '<div class="game-fb" id="gameFb"></div>';
+  document.querySelectorAll("#gameApp .op-btn").forEach(b =>
+    b.addEventListener("click", () => pilihGame(parseInt(b.dataset.v, 10), b)));
+  G.end = Date.now() + 15000;
+  stopGameTimer();
+  G.iv = setInterval(() => {
+    const sisa = Math.max(0, G.end - Date.now());
+    const bar = $("gameBar");
+    if(bar) bar.style.width = (sisa/15000*100) + "%";
+    if(sisa <= 0){ stopGameTimer(); pilihGame(-1, null); }
+  }, 100);
+}
+function stopGameTimer(){ if(G.iv){ clearInterval(G.iv); G.iv = null; } }
+function pilihGame(v, btn){
+  if(G.lock || !G.on || G.i >= GAME.length) return;
+  G.lock = true;
+  stopGameTimer();
+  const g = GAME[G.i];
+  const fb = $("gameFb");
+  document.querySelectorAll("#gameApp .op-btn").forEach(b => {
+    b.disabled = true;
+    if(parseInt(b.dataset.v, 10) === g.a) b.classList.add("benar");
+    else if(b === btn) b.classList.add("salah");
+  });
+  if(v === g.a){
+    G.score++;
+    fb.className = "game-fb ok";
+    fb.textContent = "✅ Benar! +1 💎";
+    beep("ok");
+  } else {
+    fb.className = "game-fb no";
+    fb.textContent = v === -1 ? "⏰ Waktu habis! Jawaban: " + fmt(g.a) : "❌ Salah. Jawaban: " + fmt(g.a);
+    beep("no");
+  }
+  setTimeout(() => {
+    G.i++;
+    if(G.i >= GAME.length) gameEnd();
+    else { G.lock = false; renderGameQ(); }
+  }, 1300);
+}
+function gameEnd(){
+  if(!G.on) return;
+  G.on = false;
+  let pesan = "Terus berlatih ya!";
+  if(G.score >= 9) pesan = "Luar biasa! Kamu juaranya! 🏆";
+  else if(G.score >= 6) pesan = "Hebat sekali! 💪";
+  else if(G.score >= 3) pesan = "Bagus, ayo tingkatkan! 🌱";
+  let info;
+  if(!S.game.claimed){
+    S.game.claimed = true;
+    S.game.score = G.score;
+    S.game.d = G.score;
+    save();
+    addD(G.score, "Game Diamond Rush");
+    info = "Kamu mendapat 💎 " + G.score + " dari game!";
+  } else {
+    if(S.game.score === null || G.score > S.game.score){ S.game.score = G.score; save(); }
+    info = "💎 hadiah game sudah diambil sebelumnya (main lagi = latihan).";
+  }
+  $("gameApp").innerHTML =
+    '<div style="font-size:3rem">' + (G.score >= 6 ? "🏆" : "💪") + "</div>" +
+    '<h3 style="margin:8px 0">Skor Akhir: ' + G.score + " / " + GAME.length + "</h3>" +
+    '<p class="pesan-hasil">' + pesan + "</p>" +
+    '<p style="color:#64748b;margin-bottom:14px">' + info + "</p>" +
+    '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">' +
+      '<button class="btn btn-primary" id="btnGameLagi">🔁 Main Lagi</button>' +
+      '<button class="btn btn-success" id="btnGameLanjut">🃏 Lanjut ke Kuis</button>' +
+    "</div>";
+  $("btnGameLagi").addEventListener("click", startGame);
+  $("btnGameLanjut").addEventListener("click", () => go(14));
+  if(G.score >= 6) confetti();
+}
+
+/* ================= HASIL ================= */
+function renderHasil(){
+  const app = $("hasilApp");
+  let rows = "";
+  let latBenar = 0, latD = 0;
+  const kunci = ["l1","l2","l3","l4","l5"];
+  kunci.forEach((k, idx) => {
+    const st = lat(k);
+    const benar = st.ok.filter(Boolean).length;
+    const d = st.aw.filter(Boolean).length;
+    latBenar += benar; latD += d;
+    rows += '<tr><td>✏️ Latihan ' + (idx+1) + " — " + LAT[k].judul + "</td><td>" + benar + " / 5</td><td>💎 " + d + "</td></tr>";
+  });
+  rows += '<tr><td>🎮 Game Diamond Rush</td><td>' + (S.game.score === null ? "—" : S.game.score + " / 10") + "</td><td>💎 " + S.game.d + "</td></tr>";
+  let quizD = 0;
+  [1,2,3].forEach(l => {
+    const idxs = QUIZ.map((q,i) => q.lvl === l ? i : -1).filter(i => i >= 0);
+    const ok = idxs.filter(i => S.quiz[i] && S.quiz[i].st === "ok").length;
+    const d = idxs.reduce((t,i) => t + (S.quiz[i] ? S.quiz[i].d : 0), 0);
+    quizD += d;
+    rows += '<tr><td>🃏 Kuis ' + LVL[l].bintang + " " + LVL[l].nama + "</td><td>" + ok + " / " + idxs.length + "</td><td>💎 " + d + "</td></tr>";
+  });
+  const totalKuisOk = QUIZ.map((q,i) => i).filter(i => S.quiz[i] && S.quiz[i].st === "ok").length;
+  rows += '<tr class="total"><td>🃏 Kuis (semua kartu selesai benar)</td><td>' + totalKuisOk + " / 20</td><td>💎 " + quizD + "</td></tr>";
+  rows += '<tr class="total"><td>🧮 TOTAL LATIHAN (benar)</td><td>' + latBenar + " / 25</td><td>💎 " + latD + "</td></tr>";
+
+  let bintang = 0, pesan = "";
+  if(S.diamonds >= 85){ bintang = 3; pesan = "🏅 LUAR BIASA! Kamu master puluhan ribuan!"; }
+  else if(S.diamonds >= 55){ bintang = 2; pesan = "🌟 HEBAT! Sedikit lagi menuju sempurna!"; }
+  else if(S.diamonds >= 25){ bintang = 1; pesan = "👍 BAGUS! Terus berlatih ya!"; }
+  else { pesan = "💪 Ayo kejar diamond sebanyak-banyaknya!"; }
+  app.innerHTML =
+    '<div class="panel">' +
+      '<h3>👦 Nama: ' + (S.name || "Siswa") + "</h3>" +
+      '<div class="hasil-big">' +
+        '<div class="hasil-diamond">💎 Total Diamond: ' + S.diamonds + "</div>" +
+        '<div class="bintang">' + "⭐".repeat(bintang) + "☆".repeat(3-bintang) + "</div>" +
+      "</div>" +
+      '<p class="pesan-hasil">' + pesan + "</p>" +
+      '<table class="tabel"><tr><th>Bagian</th><th>Skor</th><th>Hadiah</th></tr>' + rows + "</table>" +
+      '<p style="font-size:.9rem;color:#64748b;margin-top:8px">Maksimal: latihan 25 💎 + game 10 💎 + kuis 72 💎 + refleksi 2 💎 = 109 💎</p>' +
+    "</div>";
+  if(bintang >= 2) confetti();
+}
+
+/* ================= REFLEKSI ================= */
+function initRefleksi(){
+  document.querySelectorAll(".mood").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".mood").forEach(x => x.classList.remove("pilih"));
+    b.classList.add("pilih");
+    S.ref.mood = b.dataset.m;
+    save(); beep("click");
+  }));
+  document.querySelectorAll(".chip-sulit").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".chip-sulit").forEach(x => x.classList.remove("pilih"));
+    b.classList.add("pilih");
+    S.ref.sulit = b.dataset.s;
+    save(); beep("click");
+  }));
+  $("refTeks").addEventListener("input", () => { S.ref.teks = $("refTeks").value; save(); });
+  $("btnRef").addEventListener("click", () => {
+    S.ref.teks = $("refTeks").value;
+    if(!S.ref.done){ S.ref.done = true; addD(2, "Bonus refleksi"); }
+    const ok = $("refOk");
+    ok.classList.remove("hidden");
+    ok.textContent = "✅ Refleksimu tersimpan. Terima kasih, " + (S.name || "Siswa") + "! Kamu mendapat bonus 💎 (sekali saja).";
+    save();
+  });
+  // pulihkan pilihan tersimpan
+  if(S.ref.mood) document.querySelectorAll(".mood").forEach(b => { if(b.dataset.m === S.ref.mood) b.classList.add("pilih"); });
+  if(S.ref.sulit) document.querySelectorAll(".chip-sulit").forEach(b => { if(b.dataset.s === S.ref.sulit) b.classList.add("pilih"); });
+  if(S.ref.teks) $("refTeks").value = S.ref.teks;
+}
+
+/* ================= INIT ================= */
+function init(){
+  load();
+  // isi menu jump
+  const menu = $("menuJump");
+  menu.innerHTML = JUDUL_SLIDE.map((t, i) => '<option value="' + i + '">' + (i+1) + ". " + t + "</option>").join("");
+  menu.addEventListener("change", () => go(parseInt(menu.value, 10)));
+  // tombol nav
+  $("btnNext").addEventListener("click", () => go(cur + 1));
+  $("btnPrev").addEventListener("click", () => go(cur - 1));
+  document.addEventListener("keydown", e => {
+    const tag = (e.target.tagName || "").toLowerCase();
+    if(tag === "input" || tag === "textarea" || tag === "select") return;
+    if(!$("modalWrap").hidden) return;
+    if(e.key === "ArrowRight") go(cur + 1);
+    if(e.key === "ArrowLeft") go(cur - 1);
+  });
+  // cover
+  $("btnMulai").addEventListener("click", () => {
+    const v = $("inputNama").value.trim();
+    if(!v){
+      const inp = $("inputNama");
+      inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake");
+      toast("Isi namamu dulu ya! 😊"); inp.focus();
+      return;
+    }
+    S.name = v; save();
+    $("namaHeader").textContent = v;
+    go(1);
+  });
+  $("inputNama").addEventListener("keydown", e => { if(e.key === "Enter") $("btnMulai").click(); });
+  $("inputNama").addEventListener("input", () => {
+    const v = $("inputNama").value.trim();
+    if(v && !S.name){ S.name = v; save(); $("namaHeader").textContent = v; }
+  });
+  $("btnResetCover").addEventListener("click", () => {
+    if(confirm("Hapus semua jawaban dan diamond, lalu mulai dari awal?")){
+      try{ localStorage.removeItem(KUNCI_DB); }catch(e){}
+      location.reload();
+    }
+  });
+  // suara
+  $("btnSuara").addEventListener("click", () => {
+    S.mute = !S.mute; save();
+    $("btnSuara").textContent = S.mute ? "🔇" : "🔊";
+    toast(S.mute ? "Suara dimatikan" : "Suara dinyalakan");
+  });
+  // pulihkan sesi
+  if(S.name){
+    $("namaHeader").textContent = S.name;
+    $("inputNama").value = S.name;
+    const rn = $("resumeNote");
+    rn.classList.remove("hidden");
+    rn.textContent = "💾 Progres dimuat: " + S.diamonds + " 💎 terkumpul. Lanjutkan petualanganmu!";
+    $("btnResetCover").classList.remove("hidden");
+  }
+  if(S.mute) $("btnSuara").textContent = "🔇";
+  updateDiamondUI();
+  // bangun komponen
+  initSteps();
+  initReveal();
+  ["l1","l2","l3","l4","l5"].forEach(buildLatihan);
+  initQuiz();
+  buildQuizGrid();
+  gameIntro();
+  initRefleksi();
+  updateNav();
+}
+init();
+</script>
+</body>
+</html>
