@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayo Berhitung! — Penjumlahan & Pengurangan Puluhan (Kelas 1 SD)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AE%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ DASAR ============ */
+:root{
+  --bg:#FFF6E9; --ink:#33324E; --muted:#7A7A93;
+  --blue:#3E8ED0; --blue-d:#2C6EA0; --blue-l:#E3F1FC;
+  --coral:#FF6F59; --coral-d:#D14B37; --coral-l:#FFE9E5;
+  --green:#3FA47A; --green-d:#2E7D5C; --green-l:#E4F5EC;
+  --purple:#8B6FC9; --purple-d:#6C51A8; --purple-l:#EFE9FA;
+  --yellow:#FFB93E; --yellow-d:#D89317; --yellow-l:#FFF3D6;
+  --line:#F1E5D0; --shadow:0 10px 24px rgba(51,50,78,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{
+  font-family:'Baloo 2','Comic Sans MS','Chalkboard SE','Segoe UI',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink); overflow:hidden;
+}
+button{font-family:inherit}
+i,em{font-style:normal}
+
+/* ============ DEKORASI LATAR ============ */
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.6;z-index:0;pointer-events:none}
+.blob.b1{width:430px;height:430px;background:#FFE3C2;top:-130px;right:-130px;animation:floaty 10s ease-in-out infinite}
+.blob.b2{width:400px;height:400px;background:#D9EBFF;bottom:-150px;left:-130px;animation:floaty 12s ease-in-out infinite reverse}
+.float-emoji{position:fixed;z-index:0;opacity:.12;font-size:64px;pointer-events:none;animation:floaty 8s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-20px) rotate(3deg)}}
+
+/* ============ BILAH ATAS & BAWAH ============ */
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;gap:10px;
+  padding:0 14px;z-index:50;background:rgba(255,255,255,.8);backdrop-filter:blur(6px);border-bottom:2px solid var(--line)}
+.dots{flex:1;display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap}
+.dot{width:13px;height:13px;border-radius:50%;background:#E4D6BC;cursor:pointer;transition:.2s;border:none;padding:0}
+.dot:hover{background:var(--yellow)}
+.dot.on{background:var(--coral);transform:scale(1.3)}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:19px;
+  cursor:pointer;box-shadow:0 3px 0 var(--line);transition:.1s}
+.iconbtn:active{transform:translateY(2px);box-shadow:none}
+.navbottom{position:fixed;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;gap:18px;
+  z-index:50;background:rgba(255,255,255,.8);backdrop-filter:blur(6px);border-top:2px solid var(--line)}
+.navbtn{width:48px;height:48px;border-radius:50%;border:none;background:var(--coral);color:#fff;font-size:20px;font-weight:800;
+  cursor:pointer;box-shadow:0 5px 0 var(--coral-d);transition:.1s}
+.navbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--coral-d)}
+.navbtn:disabled{opacity:.35;cursor:not-allowed}
+#pageInfo{font-weight:800;color:var(--muted);min-width:64px;text-align:center}
+
+/* ============ SLIDE ============ */
+.deck{position:fixed;top:56px;bottom:64px;left:0;right:0;z-index:1}
+.slide{position:absolute;inset:0;display:none;padding:16px;overflow-y:auto}
+.slide.active{display:flex;flex-direction:column;animation:slideIn .45s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(46px)}to{opacity:1;transform:none}}
+.wrap{width:min(1080px,100%);margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px}
+
+/* ============ KOMPONEN UMUM ============ */
+.card{background:#fff;border-radius:22px;box-shadow:var(--shadow);border:2px solid #F4E8D2;padding:18px 22px}
+.stitle{font-size:clamp(1.5rem,3.8vw,2.3rem);text-align:center;font-weight:800}
+.stepbox{background:var(--yellow-l);border-left:8px solid var(--yellow);padding:12px 20px;border-radius:14px;
+  font-size:clamp(1.02rem,2.1vw,1.3rem);font-weight:600;width:100%;text-align:center;line-height:1.5}
+.stepbox.cap{border-left:none;border:2px dashed var(--yellow)}
+.btn{border:none;cursor:pointer;font-weight:800;color:#fff;background:var(--blue);padding:12px 26px;border-radius:999px;
+  font-size:1.1rem;box-shadow:0 5px 0 var(--blue-d);transition:transform .08s,box-shadow .08s;display:inline-flex;align-items:center;gap:8px}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-d)}
+.btn.coral{background:var(--coral);box-shadow:0 5px 0 var(--coral-d)}
+.btn.coral:active{box-shadow:0 1px 0 var(--coral-d)}
+.btn.green{background:var(--green);box-shadow:0 5px 0 var(--green-d)}
+.btn.green:active{box-shadow:0 1px 0 var(--green-d)}
+.btn.purple{background:var(--purple);box-shadow:0 5px 0 var(--purple-d)}
+.btn.purple:active{box-shadow:0 1px 0 var(--purple-d)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line)}
+.btn.big{font-size:1.3rem;padding:15px 34px}
+.btn.small{font-size:.95rem;padding:8px 16px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.c-blue{color:var(--blue)} .c-coral{color:var(--coral)} .c-green{color:var(--green)}
+.c-purple{color:var(--purple)} .c-yellow{color:var(--yellow-d)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%}
+
+/* ============ COVER ============ */
+.mascot{font-size:clamp(72px,12vw,110px);animation:bounce 2.2s ease-in-out infinite;filter:drop-shadow(0 10px 8px rgba(0,0,0,.12))}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.halo-chip{background:var(--yellow-l);border:2px solid var(--yellow);color:var(--yellow-d);font-weight:800;
+  padding:8px 20px;border-radius:999px;font-size:1.05rem;animation:pop .6s both}
+.cover-title{font-size:clamp(2.5rem,7vw,4.4rem);font-weight:800;text-align:center;line-height:1.1;
+  color:var(--coral);text-shadow:0 4px 0 #FFE0D9;animation:pop .7s both}
+.cover-sub{font-size:clamp(1.1rem,2.6vw,1.5rem);text-align:center;font-weight:600;max-width:640px;animation:pop .8s both}
+.name-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.name-row label{font-weight:800;font-size:1.1rem}
+.namein{font:inherit;font-weight:700;font-size:1.1rem;padding:10px 16px;border:3px solid var(--blue);border-radius:14px;
+  width:230px;outline:none;background:#F7FBFF;text-align:center}
+.namein:focus{box-shadow:0 0 0 4px var(--blue-l)}
+.hint{color:var(--muted);font-weight:600;font-size:.95rem;text-align:center}
+
+/* ============ KARTU TUJUAN ============ */
+.greet{font-size:1.25rem;font-weight:800;color:var(--purple)}
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%}
+.tcard{background:#fff;border-radius:20px;padding:16px 12px;box-shadow:var(--shadow);border:2px solid #F4E8D2;
+  display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;animation:pop .5s both}
+.tcard:nth-child(2){animation-delay:.1s}.tcard:nth-child(3){animation-delay:.2s}.tcard:nth-child(4){animation-delay:.3s}
+.tcard .temoji{font-size:2.4rem}
+.tcard h3{font-size:1.08rem}
+.tcard p{font-size:.92rem;color:var(--muted);font-weight:600;line-height:1.45}
+
+/* ============ KONSEP: ANGKA BESAR ============ */
+.kon-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.kon-num{font-size:3.4rem;font-weight:800;min-width:120px;text-align:center;color:var(--coral);text-shadow:0 3px 0 #FFE0D9}
+
+/* ============ VISUAL IKAT & LIDI ============ */
+.viszone{min-height:270px;width:100%;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:#FFFDF7;border-radius:20px;padding:16px;border:2px solid var(--line);position:relative}
+.grup{background:#fff;border:3px dashed var(--gc,#3E8ED0);border-radius:20px;padding:14px 16px;display:flex;
+  flex-direction:column;gap:10px;align-items:center;animation:pop .5s backwards;max-width:100%}
+.glabel{font-weight:800;font-size:1.1rem;color:var(--gc,#3E8ED0);text-align:center}
+.g-blue{--gc:#3E8ED0;background:#F7FBFF} .g-coral{--gc:#FF6F59;background:#FFF5F2}
+.g-green{--gc:#3FA47A;background:#F5FCF8} .g-purple{--gc:#8B6FC9;background:#FBF8FE}
+.g-yellow{--gc:#D89317;background:#FFFBEE} .g-red{--gc:#E23D3D;background:#FFF2F2}
+.brow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.srow{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;max-width:420px}
+.bbox{position:relative;display:inline-flex}
+.bbox.cut::after{content:'✕';position:absolute;inset:-6px;display:grid;place-items:center;color:#E23D3D;
+  font-weight:900;font-size:1.6rem;z-index:3;animation:pop .3s backwards;text-shadow:0 0 6px #fff}
+.bbox.fly{animation:flyaway .8s .3s forwards}
+.ikat{width:56px;height:72px;border-radius:14px;position:relative;display:inline-flex;align-items:center;
+  justify-content:center;gap:2.5px;padding:7px 5px 12px;border:2px solid var(--ib,#C08A3E);
+  background:linear-gradient(180deg,#FFF3D6,#FFDFA1);box-shadow:0 4px 0 rgba(0,0,0,.07);animation:pop .45s backwards}
+.ikat .st{display:block;width:3px;height:100%;background:var(--stk,#B4762B);border-radius:2px}
+.ikat::after{content:'';position:absolute;left:-3px;right:-3px;top:50%;height:11px;transform:translateY(-50%);
+  background:var(--band,#FF6F59);border-radius:6px;opacity:.95;border:1.5px solid rgba(0,0,0,.1)}
+.ikat .num{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:8px;font-style:normal}
+.ikat.b{--band:#3E8ED0;--stk:#2C6EA0;--ib:#8FBFE8;background:linear-gradient(180deg,#EAF4FE,#C9E3F8)}
+.ikat.c{--band:#FF6F59;--stk:#C14B38;--ib:#F0A493;background:linear-gradient(180deg,#FFEFEA,#FFD8CC)}
+.ikat.g{--band:#3FA47A;--stk:#2E7D5C;--ib:#8FD0B2;background:linear-gradient(180deg,#EAF9F1,#C9EEDC)}
+.ikat.p{--band:#8B6FC9;--stk:#6C51A8;--ib:#BCA8E6;background:linear-gradient(180deg,#F4EFFD,#E0D4F5)}
+.ikat.y{--band:#E8A21A;--stk:#B4762B;--ib:#E0B25C;background:linear-gradient(180deg,#FFF3D6,#FFE6A8)}
+.ikat.r{--band:#E23D3D;--stk:#A82C2C;--ib:#F0A4A4;background:linear-gradient(180deg,#FFEBEB,#FFD4D4)}
+.lidi{display:inline-block;width:7px;height:52px;border-radius:4px;position:relative;
+  background:linear-gradient(180deg,#F7DCA8,#E9BE6E);border:1.5px solid #C08A3E;animation:pop .4s backwards}
+.lidi::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:11px;height:11px;
+  border-radius:50%;background:var(--hc,#E85D75);border:1.5px solid rgba(0,0,0,.12)}
+.lidi.b{--hc:#3E8ED0}.lidi.c{--hc:#FF6F59}.lidi.g{--hc:#3FA47A}.lidi.p{--hc:#8B6FC9}.lidi.y{--hc:#E8A21A}.lidi.r{--hc:#E23D3D}
+.glow{animation:pop .4s backwards,pulse 1.3s .4s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(255,213,77,.9)}50%{box-shadow:0 0 0 8px rgba(255,213,77,.35)}}
+.bigop{font-size:clamp(2rem,5vw,2.8rem);font-weight:800;color:var(--muted)}
+.bigop.c-green{color:var(--green)}
+@keyframes flyaway{to{transform:translate(70px,-90px) rotate(50deg);opacity:0}}
+@keyframes pop{from{transform:scale(.4);opacity:0}70%{transform:scale(1.08)}to{transform:scale(1);opacity:1}}
+.viszone.mini{min-height:110px;padding:10px}
+.viszone.mini .grup{padding:8px 10px}
+.viszone.mini .ikat{width:42px;height:54px}
+.viszone.mini .lidi{width:6px;height:38px}
+.viszone.mini .glabel{font-size:.95rem}
+
+/* ============ KOLOM BERSUSUN ============ */
+.colwrap{display:flex;justify-content:center}
+.bersusun{display:grid;grid-template-columns:auto auto auto;gap:2px 12px;font-size:clamp(1.7rem,3.6vw,2.4rem);
+  font-weight:800;justify-items:center;align-items:center;background:#fff;padding:12px 20px;border-radius:16px;
+  border:2px solid var(--line);justify-content:center}
+.bersusun .op{color:var(--muted);justify-self:start;min-width:.8em}
+.bersusun .d.t,.bersusun .t{color:var(--purple)}
+.bersusun .d.o,.bersusun .o{color:var(--blue)}
+.bersusun .res{color:var(--green)}
+.bersusun .ph{color:#CBC4B4}
+.bersusun .line{grid-column:1/-1;border-top:4px solid var(--ink);width:100%;margin:4px 0;height:0}
+.bersusun s{color:#B9B2A2;margin-right:3px;font-size:.72em}
+.bersusun .b1{font-size:.55em;color:var(--coral);margin-right:1px;vertical-align:super}
+.bersusun .cm{font-size:.55em;color:var(--coral);justify-self:start;align-self:end;padding-left:2px;font-weight:800}
+
+/* ============ MESIN LANGKAH ============ */
+.ctrl-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* ============ SLIDE LATIHAN ============ */
+.ex-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;width:100%}
+.chip{background:#fff;border:2px solid var(--line);padding:6px 14px;border-radius:99px;font-weight:800;font-size:.98rem;white-space:nowrap}
+.prog{flex:1 1 180px;min-width:140px;height:16px;background:var(--line);border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--coral));
+  border-radius:99px;transition:width .45s}
+.qcard{width:100%;display:flex;flex-direction:column;gap:14px;align-items:center}
+.qbadge{background:var(--yellow-l);border:2px solid var(--yellow);color:var(--yellow-d);font-weight:800;
+  padding:6px 18px;border-radius:99px;font-size:1rem;animation:pop .4s both}
+.qbadge.hide{display:none}
+.q-eq{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+.q-eq .ansbox{border-bottom:7px dashed var(--coral);min-width:1.6ch;text-align:center;color:var(--coral);padding:0 8px}
+.opdo{color:var(--muted)}
+.inrow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.ansin{font:inherit;font-weight:800;text-align:center;font-size:clamp(1.9rem,4.5vw,2.6rem);width:170px;
+  border:4px solid var(--blue);border-radius:18px;color:var(--ink);background:#F7FBFF;outline:none;padding:4px 8px}
+.ansin:focus{box-shadow:0 0 0 5px var(--blue-l)}
+.ansin:disabled{background:#EDEAE2;border-color:#C9C2B2}
+.fb{width:100%;border-radius:16px;padding:12px 18px;font-weight:700;display:none;font-size:1.08rem;line-height:1.5}
+.fb.show{display:block;animation:pop .35s both}
+.fb.ok{background:var(--green-l);border:2px solid var(--green)}
+.fb.no{background:var(--coral-l);border:2px solid var(--coral)}
+.fb .hintline{display:block;margin-top:6px;font-size:.95rem;font-weight:600;color:var(--muted)}
+.shake{animation:shake .5s}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+.pemb{width:100%;background:var(--yellow-l);border:2px solid #F0C36B;border-radius:18px;padding:14px 20px;display:none}
+.pemb.show{display:flex;flex-direction:column;gap:10px;animation:slideup .4s both}
+@keyframes slideup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.pemb .ptitle{font-weight:800;font-size:1.15rem}
+.pemb ol{margin-left:22px;display:flex;flex-direction:column;gap:5px;font-weight:600;line-height:1.5}
+.prow{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+.story-card{width:100%;background:#FBF8FE;border:2px solid var(--purple);border-radius:18px;padding:16px 20px;text-align:center}
+.story-card .scene{font-size:2.5rem;letter-spacing:8px;margin-bottom:8px}
+.story-card p{font-size:clamp(1.1rem,2.4vw,1.4rem);font-weight:600;line-height:1.6}
+
+/* ============ SLIDE SKOR ============ */
+.score-circle{--pct:0;width:230px;height:230px;border-radius:50%;
+  background:conic-gradient(var(--green) calc(var(--pct)*1%),var(--line) 0);
+  display:grid;place-items:center;box-shadow:var(--shadow);animation:pop .6s both}
+.score-circle .inner{width:184px;height:184px;border-radius:50%;background:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px}
+.score-circle b{font-size:2.7rem;color:var(--green)}
+.score-circle span{font-weight:700;color:var(--muted);text-align:center;font-size:.98rem;padding:0 10px}
+.stars{font-size:2.7rem;letter-spacing:10px}
+.stars .star.off{filter:grayscale(1);opacity:.3}
+.badge-pill{background:#fff;border:2px solid var(--yellow);padding:8px 18px;border-radius:99px;font-weight:800;
+  box-shadow:0 3px 0 #F0C36B;animation:pop .5s both}
+.badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.score-msg{font-size:1.25rem;font-weight:800;text-align:center;max-width:640px}
+
+/* ============ KONFETI ============ */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden}
+.cf{position:absolute;top:-24px;display:block;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(112vh) rotate(720deg);opacity:.9}}
+
+/* ============ RESPONSIF ============ */
+@media (max-width:860px){
+  .tgrid,.grid2{grid-template-columns:1fr}
+  .float-emoji{display:none}
+  .wrap{gap:10px}
+  .deck{top:52px;bottom:58px}
+  .topbar{height:52px}
+  .navbottom{height:58px}
+  .ansin{width:130px}
+  .dot{width:9px;height:9px}
+  .dots{gap:4px}
+  .viszone{min-height:220px;padding:10px}
+  .ikat{width:46px;height:62px}
+  .lidi{height:42px;width:6px}
+  .srow{gap:7px;max-width:320px}
+}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div>
+<span class="float-emoji" style="top:16%;left:3%">➕</span>
+<span class="float-emoji" style="bottom:22%;right:4%;animation-delay:1.5s">➖</span>
+<span class="float-emoji" style="top:68%;left:5%;animation-delay:3s">🔢</span>
+<span class="float-emoji" style="top:12%;right:7%;animation-delay:2s">⭐</span>
+
+<header class="topbar">
+  <button class="iconbtn" id="btnHome" title="Ke halaman awal">🏠</button>
+  <nav class="dots" id="dots" aria-label="Navigasi slide"></nav>
+  <button class="iconbtn" id="btnSound" title="Suara nyala/mati">🔊</button>
+  <button class="iconbtn" id="btnFull" title="Layar penuh">⛶</button>
+</header>
+
+<main class="deck">
+
+<!-- ============ 0. COVER ============ -->
+<section class="slide active" id="s0">
+  <div class="wrap">
+    <div class="mascot">🦉</div>
+    <span class="halo-chip">✨ Matematika Seru Kelas 1 SD ✨</span>
+    <h1 class="cover-title">Ayo Berhitung!</h1>
+    <p class="cover-sub">Petualangan <b class="c-blue">Penjumlahan</b> ➕ dan <b class="c-green">Pengurangan</b> ➖ Bilangan Puluhan bersama <b>Oki si Burung Hantu</b> 🦉</p>
+    <div class="name-row">
+      <label for="inpName">👦 Siapa namamu?</label>
+      <input class="namein" id="inpName" maxlength="20" placeholder="Tulis namamu di sini" autocomplete="off">
+    </div>
+    <button class="btn coral big" id="btnStart">▶&nbsp; Mulai Belajar</button>
+    <p class="hint">💡 Tip: tekan tombol ← → pada keyboard untuk pindah halaman, dan klik ⛶ untuk layar penuh.</p>
+  </div>
+</section>
+
+<!-- ============ 1. TUJUAN ============ -->
+<section class="slide" id="s1">
+  <div class="wrap">
+    <p class="greet" id="greet"></p>
+    <h2 class="stitle">🎯 Hari Ini Kita Akan Belajar</h2>
+    <div class="tgrid">
+      <div class="tcard"><span class="temoji">🧊</span><h3>Puluhan &amp; Satuan</h3><p>Mengenal ikat 10 lidi sebagai <b>puluhan</b> dan lidi lepas sebagai <b>satuan</b>.</p></div>
+      <div class="tcard"><span class="temoji">➕</span><h3>Penjumlahan</h3><p>Menjumlahkan dengan benda, belajar teknik <b>menyimpan</b> pada 25 + 37.</p></div>
+      <div class="tcard"><span class="temoji">➖</span><h3>Pengurangan</h3><p>Mengurangi dengan benda, belajar teknik <b>meminjam</b> pada 42 − 27.</p></div>
+      <div class="tcard"><span class="temoji">🏆</span><h3>Latihan &amp; Hadiah</h3><p><b>20</b> soal penjumlahan, <b>20</b> soal pengurangan, <b>10</b> soal cerita, dan skor akhir!</p></div>
+    </div>
+    <div class="stepbox">📌 <b>Cara main:</b> klik tombol <b>Langkah Berikutnya</b> untuk belajar langkah demi langkah. Di bagian latihan: tulis jawabanmu → klik <b>✔ Cek Jawaban</b> → baca <b>📖 Pembahasan</b>. Kumpulkan poin sebanyak-banyaknya! ⭐</div>
+  </div>
+</section>
+
+<!-- ============ 2. KONSEP PULUHAN-SATUAN ============ -->
+<section class="slide" id="s2">
+  <div class="wrap">
+    <h2 class="stitle">🧊 Mengenal <span class="c-purple">Puluhan</span> &amp; <span class="c-blue">Satuan</span></h2>
+    <div class="stepbox">1 ikat berisi <b>10 lidi</b>. Ikatnya = <b class="c-purple">PULUHAN</b>, lidi lepasnya = <b class="c-blue">SATUAN</b>. Coba ubah angkanya dengan tombol di bawah! 👇</div>
+    <div class="kon-controls">
+      <button class="btn ghost" id="kDec10">− 10</button>
+      <button class="btn ghost" id="kDec1">− 1</button>
+      <div class="kon-num" id="numKon">23</div>
+      <button class="btn ghost" id="kInc1">+ 1</button>
+      <button class="btn ghost" id="kInc10">+ 10</button>
+      <button class="btn blue" id="kRnd">🎲 Acak</button>
+    </div>
+    <div class="viszone" id="visKon"></div>
+    <div class="stepbox cap" id="capKon"></div>
+  </div>
+</section>
+
+<!-- ============ 3. PENJUMLAHAN TANPA MENYIMPAN ============ -->
+<section class="slide" id="s3" data-concept="tambah1">
+  <div class="wrap">
+    <h2 class="stitle c-blue">➕ Penjumlahan: <span class="c-coral">23 + 34</span></h2>
+    <div class="stepbox" id="txt-tambah1"></div>
+    <div class="viszone" id="vis-tambah1"></div>
+    <div class="colwrap" id="col-tambah1"></div>
+    <div class="ctrl-row">
+      <button class="btn ghost small" data-act="reset">↺ Ulangi</button>
+      <button class="btn ghost small" data-act="prevstep">◀ Sebelumnya</button>
+      <button class="btn blue" data-act="nextstep">Langkah Berikutnya ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PENJUMLAHAN DENGAN MENYIMPAN ============ -->
+<section class="slide" id="s4" data-concept="tambah2">
+  <div class="wrap">
+    <h2 class="stitle c-blue">➕ Penjumlahan dengan <span class="c-coral">Menyimpan</span>: <span class="c-coral">25 + 37</span></h2>
+    <div class="stepbox" id="txt-tambah2"></div>
+    <div class="viszone" id="vis-tambah2"></div>
+    <div class="colwrap" id="col-tambah2"></div>
+    <div class="ctrl-row">
+      <button class="btn ghost small" data-act="reset">↺ Ulangi</button>
+      <button class="btn ghost small" data-act="prevstep">◀ Sebelumnya</button>
+      <button class="btn blue" data-act="nextstep">Langkah Berikutnya ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. PENGURANGAN TANPA MEMINJAM ============ -->
+<section class="slide" id="s5" data-concept="kurang1">
+  <div class="wrap">
+    <h2 class="stitle c-green">➖ Pengurangan: <span class="c-coral">47 − 23</span></h2>
+    <div class="stepbox" id="txt-kurang1"></div>
+    <div class="viszone" id="vis-kurang1"></div>
+    <div class="colwrap" id="col-kurang1"></div>
+    <div class="ctrl-row">
+      <button class="btn ghost small" data-act="reset">↺ Ulangi</button>
+      <button class="btn ghost small" data-act="prevstep">◀ Sebelumnya</button>
+      <button class="btn green" data-act="nextstep">Langkah Berikutnya ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. PENGURANGAN DENGAN MEMINJAM ============ -->
+<section class="slide" id="s6" data-concept="kurang2">
+  <div class="wrap">
+    <h2 class="stitle c-green">➖ Pengurangan dengan <span class="c-coral">Meminjam</span>: <span class="c-coral">42 − 27</span></h2>
+    <div class="stepbox" id="txt-kurang2"></div>
+    <div class="viszone" id="vis-kurang2"></div>
+    <div class="colwrap" id="col-kurang2"></div>
+    <div class="ctrl-row">
+      <button class="btn ghost small" data-act="reset">↺ Ulangi</button>
+      <button class="btn ghost small" data-act="prevstep">◀ Sebelumnya</button>
+      <button class="btn green" data-act="nextstep">Langkah Berikutnya ▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. CARA BERSUSUN ============ -->
+<section class="slide" id="s7">
+  <div class="wrap">
+    <h2 class="stitle">⚡ Cara Cepat: Cara Bersusun Ke Bawah</h2>
+    <div class="stepbox">Setelah paham benda-bendanya, kita bisa berhitung <b>lebih cepat</b> dengan cara bersusun. Kuncinya: mulai selalu dari <b class="c-blue">SATUAN (kanan)</b> dulu! 🔑</div>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="c-blue" style="text-align:center;margin-bottom:8px">➕ Penjumlahan (25 + 37)</h3>
+        <div class="colwrap" id="colTA"></div>
+        <ol class="steps" id="stepsTA" style="margin-left:20px;display:flex;flex-direction:column;gap:6px;font-weight:600;margin-top:10px"></ol>
+      </div>
+      <div class="card">
+        <h3 class="c-green" style="text-align:center;margin-bottom:8px">➖ Pengurangan (42 − 27)</h3>
+        <div class="colwrap" id="colTS"></div>
+        <ol class="steps" id="stepsTS" style="margin-left:20px;display:flex;flex-direction:column;gap:6px;font-weight:600;margin-top:10px"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. LATIHAN PENJUMLAHAN ============ -->
+<section class="slide" id="s8" data-sec="add">
+  <div class="wrap">
+    <div class="ex-head">
+      <h2 class="stitle c-blue" style="font-size:clamp(1.3rem,3vw,1.9rem)">🎯 Latihan Penjumlahan</h2>
+      <span class="chip" id="progTxt-add">Soal 1/20</span>
+      <div class="prog"><i id="progBar-add"></i></div>
+      <span class="chip" id="ptsChip-add">⭐ 0</span>
+      <span class="chip" id="strChip-add">🔥 0</span>
+    </div>
+    <div class="card qcard">
+      <div class="qbadge" id="badge-add"></div>
+      <div id="eq-add"></div>
+      <div class="helpwrap" style="display:flex;flex-direction:column;gap:10px;align-items:center;width:100%">
+        <button class="btn ghost small" id="helpBtn-add">🖼️ Lihat Bantuan Gambar</button>
+        <div class="viszone mini" id="help-add" hidden></div>
+      </div>
+      <div class="inrow">
+        <input class="ansin" id="in-add" inputmode="numeric" autocomplete="off" placeholder="?">
+        <button class="btn blue" id="cek-add">✔ Cek Jawaban</button>
+      </div>
+      <div class="fb" id="fb-add"></div>
+    </div>
+    <div class="pemb" id="pemb-add"></div>
+    <button class="btn coral big" id="next-add" disabled>Selanjutnya ➜</button>
+  </div>
+</section>
+
+<!-- ============ 9. LATIHAN PENGURANGAN ============ -->
+<section class="slide" id="s9" data-sec="sub">
+  <div class="wrap">
+    <div class="ex-head">
+      <h2 class="stitle c-green" style="font-size:clamp(1.3rem,3vw,1.9rem)">🚀 Latihan Pengurangan</h2>
+      <span class="chip" id="progTxt-sub">Soal 1/20</span>
+      <div class="prog"><i id="progBar-sub"></i></div>
+      <span class="chip" id="ptsChip-sub">⭐ 0</span>
+      <span class="chip" id="strChip-sub">🔥 0</span>
+    </div>
+    <div class="card qcard">
+      <div class="qbadge" id="badge-sub"></div>
+      <div id="eq-sub"></div>
+      <div class="helpwrap" style="display:flex;flex-direction:column;gap:10px;align-items:center;width:100%">
+        <button class="btn ghost small" id="helpBtn-sub">🖼️ Lihat Bantuan Gambar</button>
+        <div class="viszone mini" id="help-sub" hidden></div>
+      </div>
+      <div class="inrow">
+        <input class="ansin" id="in-sub" inputmode="numeric" autocomplete="off" placeholder="?">
+        <button class="btn green" id="cek-sub">✔ Cek Jawaban</button>
+      </div>
+      <div class="fb" id="fb-sub"></div>
+    </div>
+    <div class="pemb" id="pemb-sub"></div>
+    <button class="btn coral big" id="next-sub" disabled>Selanjutnya ➜</button>
+  </div>
+</section>
+
+<!-- ============ 10. SOAL CERITA ============ -->
+<section class="slide" id="s10" data-sec="story">
+  <div class="wrap">
+    <div class="ex-head">
+      <h2 class="stitle c-purple" style="font-size:clamp(1.3rem,3vw,1.9rem)">📚 Soal Cerita</h2>
+      <span class="chip" id="progTxt-story">Soal 1/10</span>
+      <div class="prog"><i id="progBar-story"></i></div>
+      <span class="chip" id="ptsChip-story">⭐ 0</span>
+      <span class="chip" id="strChip-story">🔥 0</span>
+    </div>
+    <div class="card qcard">
+      <div class="qbadge hide" id="badge-story"></div>
+      <div id="eq-story" style="width:100%"></div>
+      <div class="helpwrap" style="display:flex;flex-direction:column;gap:10px;align-items:center;width:100%">
+        <button class="btn ghost small" id="helpBtn-story">🖼️ Lihat Bantuan Gambar</button>
+        <div class="viszone mini" id="help-story" hidden></div>
+      </div>
+      <div class="inrow">
+        <input class="ansin" id="in-story" inputmode="numeric" autocomplete="off" placeholder="?">
+        <button class="btn purple" id="cek-story">✔ Cek Jawaban</button>
+      </div>
+      <div class="fb" id="fb-story"></div>
+    </div>
+    <div class="pemb" id="pemb-story"></div>
+    <button class="btn coral big" id="next-story" disabled>Selanjutnya ➜</button>
+  </div>
+</section>
+
+<!-- ============ 11. SKOR AKHIR ============ -->
+<section class="slide" id="s11">
+  <div class="wrap">
+    <h2 class="stitle">🏆 Skor Akhir Kamu</h2>
+    <div class="score-circle" id="scoreRing"><div class="inner"><b id="scorePct">0%</b><span id="scorePts">0 poin</span></div></div>
+    <div class="stars" id="scoreStars"></div>
+    <div class="badges" id="scoreBadges"></div>
+    <div class="chips" id="scoreBreak"></div>
+    <p class="score-msg" id="scoreMsg"></p>
+    <button class="btn purple big" id="btnAgain">🔁 Mulai Ulang dari Awal</button>
+  </div>
+</section>
+
+</main>
+
+<nav class="navbottom">
+  <button class="navbtn" id="btnPrev" title="Slide sebelumnya">◀</button>
+  <span id="pageInfo">1 / 12</span>
+  <button class="navbtn" id="btnNext" title="Slide berikutnya">▶</button>
+</nav>
+
+<div id="confetti"></div>
+<script>
+'use strict';
+/* ================= 1. UTIL ================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const ri = n => Math.floor(Math.random() * n);
+const R  = (k, s) => $('#' + s + '-' + k);   // elemen ber-suffix per bagian latihan
+
+/* ================= 2. AUDIO (Web Audio API) ================= */
+let AC = null, muted = false;
+function initAudio(){ try{ AC = AC || new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+function tone(f, d = .15, type = 'sine', delay = 0, vol = .18){
+  if(!AC || muted) return;
+  try{
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.value = f; o.connect(g); g.connect(AC.destination);
+    const t0 = AC.currentTime + delay;
+    g.gain.setValueAtTime(.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + .02);
+    g.gain.exponentialRampToValueAtTime(.0001, t0 + d);
+    o.start(t0); o.stop(t0 + d + .05);
+  }catch(e){}
+}
+const sndOk    = () => { tone(523,.12); tone(659,.12,'sine',.1); tone(784,.22,'sine',.2); };
+const sndNo    = () => { tone(196,.2,'square',0,.1); tone(147,.28,'square',.16,.1); };
+const sndClick = () => tone(700,.05,'triangle',0,.07);
+const sndWin   = () => [523,659,784,1047].forEach((f,i)=>tone(f,.18,'sine',i*.13));
+
+/* ================= 3. KONFETI ================= */
+function confetti(n = 40){
+  const box = $('#confetti');
+  const colors = ['#FF6F59','#FFB93E','#3FA47A','#3E8ED0','#8B6FC9','#E85D75'];
+  for(let i = 0; i < n; i++){
+    const p = document.createElement('i');
+    p.className = 'cf';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[i % colors.length];
+    const s = 7 + Math.random()*9;
+    p.style.width  = s + 'px';
+    p.style.height = (Math.random() < .5 ? s : s*1.7) + 'px';
+    if(Math.random() < .4) p.style.borderRadius = '50%';
+    p.style.animationDuration = (1.6 + Math.random()*1.7) + 's';
+    p.style.animationDelay = (Math.random()*.45) + 's';
+    box.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+
+/* ================= 4. PEMBANGUN VISUAL IKAT & LIDI ================= */
+function ikat(cls = ''){
+  return `<span class="ikat ${cls}">${'<i class="st"></i>'.repeat(10)}<span class="num">10</span></span>`;
+}
+function lidi(cls = ''){ return `<i class="lidi ${cls}"></i>`; }
+
+// grup(clsWarna, label, jumlahIkat, jumlahLidi, opsi{cutT,flyT,glowT,cutO,flyO,glowO,ikatCls,lidiCls})
+const IKAT_CLS = {'g-blue':'b','g-coral':'c','g-green':'g','g-purple':'p','g-yellow':'y','g-red':'r'};
+function grup(cls, label, t, o, opt = {}){
+  const ic = opt.ikatCls || IKAT_CLS[cls] || '';
+  const lc = opt.lidiCls || IKAT_CLS[cls] || '';
+  const wrap = (i, list, kind) => {
+    const cut  = opt['cut'+kind]  && opt['cut'+kind].includes(i);
+    const fly  = opt['fly'+kind]  && opt['fly'+kind].includes(i);
+    const glow = opt['glow'+kind] && opt['glow'+kind].includes(i);
+    return { cut, fly, glow };
+  };
+  let h = `<div class="grup ${cls}"><div class="glabel">${label}</div>`;
+  if(t > 0){
+    h += `<div class="brow">`;
+    for(let i = 0; i < t; i++){
+      const w = wrap(i, null, 'T');
+      h += `<span class="bbox ${w.cut?'cut':''} ${w.fly?'fly':''}">${ikat(w.glow?'glow':ic)}</span>`;
+    }
+    h += `</div>`;
+  }
+  if(o > 0){
+    h += `<div class="srow">`;
+    for(let i = 0; i < o; i++){
+      const w = wrap(i, null, 'O');
+      h += `<span class="bbox ${w.cut?'cut':''} ${w.fly?'fly':''}">${lidi(w.glow?'glow':lc)}</span>`;
+    }
+    h += `</div>`;
+  }
+  return h + `</div>`;
+}
+function bigop(s, cls = ''){ return `<div class="bigop ${cls}">${s}</div>`; }
+const seq = n => [...Array(n).keys()];
+
+/* ================= 5. KOLOM BERSUSUN ================= */
+function colAdd(a, b, opt = {}){
+  const t1=(a/10)|0, o1=a%10, t2=(b/10)|0, o2=b%10;
+  const carry = opt.carry !== undefined ? opt.carry : (o1+o2 >= 10);
+  const T=((a+b)/10)|0, O=(a+b)%10;
+  const d = (v, cls) => v==='?' ? `<span class="ph">?</span>` : `<span class="${cls}">${v}</span>`;
+  const tensV = opt.tens!==undefined ? opt.tens : T;
+  const onesV = opt.ones!==undefined ? opt.ones : O;
+  const resRow = d(tensV,'t res') + d(onesV,'o res');
+  const carryRow = carry ? `<span class="op"></span><span class="cm">1</span><span></span>` : `<span class="op"></span><span></span><span></span>`;
+  return `<div class="bersusun">${carryRow}
+    <span class="op"></span><span class="d t">${t1}</span><span class="d o">${o1}</span>
+    <span class="op">+</span><span class="d t">${t2}</span><span class="d o">${o2}</span>
+    <span class="line"></span>
+    <span class="op">=</span>${resRow}</div>`;
+}
+function colSub(a, b, opt = {}){
+  const t1=(a/10)|0, o1=a%10, t2=(b/10)|0, o2=b%10;
+  const borrow = opt.borrow !== undefined ? opt.borrow : (o1 < o2);
+  const T=((a-b)/10)|0, O=(a-b)%10;
+  const d = (v, cls) => v==='?' ? `<span class="ph">?</span>` : `<span class="${cls}">${v}</span>`;
+  const tensV = opt.tens!==undefined ? opt.tens : T;
+  const onesV = opt.ones!==undefined ? opt.ones : O;
+  const resRow = d(tensV,'t res') + d(onesV,'o res');
+  const topT = borrow ? `<s>${t1}</s>${t1-1}` : `${t1}`;
+  const topO = borrow ? `<span class="b1">1</span>${o1}` : `${o1}`;
+  return `<div class="bersusun">
+    <span class="op"></span><span class="d t">${topT}</span><span class="d o">${topO}</span>
+    <span class="op">−</span><span class="d t">${t2}</span><span class="d o">${o2}</span>
+    <span class="line"></span>
+    <span class="op">=</span>${resRow}</div>`;
+}
+
+/* ================= 6. NAVIGASI SLIDE ================= */
+const TITLES = ['Cover','Tujuan','Puluhan & Satuan','23 + 34','25 + 37 (Simpan)','47 − 23','42 − 27 (Pinjam)','Cara Bersusun','Latihan ＋','Latihan −','Soal Cerita','Skor Akhir'];
+const slides = $$('.slide');
+const TOTAL  = slides.length;
+let cur = 0;
+
+function buildDots(){
+  $('#dots').innerHTML = slides.map((s,i) =>
+    `<button class="dot ${i===0?'on':''}" title="${TITLES[i]||''}" data-i="${i}"></button>`).join('');
+  $$('.dot').forEach(d => d.onclick = () => goTo(+d.dataset.i));
+}
+function goTo(i){
+  if(i < 0 || i >= TOTAL) return;
+  slides[cur].classList.remove('active');
+  cur = i;
+  const s = slides[cur];
+  s.classList.add('active'); s.scrollTop = 0;
+  $$('.dot').forEach((d,k) => d.classList.toggle('on', k === cur));
+  $('#pageInfo').textContent = (cur+1) + ' / ' + TOTAL;
+  $('#btnPrev').disabled = cur === 0;
+  $('#btnNext').disabled = cur === TOTAL-1;
+  if(s.dataset.sec) ensureQ(s.dataset.sec);
+  if(cur === TOTAL-1) renderScore();
+}
+$('#btnPrev').onclick = () => goTo(cur-1);
+$('#btnNext').onclick = () => goTo(cur+1);
+$('#btnHome').onclick = () => goTo(0);
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT') return;
+  if(e.key === 'ArrowRight') goTo(cur+1);
+  if(e.key === 'ArrowLeft')  goTo(cur-1);
+});
+$('#btnSound').onclick = function(){
+  muted = !muted;
+  this.textContent = muted ? '🔇' : '🔊';
+  if(!muted) sndClick();
+};
+$('#btnFull').onclick = () => {
+  if(document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+};
+
+/* ================= 7. PENJELAJAH PULUHAN-SATUAN ================= */
+let kon = 23;
+function renderKon(){
+  const t = (kon/10)|0, o = kon%10;
+  $('#numKon').textContent = kon;
+  $('#visKon').innerHTML = grup('g-blue', kon + ' = ' + t + ' ikat + ' + o + ' lidi', t, o);
+  $('#capKon').innerHTML = `<b class="kon-num" style="font-size:1.9rem;color:var(--coral)">${kon}</b> = ` +
+    `<b class="c-purple">${t}</b> puluhan (${t*10}) + <b class="c-blue">${o}</b> satuan &nbsp;→&nbsp; ${kon} = ${t*10} + ${o}`;
+}
+function setKon(v){ kon = Math.min(99, Math.max(10, v)); sndClick(); renderKon(); }
+$('#kInc1').onclick  = () => setKon(kon+1);
+$('#kDec1').onclick  = () => setKon(kon-1);
+$('#kInc10').onclick = () => setKon(kon+10);
+$('#kDec10').onclick = () => setKon(kon-10);
+$('#kRnd').onclick   = () => setKon(10 + ri(90));
+
+/* ================= 8. MESIN LANGKAH KONSEP ================= */
+const CONCEPTS = {
+  tambah1: { celebrate:true, steps: [
+    { t:`Kita akan menghitung <b>23 + 34</b>. Lihat dulu benda-bendanya, ya! 👀`,
+      v:()=> grup('g-blue','23 = 2 ikat + 3 lidi',2,3) + bigop('＋') + grup('g-coral','34 = 3 ikat + 4 lidi',3,4),
+      c:()=> colAdd(23,34,{tens:'?',ones:'?',showRes:false}) },
+    { t:`<b>Langkah 1: Hitung SATUAN dulu!</b> Lidi lepasnya: 3 + 4 = <b class="c-blue">7</b> lidi.`,
+      v:()=> grup('g-blue','23',2,3,{glowO:seq(3),ikatCls:'b'}) + bigop('＋') + grup('g-coral','34',3,4,{glowO:seq(4),ikatCls:'c'})
+            + bigop('=','c-green') + grup('g-green','3 + 4 = 7 lidi',0,7,{glowO:seq(7)}) ,
+      c:()=> colAdd(23,34,{tens:'?',ones:7,showRes:false}) },
+    { t:`<b>Langkah 2: Hitung PULUHAN!</b> Ikatnya: 2 + 3 = <b class="c-purple">5</b> ikat. Artinya 20 + 30 = <b class="c-purple">50</b>.`,
+      v:()=> grup('g-purple','2 ikat + 3 ikat = 5 ikat (50)',5,0,{ikatCls:'p'}) + bigop('+') + grup('g-blue','7 lidi',0,7),
+      c:()=> colAdd(23,34,{tens:5,ones:7,showRes:false}) },
+    { t:`<b>Langkah 3: Gabungkan!</b> 50 + 7 = <b class="c-green">57</b>. Hebat! 🎉`,
+      v:()=> grup('g-green','57 = 5 ikat + 7 lidi',5,7,{ikatCls:'g'}),
+      c:()=> colAdd(23,34,{showRes:true}) },
+  ]},
+  tambah2: { celebrate:true, steps: [
+    { t:`Tantangan baru: <b>25 + 37</b>. Soal ini punya <b class="c-coral">simpanan</b>, hati-hati ya! 😎`,
+      v:()=> grup('g-purple','25 = 2 ikat + 5 lidi',2,5) + bigop('＋') + grup('g-coral','37 = 3 ikat + 7 lidi',3,7),
+      c:()=> colAdd(25,37,{tens:'?',ones:'?',showRes:false}) },
+    { t:`<b>Langkah 1: Hitung SATUAN dulu!</b> 5 + 7 = <b class="c-blue">12</b>. Wah, 12 lidi — <b>lebih dari 10</b>!`,
+      v:()=> grup('g-yellow','5 + 7 = 12 lidi',0,12,{glowO:seq(12)}),
+      c:()=> colAdd(25,37,{tens:'?',ones:'?',showRes:false}) },
+    { t:`<b>Langkah 2: Bikin ikat baru!</b> 10 lidi diikat lagi: 12 = <b class="c-purple">1 ikat + 2 lidi</b>. Tulis <b>2</b> di satuan, <b class="c-coral">simpan 1</b>! ✋`,
+      v:()=> grup('g-yellow','12 = 1 ikat baru + 2 lidi',1,2,{ikatCls:'y',glowT:seq(1)}),
+      c:()=> colAdd(25,37,{tens:'?',ones:2,showRes:false,carry:true}) },
+    { t:`<b>Langkah 3: Hitung PULUHAN!</b> Ikat lama: 2 + 3 = 5 ikat. Ditambah ikat simpanan: 5 + 1 = <b class="c-purple">6</b> ikat → 20 + 30 + 10 = <b class="c-purple">60</b>.`,
+      v:()=> grup('g-purple','ikat lama: 5 ikat (50)',5,0,{ikatCls:'p'}) + bigop('+')
+            + grup('g-yellow','1 ikat simpanan (10)',1,0,{ikatCls:'y',glowT:seq(1)}) + bigop('+')
+            + grup('g-blue','2 lidi',0,2),
+      c:()=> colAdd(25,37,{tens:6,ones:2,showRes:false,carry:true}) },
+    { t:`<b>Langkah 4: Gabungkan!</b> 60 + 2 = <b class="c-green">62</b>. Kamu berhasil menyimpan! 🎉`,
+      v:()=> grup('g-green','62 = 6 ikat + 2 lidi',6,2,{ikatCls:'g'}),
+      c:()=> colAdd(25,37,{showRes:true,carry:true}) },
+  ]},
+  kurang1: { celebrate:true, steps: [
+    { t:`<b>47 − 23</b>. Kita punya 47, lalu <b class="c-coral">diambil</b> 23. Perhatikan baik-baik! 👀`,
+      v:()=> grup('g-green','47 = 4 ikat + 7 lidi',4,7) + bigop('−') + grup('g-red','diambil: 2 ikat + 3 lidi',2,3),
+      c:()=> colSub(47,23,{tens:'?',ones:'?',showRes:false}) },
+    { t:`<b>Langkah 1: Satuan dulu!</b> Ambil 3 lidi (yang ✕): 7 − 3 = <b class="c-blue">4</b> lidi tersisa.`,
+      v:()=> grup('g-green','7 − 3 = 4 lidi',0,7,{cutO:seq(3)}),
+      c:()=> colSub(47,23,{tens:'?',ones:4,showRes:false}) },
+    { t:`<b>Langkah 2: Puluhan!</b> Ambil 2 ikat (yang ✕): 4 − 2 = <b class="c-purple">2</b> ikat tersisa.`,
+      v:()=> grup('g-green','4 − 2 = 2 ikat',4,0,{cutT:[0,1]}),
+      c:()=> colSub(47,23,{tens:2,ones:4,showRes:false}) },
+    { t:`<b>Langkah 3: Hitung sisanya!</b> 2 ikat + 4 lidi = 20 + 4 = <b class="c-green">24</b>. Pintar! 🎉`,
+      v:()=> grup('g-green','24 = 2 ikat + 4 lidi',2,4,{ikatCls:'g'}),
+      c:()=> colSub(47,23,{showRes:true}) },
+  ]},
+  kurang2: { celebrate:true, steps: [
+    { t:`<b>42 − 27</b>. Kita harus mengambil <b class="c-coral">7 lidi</b>… tapi lidi lepasnya cuma ada <b>2</b>! Gimana ya? 🤔`,
+      v:()=> grup('g-green','42 = 4 ikat + 2 lidi',4,2) + bigop('−') + grup('g-red','diambil: 2 ikat + 7 lidi',2,7),
+      c:()=> colSub(42,27,{tens:'?',ones:'?',showRes:false}) },
+    { t:`<b>Langkah 1: Buka 1 ikat!</b> Isinya 10 lidi lepas. Sekarang ada <b class="c-purple">3 ikat + 12 lidi</b> (30 + 12 = 42). Ini namanya <b class="c-coral">meminjam</b>!`,
+      v:()=> grup('g-blue','3 ikat + 12 lidi',3,12,{glowO:seq(10).map(i=>i+2),ikatCls:'b'}),
+      c:()=> colSub(42,27,{tens:'?',ones:'?',showRes:false,borrow:true}) },
+    { t:`<b>Langkah 2: Satuan!</b> Sekarang bisa: 12 − 7 = <b class="c-blue">5</b> lidi tersisa (yang ✕ diambil).`,
+      v:()=> grup('g-green','12 − 7 = 5 lidi',0,12,{cutO:seq(7)}),
+      c:()=> colSub(42,27,{tens:'?',ones:5,showRes:false,borrow:true}) },
+    { t:`<b>Langkah 3: Puluhan!</b> Ambil 2 ikat (yang ✕): 3 − 2 = <b class="c-purple">1</b> ikat tersisa.`,
+      v:()=> grup('g-green','3 − 2 = 1 ikat',3,0,{cutT:[0,1],ikatCls:'g'}) + bigop('+') + grup('g-blue','5 lidi tersisa',0,5),
+      c:()=> colSub(42,27,{tens:1,ones:5,showRes:false,borrow:true}) },
+    { t:`<b>Langkah 4: Sisanya!</b> 1 ikat + 5 lidi = 10 + 5 = <b class="c-green">15</b>. Kamu berhasil meminjam! 🎉`,
+      v:()=> grup('g-green','15 = 1 ikat + 5 lidi',1,5,{ikatCls:'g'}),
+      c:()=> colSub(42,27,{showRes:true,borrow:true}) },
+  ]},
+};
+
+function initConcept(key){
+  const c     = CONCEPTS[key];
+  const slide = $(`[data-concept="${key}"]`);
+  const tEl   = $('#txt-' + key), vEl = $('#vis-' + key), cEl = $('#col-' + key);
+  const bNext = slide.querySelector('[data-act="nextstep"]');
+  const bPrev = slide.querySelector('[data-act="prevstep"]');
+  let i = 0;
+  function render(){
+    const st = c.steps[i];
+    tEl.innerHTML = st.t;
+    vEl.innerHTML = st.v ? st.v() : '';
+    cEl.innerHTML = st.c ? st.c() : '';
+    bNext.disabled = (i === c.steps.length-1);
+    bPrev.disabled = (i === 0);
+  }
+  bNext.onclick = () => {
+    if(i < c.steps.length-1){
+      i++; render(); sndClick();
+      if(i === c.steps.length-1 && c.celebrate){ confetti(26); sndOk(); }
+    }
+  };
+  bPrev.onclick = () => { if(i > 0){ i--; render(); sndClick(); } };
+  slide.querySelector('[data-act="reset"]').onclick = () => { i = 0; render(); sndClick(); };
+  render();
+}
+function initConcepts(){ Object.keys(CONCEPTS).forEach(initConcept); }
+
+/* ================= 9. SLIDE CARA BERSUSUN ================= */
+function initBersusun(){
+  $('#colTA').innerHTML = colAdd(25,37,{showRes:true,carry:true});
+  $('#stepsTA').innerHTML =
+    `<li>Satuan dulu: 5 + 7 = 12 → tulis <b>2</b>, <b class="c-coral">simpan 1</b> ✋</li>` +
+    `<li>Puluhan: 2 + 3 + 1 (simpanan) = <b>6</b></li>` +
+    `<li>Hasilnya <b class="c-green">62</b> 🎉</li>`;
+  $('#colTS').innerHTML = colSub(42,27,{showRes:true,borrow:true});
+  $('#stepsTS').innerHTML =
+    `<li>Satuan: 2 tidak bisa dikurangi 7 → <b class="c-coral">pinjam 10</b>: 2 jadi 12, 4 jadi 3</li>` +
+    `<li>Satuan: 12 − 7 = <b>5</b>, lalu puluhan: 3 − 2 = <b>1</b></li>` +
+    `<li>Hasilnya <b class="c-green">15</b> 🎉</li>`;
+}
+
+/* ================= 10. GENERATOR SOAL LATIHAN ================= */
+function genAddPairs(n, needCarry){
+  const out = [], used = new Set();
+  let guard = 0;
+  while(out.length < n && guard++ < 5000){
+    let t1, t2, o1, o2;
+    if(!needCarry){                       // tanpa menyimpan: satuan <= 9, puluhan <= 9
+      t1 = 1 + ri(8);  t2 = 1 + ri(9 - t1);
+      o1 = ri(10);     o2 = ri(10 - o1);
+    } else {                              // dengan menyimpan: satuan >= 10, puluhan+1 <= 9
+      t1 = 1 + ri(7);  t2 = 1 + ri(8 - t1);
+      o1 = 1 + ri(9);  o2 = (10 - o1) + ri(o1);
+    }
+    const a = t1*10 + o1, b = t2*10 + o2;
+    if(a < 11 || b < 11) continue;
+    const k = a + '+' + b;
+    if(used.has(k)) continue;
+    used.add(k);
+    out.push({ a, b, op:'+', ans:a + b, regroup:needCarry });
+  }
+  return out;
+}
+function genSubPairs(n, needBorrow){
+  const out = [], used = new Set();
+  let guard = 0;
+  while(out.length < n && guard++ < 5000){
+    const t1 = 2 + ri(8);
+    let t2, o1, o2;
+    if(!needBorrow){                      // tanpa meminjam: satuan atas >= bawah
+      t2 = 1 + ri(t1); o1 = ri(10); o2 = ri(o1 + 1);
+    } else {                              // dengan meminjam: satuan atas < bawah
+      t2 = 1 + ri(t1 - 1); o1 = ri(9); o2 = (o1 + 1) + ri(9 - o1);
+    }
+    const a = t1*10 + o1, b = t2*10 + o2;
+    if(a <= b) continue;
+    const k = a + '-' + b;
+    if(used.has(k)) continue;
+    used.add(k);
+    out.push({ a, b, op:'-', ans:a - b, regroup:needBorrow });
+  }
+  return out;
+}
+
+/* ================= 11. SOAL CERITA ================= */
+const STORY = [
+  { scene:'🍰🧁', op:'+', a:24, b:15, why:'kue yang dibuat Ibu dan Ayah <b>digabung</b> menjadi satu',
+    text:'Ibu membuat <b>24</b> potong kue. Ayah membuat <b>15</b> potong kue. Berapa jumlah kue seluruhnya?' },
+  { scene:'🔵🔴', op:'-', a:36, b:14, why:'kelereng Andi <b>diberikan</b> kepada Budi sehingga berkurang',
+    text:'Andi punya <b>36</b> kelereng. Ia memberikan <b>14</b> kelereng kepada Budi. Berapa kelereng Andi sekarang?' },
+  { scene:'📚📖', op:'+', a:28, b:13, why:'buku di rak <b>ditambah</b> oleh Bu Guru',
+    text:'Di rak perpustakaan ada <b>28</b> buku cerita. Bu Guru menambahkan <b>13</b> buku lagi. Berapa buku di rak sekarang?' },
+  { scene:'✏️🎨', op:'-', a:45, b:18, why:'stik es krim <b>dipakai</b> sehingga berkurang',
+    text:'Rina punya <b>45</b> stik es krim untuk kerajinan. Terpakai <b>18</b> stik. Berapa sisa stik es krim Rina?' },
+  { scene:'🌹🌷', op:'+', a:32, b:17, why:'bunga milik Bapak dan Ibu <b>digabung</b>',
+    text:'Bapak menanam <b>32</b> bunga mawar. Ibu menanam <b>17</b> bunga melati. Berapa jumlah bunga seluruhnya?' },
+  { scene:'🍬🎁', op:'-', a:50, b:25, why:'permen <b>dibagikan</b> sehingga berkurang',
+    text:'Dodi punya <b>50</b> permen. Ia membagikan <b>25</b> permen kepada teman-temannya. Berapa permen Dodi sekarang?' },
+  { scene:'🐟🐠', op:'+', a:19, b:23, why:'ikan di akuarium <b>ditambah</b> ikan yang baru dibeli',
+    text:'Akuarium Pak Tono berisi <b>19</b> ikan. Ia membeli <b>23</b> ikan lagi. Berapa jumlah ikan seluruhnya?' },
+  { scene:'🎈🎉', op:'-', a:63, b:27, why:'balon <b>dibagikan</b> sehingga berkurang',
+    text:'Pak Ahmad membawa <b>63</b> balon. Sebanyak <b>27</b> balon dibagikan kepada anak-anak. Berapa balon yang tersisa?' },
+  { scene:'📕📗', op:'+', a:34, b:26, why:'halaman yang dibaca kemarin dan hari ini <b>digabung</b>',
+    text:'Dina membaca <b>34</b> halaman kemarin. Hari ini ia membaca <b>26</b> halaman lagi. Berapa halaman yang sudah dibaca Dina?' },
+  { scene:'⭐🏅', op:'-', a:71, b:45, why:'bintang <b>ditukar</b> dengan hadiah sehingga berkurang',
+    text:'Sinta mengumpulkan <b>71</b> bintang. Sebanyak <b>45</b> bintang ditukar dengan hadiah. Berapa bintang sisa Sinta?' },
+];
+STORY.forEach(q => { q.ans = q.op === '+' ? q.a + q.b : q.a - q.b; q.regroup = false; });
+
+/* ================= 12. KEADAAN & PEMBAHASAN ================= */
+const S = { name:'Kawan Hebat', points:0, streak:0 };
+const SECS = {
+  add:  { key:'add',  count:20, i:0, attempts:0, answered:false, correct:0, firstTry:0, pts:0, inited:false,
+          qs:[], nextSlide:9,
+          hint:'Jumlahkan <b>satuan</b> dulu. Kalau hasilnya 10 atau lebih, buat <b>1 ikat baru</b> dan <b>simpan</b>!' },
+  sub:  { key:'sub',  count:20, i:0, attempts:0, answered:false, correct:0, firstTry:0, pts:0, inited:false,
+          qs:[], nextSlide:10,
+          hint:'Kalau satuannya kurang, <b>buka 1 ikat</b> menjadi 10 lidi (meminjam), baru kurangi!' },
+  story:{ key:'story',count:10, i:0, attempts:0, answered:false, correct:0, firstTry:0, pts:0, inited:false,
+          qs:STORY, nextSlide:11,
+          hint:'Baca lagi ceritanya: apakah benda <b>digabung</b> (＋) atau <b>diambil</b> (−)?' },
+};
+
+function pembAdd(a, b){
+  const t1=(a/10)|0, o1=a%10, t2=(b/10)|0, o2=b%10;
+  const os = o1 + o2, carry = os >= 10;
+  const T=((a+b)/10)|0, O=(a+b)%10;
+  const li = [`Satuan dulu: <b>${o1} + ${o2} = ${os}</b>.`];
+  if(carry) li.push(`${os} lebih dari 10 → buat <b>1 ikat baru</b>: ${os} = 10 + ${O}. Tulis <b>${O}</b> di satuan, <b class="c-coral">simpan 1</b> ✋`);
+  li.push(carry
+    ? `Puluhan: ${t1} + ${t2} = ${t1+t2}, ditambah simpanan 1 → <b>${T} ikat = ${T*10}</b>.`
+    : `Puluhan: ${t1} ikat + ${t2} ikat = <b>${t1+t2} ikat = ${(t1+t2)*10}</b>.`);
+  li.push(`Gabungkan: ${carry ? T*10 : (t1+t2)*10} + ${O} = <b class="c-green">${a+b}</b>. ✔`);
+  return { steps:li, col:colAdd(a,b,{showRes:true}),
+           res:grup('g-green', `Jawaban: ${a+b} = ${T} ikat + ${O} lidi`, T, O, {ikatCls:'g'}) };
+}
+function pembSub(a, b){
+  const t1=(a/10)|0, o1=a%10, t2=(b/10)|0, o2=b%10;
+  const borrow = o1 < o2;
+  const T=((a-b)/10)|0, O=(a-b)%10;
+  const li = [];
+  if(borrow){
+    li.push(`Satuan: ${o1} tidak bisa dikurangi ${o2} → <b class="c-coral">buka 1 ikat</b>! Satuan jadi <b>${o1+10}</b> lidi, puluhan jadi ${t1-1} ikat.`);
+    li.push(`Satuan: ${o1+10} − ${o2} = <b>${O}</b> lidi.`);
+  } else {
+    li.push(`Satuan dulu: ${o1} − ${o2} = <b>${O}</b> lidi.`);
+  }
+  li.push(`Puluhan: ${borrow ? t1-1 : t1} ikat − ${t2} ikat = <b>${T} ikat = ${T*10}</b>.`);
+  li.push(`Gabungkan: ${T*10} + ${O} = <b class="c-green">${a-b}</b>. ✔`);
+  return { steps:li, col:colSub(a,b,{showRes:true}),
+           res:grup('g-green', `Jawaban: ${a-b} = ${T} ikat + ${O} lidi`, T, O, {ikatCls:'g'}) };
+}
+function showPemb(k, q){
+  const d = q.op === '+' ? pembAdd(q.a, q.b) : pembSub(q.a, q.b);
+  let why = '';
+  if(k === 'story'){
+    why = `<li>Soal ini <b class="c-purple">${q.op === '+' ? 'PENJUMLAHAN ＋' : 'PENGURANGAN −'}</b> karena ${q.why}.</li>`;
+  }
+  R(k,'pemb').innerHTML =
+    `<div class="ptitle">📖 Pembahasan ${q.a} ${q.op === '+' ? '＋' : '−'} ${q.b} = ${q.ans}</div>` +
+    `<ol>${why}${d.steps.map(s => `<li>${s}</li>`).join('')}</ol>` +
+    `<div class="prow"><div class="viszone mini" style="border:none;background:transparent">${d.col}</div>` +
+    `<div class="viszone mini" style="border:none;background:transparent">${d.res}</div></div>`;
+  R(k,'pemb').classList.add('show');
+}
+
+/* ================= 13. ALUR LATIHAN ================= */
+function genAll(){
+  SECS.add.qs  = genAddPairs(10, false).concat(genAddPairs(10, true));
+  SECS.sub.qs  = genSubPairs(10, false).concat(genSubPairs(10, true));
+}
+function updateChips(k){
+  const s = SECS[k];
+  R(k,'ptsChip').textContent = '⭐ ' + s.pts;
+  R(k,'strChip').textContent = '🔥 ' + S.streak;
+  R(k,'progTxt').textContent = `Soal ${s.i+1} / ${s.count}`;
+  R(k,'progBar').style.width = (s.i / s.count * 100) + '%';
+}
+function renderQ(k){
+  const s = SECS[k], q = s.qs[s.i];
+  s.attempts = 0; s.answered = false;
+  const eq = R(k,'eq');
+  if(k === 'story'){
+    eq.innerHTML = `<div class="story-card"><div class="scene">${q.scene}</div><p>${q.text}</p></div>`;
+    R(k,'badge').classList.add('hide');
+  } else {
+    eq.innerHTML = `<div class="q-eq"><span>${q.a}</span><span class="opdo">${q.op === '+' ? '＋' : '−'}</span>` +
+                   `<span>${q.b}</span><span class="opdo">=</span><span class="ansbox">?</span></div>`;
+    const b = R(k,'badge');
+    b.classList.remove('hide');
+    b.textContent = k === 'add'
+      ? (q.regroup ? '⭐ Tantangan: ada simpanan!' : '🌱 Satuan kurang dari 10 — tanpa simpanan')
+      : (q.regroup ? '⭐ Tantangan: ada meminjam!' : '🌱 Satuan cukup — tanpa meminjam');
+  }
+  const inp = R(k,'in');
+  inp.value = ''; inp.disabled = false;
+  R(k,'cek').disabled = false;
+  const fb = R(k,'fb'); fb.className = 'fb'; fb.innerHTML = '';
+  const pb = R(k,'pemb'); pb.classList.remove('show'); pb.innerHTML = '';
+  R(k,'help').hidden = true;
+  R(k,'help').innerHTML = '';
+  R(k,'helpBtn').textContent = '🖼️ Lihat Bantuan Gambar';
+  const nb = R(k,'next');
+  nb.disabled = true;
+  nb.textContent = (s.i === s.count-1)
+    ? (k === 'add' ? 'Lanjut: Latihan Pengurangan ➜' : k === 'sub' ? 'Lanjut: Soal Cerita ➜' : '🏁 Lihat Skor Akhir')
+    : 'Soal Berikutnya ➜';
+  updateChips(k);
+}
+function ensureQ(k){ if(!SECS[k].inited){ SECS[k].inited = true; renderQ(k); } }
+
+function showFb(k, ok, html){
+  const fb = R(k,'fb');
+  fb.className = 'fb show ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = html;
+}
+function cekAns(k){
+  const s = SECS[k], q = s.qs[s.i], inp = R(k,'in');
+  if(s.answered) return;
+  const v = parseInt(inp.value, 10);
+  if(isNaN(v)){
+    showFb(k, false, '😊 Tulis dulu jawabanmu di kotak, ya!');
+    inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+    return;
+  }
+  s.attempts++;
+  if(v === q.ans){
+    s.answered = true;
+    const p = s.attempts === 1 ? 10 : 5;
+    s.pts += p; S.points += p; s.correct++;
+    if(s.attempts === 1){ s.firstTry++; S.streak++; }
+    const starMsg = S.streak >= 3 ? ` 🔥 ${S.streak} benar berturut-turut!` : '';
+    showFb(k, true, (s.attempts === 1 ? '🎉 <b>Benar sekali!</b> +10 poin' : '👍 <b>Benar!</b> +5 poin') + starMsg);
+    inp.disabled = true; R(k,'cek').disabled = true;
+    R(k,'next').disabled = false;
+    R(k,'progBar').style.width = ((s.i+1) / s.count * 100) + '%';
+    showPemb(k, q);
+    confetti(s.attempts === 1 ? 45 : 24); sndOk();
+  } else if(s.attempts >= 2){
+    s.answered = true; S.streak = 0;
+    showFb(k, false, `💪 Belum tepat. Jawaban yang benar: <b class="c-green">${q.ans}</b>. Tidak apa-apa, belajar dari pembahasannya ya!`);
+    inp.value = q.ans; inp.disabled = true; R(k,'cek').disabled = true;
+    R(k,'next').disabled = false;
+    R(k,'progBar').style.width = ((s.i+1) / s.count * 100) + '%';
+    showPemb(k, q);
+    sndNo();
+  } else {
+    S.streak = 0;
+    showFb(k, false, '😅 <b>Belum tepat.</b> Ayo coba sekali lagi! 💪' +
+      `<span class="hintline">💡 Petunjuk: ${SECS[k].hint}</span>`);
+    inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+    sndNo();
+  }
+  updateChips(k);
+}
+function nextQ(k){
+  const s = SECS[k];
+  if(!s.answered) return;
+  s.i++;
+  if(s.i >= s.count){ goTo(s.nextSlide); }
+  else { renderQ(k); sndClick(); }
+}
+function wireEx(){
+  ['add','sub','story'].forEach(k => {
+    R(k,'cek').onclick  = () => cekAns(k);
+    R(k,'next').onclick = () => nextQ(k);
+    const inp = R(k,'in');
+    inp.addEventListener('input',  e => { e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,3); });
+    inp.addEventListener('keydown', e => { if(e.key === 'Enter') R(k,'cek').click(); });
+    R(k,'helpBtn').onclick = function(){
+      const h = R(k,'help');
+      if(h.hidden){
+        const q = SECS[k].qs[SECS[k].i];
+        h.innerHTML = k === 'story'
+          ? grup('g-blue', `${q.a} = ${(q.a/10)|0} ikat + ${q.a%10} lidi`, (q.a/10)|0, q.a%10) +
+            grup('g-coral', `${q.b} = ${(q.b/10)|0} ikat + ${q.b%10} lidi`, (q.b/10)|0, q.b%10)
+          : grup('g-blue', `${q.a} = ${(q.a/10)|0} ikat + ${q.a%10} lidi`, (q.a/10)|0, q.a%10) +
+            bigop(q.op === '+' ? '＋' : '−') +
+            grup('g-coral', `${q.b} = ${(q.b/10)|0} ikat + ${q.b%10} lidi`, (q.b/10)|0, q.b%10);
+        h.hidden = false;
+        this.textContent = '🙈 Tutup Gambar';
+        sndClick();
+      } else {
+        h.hidden = true;
+        this.textContent = '🖼️ Lihat Bantuan Gambar';
+      }
+    };
+  });
+}
+
+/* ================= 14. SKOR AKHIR ================= */
+let scoreShown = false;
+function renderScore(){
+  const correct = SECS.add.correct + SECS.sub.correct + SECS.story.correct;
+  const pts = S.points;
+  const pct = Math.round(pts / 5);   // maksimum 500 poin → 100%
+  $('#scoreRing').style.setProperty('--pct', pct);
+  $('#scorePct').textContent = pct + '%';
+  $('#scorePts').textContent = pts + ' poin • ' + correct + ' dari 50 soal benar';
+  const nStar = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 45 ? 1 : 0;
+  $('#scoreStars').innerHTML = seq(3).map(i => `<span class="star ${i < nStar ? '' : 'off'}">⭐</span>`).join('');
+  const badges = [];
+  if(SECS.add.correct   >= 16) badges.push('🏅 Ahli Penjumlahan');
+  if(SECS.sub.correct   >= 16) badges.push('🏅 Master Pengurangan');
+  if(SECS.story.correct >= 8)  badges.push('🏅 Pahlawan Cerita');
+  if(pct >= 90) badges.push('🏆 Bintang Kelas Emas');
+  $('#scoreBadges').innerHTML = badges.length
+    ? badges.map(b => `<span class="badge-pill">${b}</span>`).join('')
+    : `<span class="badge-pill">🌱 Terus berlatih, ya!</span>`;
+  $('#scoreBreak').innerHTML =
+    `<span class="chip">➕ Penjumlahan: ${SECS.add.correct}/20</span>` +
+    `<span class="chip">➖ Pengurangan: ${SECS.sub.correct}/20</span>` +
+    `<span class="chip">📚 Soal Cerita: ${SECS.story.correct}/10</span>`;
+  let msg;
+  if(pct >= 90)      msg = `LUAR BIASA, ${S.name.toUpperCase()}! 🤩 Kamu adalah bintang matematika kelas 1!`;
+  else if(pct >= 70) msg = `Hebat sekali, ${S.name}! 😄 Sedikit lagi kamu jadi ahli berhitung!`;
+  else if(pct >= 45) msg = `Bagus, ${S.name}! 👍 Ayo ulangi latihannya biar makin jago!`;
+  else               msg = `Jangan menyerah, ${S.name}! 🌱 Yuk belajar lagi dari awal, kamu pasti bisa!`;
+  $('#scoreMsg').textContent = msg;
+  if(!scoreShown && pct >= 45){ scoreShown = true; confetti(150); sndWin(); }
+}
+$('#btnAgain').onclick = () => location.reload();
+
+/* ================= 15. COVER & INISIALISASI ================= */
+$('#btnStart').onclick = () => {
+  initAudio();
+  const n = $('#inpName').value.trim();
+  S.name = n || 'Kawan Hebat';
+  $('#greet').textContent = `Halo, ${S.name}! 👋 Selamat belajar!`;
+  sndClick();
+  goTo(1);
+};
+
+buildDots();
+renderKon();
+initConcepts();
+initBersusun();
+genAll();
+wireEx();
+goTo(0);
+</script>
+</body>
+</html>
