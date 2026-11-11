@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Latihan interaktif tabel perkalian rumpang 1-10 untuk siswa SD. Isi kotak kosong, cek jawaban, bagian yang salah ditandai tanpa mengungkap jawabannya.">
+<title>Tabel Perkalian Rumpang — Latihan Perkalian 1–10</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>%E2%9C%96%EF%B8%8F</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --biru:#1d4ed8;
+    --hijau:#22c55e;  --hijau-tua:#15803d;  --hijau-muda:#e8f9ef;
+    --merah:#ef4444;  --merah-tua:#b91c1c;  --merah-muda:#fdecec;
+    --oranye:#f59e0b; --oranye-tua:#b45309; --oranye-muda:#fff4e0;
+    --kuning:#fff3b0; --kuning-border:#f2cc45;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{
+    font-family:'Nunito','Segoe UI',Tahoma,Arial,sans-serif;
+    background:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 55%,#a855f7 100%);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px 12px; color:#1e293b;
+  }
+  .kartu{
+    background:#fff; width:100%; max-width:880px;
+    border-radius:20px; box-shadow:0 24px 60px rgba(15,23,42,.35);
+    padding:28px 28px 22px;
+  }
+  h1{
+    text-align:center; color:var(--biru);
+    font-size:clamp(1.5rem,4vw,2.1rem); font-weight:900; letter-spacing:.3px;
+  }
+  .subjudul{
+    text-align:center; color:#64748b; font-weight:600;
+    font-size:clamp(.85rem,2.5vw,1rem); margin:6px 0 18px;
+  }
+
+  /* ===== Kontrol ===== */
+  .kontrol{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:14px; }
+  .kontrol label{ font-weight:700; color:#334155; font-size:.92rem; }
+  select{
+    font:inherit; font-weight:700; padding:10px 12px; cursor:pointer;
+    border:2px solid #dbe4f3; border-radius:12px; background:#f8faff; color:var(--biru);
+  }
+  select:focus{ outline:none; border-color:#3b82f6; }
+  .btn{
+    font:inherit; font-weight:800; padding:11px 18px; border-radius:12px;
+    border:none; cursor:pointer; transition:transform .06s ease;
+  }
+  .btn:active{ transform:translateY(2px); }
+  .btn-utama{ background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; box-shadow:0 4px 0 #15803d; }
+  .btn-utama:hover{ filter:brightness(1.06); }
+  .btn-sekunder{ background:#eef2fb; color:var(--biru); box-shadow:0 4px 0 #d5def0; }
+  .btn-sekunder:hover{ background:#e3eaf8; }
+
+  /* ===== Indikator perkalian ===== */
+  .indikator-wrap{ text-align:center; margin-bottom:12px; }
+  .indikator{
+    display:inline-block; padding:8px 20px; border-radius:999px;
+    background:#f1f5f9; color:#64748b; font-weight:700; font-size:.95rem; transition:all .15s;
+  }
+  .indikator.aktif{
+    background:#fff7ed; color:#c2410c; box-shadow:inset 0 0 0 2px #fb923c;
+    font-size:1.1rem; font-weight:900; letter-spacing:1px;
+  }
+
+  /* ===== Kotak umpan balik ===== */
+  .feedback{
+    min-height:54px; max-width:660px; margin:0 auto 14px; text-align:center;
+    padding:12px 18px; border-radius:14px; font-weight:700; font-size:.95rem;
+  }
+  .feedback.info{ background:#e8f1ff; color:#1e40af; }
+  .feedback.ok  { background:#dcfce7; color:#166534; box-shadow:inset 0 0 0 2px #86efac; }
+  .feedback.warn{ background:#fef9c3; color:#854d0e; box-shadow:inset 0 0 0 2px #fde047; }
+
+  /* ===== Tabel perkalian ===== */
+  .tabel-wrap{ overflow-x:auto; padding:4px 2px 8px; }
+  table{ border-collapse:separate; border-spacing:4px; margin:0 auto; min-width:640px; }
+  th{
+    width:48px; height:48px; border-radius:10px; user-select:none;
+    background:linear-gradient(160deg,#2563eb,#1d4ed8); color:#fff;
+    font-weight:900; font-size:1.05rem;
+  }
+  th.sorot{ outline:3px solid #fbbf24; outline-offset:1px; }
+  th.sudut{ background:linear-gradient(160deg,#0f172a,#1e293b); }
+  td{
+    width:48px; height:48px; border-radius:10px; position:relative;
+    text-align:center; background:#eef3fc; color:#33507a;
+    font-weight:800; font-size:1rem;
+  }
+  td.terisi{ user-select:none; }
+  td.rumpang{ padding:0; background:transparent; }
+  td.rumpang input{
+    width:100%; height:100%; border:none; border-radius:10px; outline:none;
+    background:var(--kuning); box-shadow:inset 0 0 0 2px var(--kuning-border);
+    font:inherit; font-weight:900; text-align:center; color:#8a6100;
+  }
+  td.rumpang input:focus{ background:#fff; box-shadow:0 0 0 3px rgba(59,130,246,.45); color:#1e293b; }
+
+  /* Hasil pemeriksaan */
+  td.benar  input{ background:var(--hijau-muda);  box-shadow:inset 0 0 0 2px var(--hijau);  color:var(--hijau-tua); }
+  td.salah  input{ background:var(--merah-muda);  box-shadow:inset 0 0 0 2px var(--merah);  color:var(--merah-tua); animation:goyang .4s ease; }
+  td.kosong input{ background:var(--oranye-muda); box-shadow:inset 0 0 0 2px var(--oranye); color:var(--oranye-tua); }
+  td.benar::after, td.salah::after, td.kosong::after{
+    position:absolute; top:-7px; right:-7px; width:19px; height:19px; z-index:2;
+    border-radius:50%; color:#fff; font-size:12px; font-weight:900; line-height:19px; text-align:center;
+    box-shadow:0 2px 5px rgba(15,23,42,.3);
+  }
+  td.benar::after { content:'\2713'; background:var(--hijau); }
+  td.salah::after { content:'\2715'; background:var(--merah); }
+  td.kosong::after{ content:'?';     background:var(--oranye); }
+  @keyframes goyang{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-4px); } 40%{ transform:translateX(4px); }
+    60%{ transform:translateX(-3px); } 80%{ transform:translateX(3px); }
+  }
+
+  /* ===== Legenda & petunjuk ===== */
+  .kaki{
+    margin-top:16px; display:flex; flex-wrap:wrap; gap:8px 18px;
+    justify-content:center; font-size:.85rem; color:#64748b; font-weight:700;
+  }
+  .titik{
+    display:inline-block; width:13px; height:13px; border-radius:4px;
+    margin-right:6px; vertical-align:-2px;
+  }
+  .petunjuk{ text-align:center; color:#94a3b8; font-size:.8rem; margin-top:10px; font-weight:600; }
+
+  /* ===== Konfeti ===== */
+  .konfeti{
+    position:fixed; top:-14px; width:10px; height:15px; border-radius:3px;
+    opacity:.95; pointer-events:none; z-index:99;
+    animation:jatuh linear forwards;
+  }
+  @keyframes jatuh{ to{ transform:translateY(108vh) rotate(620deg); opacity:.6; } }
+
+  @media (max-width:560px){
+    .kartu{ padding:18px 12px; }
+    .btn{ padding:10px 12px; font-size:.9rem; }
+  }
+</style>
+</head>
+<body>
+<main class="kartu">
+  <h1>Tabel Perkalian Rumpang</h1>
+  <p class="subjudul">Lengkapi kotak yang masih kosong, lalu tekan <b>Cek Jawaban</b> untuk mengetahui hasilnya.</p>
+
+  <div class="kontrol">
+    <label for="jumlahRumpang">Jumlah rumpang</label>
+    <select id="jumlahRumpang">
+      <option value="8">8 &mdash; mudah</option>
+      <option value="12" selected>12 &mdash; sedang</option>
+      <option value="18">18 &mdash; sulit</option>
+      <option value="25">25 &mdash; mahir</option>
+    </select>
+    <button type="button" id="btnSoalBaru" class="btn btn-sekunder">Soal Baru</button>
+    <button type="button" id="btnReset"    class="btn btn-sekunder">Hapus Jawaban</button>
+    <button type="button" id="btnCek"      class="btn btn-utama">Cek Jawaban</button>
+  </div>
+
+  <div class="indikator-wrap"><span id="indikator" class="indikator"></span></div>
+
+  <div class="feedback info" id="feedback" aria-live="polite"></div>
+
+  <div class="tabel-wrap">
+    <table id="tabelPerkalian" aria-label="Tabel perkalian 1 sampai 10"></table>
+  </div>
+
+  <div class="kaki">
+    <span><span class="titik" style="background:#fff3b0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span>kotak rumpang</span>
+    <span><span class="titik" style="background:#e8f9ef;box-shadow:inset 0 0 0 2px #22c55e"></span>benar</span>
+    <span><span class="titik" style="background:#fdecec;box-shadow:inset 0 0 0 2px #ef4444"></span>salah</span>
+    <span><span class="titik" style="background:#fff4e0;box-shadow:inset 0 0 0 2px #f59e0b"></span>belum diisi</span>
+  </div>
+  <p class="petunjuk">Tips: tekan <b>Enter</b> untuk pindah ke kotak berikutnya. Arahkan kursor ke sebuah kotak untuk melihat perkalian yang dimaksud.</p>
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  var UKURAN = 10; // tabel perkalian 1 x 1 sampai 10 x 10
+  var tabel       = document.getElementById('tabelPerkalian');
+  var feedback    = document.getElementById('feedback');
+  var indikator   = document.getElementById('indikator');
+  var selectJum   = document.getElementById('jumlahRumpang');
+  var btnCek      = document.getElementById('btnCek');
+  var btnReset    = document.getElementById('btnReset');
+  var btnSoalBaru = document.getElementById('btnSoalBaru');
+
+  /* ---------- util ---------- */
+  function semuaInput(){
+    return Array.prototype.slice.call(tabel.querySelectorAll('input'));
+  }
+
+  function acakRumpang(n){
+    var semua = [], i, j, k, r, t;
+    for(i = 1; i <= UKURAN; i++){
+      for(j = 1; j <= UKURAN; j++){ semua.push([i, j]); }
+    }
+    for(k = semua.length - 1; k > 0; k--){
+      r = Math.floor(Math.random() * (k + 1));
+      t = semua[k]; semua[k] = semua[r]; semua[r] = t;
+    }
+    return semua.slice(0, Math.min(n, semua.length));
+  }
+
+  function resetFeedback(){
+    feedback.className = 'feedback info';
+    feedback.innerHTML = 'Isilah semua kotak kuning, lalu tekan <b>Cek Jawaban</b>.';
+  }
+  function indikatorDefault(){
+    indikator.textContent = 'Arahkan kursor atau sentuh sebuah kotak untuk melihat perkaliannya';
+    indikator.classList.remove('aktif');
+  }
+  function bersihkanTanda(){
+    Array.prototype.forEach.call(
+      tabel.querySelectorAll('td.benar, td.salah, td.kosong'),
+      function(td){ td.classList.remove('benar','salah','kosong'); }
+    );
+  }
+  function bersihkanSorotan(){
+    Array.prototype.forEach.call(
+      tabel.querySelectorAll('th.sorot'),
+      function(th){ th.classList.remove('sorot'); }
+    );
+  }
+
+  /* ---------- bangun tabel ---------- */
+  function buatTabel(){
+    var rumpang = acakRumpang(parseInt(selectJum.value, 10));
+    var set = {}, p, html, i, j;
+    rumpang.forEach(function(pt){ set[pt[0] + ',' + pt[1]] = true; });
+
+    html = '<thead><tr><th class="sudut" aria-hidden="true">&times;</th>';
+    for(j = 1; j <= UKURAN; j++){ html += '<th scope="col">' + j + '</th>'; }
+    html += '</tr></thead><tbody>';
+
+    for(i = 1; i <= UKURAN; i++){
+      html += '<tr><th scope="row">' + i + '</th>';
+      for(j = 1; j <= UKURAN; j++){
+        if(set[i + ',' + j]){
+          html += '<td class="rumpang" data-i="' + i + '" data-j="' + j + '">' +
+                  '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" ' +
+                  'autocomplete="off" aria-label="Isi hasil ' + i + ' kali ' + j + '">' +
+                  '</td>';
+        }else{
+          html += '<td class="terisi">' + (i * j) + '</td>';
+        }
+      }
+      html += '</tr>';
+    }
+    html += '</tbody>';
+    tabel.innerHTML = html;
+
+    bersihkanTanda();
+    resetFeedback();
+    indikatorDefault();
+  }
+
+  /* ---------- periksa jawaban ---------- */
+  function cekJawaban(){
+    var inputs = semuaInput();
+    if(!inputs.length){ return; }
+
+    var benar = 0, salah = 0, kosong = 0, fokusPertama = null;
+
+    inputs.forEach(function(inp){
+      var td = inp.closest('td');
+      td.classList.remove('benar','salah','kosong');
+      var v = inp.value.trim();
+
+      if(v === ''){
+        kosong++; td.classList.add('kosong');
+        if(!fokusPertama){ fokusPertama = inp; }
+      }else if(parseInt(v, 10) === parseInt(td.dataset.i, 10) * parseInt(td.dataset.j, 10)){
+        benar++; td.classList.add('benar');
+      }else{
+        salah++; td.classList.add('salah');
+        if(!fokusPertama){ fokusPertama = inp; }
+      }
+    });
+
+    var total  = inputs.length;
+    var persen = Math.round(benar / total * 100);
+
+    if(benar === total){
+      feedback.className = 'feedback ok';
+      feedback.innerHTML = '<b>Luar biasa!</b> Semua ' + total + ' jawaban benar (100%). Kamu memang jago perkalian!';
+      rayakan();
+    }else{
+      feedback.className = 'feedback warn';
+      feedback.innerHTML =
+        '<b>Benar:</b> ' + benar + '/' + total + ' (' + persen + '%)' +
+        ' &nbsp;&bull;&nbsp; <b>Salah:</b> ' + salah +
+        (kosong ? ' &nbsp;&bull;&nbsp; <b>Belum diisi:</b> ' + kosong : '') +
+        '<br>Perbaiki kotak yang bertanda, lalu tekan <b>Cek Jawaban</b> lagi. Jawaban tidak dibocorkan, ya!';
+    }
+    if(fokusPertama){ fokusPertama.focus(); fokusPertama.select(); }
+  }
+
+  function hapusJawaban(){
+    semuaInput().forEach(function(inp){ inp.value = ''; });
+    bersihkanTanda();
+    resetFeedback();
+    var p = semuaInput();
+    if(p.length){ p[0].focus(); }
+  }
+
+  /* ---------- konfeti (kotak berwarna, tanpa gambar) ---------- */
+  function rayakan(){
+    var warna = ['#f43f5e','#f59e0b','#22c55e','#3b82f6','#a855f7','#14b8a6'];
+    var k, d;
+    for(k = 0; k < 50; k++){
+      d = document.createElement('span');
+      d.className = 'konfeti';
+      d.style.left = (Math.random() * 100) + 'vw';
+      d.style.background = warna[k % warna.length];
+      d.style.animationDelay = (Math.random() * 0.6) + 's';
+      d.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+      d.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      document.body.appendChild(d);
+      (function(el){ setTimeout(function(){ el.remove(); }, 4500); })(d);
+    }
+  }
+
+  /* ---------- sorot baris/kolom + indikator perkalian ---------- */
+  function sorotHeader(td){
+    bersihkanSorotan();
+    if(!td){ return; }
+    var tr = td.parentElement;
+    var thBaris = tr.querySelector('th');
+    var idx = Array.prototype.indexOf.call(tr.children, td) + 1;
+    var thKolom = tabel.querySelector('thead tr th:nth-child(' + idx + ')');
+    if(thBaris){ thBaris.classList.add('sorot'); }
+    if(thKolom){ thKolom.classList.add('sorot'); }
+  }
+  function tampilkanIndikator(td){
+    indikator.textContent = td.dataset.i + ' \u00d7 ' + td.dataset.j + ' = ?';
+    indikator.classList.add('aktif');
+  }
+
+  tabel.addEventListener('mouseover', function(e){
+    var td = e.target.closest('td');
+    sorotHeader(td);
+    if(td && td.classList.contains('rumpang')){ tampilkanIndikator(td); }
+    else{ indikatorDefault(); }
+  });
+  tabel.addEventListener('focusin', function(e){
+    var td = e.target.closest('td');
+    sorotHeader(td);
+    if(td && td.classList.contains('rumpang')){ tampilkanIndikator(td); }
+    if(e.target.tagName === 'INPUT'){ e.target.select(); }
+  });
+  tabel.addEventListener('focusout', bersihkanSorotan);
+  tabel.addEventListener('mouseleave', bersihkanSorotan);
+
+  /* ---------- input: hanya angka, hapus tanda saat diketik ---------- */
+  tabel.addEventListener('input', function(e){
+    var inp = e.target;
+    if(inp.tagName !== 'INPUT'){ return; }
+    inp.value = inp.value.replace(/[^0-9]/g, '');
+    var td = inp.closest('td');
+    if(td){ td.classList.remove('benar','salah','kosong'); }
+  });
+
+  /* ---------- Enter = pindah ke kotak berikutnya ---------- */
+  tabel.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter'){ return; }
+    e.preventDefault();
+    var list = semuaInput();
+    var idx = list.indexOf(e.target);
+    if(idx > -1 && list.length){
+      var nxt = list[(idx + 1) % list.length];
+      nxt.focus(); nxt.select();
+    }
+  });
+
+  /* ---------- tombol ---------- */
+  btnCek.addEventListener('click', cekJawaban);
+  btnReset.addEventListener('click', hapusJawaban);
+  btnSoalBaru.addEventListener('click', buatTabel);
+  selectJum.addEventListener('change', buatTabel);
+
+  /* ---------- mulai ---------- */
+  buatTabel();
+})();
+</script>
+</body>
+</html>
