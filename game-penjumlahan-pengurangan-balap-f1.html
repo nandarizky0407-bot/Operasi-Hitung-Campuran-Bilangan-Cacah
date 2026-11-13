@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Balap Hitung F1 — Game Penjumlahan & Pengurangan Matematika SD</title>
+<style>
+  :root{
+    --cyan:#19e3ff; --mag:#ff2d95; --amber:#ffb020; --green:#39ff88; --red:#ff4d6d;
+    --bg:#05070d; --panel:rgba(8,12,24,.80); --line:rgba(25,227,255,.35);
+    --text:#eaf6ff; --dim:#8fb3d9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%, #101a33 0%, var(--bg) 55%);
+    color:var(--text);font-family:'Segoe UI',Arial,Helvetica,sans-serif;overflow:hidden;
+    display:flex;justify-content:center;
+  }
+  #stage{position:relative;width:min(100vw,980px);height:100vh;height:100dvh;overflow:hidden}
+  canvas{display:block;width:100%;height:100%;cursor:pointer}
+
+  /* ===== HUD ===== */
+  #hud{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;align-items:stretch;z-index:5;pointer-events:none}
+  .panel{
+    background:var(--panel);border:1px solid var(--line);padding:6px 14px;backdrop-filter:blur(4px);
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+  }
+  .panel .lbl{font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:700;white-space:nowrap}
+  .panel .val{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:clamp(14px,2.6vw,20px);letter-spacing:1px;white-space:nowrap}
+  .panel .sub{font-size:11px;color:var(--amber);font-weight:700;white-space:nowrap}
+  #pLevel{border-color:rgba(255,45,149,.4)}
+  #pLevel .val{color:var(--mag)}
+  #pQ{flex:1;text-align:center}
+  #pQ .val{font-size:clamp(20px,4.5vw,32px);color:var(--cyan);text-shadow:0 0 14px rgba(25,227,255,.65)}
+  #hudQTime{font-size:12px;font-weight:800;color:var(--amber);letter-spacing:1px;white-space:nowrap;margin-top:1px}
+  #hudQTime.urgent{color:var(--red);animation:qtblink .55s linear infinite}
+  @keyframes qtblink{50%{opacity:.25}}
+  #pTime{min-width:130px;text-align:right}
+  #pTime .val{color:#fff;font-variant-numeric:tabular-nums}
+  .hbtn{
+    pointer-events:auto;background:var(--panel);border:1px solid var(--line);color:var(--text);
+    font-size:10px;letter-spacing:1px;font-weight:700;padding:6px 10px;cursor:pointer;
+    clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+  }
+  .hbtn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+  /* ===== progress start -> finish ===== */
+  #progress{position:absolute;top:100px;left:16px;right:16px;z-index:5;display:flex;align-items:center;gap:8px;pointer-events:none}
+  #progress .flag{font-size:9px;letter-spacing:2px;color:var(--dim);font-weight:700}
+  #progress .track{position:relative;flex:1;height:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+    clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%)}
+  #progFill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--mag),var(--cyan));transition:width .1s linear}
+  #progCar{position:absolute;top:-9px;left:0%;transform:translateX(-50%);font-size:13px;color:#fff;text-shadow:0 0 6px var(--cyan);transition:left .1s linear}
+
+  /* ===== tombol SPEED ===== */
+  #btnSpeed{
+    position:absolute;right:16px;bottom:16px;z-index:6;width:104px;height:104px;border:none;cursor:pointer;
+    background:linear-gradient(160deg,#ff9d00,#ff5e00);color:#1a0d00;
+    clip-path:polygon(25% 0,75% 0,100% 25%,100% 75%,75% 100%,25% 100%,0 75%,0 25%);
+    font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:20px;letter-spacing:1px;
+    box-shadow:0 0 22px rgba(255,140,0,.55);user-select:none;touch-action:manipulation;
+  }
+  #btnSpeed:active{transform:scale(.94)}
+  #btnSpeed .dots{display:block;font-size:11px;letter-spacing:3px;margin-top:3px;color:#3d1d00}
+  #btnSpeed.off{filter:grayscale(1) brightness(.5);box-shadow:none;cursor:default}
+
+  #hint{
+    position:absolute;left:16px;bottom:16px;z-index:5;pointer-events:none;
+    background:rgba(5,8,16,.6);border:1px solid rgba(255,255,255,.12);padding:7px 12px;
+    font-size:11px;color:var(--dim);line-height:1.7;backdrop-filter:blur(3px);
+  }
+  #hint b{color:var(--text)}
+  #hint{transition:opacity .25s}
+  #hint.ghost{opacity:0}
+
+  /* ===== OVERLAY umum ===== */
+  .ovl{
+    position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
+    background:rgba(4,7,15,.82);backdrop-filter:blur(6px);padding:14px;
+  }
+  .card{
+    width:min(640px,94%);max-height:94vh;overflow:auto;background:linear-gradient(165deg,rgba(14,20,38,.96),rgba(8,11,22,.96));
+    border:1px solid var(--line);padding:26px 26px 22px;
+    clip-path:polygon(22px 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%,0 22px);
+  }
+  .hidden{display:none!important}
+  .title{
+    font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-style:italic;
+    font-size:clamp(26px,5.4vw,42px);letter-spacing:1px;line-height:1.05;
+    background:linear-gradient(90deg,var(--mag),var(--amber) 55%,var(--cyan));
+    -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(255,45,149,.35));
+  }
+  .tagline{color:var(--dim);font-size:13px;margin-top:6px;letter-spacing:.5px}
+  .sec{margin-top:18px}
+  .sec h3{font-size:12px;letter-spacing:3px;color:var(--cyan);margin-bottom:10px}
+  .howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .how{border:1px solid rgba(255,255,255,.12);padding:10px 12px;background:rgba(255,255,255,.03)}
+  .how b{display:block;font-size:12px;color:var(--amber);letter-spacing:1px;margin-bottom:4px}
+  .how span{font-size:11.5px;color:var(--dim);line-height:1.55;display:block}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid rgba(255,45,149,.5);padding:7px 12px;font-size:11px;font-weight:700;color:var(--text);background:rgba(255,45,149,.08)}
+  .chip i{font-style:normal;color:var(--mag)}
+  .note{font-size:11.5px;color:var(--dim);line-height:1.6;margin-top:10px;border-left:3px solid var(--cyan);padding-left:10px}
+  .btn{
+    margin-top:20px;width:100%;border:none;cursor:pointer;padding:16px;color:#00121a;
+    font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:20px;letter-spacing:2px;
+    background:linear-gradient(90deg,var(--cyan),#4da3ff);clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
+    box-shadow:0 0 24px rgba(25,227,255,.4);transition:transform .08s;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn.rose{background:linear-gradient(90deg,var(--mag),#ff7ab8);color:#210012;box-shadow:0 0 24px rgba(255,45,149,.4)}
+
+  /* ===== level intro ===== */
+  #ovLevel .card{text-align:center}
+  #lvTitle{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-style:italic;font-size:clamp(34px,7vw,54px);color:var(--mag);text-shadow:0 0 20px rgba(255,45,149,.5)}
+  #lvDesc{color:var(--cyan);font-weight:700;font-size:clamp(14px,3vw,19px);margin-top:4px}
+  #lvInfo{color:var(--dim);font-size:12px;margin-top:8px}
+  .lights{display:flex;justify-content:center;gap:12px;margin-top:22px}
+  .light{width:30px;height:30px;border-radius:50%;background:#1c2230;border:2px solid #2a3346}
+  .light.on{background:#ff2233;border-color:#ff5566;box-shadow:0 0 18px rgba(255,34,51,.8)}
+  #goText{margin-top:14px;font-family:'Arial Black',Arial,sans-serif;font-size:34px;color:var(--green);opacity:0;transform:scale(.6);transition:all .15s}
+  #goText.show{opacity:1;transform:scale(1.15);text-shadow:0 0 22px rgba(57,255,136,.8)}
+
+  /* ===== hasil level ===== */
+  #ovLevelEnd .card{text-align:center}
+  #leTitle{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-style:italic;font-size:clamp(26px,5vw,38px);color:var(--green);text-shadow:0 0 18px rgba(57,255,136,.5)}
+  .strow{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(255,255,255,.15);padding:9px 4px;font-size:14px}
+  .strow b{font-family:'Arial Black',Arial,sans-serif;color:var(--amber)}
+  .stwrap{margin-top:16px;text-align:left}
+
+  /* ===== kotak rahasia ===== */
+  #ovStory .card{border-color:rgba(255,176,32,.55);box-shadow:0 0 40px rgba(255,176,32,.15) inset}
+  #stHead{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:16px;letter-spacing:3px;color:var(--amber);text-align:center}
+  #stBox{width:66px;height:66px;margin:12px auto 4px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#ffd34d,#ff9d00);color:#3d1d00;font-family:'Arial Black',Arial,sans-serif;font-size:34px;
+    clip-path:polygon(12% 0,88% 0,100% 12%,100% 88%,88% 100%,12% 100%,0 88%,0 12%);box-shadow:0 0 26px rgba(255,176,32,.6)}
+  #stText{font-size:16px;line-height:1.65;margin-top:14px;text-align:center}
+  #stOpts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+  .opt{
+    border:1px solid var(--line);background:rgba(25,227,255,.06);color:var(--text);cursor:pointer;
+    font-family:'Arial Black',Arial,sans-serif;font-size:clamp(18px,3.4vw,24px);padding:14px 4px;
+    clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:transform .08s;
+  }
+  .opt:hover:not(:disabled){background:rgba(25,227,255,.16);transform:translateY(-2px)}
+  .opt.right{background:rgba(57,255,136,.22)!important;border-color:var(--green)!important;color:var(--green)!important}
+  .opt.wrongpick{background:rgba(255,77,109,.22)!important;border-color:var(--red)!important;color:var(--red)!important;text-decoration:line-through}
+  .opt:disabled{cursor:default;opacity:.85}
+  #stResult{text-align:center;font-weight:800;margin-top:14px;min-height:22px;font-size:15px}
+  #stResult.ok{color:var(--green)}
+  #stResult.no{color:var(--red)}
+
+  /* ===== finish ===== */
+  #ftTitle{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-style:italic;font-size:clamp(34px,6vw,48px);
+    background:linear-gradient(90deg,var(--amber),#fff);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+  #ftStars{text-align:center;font-size:clamp(34px,6vw,46px);letter-spacing:10px;margin-top:8px;color:#2a3346}
+  #ftStars .on{color:#ffd34d;text-shadow:0 0 18px rgba(255,211,77,.7)}
+  #ftMsg{text-align:center;color:var(--cyan);font-weight:800;margin-top:6px;font-size:15px;letter-spacing:1px}
+  .bigstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .bstat{border:1px solid var(--line);padding:12px;text-align:center;background:rgba(25,227,255,.05)}
+  .bstat .lbl{font-size:10px;letter-spacing:2px;color:var(--dim)}
+  .bstat .v{font-family:'Arial Black',Arial,sans-serif;font-size:clamp(20px,4vw,30px);margin-top:4px}
+  .bstat.rose .v{color:var(--mag)} .bstat.cy .v{color:var(--cyan)}
+  table.ft{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+  table.ft th{font-size:10px;letter-spacing:2px;color:var(--dim);text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  table.ft td{padding:8px;border-bottom:1px dashed rgba(255,255,255,.12)}
+  table.ft td.num{font-variant-numeric:tabular-nums;color:var(--amber);font-weight:700}
+  table.ft tr.total td{color:#fff;font-weight:800;border-bottom:none;border-top:1px solid var(--line);padding-top:10px}
+  .foot{color:var(--dim);font-size:11px;text-align:center;margin-top:14px;line-height:1.6}
+
+  @media (max-height:560px){
+    #progress{top:90px}
+    .card{padding:16px 18px 14px}
+    #btnSpeed{width:84px;height:84px;font-size:16px}
+    #hint{display:none}
+  }
+  @media (max-width:600px){
+    #hud{gap:5px;flex-wrap:wrap}
+    .panel{padding:4px 8px}
+    .panel .lbl{font-size:8px;letter-spacing:1px}
+    .panel .val{font-size:12px}
+    #pQ{min-width:104px}
+    #pQ .val{font-size:clamp(17px,5vw,21px)}
+    #pQ .lbl{font-size:8px}
+    #pTime{min-width:86px}
+    #pTime .val{font-size:13px}
+    #hudQTime{font-size:10px}
+    #hudLevelDesc{display:none}
+    .hbtn{padding:4px 8px;font-size:8px}
+    #btnPause{margin-left:auto}
+    #btnSound{margin-left:5px}
+    #progress{top:104px;left:10px;right:10px}
+    #btnSpeed{width:76px;height:76px;font-size:14px;right:10px;bottom:10px}
+    #hint{left:10px;bottom:10px;font-size:9px;padding:5px 8px;max-width:56vw}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="panel" id="pLevel">
+      <div class="lbl" id="hudLevel">LEVEL 1</div>
+      <div class="val" id="hudLevelDesc">Satuan + Satuan</div>
+      <div class="sub" id="hudBox">KOTAK: 0/8</div>
+    </div>
+    <div class="panel" id="pQ">
+      <div class="lbl" id="hudQNo">SOAL 1/10</div>
+      <div class="val" id="hudQ">—</div>
+      <div class="sub" id="hudQTime">WAKTU SOAL: —</div>
+    </div>
+    <div class="panel" id="pTime">
+      <div class="lbl">WAKTU AKUMULASI</div>
+      <div class="val" id="hudTime">00:00.0</div>
+      <div class="sub">POIN: <span id="hudScore">0</span></div>
+    </div>
+    <button class="hbtn" id="btnPause" title="Jeda (P)">JEDA</button>
+    <button class="hbtn" id="btnSound" title="Suara on/off">SUARA: ON</button>
+  </div>
+
+  <div id="progress">
+    <div class="flag">START</div>
+    <div class="track"><div id="progFill"></div><div id="progCar">▲</div></div>
+    <div class="flag">FINISH</div>
+  </div>
+
+  <button id="btnSpeed">SPEED<span class="dots" id="nitroDots">●●○○○</span></button>
+
+  <div id="hint">
+    <b>← →</b> pindah jalan jawaban &nbsp;•&nbsp; <b>↑</b> gas &nbsp;•&nbsp; <b>↓</b> rem<br>
+    <b>SPASI / tombol SPEED</b> melaju cepat &nbsp;•&nbsp; <b>P</b> jeda<br>
+    Di gerbang soal mobil <b>berhenti</b> — pilih jalan lalu tekan <b>↑</b> untuk melaju
+  </div>
+
+  <!-- START -->
+  <div class="ovl" id="ovStart">
+    <div class="card">
+      <div class="title">BALAP HITUNG F1</div>
+      <div class="tagline">Soal penjumlahan & pengurangan — pilih jalan dengan jawaban yang benar, kendarai mobil balapmu sampai garis finish!</div>
+      <div class="sec">
+        <h3>CARA BERMAIN</h3>
+        <div class="howto">
+          <div class="how"><b>PILIH JALAN</b><span>Baca soal penjumlahan (+) atau pengurangan (−), lalu belok ke jalur gerbang yang berisi jawaban benar.</span></div>
+          <div class="how"><b>KENDARAI MOBIL</b><span>Tombol panah: ← → pilih jalan. Mobil berhenti di gerbang soal — kalau sudah yakin dengan jawabanmu, tekan ↑ untuk melaju.</span></div>
+          <div class="how"><b>NYALAKAN SPEED</b><span>Jawab cepat atau ambil kotak rahasia untuk mendapat isi tabungan SPEED.</span></div>
+          <div class="how"><b>KOTAK RAHASIA ?</b><span>Berisi soal cerita. Jawab benar = poin tambahan + kecepatan bertambah!</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <h3>4 LEVEL · 40 SOAL (SOAL SELALU BERBEDA TIAP PERMAINAN)</h3>
+        <div class="chips">
+          <div class="chip"><i>LEVEL 1</i> · Penjumlahan & Pengurangan Satuan</div>
+          <div class="chip"><i>LEVEL 2</i> · Kelipatan 10 (hingga 100)</div>
+          <div class="chip"><i>LEVEL 3</i> · Puluhan Tanpa Menyimpan & Meminjam</div>
+          <div class="chip"><i>LEVEL 4</i> · Puluhan Dengan Menyimpan & Meminjam</div>
+        </div>
+        <div class="note"><b>Waktu hitung per soal:</b> Level 1 = 15 detik · Level 2 = <b>1 menit</b> · Level 3 = 1 menit · Level 4 = 1,5 menit. Mobil otomatis berhenti di gerbang soal supaya kamu punya waktu menghitung — pilih jalan ← →, lalu tekan ↑ untuk melaju. Jika waktu habis, mobil langsung maju dan soal dinilai sesuai jalan yang diambil. Waktu total tetap diukur sebagai <b>stopwatch akumulasi</b> START → FINISH: makin cepat menjawab, makin besar bonus poinnya!</div>
+      </div>
+      <button class="btn" id="btnStart">MULAI BALAPAN</button>
+    </div>
+  </div>
+
+  <!-- LEVEL INTRO -->
+  <div class="ovl hidden" id="ovLevel">
+    <div class="card">
+      <div id="lvTitle">LEVEL 1</div>
+      <div id="lvDesc">Penjumlahan & Pengurangan Satuan</div>
+      <div id="lvInfo">10 soal menantimu. Siapkan jari di tombol panah!</div>
+      <div class="lights">
+        <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+      </div>
+      <div id="goText">GO!</div>
+    </div>
+  </div>
+
+  <!-- LEVEL END -->
+  <div class="ovl hidden" id="ovLevelEnd">
+    <div class="card">
+      <div id="leTitle">LEVEL SELESAI!</div>
+      <div class="stwrap" id="leStats"></div>
+      <button class="btn rose" id="btnNext">LANJUT KE LEVEL BERIKUTNYA</button>
+    </div>
+  </div>
+
+  <!-- KOTAK RAHASIA -->
+  <div class="ovl hidden" id="ovStory">
+    <div class="card">
+      <div id="stHead">KOTAK RAHASIA — SOAL CERITA</div>
+      <div id="stBox">?</div>
+      <div id="stText"></div>
+      <div id="stOpts"></div>
+      <div id="stResult"></div>
+    </div>
+  </div>
+
+  <!-- PAUSE -->
+  <div class="ovl hidden" id="ovPause">
+    <div class="card" style="text-align:center">
+      <div class="title" style="font-size:30px">JEDA</div>
+      <div class="tagline">Waktu tidak berjalan saat jeda.</div>
+      <button class="btn" id="btnResume">LANJUTKAN BALAPAN</button>
+    </div>
+  </div>
+
+  <!-- FINISH -->
+  <div class="ovl hidden" id="ovFinish">
+    <div class="card">
+      <div id="ftTitle">FINISH!</div>
+      <div id="ftStars"><span>★</span><span>★</span><span>★</span></div>
+      <div id="ftMsg"></div>
+      <div class="bigstats">
+        <div class="bstat rose"><div class="lbl">TOTAL POIN</div><div class="v" id="ftScore">0</div></div>
+        <div class="bstat cy"><div class="lbl">TOTAL WAKTU START → FINISH</div><div class="v" id="ftTime">00:00.0</div></div>
+        <div class="bstat cy"><div class="lbl">SOAL BENAR</div><div class="v" id="ftCorrect">0/40</div></div>
+        <div class="bstat rose"><div class="lbl">KOTAK RAHASIA (BENAR)</div><div class="v" id="ftBox">0/8</div></div>
+      </div>
+      <table class="ft">
+        <thead><tr><th>LEVEL</th><th>SOAL BENAR</th><th>POIN</th><th>WAKTU</th></tr></thead>
+        <tbody id="ftRows"></tbody>
+      </table>
+      <div class="foot">Total waktu diukur dari garis START level 1 sampai garis FINISH level 4 (tanpa jeda layar antar level).</div>
+      <button class="btn" id="btnAgain">MAIN LAGI</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =========================================================
+   BALAP HITUNG F1 — game edukasi penjumlahan & pengurangan SD
+   Satu file HTML: CSS + JS menyatu, tanpa aset eksternal.
+   ========================================================= */
+
+/* ---------- util ---------- */
+function ri(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function fmt(ms){
+  const t=Math.max(0,ms), m=Math.floor(t/60000), s=Math.floor((t%60000)/1000), d=Math.floor((t%1000)/100);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+d;
+}
+function fmtCD(sec){
+  const t=Math.max(0,Math.ceil(sec));
+  return Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+}
+
+/* ---------- konstanta game ---------- */
+const NQ = 10;                 // soal per level
+const BOX_AFTER = [3,7];       // nomor soal ke- yang diculik kotak rahasia (1-based)
+const NBOX = BOX_AFTER.length; // kotak per level
+const MAXNITRO = 5;
+const NITRO_DUR = 2.6;         // detik boost per pengisian
+
+const LVL = [
+  { no:1, nama:'Satuan + Satuan',         full:'Penjumlahan dan pengurangan satuan',                                base:100, par:8,  story:75,  think:15, speed:0.155,
+    gen:genL1 },
+  { no:2, nama:'Kelipatan 10',            full:'Penjumlahan dan pengurangan kelipatan 10 (hingga 100)',             base:150, par:12, story:100, think:60, speed:0.175,
+    gen:genL2 },
+  { no:3, nama:'Puluhan Tanpa Menyimpan', full:'Penjumlahan dan pengurangan puluhan tanpa menyimpan & meminjam',    base:200, par:15, story:125, think:60, speed:0.19,
+    gen:genL3 },
+  { no:4, nama:'Menyimpan & Meminjam',    full:'Penjumlahan dan pengurangan puluhan dengan menyimpan & meminjam',   base:250, par:20, story:150, think:90, speed:0.205,
+    gen:genL4 }
+];
+/* Generator soal: mengembalikan [a, b, op] — op '+' atau '-', selalu hasil >= 0 */
+function genL1(){ // level 1: satuan, fakta dasar dalam 10
+  if(Math.random()<0.5){ const a=ri(1,9); return [a, ri(1,10-a), '+']; }
+  const a=ri(2,9); return [a, ri(1,a), '-'];
+}
+function genL2(){ // level 2: kelipatan 10, hasil hingga 100
+  if(Math.random()<0.5){ const a=ri(1,9)*10; return [a, ri(1,10-a/10)*10, '+']; }
+  const a=ri(2,10)*10; return [a, ri(1,a/10-1)*10, '-'];
+}
+function genL3(){ // level 3: dua digit TANPA menyimpan/meminjam (tiap kolom aman)
+  if(Math.random()<0.5){
+    const ta=ri(1,8), tb=ri(1,9-ta), oa=ri(0,9), ob=ri(0,9-oa);
+    return [ta*10+oa, tb*10+ob, '+'];                 // ones a+ones b <= 9 dan tens a+tens b <= 9
+  }
+  if(Math.random()<0.7){
+    const ta=ri(2,9), tb=ri(1,ta-1), ob=ri(0,9), oa=ri(ob,9);
+    return [ta*10+oa, tb*10+ob, '-'];                 // tens a > tens b dan ones a >= ones b
+  }
+  const t=ri(1,9), ob=ri(0,8), oa=ri(ob+1,9);         // puluhan sama, selisih satuan saja
+  return [t*10+oa, t*10+ob, '-'];
+}
+function genL4(){ // level 4: dua digit, PASTI menyimpan (ones a+ones b >= 10) / meminjam (ones a < ones b)
+  if(Math.random()<0.5){
+    const oa=ri(1,9), ob=ri(10-oa,9), ta=ri(1,9), tb=ri(1,9);
+    return [ta*10+oa, tb*10+ob, '+'];
+  }
+  const oa=ri(0,8), ob=ri(oa+1,9), tb=ri(1,8), ta=ri(tb+1,9);
+  return [ta*10+oa, tb*10+ob, '-'];
+}
+
+/* ---------- soal cerita (kotak rahasia) ---------- */
+const STORY_T=[
+  { '+':[ (a,b)=>'Ani memiliki '+a+' kelereng. Ayah memberi '+b+' kelereng lagi. Berapa kelereng Ani sekarang?',
+          (a,b)=>'Di pohon ada '+a+' burung. Lalu '+b+' burung lain hinggap. Berapa jumlah burung di pohon?',
+          (a,b)=>'Rara membawa '+a+' pensil dan Budi membawa '+b+' pensil. Berapa jumlah pensil mereka?',
+          (a,b)=>'Di dalam kotak ada '+a+' kue. Ibu memasukkan '+b+' kue lagi. Berapa kue di kotak sekarang?' ],
+    '-':[ (a,b)=>'Ada '+a+' burung di pohon. Sebanyak '+b+' ekor terbang pergi. Berapa burung yang tersisa?',
+          (a,b)=>'Ani punya '+a+' permen. Sebanyak '+b+' permen dimakannya. Berapa permen yang tersisa?',
+          (a,b)=>'Di meja ada '+a+' buku. Sebanyak '+b+' buku dibawa pulang. Berapa buku yang tersisa di meja?',
+          (a,b)=>'Toko memiliki '+a+' balon. Sebanyak '+b+' balon terjual. Berapa balon yang tersisa?' ] },
+  { '+':[ (a,b)=>'Di kandang ada '+a+' ekor ayam. Dibeli lagi '+b+' ekor ayam. Berapa ayam di kandang sekarang?',
+          (a,b)=>'Bus A membawa '+a+' penumpang dan bus B membawa '+b+' penumpang. Berapa jumlah penumpang kedua bus?',
+          (a,b)=>'Bu Rina memiliki '+a+' buku tulis, lalu membeli '+b+' buku lagi. Berapa jumlah buku tulis Bu Rina?',
+          (a,b)=>'Di aula ada '+a+' kursi, ditambah '+b+' kursi dari kelas. Berapa jumlah kursi sekarang?' ],
+    '-':[ (a,b)=>'Toko punya '+a+' botol minum. Sebanyak '+b+' botol terjual. Berapa botol yang tersisa?',
+          (a,b)=>'Di parkiran ada '+a+' motor. Sebanyak '+b+' motor pergi. Berapa motor yang tersisa?',
+          (a,b)=>'Perpustakaan memiliki '+a+' buku. Sebanyak '+b+' buku dipinjam. Berapa buku yang masih ada?',
+          (a,b)=>'Di kolam ada '+a+' ekor bebek. Sebanyak '+b+' ekor masuk kandang. Berapa bebek yang tersisa di kolam?' ] },
+  { '+':[ (a,b)=>'Perpustakaan memiliki '+a+' buku cerita dan '+b+' buku pelajaran. Berapa jumlah buku semuanya?',
+          (a,b)=>'Kelas A memiliki '+a+' kursi dan kelas B memiliki '+b+' kursi. Berapa jumlah kursi keduanya?',
+          (a,b)=>'Pak Dani menanam '+a+' pohon mangga dan '+b+' pohon jeruk. Berapa pohon yang ditanam Pak Dani?',
+          (a,b)=>'Di kolam ada '+a+' ikan mas dan '+b+' ikan gurame. Berapa jumlah ikan di kolam?' ],
+    '-':[ (a,b)=>'Ada '+a+' siswa berolahraga di lapangan. Sebanyak '+b+' siswa kembali ke kelas. Berapa siswa yang masih di lapangan?',
+          (a,b)=>'Pak Min memiliki '+a+' botol. Sebanyak '+b+' botol dikirim ke toko. Berapa botol yang tersisa?',
+          (a,b)=>'Kantin membuat '+a+' gelas es teh. Terjual '+b+' gelas. Berapa es teh yang tersisa?',
+          (a,b)=>'Halaman sekolah memiliki '+a+' pohon. Sebanyak '+b+' pohon ditebang karena lapuk. Berapa pohon yang tersisa?' ] },
+  { '+':[ (a,b)=>'Ibu menjual '+a+' kue pagi hari dan '+b+' kue sore hari. Berapa kue yang terjual hari itu?',
+          (a,b)=>'Ada '+a+' siswa berlatih paduan suara dan '+b+' siswa berlatih tari. Berapa jumlah siswa yang berlatih?',
+          (a,b)=>'Galih mengumpulkan '+a+' botol plastik dan Sinta mengumpulkan '+b+' botol. Berapa jumlah botol mereka?',
+          (a,b)=>'Sekolah membeli '+a+' buku bulan lalu dan '+b+' buku bulan ini. Berapa jumlah buku yang dibeli?' ],
+    '-':[ (a,b)=>'Ibu membuat '+a+' kue. Sebanyak '+b+' kue terjual. Berapa kue yang tersisa?',
+          (a,b)=>'Di sekolah terdaftar '+a+' siswa. Sebanyak '+b+' siswa sedang sakit. Berapa siswa yang hadir hari itu?',
+          (a,b)=>'Pak Rahmat memiliki '+a+' ekor kambing. Sebanyak '+b+' ekor dijual. Berapa kambing yang tersisa?',
+          (a,b)=>'Toko memiliki '+a+' buku tulis. Sebanyak '+b+' buku terjual. Berapa buku tulis yang tersisa?' ] }
+];
+function storyGen(li){
+  let a,b,op;
+  if(li===0){
+    if(Math.random()<0.5){ op='+'; a=ri(2,9); b=ri(1,10-a); }
+    else{ op='-'; a=ri(3,9); b=ri(1,a-1); }
+  }else if(li===1){
+    if(Math.random()<0.5){ op='+'; a=ri(1,9)*10; b=ri(1,10-a/10)*10; }
+    else{ op='-'; a=ri(2,10)*10; b=ri(1,a/10-1)*10; }
+  }else if(li===2){
+    if(Math.random()<0.5){ const ta=ri(1,8),tb=ri(1,9-ta),oa=ri(1,9),ob=ri(1,9-oa); op='+'; a=ta*10+oa; b=tb*10+ob; }
+    else{ const tb=ri(1,8),ta=ri(tb+1,9),ob=ri(1,9),oa=ri(ob,9); op='-'; a=ta*10+oa; b=tb*10+ob; }
+  }else{
+    if(Math.random()<0.5){ const oa=ri(2,9),ob=ri(10-oa,9),ta=ri(1,9),tb=ri(1,9); op='+'; a=ta*10+oa; b=tb*10+ob; }
+    else{ const oa=ri(1,8),ob=ri(oa+1,9),tb=ri(1,8),ta=ri(tb+1,9); op='-'; a=ta*10+oa; b=tb*10+ob; }
+  }
+  const t=pick(STORY_T[li][op]);
+  return { q:t(a,b), a:a, b:b, op:op, c:(op==='+')?a+b:a-b };
+}
+
+/* ---------- pilihan jawaban (1 benar + 2 pengecoh unik) ---------- */
+function makeOptions(a,b,op,c){
+  const pool=[c+1,c-1,c+2,c-2,c+10,c-10,c+100,c-100,a+b,a-b,b-a,a,b].filter(function(x){
+    return x>=0 && Math.abs(x-c)<=Math.max(12,c*1.5);  /* buang pengecoh tidak masuk akal (terlalu jauh dari jawaban) */
+  });
+  const out=[c];
+  for(const x of shuffle(pool)){
+    if(out.length>=3) break;
+    if(x>=0 && !out.includes(x)) out.push(x);
+  }
+  let d=1;
+  while(out.length<3){ if(!out.includes(c+d)) out.push(c+d); d++; }
+  return out;
+}
+
+/* ---------- efek suara (Web Audio, tanpa file) ---------- */
+const SFX={
+  ctx:null, master:null, engO:null, engO2:null, engG:null, engF:null, muted:false, noiseBuf:null,
+  init:function(){
+    if(this.ctx) return;
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return;
+    this.ctx=new AC();
+    this.master=this.ctx.createGain(); this.master.gain.value=0.5; this.master.connect(this.ctx.destination);
+    const len=this.ctx.sampleRate, buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+    this.noiseBuf=buf;
+  },
+  resume:function(){ if(this.ctx && this.ctx.state==='suspended') this.ctx.resume(); },
+  setMuted:function(m){ this.muted=m; if(this.master) this.master.gain.value=m?0:0.5; },
+  engineStart:function(){
+    if(!this.ctx||this.engO) return;
+    const o=this.ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=55;
+    const o2=this.ctx.createOscillator(); o2.type='square'; o2.frequency.value=111;
+    const f=this.ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=380;
+    const g=this.ctx.createGain(); g.gain.value=0.0;
+    o.connect(f); o2.connect(f); f.connect(g); g.connect(this.master);
+    o.start(); o2.start();
+    this.engO=o; this.engO2=o2; this.engG=g; this.engF=f;
+  },
+  engineUpdate:function(sp,on){
+    if(!this.engO) return;
+    const t=this.ctx.currentTime;
+    this.engG.gain.setTargetAtTime(on?0.045:0.0, t, 0.12);
+    const f=48+clamp(sp,0,1)*150;
+    this.engO.frequency.setTargetAtTime(f,t,0.08);
+    this.engO2.frequency.setTargetAtTime(f*2.02,t,0.08);
+    this.engF.frequency.setTargetAtTime(280+clamp(sp,0,1)*1100,t,0.1);
+  },
+  engineStop:function(){
+    if(!this.engO) return;
+    try{ this.engO.stop(); this.engO2.stop(); }catch(e){}
+    this.engO=null; this.engO2=null; this.engG=null; this.engF=null;
+  },
+  tone:function(freq,dur,type,vol,when,slideTo){
+    if(!this.ctx||this.muted) return;
+    const t=this.ctx.currentTime+(when||0);
+    const o=this.ctx.createOscillator(), g=this.ctx.createGain();
+    o.type=type||'sine'; o.frequency.setValueAtTime(freq,t);
+    if(slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(30,slideTo), t+dur);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol||0.2, t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t+dur+0.05);
+  },
+  noise:function(dur,vol,from,to){
+    if(!this.ctx||this.muted||!this.noiseBuf) return;
+    const t=this.ctx.currentTime;
+    const src=this.ctx.createBufferSource(); src.buffer=this.noiseBuf; src.loop=true;
+    const f=this.ctx.createBiquadFilter(); f.type='bandpass';
+    f.frequency.setValueAtTime(from||800,t);
+    f.frequency.exponentialRampToValueAtTime(Math.max(40,to||200), t+dur);
+    const g=this.ctx.createGain();
+    g.gain.setValueAtTime(vol||0.2,t);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    src.connect(f); f.connect(g); g.connect(this.master);
+    src.start(t); src.stop(t+dur+0.05);
+  },
+  correct:function(){ this.tone(660,.12,'sine',.24); this.tone(880,.14,'sine',.24,.09); this.tone(1320,.2,'sine',.2,.18); },
+  wrong:function(){ this.tone(220,.3,'square',.16,0,120); this.tone(150,.4,'square',.14,.06,80); },
+  box:function(){ this.tone(523,.1,'triangle',.24); this.tone(659,.1,'triangle',.24,.08); this.tone(784,.12,'triangle',.24,.16); this.tone(1047,.2,'triangle',.24,.24); },
+  nitro:function(){ this.noise(.75,.3,500,3200); this.tone(180,.5,'sawtooth',.1,0,520); },
+  fanfare:function(){ const n=[523,659,784,1047]; for(let i=0;i<n.length;i++) this.tone(n[i],.22,'triangle',.24,i*.12); this.tone(1319,.55,'triangle',.24,.5); },
+  go:function(){ this.tone(440,.14,'square',.18); this.tone(880,.5,'square',.2,.16); },
+  tick:function(){ this.tone(920,.07,'square',.14); },
+  timeout:function(){ this.tone(330,.35,'sawtooth',.18,0,150); this.tone(210,.5,'sawtooth',.15,.14,85); }
+};
+
+/* ---------- state game ---------- */
+const G={
+  state:'menu',            // menu | lights | playing | modal | levelEnd | finish
+  li:0,                    // index level
+  answered:0, levelCorrect:0, levelScore:0, levelBoxPoin:0,
+  correct:0, wrongCount:0, score:0,
+  totalMs:0, levelMs:0, qMs:0,
+  perLevel:[], boxStats:{got:0,benar:0},
+  nitro:2, boosting:0,
+  carLane:1, carLaneF:1, accelT:1,
+  gate:null, box:null, finishLine:null,
+  cur:{a:0,b:0,c:0,op:'+'}, used:new Set(),
+  dist:0, t:0,
+  floats:[], sparks:[], banner:null, wrongLane:null,
+  flash:0, flashCol:'rgba(255,255,255,', shake:0,
+  lightsT:0, paused:false, keys:{}, story:null, qLeft:0, touchGo:0
+};
+
+/* ---------- canvas ---------- */
+const cv=document.getElementById('cv'), cx=cv.getContext('2d');
+let W=0,H=0,horizonY=0,carY=0,roadHalfMax=0,roadHalfMin=0;
+let bgGrad=null, roadGrad=null, stars=[];
+
+function resize(){
+  const r=cv.parentElement.getBoundingClientRect();
+  const DPR=Math.min(2, window.devicePixelRatio||1);
+  cv.width=Math.round(r.width*DPR); cv.height=Math.round(r.height*DPR);
+  cx.setTransform(DPR,0,0,DPR,0,0);
+  W=r.width; H=r.height;
+  horizonY=H*0.16; carY=H*0.85;
+  roadHalfMax=Math.min(W*0.44,360); roadHalfMin=roadHalfMax*0.13;
+  bgGrad=cx.createLinearGradient(0,0,0,H);
+  bgGrad.addColorStop(0,'#070a14'); bgGrad.addColorStop(.45,'#0a0f1e'); bgGrad.addColorStop(1,'#05070d');
+  roadGrad=cx.createLinearGradient(0,horizonY,0,H);
+  roadGrad.addColorStop(0,'#10131d'); roadGrad.addColorStop(1,'#181c29');
+  stars=[];
+  for(let i=0;i<60;i++) stars.push({x:Math.random()*W, y:Math.random()*horizonY*0.92, r:Math.random()<.3?2:1, tw:1+Math.random()*2, ph:Math.random()*6.28});
+}
+window.addEventListener('resize', resize);
+
+function yOf(rel){ return horizonY + rel*(carY-horizonY); }
+function halfAtY(y){ const t=(y-horizonY)/(carY-horizonY); return roadHalfMin + t*(roadHalfMax-roadHalfMin); }
+function laneCX(lane,y){ const half=halfAtY(y); return W/2 + (lane-1)*(2*half/3); }
+function laneWAtCar(){ return 2*roadHalfMax/3; }
+
+/* ---------- DOM ---------- */
+const el={};
+['hudLevel','hudLevelDesc','hudBox','hudQNo','hudQ','hudQTime','hudTime','hudScore','progFill','progCar','nitroDots','btnSpeed',
+ 'btnPause','btnSound','hint','ovStart','ovLevel','ovLevelEnd','ovStory','ovPause','ovFinish','lvTitle','lvDesc','lvInfo',
+ 'goText','leTitle','leStats','btnNext','stText','stOpts','stResult','btnResume','ftStars','ftMsg','ftScore','ftTime',
+ 'ftCorrect','ftBox','ftRows','btnAgain','btnStart'].forEach(function(id){ el[id]=document.getElementById(id); });
+const lightEls=Array.prototype.slice.call(document.querySelectorAll('.light'));
+
+function show(o){ o.classList.remove('hidden'); }
+function hide(o){ o.classList.add('hidden'); }
+
+function updateHUD(){
+  const L=LVL[G.li];
+  el.hudLevel.textContent='LEVEL '+L.no;
+  el.hudLevelDesc.textContent=L.nama;
+  el.hudBox.textContent='KOTAK: '+G.boxStats.got+'/'+(NBOX*4);
+  const qNo=Math.min(G.answered+((G.state==='playing'||G.state==='modal'||G.state==='lights')?1:0), NQ);
+  el.hudQNo.textContent='SOAL '+qNo+'/'+NQ;
+  if(G.gate) el.hudQ.textContent=G.cur.a+' '+(G.cur.op==='-'?'−':'+')+' '+G.cur.b+' = ?';
+  else if(G.finishLine) el.hudQ.textContent='MENUJU GARIS FINISH!';
+  else el.hudQ.textContent='—';
+  el.hudTime.textContent=fmt(G.totalMs);
+  el.hudScore.textContent=G.score;
+  if(G.gate && (G.state==='playing'||G.state==='modal')){
+    el.hudQTime.style.display='';
+    el.hudQTime.textContent='WAKTU SOAL: '+fmtCD(G.qLeft);
+    el.hudQTime.classList.toggle('urgent', G.state==='playing' && !G.gate.rush && G.qLeft<=10.5);
+  }else{
+    el.hudQTime.style.display='none';
+  }
+  el.hint.classList.toggle('ghost', !!(G.gate && G.gate.stop && G.state==='playing' && !G.gate.rush));
+  let dots='';
+  for(let i=0;i<MAXNITRO;i++) dots += (i<G.nitro)?'●':'○';
+  el.nitroDots.textContent=dots;
+  el.btnSpeed.classList.toggle('off', !(G.nitro>0 && G.state==='playing' && !G.paused));
+  const segFrac = G.gate ? clamp(G.gate.rel,0,1) : (G.answered>=NQ ? 1 : 0);
+  const p=clamp((G.answered+segFrac)/NQ*100,0,100);
+  el.progFill.style.width=p+'%';
+  el.progCar.style.left=p+'%';
+}
+
+function addFloat(text,color,dur){ G.floats.push({text:text,color:color||'#fff',t:0,dur:dur||1.4}); }
+function addSparks(x,y,color,n,spd){
+  for(let i=0;i<(n||10);i++){
+    const a=Math.random()*Math.PI*2, v=(spd||120)*(0.4+Math.random()*0.9);
+    G.sparks.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-40,life:0.5+Math.random()*0.5,t:0,color:color,r:1.5+Math.random()*2.5});
+  }
+}
+
+/* ---------- alur permainan ---------- */
+function startGame(){
+  SFX.init(); SFX.resume(); SFX.engineStart();
+  hide(el.ovStart);
+  startLevel(0);
+}
+function startLevel(i){
+  G.li=i;
+  G.answered=0; G.levelCorrect=0; G.levelScore=0; G.levelBoxPoin=0;
+  G.levelMs=0; G.qMs=0; G.dist=0;
+  G.gate=null; G.box=null; G.finishLine=null;
+  G.nitro=2; G.boosting=0;
+  G.carLane=1; G.carLaneF=1; G.accelT=1;
+  G.lightsT=0;
+  const L=LVL[i];
+  el.lvTitle.textContent='LEVEL '+L.no;
+  el.lvDesc.textContent=L.full;
+  let th;
+  if(L.think>=60){ const m=L.think/60; th=(Number.isInteger(m)?m:String(m).replace('.',','))+' menit'; }
+  else th=L.think+' detik';
+  el.lvInfo.textContent='10 soal • waktu hitung '+th+' per soal. Mobil berhenti di gerbang: pilih jalan ← →, lalu tekan ↑ untuk melaju!';
+  lightEls.forEach(function(l){ l.classList.remove('on'); });
+  el.goText.classList.remove('show');
+  show(el.ovLevel);
+  G.state='lights';
+  updateHUD();
+}
+function lightsUpdate(dt){
+  G.lightsT+=dt;
+  G.dist+=0.05*dt; // jalan bergerak pelan saat light sequence
+  const n=Math.min(5, Math.floor(G.lightsT/0.38));
+  lightEls.forEach(function(l,idx){ l.classList.toggle('on', idx<n); });
+  const go=G.lightsT > 0.38*5+0.3;
+  el.goText.classList.toggle('show', go);
+  if(go && !G._goSound){ G._goSound=true; SFX.go(); }
+  if(G.lightsT > 0.38*5+0.85){
+    G._goSound=false;
+    hide(el.ovLevel);
+    G.state='playing';
+    newQuestion(0.02);
+    updateHUD();
+  }
+}
+function newQuestion(startRel){
+  const L=LVL[G.li];
+  let a=0,b=0,op='+',tries=0,key='';
+  do{ const ab=L.gen(); a=ab[0]; b=ab[1]; op=ab[2]; key=a+op+b; tries++; }while(G.used.has(key) && tries<60);
+  G.used.add(key);
+  const c=(op==='-')?a-b:a+b;
+  G.cur={a:a,b:b,c:c,op:op};
+  const vals=shuffle(makeOptions(a,b,op,c));
+  G.gate={ rel:(startRel!=null?startRel:-0.22), opts:vals, c:c, a:a, b:b, stop:false, rush:false };
+  G.qLeft=LVL[G.li].think;
+}
+function answerGate(){
+  const g=G.gate;
+  const near=clamp(Math.round(G.carLaneF),0,2);
+  const chosen=g.opts[near];
+  const ok=(chosen===g.c);
+  G.answered++;
+  if(ok){
+    G.correct++; G.levelCorrect++;
+    const tAns=G.qMs/1000;
+    const bonus=Math.max(0,Math.ceil(LVL[G.li].par-tAns))*5;
+    const pts=LVL[G.li].base+bonus;
+    G.score+=pts; G.levelScore+=pts;
+    addFloat('BENAR! +'+pts+' POIN','#39ff88');
+    SFX.correct();
+    G.flash=0.22; G.flashCol='rgba(57,255,136,';
+    if(tAns<=LVL[G.li].par && G.nitro<MAXNITRO){ G.nitro++; addFloat('JAWAB CEPAT! +1 SPEED','#7df9ff',1.1); }
+  }else{
+    G.wrongCount++;
+    addFloat('SALAH! Jawaban: '+g.c,'#ff4d6d');
+    SFX.wrong();
+    G.shake=0.4; G.flash=0.3; G.flashCol='rgba(255,77,109,';
+    G.wrongLane={lane:g.opts.indexOf(g.c), t:1.0};
+  }
+  G.banner = ok ? {text:'BENAR!',color:'#39ff88',t:0} : {text:'SALAH! Jawaban: '+g.c,color:'#ff4d6d',t:0};
+  G.qMs=0;
+  if(G.answered>=NQ){
+    G.gate=null;
+    G.finishLine={rel:-0.45};
+  }else{
+    newQuestion(-0.25);
+    if(BOX_AFTER.indexOf(G.answered)>=0 && !G.box){
+      G.box={rel:-0.55, lane:ri(0,2), open:false};
+    }
+  }
+  updateHUD();
+}
+function completeLevel(){
+  SFX.fanfare();
+  G.perLevel.push({no:G.li+1, benar:G.levelCorrect, poin:G.levelScore+G.levelBoxPoin, ms:G.levelMs, kotak:0});
+  if(G.li<3){
+    G.state='levelEnd';
+    el.leTitle.textContent='LEVEL '+LVL[G.li].no+' SELESAI!';
+    el.leStats.innerHTML=
+      '<div class="strow"><span>Soal benar</span><b>'+G.levelCorrect+' / '+NQ+'</b></div>'+
+      '<div class="strow"><span>Poin level ini</span><b>'+(G.levelScore+G.levelBoxPoin)+'</b></div>'+
+      '<div class="strow"><span>Waktu level ini</span><b>'+fmt(G.levelMs)+'</b></div>'+
+      '<div class="strow"><span>Total poin sementara</span><b>'+G.score+'</b></div>';
+    el.btnNext.textContent='LANJUT KE LEVEL '+(G.li+2);
+    show(el.ovLevelEnd);
+  }else{
+    showFinish();
+  }
+  updateHUD();
+}
+function showFinish(){
+  G.state='finish';
+  const acc=G.correct/(NQ*4);
+  const st = acc>=0.9?3 : acc>=0.7?2 : acc>=0.4?1 : 0;
+  const spans=el.ftStars.children;
+  for(let i=0;i<3;i++) spans[i].classList.toggle('on', i<st);
+  el.ftMsg.textContent = st===3?'HEBAT SEKALI! KAMU JAGO BERHITUNG!' : st===2?'KEREN! SEDIKIT LAGI SEMPURNA!' : st===1?'BAGUS! TERUS BERLATIH YA!' : 'JANGAN MENYERAH, COBA LAGI!';
+  el.ftScore.textContent=G.score;
+  el.ftTime.textContent=fmt(G.totalMs);
+  el.ftCorrect.textContent=G.correct+'/'+(NQ*4);
+  el.ftBox.textContent=G.boxStats.got+'/'+(NBOX*4)+'  (benar '+G.boxStats.benar+')';
+  let rows='';
+  for(const p of G.perLevel){
+    rows+='<tr><td>Level '+p.no+'</td><td class="num">'+p.benar+'/'+NQ+'</td><td class="num">'+p.poin+'</td><td class="num">'+fmt(p.ms)+'</td></tr>';
+  }
+  rows+='<tr class="total"><td>TOTAL</td><td class="num">'+G.correct+'/'+(NQ*4)+'</td><td class="num">'+G.score+'</td><td class="num">'+fmt(G.totalMs)+'</td></tr>';
+  el.ftRows.innerHTML=rows;
+  show(el.ovFinish);
+  SFX.engineStop();
+}
+function resetGame(){
+  G.state='menu'; G.li=0;
+  G.answered=0; G.levelCorrect=0; G.levelScore=0; G.levelBoxPoin=0;
+  G.correct=0; G.wrongCount=0; G.score=0;
+  G.totalMs=0; G.levelMs=0; G.qMs=0;
+  G.perLevel=[]; G.boxStats={got:0,benar:0};
+  G.nitro=2; G.boosting=0;
+  G.carLane=1; G.carLaneF=1; G.accelT=1;
+  G.gate=null; G.box=null; G.finishLine=null;
+  G.used=new Set(); G.cur={a:0,b:0,c:0,op:'+'};
+  G.dist=0; G.floats=[]; G.sparks=[]; G.banner=null; G.wrongLane=null;
+  G.flash=0; G.shake=0; G.paused=false; G.story=null; G.qLeft=0; G.touchGo=0;
+  hide(el.ovFinish); hide(el.ovLevelEnd); hide(el.ovStory); hide(el.ovLevel); hide(el.ovPause);
+  show(el.ovStart);
+  updateHUD();
+}
+
+/* ---------- kotak rahasia ---------- */
+function openStory(){
+  G.state='modal';
+  G.boxStats.got++;
+  const s=storyGen(G.li);
+  s.opts=shuffle(makeOptions(s.a,s.b,s.op,s.c));
+  s.done=false;
+  G.story=s;
+  el.stText.textContent=s.q;
+  el.stOpts.innerHTML='';
+  s.opts.forEach(function(v){
+    const b=document.createElement('button');
+    b.className='opt'; b.textContent=v; b.dataset.v=v;
+    b.addEventListener('click', function(){ answerStory(v,b); });
+    el.stOpts.appendChild(b);
+  });
+  el.stResult.textContent='';
+  el.stResult.className='';
+  show(el.ovStory);
+  SFX.box();
+}
+function answerStory(v,btn){
+  const s=G.story;
+  if(!s||s.done) return;
+  s.done=true;
+  const btns=Array.prototype.slice.call(el.stOpts.children);
+  btns.forEach(function(b){ b.disabled=true; });
+  const right=btns.filter(function(b){ return +b.dataset.v===s.c; })[0];
+  if(right) right.classList.add('right');
+  if(v===s.c){
+    const pts=LVL[G.li].story;
+    G.score+=pts; G.levelBoxPoin+=pts; G.boxStats.benar++;
+    G.nitro=Math.min(MAXNITRO,G.nitro+2);
+    if(G.boosting<1.4) G.boosting=1.8;
+    el.stResult.textContent='BENAR! +'+pts+' POIN & KECEPATAN BERTAMBAH!';
+    el.stResult.classList.add('ok');
+    SFX.correct();
+    addSparks(W/2,H*0.5,'#ffd34d',22,180);
+  }else{
+    btn.classList.add('wrongpick');
+    el.stResult.textContent='Belum tepat. Jawaban yang benar: '+s.c;
+    el.stResult.classList.add('no');
+    SFX.wrong();
+  }
+  setTimeout(function(){
+    if(G.state!=='modal') return;
+    hide(el.ovStory);
+    G.story=null; G.box=null;
+    G.state='playing';
+    updateHUD();
+  },1600);
+}
+
+/* ---------- kontrol ---------- */
+function useNitro(){
+  if(G.state!=='playing'||G.paused) return;
+  if(G.nitro<=0||G.boosting>0) return;
+  G.nitro--;
+  G.boosting=NITRO_DUR;
+  SFX.nitro();
+  addFloat('SPEED!','#7df9ff',1.0);
+  updateHUD();
+}
+function steer(d){
+  if(G.state!=='playing'||G.paused) return;
+  G.carLane=clamp(G.carLane+d,0,2);
+}
+
+document.addEventListener('keydown',function(e){
+  const k=e.key;
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].indexOf(k)>=0) e.preventDefault();
+  if(k==='ArrowLeft') steer(-1);
+  else if(k==='ArrowRight') steer(1);
+  else if(k===' '){ if(!e.repeat) useNitro(); }
+  else if(k==='p'||k==='P'){ togglePause(); }
+  else if(k==='Enter'){
+    if(!el.ovStart.classList.contains('hidden')) startGame();
+    else if(!el.ovLevelEnd.classList.contains('hidden')) el.btnNext.click();
+    else if(!el.ovFinish.classList.contains('hidden')) resetGame();
+    else if(!el.ovPause.classList.contains('hidden')) togglePause();
+  }
+  if(k==='ArrowUp') G.keys.up=true;
+  if(k==='ArrowDown') G.keys.down=true;
+});
+document.addEventListener('keyup',function(e){
+  if(e.key==='ArrowUp') G.keys.up=false;
+  if(e.key==='ArrowDown') G.keys.down=false;
+});
+/* dukungan WASD */
+document.addEventListener('keydown',function(e){
+  if(e.code==='KeyA') steer(-1);
+  if(e.code==='KeyD') steer(1);
+  if(e.code==='KeyW') G.keys.up=true;
+  if(e.code==='KeyS') G.keys.down=true;
+});
+document.addEventListener('keyup',function(e){
+  if(e.code==='KeyW') G.keys.up=false;
+  if(e.code==='KeyS') G.keys.down=false;
+});
+/* sentuh: kiri/kanan layar = pindah jalan, tengah = SPEED */
+cv.addEventListener('pointerdown',function(e){
+  if(G.state!=='playing'||G.paused) return;
+  const rect=cv.getBoundingClientRect();
+  const x=(e.clientX-rect.left)/rect.width;
+  if(x<0.36) steer(-1);
+  else if(x>0.64) steer(1);
+  else if(G.gate && G.gate.stop && !G.gate.rush) G.touchGo=0.5;
+  else useNitro();
+});
+
+function togglePause(){
+  if(G.state!=='playing'&&G.state!=='modal'&&!G.paused) return;
+  if(G.paused){ G.paused=false; hide(el.ovPause); }
+  else{ G.paused=true; show(el.ovPause); }
+  updateHUD();
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden && (G.state==='playing'||G.state==='modal') && !G.paused) togglePause();
+});
+
+el.btnStart.addEventListener('click', startGame);
+el.btnNext.addEventListener('click', function(){ hide(el.ovLevelEnd); startLevel(G.li+1); });
+el.btnAgain.addEventListener('click', resetGame);
+el.btnResume.addEventListener('click', togglePause);
+el.btnPause.addEventListener('click', togglePause);
+el.btnSound.addEventListener('click', function(){
+  SFX.init();
+  const m=!SFX.muted;
+  SFX.setMuted(m);
+  el.btnSound.textContent='SUARA: '+(m?'OFF':'ON');
+});
+el.btnSpeed.addEventListener('pointerdown', function(e){
+  e.preventDefault();
+  if(G.state==='playing' && !G.paused && G.gate && G.gate.stop && !G.gate.rush) G.touchGo=0.5;
+  else useNitro();
+});
+
+/* ---------- update ---------- */
+function update(dt){
+  if(G.paused) { SFX.engineUpdate(0,false); return; }
+  G.t+=dt;
+
+  if(G.state==='lights'){ lightsUpdate(dt); SFX.engineUpdate(0.15,true); renderHUDTick(); return; }
+  if(G.state==='menu'||G.state==='levelEnd'||G.state==='finish'){ G.dist+=0.03*dt; }
+
+  const active=(G.state==='playing'||G.state==='modal');
+  if(active){
+    G.totalMs+=dt*1000; G.levelMs+=dt*1000; G.qMs+=dt*1000;
+  }
+  if(G.touchGo>0) G.touchGo-=dt;
+
+  /* hitung mundur waktu per soal (berhenti saat jeda/modal) */
+  if(G.state==='playing' && G.gate && !G.gate.rush){
+    const prevTick=Math.ceil(G.qLeft);
+    G.qLeft=Math.max(0,G.qLeft-dt);
+    const nowTick=Math.ceil(G.qLeft);
+    if(nowTick<prevTick && nowTick<=5 && nowTick>0) SFX.tick();
+    if(G.qLeft<=0){
+      G.gate.rush=true;
+      addFloat('WAKTU HABIS!','#ffb020');
+      SFX.timeout();
+      G.flash=0.3; G.flashCol='rgba(255,176,32,'; G.shake=0.3;
+    }
+  }
+
+  const L=LVL[G.li];
+  /* kecepatan */
+  const holdGate=(G.state==='playing' && G.gate && G.gate.stop && !G.gate.rush);
+  let target=1;
+  if(active){
+    if(holdGate) target=G.keys.up?1.45:0;
+    else if(G.keys.up) target=1.45; else if(G.keys.down) target=0.55;
+  }
+  G.accelT+=(target-G.accelT)*Math.min(1,dt*4);
+  let boost=0;
+  if(G.boosting>0){ G.boosting-=dt; boost=0.9; }
+  const crawl=(G.state==='modal')?0.12:1;
+  let sp=active? L.speed*(G.accelT+boost)*crawl : 0.03;
+  if(G.state==='playing' && G.gate){
+    if(G.gate.rush) sp=Math.max(sp,0.62);
+    else if(G.gate.stop && (G.keys.up || G.touchGo>0)) sp=Math.max(sp,0.5);
+  }
+  G.dist+=sp*dt;
+
+  SFX.engineUpdate(sp/0.5, active);
+
+  /* lane */
+  G.carLaneF+=(G.carLane-G.carLaneF)*Math.min(1,dt*10);
+
+  /* api boost */
+  if(G.boosting>0 && active){
+    const laneW=laneWAtCar();
+    const x=W/2+(G.carLaneF-1)*laneW;
+    for(let i=0;i<2;i++){
+      G.sparks.push({x:x+(Math.random()-0.5)*laneW*0.3, y:carY+18, vx:(Math.random()-0.5)*40, vy:120+Math.random()*140, life:0.35,t:0, color:Math.random()<.5?'#ffb020':'#7df9ff', r:2+Math.random()*3});
+    }
+  }
+
+  /* gerbang */
+  if(G.gate){
+    if(G.state==='playing' && !G.gate.stop && G.gate.rel>=0.88) G.gate.stop=true;
+    G.gate.rel+=sp*dt;
+    if(G.state==='modal') G.gate.rel=Math.min(G.gate.rel,0.9);
+    if(G.gate.rel>=1 && G.state==='playing') answerGate();
+    else if(G.gate.rel>1.35) G.gate=null;
+  }
+
+  /* garis finish level */
+  if(G.finishLine){
+    G.finishLine.rel+=sp*dt;
+    if(G.finishLine.rel>=1 && G.state==='playing'){ G.finishLine=null; completeLevel(); }
+  }
+
+  /* kotak rahasia */
+  if(G.box){
+    G.box.rel+=sp*dt;
+    if(!G.box.open && G.box.rel>=0.965 && G.state==='playing'){
+      const near=clamp(Math.round(G.carLaneF),0,2);
+      if(near===G.box.lane){ openStory(); }
+    }
+    if(G.box.rel>1.35) G.box=null;
+  }
+
+  /* efek sementara */
+  if(G.banner){ G.banner.t+=dt; if(G.banner.t>1.15) G.banner=null; }
+  if(G.wrongLane){ G.wrongLane.t-=dt; if(G.wrongLane.t<=0) G.wrongLane=null; }
+  G.flash=Math.max(0,G.flash-dt*1.6);
+  G.shake=Math.max(0,G.shake-dt*1.4);
+  for(let i=G.floats.length-1;i>=0;i--){ const f=G.floats[i]; f.t+=dt; if(f.t>f.dur) G.floats.splice(i,1); }
+  for(let i=G.sparks.length-1;i>=0;i--){ const p=G.sparks[i]; p.t+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=60*dt; if(p.t>p.life) G.sparks.splice(i,1); }
+
+  renderHUDTick();
+}
+function renderHUDTick(){ updateHUD(); }
+
+/* ---------- render ---------- */
+function drawKerbs(){
+  const step=0.06, off=G.dist%step, k0=Math.floor(G.dist/step);
+  for(let j=-1;j<26;j++){
+    const k=k0+j, rel=off+j*step;
+    if(rel<0.01||rel>1.28) continue;
+    const y1=yOf(rel), y2=yOf(Math.min(1.3,rel+step*0.55));
+    const h1=halfAtY(y1), h2=halfAtY(y2);
+    const w1=h1*0.055, w2=h2*0.055;
+    cx.fillStyle=(k%2===0)?'#e8354d':'#eef2f8';
+    cx.globalAlpha=clamp(1.25-rel,0,1)*0.9;
+    cx.beginPath();
+    cx.moveTo(W/2-h1,y1); cx.lineTo(W/2-h1-w1,y1); cx.lineTo(W/2-h2-w2,y2); cx.lineTo(W/2-h2,y2); cx.closePath(); cx.fill();
+    cx.beginPath();
+    cx.moveTo(W/2+h1,y1); cx.lineTo(W/2+h1+w1,y1); cx.lineTo(W/2+h2+w2,y2); cx.lineTo(W/2+h2,y2); cx.closePath(); cx.fill();
+  }
+  cx.globalAlpha=1;
+}
+function drawDashes(){
+  const step=0.09, off=G.dist%step, k0=Math.floor(G.dist/step);
+  cx.strokeStyle='rgba(255,210,74,0.75)';
+  for(let j=-1;j<20;j++){
+    const rel=off+j*step;
+    if(rel<0.02||rel>1.25) continue;
+    const y1=yOf(rel), y2=yOf(Math.min(1.3,rel+step*0.45));
+    cx.lineWidth=1+2.5*rel;
+    cx.globalAlpha=clamp(1.25-rel,0,1);
+    for(const f of [-1/3,1/3]){
+      const x1=W/2+f*halfAtY(y1), x2=W/2+f*halfAtY(y2);
+      cx.beginPath(); cx.moveTo(x1,y1); cx.lineTo(x2,y2); cx.stroke();
+    }
+  }
+  cx.globalAlpha=1;
+}
+function drawPoles(){
+  const step=0.3, off=G.dist%step, k0=Math.floor(G.dist/step);
+  for(let j=-1;j<8;j++){
+    const k=k0+j, rel=off+j*step;
+    if(rel<0.03||rel>1.1) continue;
+    const y=yOf(rel), half=halfAtY(y);
+    const ph=12+58*rel, r=2+4*rel;
+    const col=(k%2===0)?'#19e3ff':'#ff2d95';
+    cx.strokeStyle='rgba(140,170,210,0.5)';
+    cx.lineWidth=1+2*rel;
+    for(const s of [-1,1]){
+      const px=W/2+s*half*1.22;
+      cx.beginPath(); cx.moveTo(px,y); cx.lineTo(px,y-ph); cx.stroke();
+      cx.fillStyle=col; cx.shadowColor=col; cx.shadowBlur=10*rel;
+      cx.beginPath(); cx.arc(px,y-ph,r,0,Math.PI*2); cx.fill();
+      cx.shadowBlur=0;
+    }
+  }
+}
+function drawWorld(){
+  cx.fillStyle=bgGrad; cx.fillRect(0,0,W,H);
+  for(const s of stars){
+    cx.globalAlpha=0.25+0.5*Math.abs(Math.sin(G.t*s.tw+s.ph));
+    cx.fillStyle='#cfe9ff'; cx.fillRect(s.x,s.y,s.r,s.r);
+  }
+  cx.globalAlpha=1;
+  /* cahaya horizon */
+  const hg=cx.createLinearGradient(0,horizonY-30,0,horizonY+50);
+  hg.addColorStop(0,'rgba(25,227,255,0)'); hg.addColorStop(.5,'rgba(25,227,255,0.16)'); hg.addColorStop(1,'rgba(25,227,255,0)');
+  cx.fillStyle=hg; cx.fillRect(0,horizonY-30,W,80);
+  /* jalan */
+  const yH=yOf(0), yB=H+40;
+  const hT=halfAtY(yH), hB=halfAtY(yB);
+  cx.beginPath();
+  cx.moveTo(W/2-hT,yH); cx.lineTo(W/2+hT,yH); cx.lineTo(W/2+hB,yB); cx.lineTo(W/2-hB,yB); cx.closePath();
+  cx.fillStyle=roadGrad; cx.fill();
+  /* garis tepi neon */
+  cx.strokeStyle='#19e3ff'; cx.lineWidth=2.2;
+  cx.shadowColor='#19e3ff'; cx.shadowBlur=9;
+  cx.beginPath();
+  cx.moveTo(W/2-hT,yH); cx.lineTo(W/2-hB,yB);
+  cx.moveTo(W/2+hT,yH); cx.lineTo(W/2+hB,yB);
+  cx.stroke();
+  cx.shadowBlur=0;
+  drawKerbs(); drawDashes(); drawPoles();
+}
+function drawGate(){
+  const g=G.gate;
+  if(!g||g.rel<0.02) return;
+  const y=yOf(g.rel), half=halfAtY(y), laneW=2*half/3;
+  const alpha=clamp((g.rel-0.02)*4,0,1)*clamp(1.15-g.rel*0.5,0,1);
+  cx.globalAlpha=alpha;
+  /* balok atas (gantry) */
+  const bh=Math.max(5,laneW*0.10);
+  cx.fillStyle='#0b1220';
+  cx.fillRect(W/2-half,y-bh/2,2*half,bh);
+  cx.strokeStyle='#ff2d95'; cx.lineWidth=1.5;
+  cx.shadowColor='#ff2d95'; cx.shadowBlur=8*alpha;
+  cx.strokeRect(W/2-half,y-bh/2,2*half,bh);
+  /* tiang pembatas antar pintu */
+  cx.beginPath();
+  for(const f of [-1/3,1/3]){
+    const px=W/2+f*half;
+    cx.moveTo(px,y); cx.lineTo(px,y+laneW*0.55);
+  }
+  cx.stroke();
+  cx.shadowBlur=0;
+  /* papan angka */
+  for(let l=0;l<3;l++){
+    const x=laneCX(l,y);
+    const sw=laneW*0.74, sh=Math.max(16,laneW*0.44);
+    const sy=y+sh*0.55;
+    cx.fillStyle='#071018';
+    cx.strokeStyle='#19e3ff'; cx.lineWidth=1.6;
+    cx.shadowColor='#19e3ff'; cx.shadowBlur=10*alpha;
+    cx.fillRect(x-sw/2,sy-sh/2,sw,sh);
+    cx.strokeRect(x-sw/2,sy-sh/2,sw,sh);
+    cx.shadowBlur=0;
+    cx.fillStyle='#eafcff';
+    const fs=Math.max(11,Math.min(44,laneW*0.34));
+    cx.font='900 '+fs+'px Arial';
+    cx.textAlign='center'; cx.textBaseline='middle';
+    cx.fillText(String(g.opts[l]), x, sy+fs*0.04);
+  }
+  cx.globalAlpha=1;
+}
+function drawFinishLine(){
+  const f=G.finishLine;
+  if(!f||f.rel<0.02) return;
+  const y=yOf(f.rel), half=halfAtY(y);
+  const cols=12, rows=2, cw=(2*half)/cols, ch=cw*0.62;
+  for(let r=0;r<rows;r++){
+    for(let i=0;i<cols;i++){
+      cx.fillStyle=((r+i)%2===0)?'#f2f5fa':'#10131d';
+      cx.fillRect(W/2-half+i*cw, y-ch/2+r*ch, cw, ch);
+    }
+  }
+  const laneW=2*half/3;
+  const fs=Math.max(12,Math.min(34,laneW*0.3));
+  cx.font='900 '+fs+'px Arial';
+  cx.textAlign='center'; cx.textBaseline='bottom';
+  cx.fillStyle='#ffd34d'; cx.shadowColor='#ffb020'; cx.shadowBlur=12;
+  cx.fillText('FINISH', W/2, y-ch-4);
+  cx.shadowBlur=0;
+}
+function drawBox(){
+  const b=G.box;
+  if(!b||b.rel<0.03) return;
+  const y=yOf(b.rel), half=halfAtY(y), laneW=2*half/3;
+  const x=laneCX(b.lane,y);
+  const s=laneW*0.46;
+  const bob=Math.sin(G.t*6)*s*0.08;
+  const rot=Math.sin(G.t*3)*0.14;
+  cx.save();
+  cx.translate(x,y+bob); cx.rotate(rot);
+  cx.shadowColor='#ffb020'; cx.shadowBlur=14;
+  cx.fillStyle='#ffb020';
+  cx.fillRect(-s/2,-s/2,s,s);
+  cx.shadowBlur=0;
+  cx.fillStyle='#3d1d00';
+  const fs=Math.max(10,s*0.62);
+  cx.font='900 '+fs+'px Arial';
+  cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillText('?',0,fs*0.05);
+  cx.restore();
+}
+function rr(x,y,w,h,r){
+  cx.beginPath();
+  cx.moveTo(x+r,y);
+  cx.arcTo(x+w,y,x+w,y+h,r);
+  cx.arcTo(x+w,y+h,x,y+h,r);
+  cx.arcTo(x,y+h,x,y,r);
+  cx.arcTo(x,y,x+w,y,r);
+  cx.closePath();
+}
+function drawCar(){
+  const laneW=laneWAtCar();
+  const x=W/2+(G.carLaneF-1)*laneW, y=carY;
+  const w=laneW*0.40, h=laneW*0.82;
+  cx.save();
+  cx.translate(x,y);
+  /* bayangan */
+  cx.fillStyle='rgba(0,0,0,0.45)';
+  cx.beginPath(); cx.ellipse(0,h*0.12,w*0.62,h*0.34,0,0,Math.PI*2); cx.fill();
+  if(G.boosting>0){
+    cx.shadowColor='#ff8800'; cx.shadowBlur=22;
+  }
+  /* sayap belakang */
+  cx.fillStyle='#c9143f';
+  rr(-w*0.56,h*0.30,w*1.12,h*0.14,3); cx.fill();
+  /* roda */
+  cx.fillStyle='#0a0c11';
+  rr(-w*0.62,-h*0.30,w*0.30,h*0.30,4); cx.fill();
+  rr(w*0.32,-h*0.30,w*0.30,h*0.30,4); cx.fill();
+  rr(-w*0.68,h*0.02,w*0.36,h*0.34,4); cx.fill();
+  rr(w*0.32,h*0.02,w*0.36,h*0.34,4); cx.fill();
+  cx.fillStyle='#3a4356';
+  rr(-w*0.55,-h*0.24,w*0.12,h*0.18,2); cx.fill();
+  rr(w*0.43,-h*0.24,w*0.12,h*0.18,2); cx.fill();
+  /* bodi */
+  const grad=cx.createLinearGradient(0,-h*0.5,0,h*0.5);
+  grad.addColorStop(0,'#ff3355'); grad.addColorStop(1,'#a80f2e');
+  cx.fillStyle=grad;
+  cx.beginPath();
+  cx.moveTo(0,-h*0.52);
+  cx.lineTo(w*0.22,-h*0.30);
+  cx.lineTo(w*0.26,h*0.26);
+  cx.lineTo(w*0.50,h*0.40);
+  cx.lineTo(-w*0.50,h*0.40);
+  cx.lineTo(-w*0.26,h*0.26);
+  cx.lineTo(-w*0.22,-h*0.30);
+  cx.closePath();
+  cx.fill();
+  cx.shadowBlur=0;
+  /* sayap depan */
+  cx.fillStyle='#c9143f';
+  rr(-w*0.55,-h*0.48,w*1.10,h*0.09,3); cx.fill();
+  /* kokpit + helm */
+  cx.fillStyle='#10131d';
+  rr(-w*0.13,-h*0.18,w*0.26,h*0.30,4); cx.fill();
+  cx.fillStyle='#f2f5fa';
+  cx.beginPath(); cx.arc(0,-h*0.10,w*0.10,0,Math.PI*2); cx.fill();
+  cx.strokeStyle='#19e3ff'; cx.lineWidth=1.5;
+  cx.beginPath(); cx.arc(0,-h*0.10,w*0.13,Math.PI*1.05,Math.PI*1.95); cx.stroke();
+  cx.restore();
+}
+function drawWrongLane(){
+  const w=G.wrongLane;
+  if(!w) return;
+  const laneW=laneWAtCar();
+  const x=W/2+(w.lane-1)*laneW;
+  cx.globalAlpha=clamp(w.t,0,1)*0.8;
+  cx.strokeStyle='#ff4d6d'; cx.lineWidth=3;
+  cx.shadowColor='#ff4d6d'; cx.shadowBlur=14;
+  cx.beginPath();
+  cx.moveTo(x-laneW*0.3,carY-laneW*0.3); cx.lineTo(x+laneW*0.3,carY+laneW*0.3);
+  cx.moveTo(x+laneW*0.3,carY-laneW*0.3); cx.lineTo(x-laneW*0.3,carY+laneW*0.3);
+  cx.stroke();
+  cx.shadowBlur=0; cx.globalAlpha=1;
+}
+function drawSparks(){
+  for(const p of G.sparks){
+    cx.globalAlpha=clamp(1-p.t/p.life,0,1);
+    cx.fillStyle=p.color;
+    cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2); cx.fill();
+  }
+  cx.globalAlpha=1;
+}
+function drawFloats(){
+  for(const f of G.floats){
+    const a=1-f.t/f.dur;
+    cx.globalAlpha=a;
+    cx.fillStyle=f.color;
+    cx.font='900 24px Arial';
+    cx.textAlign='center'; cx.textBaseline='middle';
+    cx.shadowColor=f.color; cx.shadowBlur=12;
+    cx.fillText(f.text, W/2, H*0.42-f.t*34);
+    cx.shadowBlur=0;
+  }
+  cx.globalAlpha=1;
+}
+function drawBanner(){
+  const b=G.banner;
+  if(!b) return;
+  const t=b.t;
+  const a= t<0.12? t/0.12 : t>0.85? Math.max(0,(1.15-t)/0.3) : 1;
+  const sc= t<0.12? 0.7+0.3*(t/0.12) : 1;
+  cx.save();
+  cx.globalAlpha=clamp(a,0,1);
+  cx.translate(W/2,H*0.30); cx.scale(sc,sc);
+  cx.font='900 34px Arial';
+  cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillStyle=b.color;
+  cx.shadowColor=b.color; cx.shadowBlur=18;
+  cx.fillText(b.text,0,0);
+  cx.restore();
+}
+function drawSpeedLines(){
+  if(G.boosting<=0) return;
+  cx.strokeStyle='rgba(255,255,255,0.10)';
+  cx.lineWidth=2;
+  for(let i=0;i<12;i++){
+    const yy=((G.t*900+i*137)%(H+120))-60;
+    const xx=(i*97+40)%W;
+    cx.beginPath(); cx.moveTo(xx,yy); cx.lineTo(xx,yy+90); cx.stroke();
+  }
+}
+function render(){
+  cx.save();
+  if(G.shake>0) cx.translate((Math.random()-0.5)*G.shake*16,(Math.random()-0.5)*G.shake*10);
+  drawWorld();
+  drawFinishLine();
+  drawBox();
+  drawCar();
+  drawGate();  /* digambar setelah mobil: papan jawaban terlihat seperti rambu gantry di atas mobil */
+  drawWrongLane();
+  drawSparks();
+  cx.restore();
+  drawFloats();
+  drawBanner();
+  drawSpeedLines();
+  if(G.flash>0){
+    cx.fillStyle=G.flashCol+(G.flash*0.55)+')';
+    cx.fillRect(0,0,W,H);
+  }
+}
+
+/* ---------- loop ---------- */
+let lastT=performance.now();
+function loop(now){
+  const dt=Math.min(0.05,(now-lastT)/1000);
+  lastT=now;
+  update(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+
+/* init */
+resize();
+updateHUD();
+requestAnimationFrame(function(t){ lastT=t; requestAnimationFrame(loop); });
+</script>
+</body>
+</html>
