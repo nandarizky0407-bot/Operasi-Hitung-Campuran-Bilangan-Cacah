@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayo Belajar Pembagian — Matematika Kelas 1 SD</title>
+<style>
+:root{
+  --cream:#FFF7E6; --cream2:#FFF1D6; --ink:#3A3335; --ink-soft:#6B6265;
+  --red:#FF6B6B; --red-d:#E5484D; --yellow:#FFD166; --yellow-d:#EBA400;
+  --blue:#4D96FF; --blue-d:#2C6ED9; --green:#43D9A3; --green-d:#1FA97C;
+  --purple:#B388FF; --pink:#FF8FAB; --shadow:#E8DFC8; --card:#FFFFFF;
+  --r:20px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; color:var(--ink); font-family:"Baloo 2","Comic Sans MS","Segoe UI",system-ui,sans-serif;
+  background-color:var(--cream);
+  background-image:radial-gradient(#FFE9BD 11%,transparent 12%),radial-gradient(#FFE9BD 11%,transparent 12%);
+  background-size:44px 44px; background-position:0 0,22px 22px;
+}
+button{font-family:inherit; cursor:pointer;}
+input,textarea{font-family:inherit; font-size:1rem;}
+.hidden{display:none !important;}
+.muted{color:var(--ink-soft); font-size:.92rem;}
+img{max-width:100%; height:auto;}
+
+/* ---------- Topbar ---------- */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:50; height:54px;
+  display:flex; align-items:center; gap:8px; padding:0 10px;
+  background:rgba(255,247,230,.92); backdrop-filter:blur(6px);
+  border-bottom:3px solid var(--ink);
+}
+.topbar-title{font-weight:800; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.dots{display:flex; gap:5px; flex:1; justify-content:center; flex-wrap:wrap;}
+.dot{width:11px; height:11px; border-radius:50%; border:2px solid var(--ink); background:#fff; padding:0; transition:.2s;}
+.dot.on{background:var(--red); transform:scale(1.25);}
+.counter{font-weight:800; font-size:.9rem; background:#fff; border:2px solid var(--ink); border-radius:999px; padding:2px 10px; white-space:nowrap;}
+.icon-btn{
+  width:38px; height:38px; border-radius:12px; border:3px solid var(--ink); background:#fff;
+  font-size:1.05rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  box-shadow:0 3px 0 var(--shadow);
+}
+.pbar-wrap{position:absolute; left:0; right:0; bottom:-3px; height:3px;}
+.pbar{height:100%; width:8%; background:linear-gradient(90deg,var(--red),var(--yellow),var(--green)); transition:width .35s;}
+
+/* ---------- Menu overlay ---------- */
+.menu-overlay{position:fixed; inset:0; z-index:70; background:rgba(58,51,53,.45); display:flex; align-items:center; justify-content:center; padding:16px;}
+.menu-card{max-width:420px; width:100%; max-height:80vh; overflow-y:auto;}
+.menu-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.menu-list{display:flex; flex-direction:column; gap:6px;}
+.menu-item{
+  text-align:left; border:2px solid var(--ink); background:var(--cream2); border-radius:12px;
+  padding:9px 12px; font-weight:700; display:flex; gap:10px; align-items:center;
+}
+.menu-item.on{background:var(--yellow);}
+.menu-item .mn{width:26px; height:26px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.85rem; flex:0 0 auto;}
+
+/* ---------- Slides ---------- */
+.slide{min-height:100svh; padding:70px 14px 92px; display:none; position:relative;}
+.slide.active{display:flex; flex-direction:column; align-items:center;}
+.wrap{width:100%; max-width:1060px; display:flex; flex-direction:column; gap:14px; animation:slideUp .45s ease;}
+@keyframes slideUp{from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:none;}}
+.kicker{
+  align-self:flex-start; background:var(--ink); color:#fff; font-weight:800; font-size:.78rem;
+  letter-spacing:1px; text-transform:uppercase; padding:5px 14px; border-radius:999px;
+}
+h2{font-size:clamp(1.45rem,4.2vw,2.3rem); margin:2px 0 0; line-height:1.15;}
+h3{font-size:clamp(1.1rem,3vw,1.4rem); margin:4px 0;}
+.hl-red{box-shadow:inset 0 -.38em 0 var(--yellow);}
+.hl-blue{box-shadow:inset 0 -.38em 0 var(--pink);}
+.slide-lead{margin:0; font-size:clamp(1rem,2.6vw,1.15rem); color:var(--ink-soft); font-weight:600;}
+
+/* ---------- Cards / buttons ---------- */
+.card{background:var(--card); border:3px solid var(--ink); border-radius:var(--r); padding:16px 18px; box-shadow:0 6px 0 var(--shadow);}
+.card p{margin:8px 0; line-height:1.55;}
+.card-blue{background:#EAF3FF;} .card-yellow{background:#FFF6DA;} .card-green{background:#EAFBF3;} .card-red{background:#FFEBEB;}
+.btn{
+  border:3px solid var(--ink); border-radius:999px; padding:10px 22px; font-weight:800; font-size:1rem;
+  background:#fff; box-shadow:0 4px 0 var(--shadow); transition:transform .08s, box-shadow .08s;
+  display:inline-flex; align-items:center; gap:8px; min-height:44px;
+}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--shadow);}
+.btn:disabled{opacity:.55; cursor:not-allowed;}
+.btn-primary{background:var(--red); color:#fff;}
+.btn-blue{background:var(--blue); color:#fff;}
+.btn-green{background:var(--green); color:#fff;}
+.btn-ghost{background:#fff;}
+.btn-big{font-size:1.15rem; padding:13px 30px;}
+.chip-mini{border:2px solid var(--ink); background:#fff; border-radius:999px; padding:6px 14px; font-weight:800; box-shadow:0 3px 0 var(--shadow);}
+.chip-mini.on{background:var(--yellow);}
+
+/* ---------- Mascot bar ---------- */
+.mascot-bar{display:flex; align-items:flex-end; gap:10px; margin-top:4px;}
+.bobo{width:54px; height:54px; flex:0 0 auto;}
+.bubble{
+  position:relative; background:#fff; border:3px solid var(--ink); border-radius:16px;
+  padding:10px 14px; font-weight:600; font-size:.95rem; line-height:1.45; flex:1;
+}
+.bubble::before{content:""; position:absolute; left:-13px; bottom:14px; border:8px solid transparent; border-right-color:var(--ink);}
+.bubble b{color:var(--red-d);}
+
+/* ---------- Cover ---------- */
+.cover{align-items:center; text-align:center; gap:12px;}
+.cover-title{font-size:clamp(2.1rem,8vw,4rem); margin:6px 0 0; line-height:1.1;}
+.cover-sub{font-size:clamp(1rem,3vw,1.2rem); color:var(--ink-soft); font-weight:700; margin:0; max-width:640px;}
+.bobo-hero{width:clamp(120px,30vw,190px); height:clamp(120px,30vw,190px); filter:drop-shadow(0 8px 0 rgba(232,223,200,.9)); animation:bob 3s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.bobo-say{max-width:460px; text-align:left;}
+.cover-form{display:flex; flex-direction:column; gap:10px; align-items:center; background:#fff; border:3px solid var(--ink); border-radius:var(--r); padding:16px 20px; box-shadow:0 6px 0 var(--shadow); width:100%; max-width:430px;}
+.cover-form label{font-weight:800;}
+#namaInput{border:3px solid var(--ink); border-radius:14px; padding:10px 14px; width:100%; text-align:center; font-weight:700; background:var(--cream2);}
+.hint{font-size:.85rem; color:var(--ink-soft); margin:0;}
+.floaty{position:absolute; font-size:clamp(1.6rem,5vw,2.6rem); opacity:.85; animation:floaty 4s ease-in-out infinite; pointer-events:none;}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-14px) rotate(6deg);}}
+.f1{top:11%; left:5%;} .f2{top:16%; right:7%; animation-delay:.7s;} .f3{bottom:16%; left:9%; animation-delay:1.2s;}
+.f4{bottom:24%; right:6%; animation-delay:.4s;} .f5{top:44%; left:2%; animation-delay:1.8s;}
+
+/* ---------- Agenda ---------- */
+.agenda-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px;}
+.agenda-card{display:flex; gap:12px; align-items:center; text-align:left; padding:14px;}
+.agenda-num{width:40px; height:40px; border-radius:50%; border:3px solid var(--ink); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.1rem; flex:0 0 auto; color:#fff;}
+.n-red{background:var(--red);} .n-blue{background:var(--blue);} .n-green{background:var(--green);} .n-purple{background:var(--purple);} .n-yellow{background:var(--yellow-d);} .n-pink{background:var(--pink);}
+.agenda-card b{display:block; font-size:1.02rem;}
+.agenda-card small{color:var(--ink-soft); font-weight:600;}
+
+/* ---------- Demo bagi rata ---------- */
+.demo-head{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
+.demo-presets{display:flex; gap:6px; flex-wrap:wrap;}
+.demo-stage{display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center;}
+.fruit-row{font-size:clamp(1.5rem,4vw,2.1rem); letter-spacing:4px; line-height:1.4;}
+.baskets-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; width:100%;}
+.basket{border:3px dashed var(--blue-d); border-radius:16px; background:#F2F8FF; min-width:120px; min-height:86px; padding:8px 10px 6px; flex:1; max-width:200px;}
+.basket-items{display:flex; flex-wrap:wrap; gap:2px; justify-content:center; font-size:1.5rem; min-height:40px; align-items:center;}
+.basket-cap{font-size:.8rem; font-weight:800; color:var(--blue-d); margin-top:2px;}
+.demo-eq{font-size:clamp(1.3rem,4vw,1.8rem); font-weight:800; background:var(--yellow); border:3px solid var(--ink); border-radius:14px; padding:8px 20px;}
+.demo-hint{font-weight:600; color:var(--ink-soft);}
+.pop{animation:pop .35s cubic-bezier(.2,1.6,.4,1) both;}
+@keyframes pop{from{transform:scale(0);} to{transform:scale(1);}}
+
+/* ---------- Istilah ---------- */
+.eq-anatomy{overflow-x:auto;}
+.eq-row{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:nowrap;}
+.eq-op{font-size:clamp(1.6rem,5vw,2.4rem); font-weight:800;}
+.eq-part{display:flex; flex-direction:column; align-items:center; gap:4px; border:3px solid var(--ink); border-radius:16px; padding:8px 18px; min-width:96px;}
+.eq-num{font-size:clamp(1.8rem,6vw,2.6rem); font-weight:800; line-height:1;}
+.eq-lab{font-size:.78rem; font-weight:800; text-align:center; line-height:1.2;}
+.p-red{background:#FFE3E3;} .p-blue{background:#E1EEFF;} .p-green{background:#DFF7EC;}
+.dua-makna{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;}
+.mini-visual{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+.mini-group{border:2px dashed var(--ink-soft); border-radius:12px; padding:6px 10px; font-size:1.35rem; background:var(--cream2); text-align:center;}
+.mini-group small{display:block; font-size:.72rem; font-weight:800; color:var(--ink-soft);}
+
+/* ---------- Array & keluarga fakta ---------- */
+.array-card{display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center;}
+.dotgrid{display:flex; flex-direction:column; gap:6px;}
+.dotrow{display:flex; gap:6px;}
+.array-dot{width:clamp(22px,5vw,30px); height:clamp(22px,5vw,30px); border-radius:50%; background:var(--red); border:2px solid var(--ink);}
+.array-dot.alt{background:var(--blue);}
+.array-legend{font-weight:800; font-size:clamp(1.05rem,3vw,1.3rem);}
+.family-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:8px;}
+.fact-card{
+  border:3px solid var(--ink); border-radius:16px; background:var(--cream2); padding:16px 8px;
+  font-size:clamp(1.2rem,3.5vw,1.5rem); font-weight:800; text-align:center; box-shadow:0 4px 0 var(--shadow);
+  transition:transform .15s, background .15s;
+}
+.fact-card .front{color:var(--ink-soft);}
+.fact-card.open{background:var(--green); color:#fff; transform:rotate(-2deg) scale(1.04);}
+.mini-quiz .chips{margin-top:8px;}
+.chips{display:flex; gap:8px; flex-wrap:wrap;}
+.chips button{border:3px solid var(--ink); background:#fff; border-radius:14px; padding:9px 18px; font-weight:800; font-size:1.05rem; box-shadow:0 3px 0 var(--shadow); min-height:44px;}
+.chips button.correct{background:var(--green); color:#fff;}
+.chips button.wrong{background:var(--red); color:#fff; animation:shake .4s;}
+.chips button:disabled{cursor:default;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.chips-fb{font-weight:700; margin-top:8px;}
+.chips-fb.ok{color:var(--green-d);} .chips-fb.no{color:var(--red-d);}
+</style>
+<style>
+/* ---------- Pengurangan berulang ---------- */
+.kurang-top{display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center;}
+.bignum{
+  width:clamp(88px,20vw,120px); height:clamp(88px,20vw,120px); border-radius:24px; background:var(--yellow);
+  border:3px solid var(--ink); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(2.4rem,8vw,3.6rem); font-weight:800; box-shadow:0 5px 0 var(--shadow);
+}
+.bignum.bump{animation:bump .3s;}
+@keyframes bump{0%{transform:scale(1);}40%{transform:scale(1.18);}100%{transform:scale(1);}}
+.kurang-side{display:flex; flex-direction:column; gap:6px; font-weight:700;}
+.kurang-eq{font-size:1.25rem; font-weight:800; background:var(--cream2); border:2px solid var(--ink); border-radius:12px; padding:4px 14px;}
+.kurang-history{display:flex; flex-wrap:wrap; gap:8px; min-height:34px;}
+.hist-chip{background:var(--cream2); border:2px solid var(--ink); border-radius:12px; padding:5px 10px; font-weight:800; animation:pop .3s both;}
+.hist-chip small{color:var(--ink-soft); font-weight:700;}
+.kurang-actions{display:flex; gap:10px; flex-wrap:wrap;}
+.kurang-result{
+  background:var(--green); color:#fff; border:3px solid var(--ink); border-radius:16px;
+  padding:12px 16px; font-size:1.1rem; font-weight:700; animation:pop .4s both;
+}
+.kurang-presets{display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-weight:700;}
+
+/* ---------- Tusuk sate ---------- */
+.steps-list{margin:8px 0 0; padding-left:22px; line-height:1.6; font-weight:600;}
+.satay-tabs{display:flex; gap:8px; flex-wrap:wrap;}
+.tab{border:3px solid var(--ink); background:#fff; border-radius:999px; padding:9px 18px; font-weight:800; box-shadow:0 3px 0 var(--shadow); min-height:44px;}
+.tab.active{background:var(--yellow);}
+.satay-scene{display:flex; flex-direction:column; gap:12px;}
+.satay-head{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;}
+.satay-expr{font-size:clamp(1.6rem,5vw,2.2rem); font-weight:800;}
+.satay-badge{background:var(--purple); color:#fff; border:2px solid var(--ink); border-radius:999px; padding:5px 14px; font-weight:800; font-size:.9rem;}
+.digit-row{display:flex; gap:8px; justify-content:center;}
+.digitbox{
+  width:clamp(64px,16vw,86px); height:clamp(64px,16vw,86px); border:3px solid var(--ink); border-radius:18px;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:clamp(2rem,7vw,2.8rem); font-weight:800; box-shadow:0 4px 0 var(--shadow); transition:.35s;
+}
+.digit-row.split .digitbox:first-child{background:#FFE3E3; transform:translateX(-14px) rotate(-3deg);}
+.digit-row.split .digitbox:last-child{background:#E1EEFF; transform:translateX(14px) rotate(3deg);}
+.q-row{display:flex; gap:8px; justify-content:center;}
+.qslot{
+  width:clamp(44px,11vw,56px); height:clamp(44px,11vw,56px); border:3px dashed var(--ink-soft); border-radius:14px;
+  display:flex; align-items:center; justify-content:center; font-size:clamp(1.4rem,5vw,1.9rem); font-weight:800;
+  color:var(--ink-soft); background:var(--cream2);
+}
+.qslot.fill{border-style:solid; background:var(--green); color:#fff; border-color:var(--ink); animation:pop .4s both;}
+.work-row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.work{
+  border:3px dashed var(--ink-soft); border-radius:16px; background:var(--cream2);
+  min-height:120px; padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+}
+.work-label{font-size:.78rem; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:1px;}
+.dots-row{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-width:100%;}
+.meat{
+  width:26px; height:26px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#FFC37E,#E58E26);
+  border:2px solid var(--ink); display:inline-block; animation:pop .3s both;
+}
+.meat.dot{width:24px; height:24px;}
+.meat.small{width:18px; height:18px;}
+.skewers{display:flex; flex-direction:column; gap:8px; align-items:center; width:100%;}
+.skewer{
+  position:relative; display:flex; align-items:center; gap:5px; padding:4px 26px 4px 10px;
+  background:linear-gradient(180deg,#D9A066,#B97B3F); border:2px solid var(--ink); border-radius:999px; animation:pop .35s both;
+}
+.skewer::after{content:""; position:absolute; right:-20px; top:50%; width:22px; height:5px; background:#B97B3F; border:1px solid var(--ink); border-radius:99px; transform:translateY(-50%);}
+.sisa{background:var(--red); color:#fff; border:2px solid var(--ink); border-radius:999px; padding:4px 12px; font-weight:800; font-size:.9rem;}
+.sisa.hot{background:var(--yellow-d); animation:flash 1s infinite;}
+@keyframes flash{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.carry{background:#fff; border:2px solid var(--ink); border-radius:12px; padding:6px 12px; font-weight:800; text-align:center;}
+.satay-note{background:#fff; border:2px solid var(--ink); border-radius:14px; padding:10px 14px; font-weight:600; line-height:1.5; text-align:center;}
+.satay-result{background:var(--green); color:#fff; border:3px solid var(--ink); border-radius:16px; padding:12px; text-align:center; animation:pop .4s both;}
+.res-eq{font-size:clamp(1.5rem,5vw,2rem); font-weight:800;}
+.res-check{font-weight:700; margin-top:4px;}
+.poro{font-family:ui-monospace,Menlo,Consolas,monospace; font-size:1.15rem; line-height:1.3; margin:10px auto 0; background:#fff; color:var(--ink); border:2px solid var(--ink); border-radius:12px; padding:8px 16px; display:inline-block; font-weight:700;}
+.satay-ctrl{display:flex; justify-content:center;}
+
+/* ---------- Quiz ---------- */
+.quiz-top{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; font-weight:800;}
+.qnum{background:var(--ink); color:#fff; border-radius:999px; padding:5px 14px; font-size:.9rem;}
+.qscore{color:var(--green-d);}
+.qcard{display:flex; flex-direction:column; gap:10px;}
+.qtag{align-self:flex-start; border:2px solid var(--ink); border-radius:999px; padding:3px 12px; font-weight:800; font-size:.82rem;}
+.t-blue{background:#E1EEFF;} .t-green{background:#DFF7EC;}
+.qtext{font-size:clamp(1.1rem,3vw,1.35rem); font-weight:700; line-height:1.5;}
+.qchoices{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px;}
+.chip-ans{
+  border:3px solid var(--ink); background:var(--cream2); border-radius:16px; padding:14px 10px;
+  font-weight:800; font-size:clamp(1.15rem,3.5vw,1.5rem); box-shadow:0 4px 0 var(--shadow); transition:.15s; min-height:56px;
+}
+.chip-ans:disabled{cursor:default;}
+.chip-ans.correct{background:var(--green); color:#fff; animation:pop .35s both;}
+.chip-ans.wrong{background:var(--red); color:#fff; animation:shake .4s;}
+.qfb{border-radius:14px; padding:10px 14px; font-weight:700; border:2px solid var(--ink);}
+.qfb.ok{background:#DFF7EC; color:var(--green-d);}
+.qfb.no{background:#FFEBEB; color:var(--red-d);}
+.qsteps{display:flex; flex-direction:column; gap:6px;}
+.qstep{background:var(--cream2); border:2px solid var(--ink); border-radius:12px; padding:8px 12px; font-weight:600; line-height:1.5; animation:slideUp .4s both;}
+.qdone{display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center;}
+.qdone-title{font-size:clamp(1.4rem,4vw,1.9rem); font-weight:800;}
+.stars{color:var(--yellow-d); letter-spacing:2px;}
+.stars.big{font-size:clamp(1.8rem,6vw,2.6rem);}
+.qdone-score{font-size:1.25rem;}
+.qdone-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+
+/* ---------- Hasil kerja ---------- */
+.hasil-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;}
+.identitas{display:flex; flex-direction:column; gap:8px;}
+.identitas label{font-weight:700; display:flex; flex-direction:column; gap:4px;}
+#namaHasil{border:3px solid var(--ink); border-radius:12px; padding:8px 12px; font-weight:700; background:var(--cream2);}
+.skor-card{display:flex; flex-direction:column; gap:8px;}
+.skor-row{display:flex; justify-content:space-between; gap:8px; align-items:center; border-bottom:2px dashed var(--shadow); padding:6px 0; font-weight:600; flex-wrap:wrap;}
+.skor-total{background:var(--cream2); border:2px solid var(--ink); border-radius:12px; padding:8px 12px; font-weight:700; margin-top:4px;}
+.galeri{display:flex; flex-direction:column; gap:8px;}
+.upload-btn{align-self:flex-start; background:var(--blue); color:#fff; border:3px solid var(--ink); border-radius:999px; padding:10px 20px; font-weight:800; box-shadow:0 4px 0 var(--shadow); cursor:pointer;}
+.gal-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px;}
+.gal-item{position:relative; margin:0; border:3px solid var(--ink); border-radius:14px; overflow:hidden; background:#fff;}
+.gal-item img{display:block; width:100%; height:110px; object-fit:cover;}
+.gal-item figcaption{font-size:.7rem; font-weight:700; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.gal-del{position:absolute; top:4px; right:4px; width:26px; height:26px; border-radius:50%; border:2px solid var(--ink); background:var(--red); color:#fff; font-weight:800; line-height:1;}
+
+/* ---------- Refleksi & thanks ---------- */
+.mood-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.mood-btn{border:3px solid var(--ink); background:#fff; border-radius:16px; padding:10px 14px; font-weight:800; font-size:1rem; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:86px; box-shadow:0 4px 0 var(--shadow);}
+.mood-btn .m-emoji{font-size:1.8rem;}
+.mood-btn.on{background:var(--yellow); transform:scale(1.05);}
+.cando{display:flex; flex-direction:column; gap:8px; font-weight:600;}
+.cando label{display:flex; gap:10px; align-items:flex-start; line-height:1.4;}
+.cando input{width:20px; height:20px; accent-color:var(--green-d); margin-top:2px; flex:0 0 auto;}
+.refleksi-form{display:flex; flex-direction:column; gap:10px;}
+.refleksi-form textarea{border:3px solid var(--ink); border-radius:14px; padding:10px 12px; min-height:74px; resize:vertical; background:var(--cream2); font-weight:600;}
+.toast{background:var(--green); color:#fff; border:2px solid var(--ink); border-radius:12px; padding:8px 14px; font-weight:800; animation:pop .3s both; align-self:center;}
+.thanks-wrap{align-items:center; text-align:center;}
+.thanks-title{font-size:clamp(2rem,8vw,3.6rem); margin:8px 0 0;}
+.thanks-sub{font-size:clamp(1.05rem,3vw,1.3rem); font-weight:700; color:var(--ink-soft); max-width:600px; margin:0;}
+.thanks-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+
+/* ---------- Confetti & fx ---------- */
+#fx{position:fixed; inset:0; pointer-events:none; z-index:80; overflow:hidden;}
+.cf{position:absolute; top:-24px; width:10px; height:16px; border-radius:3px; animation:cfFall linear forwards;}
+@keyframes cfFall{to{transform:translateY(110vh) rotate(560deg); opacity:.85;}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:640px){
+  .dots{display:none;}
+  .topbar-title{display:none;}
+  .topbar{justify-content:space-between;}
+  .slide{padding:62px 10px 110px;}
+  .card{padding:13px 14px;}
+  .work-row{grid-template-columns:1fr;}
+  .eq-part{min-width:84px; padding:6px 12px;}
+  .btn{padding:10px 16px;}
+}
+@media (min-width:900px){
+  .dua-makna .card{min-height:100%;}
+}
+</style>
+</head>
+<body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="panda" viewBox="0 0 120 120">
+    <circle cx="30" cy="28" r="14" fill="#3A3335"/>
+    <circle cx="90" cy="28" r="14" fill="#3A3335"/>
+    <ellipse cx="60" cy="66" rx="44" ry="40" fill="#fff" stroke="#3A3335" stroke-width="3.5"/>
+    <ellipse cx="42" cy="58" rx="10.5" ry="13" fill="#3A3335" transform="rotate(-16 42 58)"/>
+    <ellipse cx="78" cy="58" rx="10.5" ry="13" fill="#3A3335" transform="rotate(16 78 58)"/>
+    <circle cx="44.5" cy="56" r="4.2" fill="#fff"/>
+    <circle cx="75.5" cy="56" r="4.2" fill="#fff"/>
+    <ellipse cx="60" cy="75" rx="7.5" ry="5.5" fill="#3A3335"/>
+    <path d="M60 80 q0 8 -11 8 M60 80 q0 8 11 8" stroke="#3A3335" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="31" cy="80" r="6" fill="#FFB3C1" opacity=".85"/>
+    <circle cx="89" cy="80" r="6" fill="#FFB3C1" opacity=".85"/>
+  </symbol>
+</svg>
+
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Daftar slide">☰</button>
+  <span class="topbar-title">➗ Pembagian • Kelas 1 SD</span>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1 / 13</span>
+  <button class="icon-btn" id="soundBtn" aria-label="Hidupkan atau matikan suara">🔊</button>
+  <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+</header>
+
+<div class="menu-overlay hidden" id="menuOverlay">
+  <div class="menu-card card">
+    <div class="menu-head"><b>Daftar Slide</b><button class="icon-btn" id="menuClose" aria-label="Tutup">✕</button></div>
+    <div class="menu-list" id="menuList"></div>
+  </div>
+</div>
+
+<div id="fx" aria-hidden="true"></div>
+
+<main id="deck">
+<!-- SLIDE 0: COVER -->
+<section class="slide active" id="slide-cover" data-title="Sampul">
+  <div class="wrap cover">
+    <span class="floaty f1">➗</span><span class="floaty f2">✖️</span><span class="floaty f3">🍢</span><span class="floaty f4">➕</span><span class="floaty f5">🍪</span>
+    <span class="kicker">Matematika • Kelas 1 SD</span>
+    <h1 class="cover-title">Ayo Belajar <span class="hl-red">Pembagian</span>!</h1>
+    <p class="cover-sub">Konsep pembagian • Hubungan dengan perkalian • Pengurangan berulang • Metode tusuk sate 🍢</p>
+    <svg class="bobo-hero" aria-hidden="true"><use href="#panda"/></svg>
+    <div class="bubble bobo-say">Hai, aku <b>Bobo</b>! 🐼 Hari ini kita akan belajar <b>konsep pembagian</b> bersama. Aku akan menemanimu di setiap slide, lho!</div>
+    <div class="cover-form">
+      <label for="namaInput">Siapa namamu?</label>
+      <input id="namaInput" maxlength="24" placeholder="Tulis namamu di sini…" autocomplete="off">
+      <button class="btn btn-primary btn-big" id="startBtn">Mulai Belajar 🚀</button>
+    </div>
+    <p class="hint">💡 Tips: gunakan tombol ← → di keyboard, geser layar di HP, atau tombol ☰ untuk lompat ke slide mana pun.</p>
+  </div>
+</section>
+
+<!-- SLIDE 1: AGENDA -->
+<section class="slide" id="slide-agenda" data-title="Rencana Belajar">
+  <div class="wrap">
+    <span class="kicker">Rencana Belajar</span>
+    <h2>Hari Ini Kita Belajar Apa Saja? 🎒</h2>
+    <div class="agenda-grid">
+      <button class="card agenda-card" data-go="2"><span class="agenda-num n-red">1</span><span><b>Apa itu pembagian?</b><small>Membagi rata, mengelompokkan, dan simbol ÷</small></span></button>
+      <button class="card agenda-card" data-go="4"><span class="agenda-num n-blue">2</span><span><b>Pembagian &amp; perkalian</b><small>Dua sahabat yang saling kebalikan</small></span></button>
+      <button class="card agenda-card" data-go="5"><span class="agenda-num n-green">3</span><span><b>Pengurangan berulang</b><small>Kurangi terus sampai habis!</small></span></button>
+      <button class="card agenda-card" data-go="6"><span class="agenda-num n-purple">4</span><span><b>Metode tusuk sate 🍢</b><small>Pembagian bersusun, misal 42 ÷ 2</small></span></button>
+      <button class="card agenda-card" data-go="7"><span class="agenda-num n-yellow">5</span><span><b>Latihan &amp; 10 soal</b><small>Latihan mendalam + soal cerita berskor</small></span></button>
+      <button class="card agenda-card" data-go="9"><span class="agenda-num n-pink">6</span><span><b>Hasil kerja &amp; refleksi</b><small>Skor, galeri karya, dan kesimpulan</small></span></button>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Klik salah satu kartu untuk langsung melompat ke topiknya, atau tekan tombol ➡️ untuk belajar berurutan ya!</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: KONSEP PEMBAGIAN -->
+<section class="slide" id="slide-konsep" data-title="Apa Itu Pembagian?">
+  <div class="wrap">
+    <span class="kicker">Materi 1</span>
+    <h2>Apa Itu <span class="hl-red">Pembagian</span>? 🍎</h2>
+    <div class="card card-red">
+      <p><b>Pembagian</b> adalah <b>membagi rata</b> atau <b>mengelompokkan</b> benda menjadi bagian-bagian yang <b>sama banyak</b>.</p>
+      <p>Contohnya: 6 apel dibagi rata ke 2 keranjang, maka tiap keranjang berisi apel yang sama banyak. Itulah pembagian: <b>6 ÷ 2 = 3</b>.</p>
+    </div>
+    <div class="card demo">
+      <div class="demo-head">
+        <b>🧪 Demo: Bagi Rata!</b>
+        <div class="demo-presets">
+          <button class="chip-mini preset-bagi on" data-total="6" data-groups="2" data-fruit="🍎">6 ÷ 2</button>
+          <button class="chip-mini preset-bagi" data-total="8" data-groups="2" data-fruit="🍓">8 ÷ 2</button>
+          <button class="chip-mini preset-bagi" data-total="10" data-groups="5" data-fruit="🍪">10 ÷ 5</button>
+        </div>
+      </div>
+      <div class="demo-stage" id="demoStage"></div>
+    </div>
+    <div class="card card-blue">
+      <p><b>Simbol pembagian</b> adalah <b>÷</b>, dibaca “dibagi”. Bisa juga ditulis dengan titik dua seperti <b>6 : 2 = 3</b>, atau disusun seperti porogapit di buku. Semuanya artinya sama!</p>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Coba tombol <b>Bagi Rata!</b> dan perhatikan: apelnya dibagikan bergantian sampai sama banyak. Coba juga preset 8 ÷ 2 dan 10 ÷ 5 ya!</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: ISTILAH -->
+<section class="slide" id="slide-istilah" data-title="Istilah Pembagian">
+  <div class="wrap">
+    <span class="kicker">Materi 2</span>
+    <h2>Tiga Kata Penting dalam Pembagian 📚</h2>
+    <div class="card eq-anatomy">
+      <div class="eq-row">
+        <div class="eq-part p-red"><span class="eq-num">12</span><span class="eq-lab">bilangan<br>yang dibagi</span></div>
+        <div class="eq-op">÷</div>
+        <div class="eq-part p-blue"><span class="eq-num">3</span><span class="eq-lab">pembagi</span></div>
+        <div class="eq-op">=</div>
+        <div class="eq-part p-green"><span class="eq-num">4</span><span class="eq-lab">hasil bagi</span></div>
+      </div>
+    </div>
+    <div class="dua-makna">
+      <div class="card card-yellow">
+        <h3>Makna 1: Membagi rata</h3>
+        <p>12 kue dibagikan ke <b>3 kelompok</b> yang sama banyak → tiap kelompok mendapat <b>4 kue</b>.</p>
+        <div class="mini-visual">
+          <div class="mini-group">🍪🍪🍪🍪<small>kelompok 1</small></div>
+          <div class="mini-group">🍪🍪🍪🍪<small>kelompok 2</small></div>
+          <div class="mini-group">🍪🍪🍪🍪<small>kelompok 3</small></div>
+        </div>
+      </div>
+      <div class="card card-green">
+        <h3>Makna 2: Mengelompokkan</h3>
+        <p>12 kue dibagi rata, tiap kelompok berisi <b>3 kue</b> → kita dapat <b>4 kelompok</b>.</p>
+        <div class="mini-visual">
+          <div class="mini-group">🍪🍪🍪<small>kelompok 1</small></div>
+          <div class="mini-group">🍪🍪🍪<small>kelompok 2</small></div>
+          <div class="mini-group">🍪🍪🍪<small>kelompok 3</small></div>
+          <div class="mini-group">🍪🍪🍪<small>kelompok 4</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Hafalkan tiga kata kunci ya: <b>bilangan yang dibagi</b>, <b>pembagi</b>, dan <b>hasil bagi</b>. Dua makna pembagian hasilnya sama-sama 4, lho!</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: HUBUNGAN PERKALIAN -->
+<section class="slide" id="slide-perkalian" data-title="Pembagian &amp; Perkalian">
+  <div class="wrap">
+    <span class="kicker">Materi 3</span>
+    <h2>Pembagian &amp; Perkalian: <span class="hl-blue">Kembar Kebalikan</span>! 🪞</h2>
+    <div class="card">
+      <p>Pembagian adalah <b>kebalikan</b> dari perkalian. Kalau kamu hafal perkaliannya, kamu bisa langsung menjawab pembagiannya — seperti melihat cermin!</p>
+    </div>
+    <div class="card array-card">
+      <div class="dotgrid" id="arrayGrid"></div>
+      <div class="array-legend" id="arrayLegend"></div>
+      <button class="btn btn-blue" id="arrayFlip">Putar Susunan! 🔄</button>
+    </div>
+    <div class="card card-yellow">
+      <h3>🏠 Rumah Keluarga Fakta (3, 4, 12)</h3>
+      <p style="margin:4px 0 0">Satu keluarga angka, empat jalan cerita. Klik kartunya untuk membuka!</p>
+      <div class="family-grid">
+        <button class="fact-card" data-f="3 × 4 = 12"><span class="front">? × ? = ?</span></button>
+        <button class="fact-card" data-f="4 × 3 = 12"><span class="front">? × ? = ?</span></button>
+        <button class="fact-card" data-f="12 ÷ 3 = 4"><span class="front">? ÷ ? = ?</span></button>
+        <button class="fact-card" data-f="12 ÷ 4 = 3"><span class="front">? ÷ ? = ?</span></button>
+      </div>
+    </div>
+    <div class="card mini-quiz">
+      <b>🎯 Ayo coba!</b> Jika <b>2 × 5 = 10</b>, maka <b>10 ÷ 2 = ?</b>
+      <div class="chips" data-yes="Betul! 10 ÷ 2 = 5, karena 5 × 2 = 10. 🎉" data-no="Belum tepat. Ingat, kebalikan dari 2 × 5 = 10 adalah 10 ÷ 2 = 5.">
+        <button data-ok="0">2</button><button data-ok="1">5</button><button data-ok="0">10</button><button data-ok="0">4</button>
+      </div>
+      <div class="chips-fb hidden"></div>
+    </div>
+    <div class="card mini-quiz">
+      <b>🎯 Satu lagi!</b> Jika <b>5 × 2 = 10</b>, maka <b>10 ÷ 5 = ?</b>
+      <div class="chips" data-yes="Pintar! 10 ÷ 5 = 2. Kamu memahami keluarga fakta! 🌟" data-no="Belum tepat. Kebalikan dari 5 × 2 = 10 adalah 10 ÷ 5 = 2.">
+        <button data-ok="0">5</button><button data-ok="1">2</button><button data-ok="0">10</button><button data-ok="0">1</button>
+      </div>
+      <div class="chips-fb hidden"></div>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Lihat dotnya: <b>3 baris berisi 4</b> bisa diputar jadi <b>4 baris berisi 3</b> — jumlahnya tetap 12! Dari situ lahir 4 persamaan keluarga fakta.</div>
+    </div>
+  </div>
+</section>
+<!-- SLIDE 5: PENGURANGAN BERULANG -->
+<section class="slide" id="slide-kurang" data-title="Pengurangan Berulang">
+  <div class="wrap">
+    <span class="kicker">Materi 4</span>
+    <h2>Pembagian = <span class="hl-red">Pengurangan Berulang</span> ➖</h2>
+    <div class="card">
+      <p><b>12 ÷ 3</b> artinya: berapa kali kita bisa <b>mengurangi 3</b> dari 12 sampai habis? Yuk, hitung bersama-bersama! Tekan tombolnya satu per satu.</p>
+    </div>
+    <div class="card kurang-lab">
+      <div class="kurang-top">
+        <div class="bignum" id="kurangNum">12</div>
+        <div class="kurang-side">
+          <div class="kurang-eq" id="kurangEq">12 ÷ 3 = ?</div>
+          <div>Sudah dikurangi: <b id="kurangCount">0</b> kali</div>
+        </div>
+      </div>
+      <div class="kurang-history" id="kurangHist"></div>
+      <div class="kurang-actions">
+        <button class="btn btn-primary" id="kurangBtn">Kurangi 3! ➖</button>
+        <button class="btn btn-ghost" id="kurangReset">Ulangi 🔁</button>
+      </div>
+      <div class="kurang-result hidden" id="kurangResult"></div>
+      <div class="kurang-presets">
+        <span>Coba soal lain:</span>
+        <button class="chip-mini preset-k" data-a="20" data-b="5">20 ÷ 5</button>
+        <button class="chip-mini preset-k" data-a="18" data-b="6">18 ÷ 6</button>
+        <button class="chip-mini preset-k" data-a="12" data-b="3">12 ÷ 3</button>
+      </div>
+    </div>
+    <div id="quiz-kurang"></div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Hitung ya: berapa kali kita mengurangi sampai angkanya jadi 0? Itulah jawaban pembagiannya! Lalu kerjakan 2 soal mini di bawah ya.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: TUSUK SATE -->
+<section class="slide" id="slide-satay" data-title="Metode Tusuk Sate">
+  <div class="wrap">
+    <span class="kicker">Materi 5</span>
+    <h2>Metode <span class="hl-red">Tusuk Sate</span> 🍢 (Pembagian Bersusun)</h2>
+    <div class="card">
+      <p>Untuk angka besar seperti <b>42 ÷ 2</b>, kita pisahkan <b>tiap angka</b>, lalu bagi satu per satu seperti menusuk sate!</p>
+      <ol class="steps-list">
+        <li><b>Pisahkan angkanya</b> (42 → 4 | 2), kerjakan dari angka depan.</li>
+        <li>Buat <b>bulatan</b> sebanyak angkanya. Setiap tusuk sate berisi <b>pembagi</b> (di sini 2).</li>
+        <li>Jumlah tusuk sate = angka hasil. <b>Jika bersisa, sisanya diletakkan di bilangan setelahnya!</b></li>
+      </ol>
+    </div>
+    <div class="satay-tabs">
+      <button class="tab active" data-satay="satay-ex1">Contoh 1: 42 ÷ 2</button>
+      <button class="tab" data-satay="satay-ex2">Contoh 2: 52 ÷ 2</button>
+    </div>
+    <div class="satay-scene card" id="satay-ex1"></div>
+    <div class="satay-scene card hidden" id="satay-ex2"></div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Tekan tombol langkah demi langkah ya! Perhatikan di Contoh 2: sisa 1 dari 5 ÷ 2 tidak dibuang, tapi diletakkan di bilangan setelahnya menjadi <b>12</b>. Ajaib, kan?</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: LATIHAN MENDALAM -->
+<section class="slide" id="slide-mendalam" data-title="Latihan Mendalam">
+  <div class="wrap">
+    <span class="kicker">Latihan</span>
+    <h2>Latihan Mendalam 💪</h2>
+    <p class="slide-lead">6 soal campuran: konsep pembagian, keluarga fakta, pengurangan berulang, dan tusuk sate. Jawab dulu, lalu buka pembahasannya!</p>
+    <div id="quiz-mendalam"></div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Kerjakan pelan-pelan, tidak perlu buru-buru. Salah tidak apa-apa, nanti langsung dibahas kok! Semangat! 🐼</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: KUIS 10 SOAL -->
+<section class="slide" id="slide-sepuluh" data-title="Kuis 10 Soal">
+  <div class="wrap">
+    <span class="kicker">Kuis</span>
+    <h2>Contoh Soal &amp; Soal Cerita 📝 (10 Soal)</h2>
+    <p class="slide-lead">Ada soal hitung biasa (contoh soal) dan soal cerita. Baca soal ceritanya <b>dua kali</b>, temukan angkanya, lalu tentukan pembagiannya!</p>
+    <div id="quiz-sepuluh"></div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Soal cerita itu seperti detektif: cari dulu <b>yang diketahui</b>, baru pilih operasi pembagiannya. Skor dan bintang menantimu di ujung! ⭐</div>
+    </div>
+  </div>
+</section>
+<!-- SLIDE 9: HASIL KERJA SISWA -->
+<section class="slide" id="slide-hasil" data-title="Hasil Kerja Siswa">
+  <div class="wrap">
+    <span class="kicker">Portofolio</span>
+    <h2>Hasil Kerja Siswa 📋</h2>
+    <div class="hasil-grid">
+      <div class="card identitas">
+        <h3>🪪 Identitas</h3>
+        <label>Nama: <input id="namaHasil" maxlength="24" placeholder="Tulis namamu…" autocomplete="off"></label>
+        <div>Tanggal: <b id="hasilTanggal">—</b></div>
+        <div>Kelas: <b>1 SD</b> • Materi: <b>Konsep Pembagian</b></div>
+      </div>
+      <div class="card skor-card">
+        <h3>⭐ Skor Latihan</h3>
+        <div id="skorList"></div>
+        <div id="skorTotal"></div>
+      </div>
+    </div>
+    <div class="card galeri">
+      <h3>🖼️ Galeri Karya Siswa</h3>
+      <p>Tuliskan pekerjaanmu di buku (misalnya 42 ÷ 2 dengan tusuk sate), lalu unggah fotonya di sini untuk dipajang bersama Bobo!</p>
+      <label class="upload-btn">📷 Pilih Foto Karya<input type="file" id="fileInput" accept="image/*" multiple hidden></label>
+      <div class="gal-grid" id="galGrid"></div>
+      <p class="hint">Catatan: foto hanya tampil di halaman ini selama terbuka, tidak dikirim ke internet. Untuk menyimpan permanen, simpan fotonya di galeri HP/guru.</p>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Ini hasil kerjamu hari ini, otomatis dari latihan yang sudah kamu kerjakan. Jangan lupa unggah foto karyamu ya, aku sudah menyiapkan ruang pajangan!</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: KESIMPULAN -->
+<section class="slide" id="slide-kesimpulan" data-title="Kesimpulan">
+  <div class="wrap">
+    <span class="kicker">Kesimpulan</span>
+    <h2>Ingat 5 Hal Ini! 🧠</h2>
+    <div class="agenda-grid">
+      <div class="card card-red"><h3>1️⃣ Pembagian itu membagi rata</h3><p>Pembagian = membagi benda menjadi bagian yang <b>sama banyak</b>, atau mengelompokkan benda.</p></div>
+      <div class="card card-yellow"><h3>2️⃣ Tiga kata penting</h3><p><b>12 ÷ 3 = 4</b>: 12 bilangan yang dibagi, 3 pembagi, 4 hasil bagi.</p></div>
+      <div class="card card-blue"><h3>3️⃣ Kebalikan perkalian</h3><p>Kalau <b>3 × 4 = 12</b>, maka <b>12 ÷ 3 = 4</b> dan <b>12 ÷ 4 = 3</b>. Hafal perkalian = mudah membagi!</p></div>
+      <div class="card card-green"><h3>4️⃣ Pengurangan berulang</h3><p>12 ÷ 3 bisa dijawab dengan mengurangi 3 terus-menerus: 12 → 9 → 6 → 3 → 0, yaitu <b>4 kali</b>.</p></div>
+      <div class="card" style="background:#F3EAFF"><h3>5️⃣ Tusuk sate 🍢</h3><p>Pisahkan angka, bagi tiap angka dengan tusuk berisi pembagi. <b>42 ÷ 2 = 21</b>, dan jika bersisa, sisanya diletakkan di bilangan setelahnya (<b>52 ÷ 2 = 26</b>).</p></div>
+    </div>
+    <div class="card eq-anatomy">
+      <div class="eq-row">
+        <div class="eq-part p-green"><span class="eq-num">42 ÷ 2 = 21</span></div>
+        <div class="eq-part p-green"><span class="eq-num">52 ÷ 2 = 26</span></div>
+        <div class="eq-part p-green"><span class="eq-num">12 ÷ 3 = 4</span></div>
+      </div>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble">Itulah bekal pembagianmu hari ini! Kalau lupa, kembali ke slide tusuk sate dan ulangi langkahnya ya.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11: REFLEKSI -->
+<section class="slide" id="slide-refleksi" data-title="Refleksi">
+  <div class="wrap">
+    <span class="kicker">Refleksi</span>
+    <h2>Ayo Ceritakan Perasaanmu! 💭</h2>
+    <div class="card">
+      <h3>Bagaimana perasaanmu belajar pembagian hari ini?</h3>
+      <div class="mood-row" id="moodRow">
+        <button class="mood-btn" data-m="😄"><span class="m-emoji">😄</span>Mantap!</button>
+        <button class="mood-btn" data-m="🙂"><span class="m-emoji">🙂</span>Senang</button>
+        <button class="mood-btn" data-m="😐"><span class="m-emoji">😐</span>Biasa saja</button>
+        <button class="mood-btn" data-m="😟"><span class="m-emoji">😟</span>Masih bingung</button>
+      </div>
+      <div class="chips-fb hidden" id="moodFb"></div>
+    </div>
+    <div class="card card-green">
+      <h3>✅ Ceklis: “Aku bisa…”</h3>
+      <div class="cando" id="candoList">
+        <label><input type="checkbox" value="membaca simbol ÷"> Membaca dan menulis simbol pembagian ÷</label>
+        <label><input type="checkbox" value="membagi rata"> Membagi benda menjadi kelompok sama banyak</label>
+        <label><input type="checkbox" value="pengurangan berulang"> Memakai pengurangan berulang untuk membagi</label>
+        <label><input type="checkbox" value="tusuk sate"> Memakai metode tusuk sate (misal 42 ÷ 2)</label>
+        <label><input type="checkbox" value="soal cerita"> Menyelesaikan soal cerita pembagian</label>
+      </div>
+    </div>
+    <div class="card refleksi-form">
+      <h3>✏️ Tulis Refleksimu</h3>
+      <label>Hari ini aku belajar…<textarea id="refTeks1" placeholder="Contoh: aku belajar membagi 42 ÷ 2 dengan tusuk sate…"></textarea></label>
+      <label>Hal yang masih ingin aku pelajari…<textarea id="refTeks2" placeholder="Contoh: aku ingin mencoba pembagian dengan angka yang lebih besar…"></textarea></label>
+      <button class="btn btn-primary" id="refSave">Simpan Refleksi 💾</button>
+      <div class="toast hidden" id="refToast">Tersimpan ✓</div>
+    </div>
+    <div class="mascot-bar">
+      <svg class="bobo" aria-hidden="true"><use href="#panda"/></svg>
+      <div class="bubble" id="moodBobo">Pilih emoji perasaanmu, centang yang bisa kamu lakukan, lalu tulis ceritamu. Aku membaca semuanya, lho! 🐼</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12: THANK YOU -->
+<section class="slide" id="slide-thanks" data-title="Sampai Jumpa!">
+  <div class="wrap cover thanks-wrap">
+    <span class="floaty f1">🎉</span><span class="floaty f2">⭐</span><span class="floaty f3">🍢</span><span class="floaty f4">🎊</span>
+    <svg class="bobo-hero" aria-hidden="true"><use href="#panda"/></svg>
+    <h1 class="thanks-title">Thank You <span class="hl-red">for Today</span>! 🎉</h1>
+    <p class="thanks-sub">Terima kasih sudah belajar pembagian bersama Bobo hari ini. Kamu luar biasa — sampai jumpa di materi berikutnya! 👋🐼</p>
+    <div class="thanks-actions">
+      <button class="btn btn-ghost" data-go="0">🔁 Ulangi dari Awal</button>
+      <button class="btn btn-blue" data-go="6">🍢 Pelajari Tusuk Sate Lagi</button>
+      <button class="btn btn-primary" data-go="9">📋 Lihat Hasil Kerja</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="nav-btns">
+  <button class="nav-btn" id="btnPrev" aria-label="Slide sebelumnya">⬅️</button>
+  <button class="nav-btn" id="btnNext" aria-label="Slide berikutnya">➡️</button>
+</div>
+<style>
+.nav-btns{position:fixed; right:14px; bottom:14px; z-index:60; display:flex; gap:10px;}
+.nav-btn{
+  width:56px; height:56px; border-radius:50%; border:3px solid var(--ink); font-size:1.4rem;
+  background:#fff; box-shadow:0 5px 0 var(--shadow); display:flex; align-items:center; justify-content:center;
+  transition:transform .08s;
+}
+.nav-btn:active{transform:translateY(3px); box-shadow:0 2px 0 var(--shadow);}
+</style>
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+const LS_NAMA = 'bobo-nama', LS_REF = 'bobo-refleksi';
+const appState = { nama:'', scores:{ kurang:null, mendalam:null, sepuluh:null }, refleksi:null };
+try {
+  appState.nama = localStorage.getItem(LS_NAMA) || '';
+  appState.refleksi = JSON.parse(localStorage.getItem(LS_REF) || 'null');
+} catch(e) { appState.refleksi = null; }
+
+/* ================= AUDIO ================= */
+let audioCtx = null, muted = false;
+function ac() {
+  if (!audioCtx) { const C = window.AudioContext || window.webkitAudioContext; if (C) audioCtx = new C(); }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function tone(f, dur, type, vol, when) {
+  if (muted) return;
+  try {
+    const c = ac(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine'; o.frequency.value = f;
+    const t0 = c.currentTime + (when || 0);
+    g.gain.setValueAtTime(vol || 0.2, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  } catch(e) {}
+}
+function sfx(name) {
+  if (name === 'correct') [523.25, 659.25, 783.99].forEach((f,i)=>tone(f, .18, 'triangle', .22, i*.09));
+  else if (name === 'wrong') { tone(196, .3, 'sawtooth', .12); tone(147, .35, 'sawtooth', .1, .13); }
+  else if (name === 'click') tone(660, .06, 'square', .05);
+  else if (name === 'pop') tone(880, .08, 'sine', .14);
+  else if (name === 'fanfare') [523, 659, 784, 1047].forEach((f,i)=>tone(f, .22, 'triangle', .2, i*.13));
+}
+document.addEventListener('pointerdown', () => ac(), { once:true });
+$('soundBtn').onclick = () => { muted = !muted; $('soundBtn').textContent = muted ? '🔇' : '🔊'; if (!muted) sfx('click'); };
+
+/* ================= CONFETTI ================= */
+const CF_COLORS = ['#FF6B6B','#FFD166','#4D96FF','#43D9A3','#B388FF','#FF8FAB'];
+function confettiFire(n) {
+  const fx = $('fx'); n = n || 70;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('i');
+    s.className = 'cf';
+    s.style.left = (Math.random()*100) + 'vw';
+    s.style.background = CF_COLORS[Math.floor(Math.random()*CF_COLORS.length)];
+    s.style.animationDelay = (Math.random()*0.5) + 's';
+    s.style.animationDuration = (1.6 + Math.random()*1.5) + 's';
+    fx.appendChild(s);
+    setTimeout(() => s.remove(), 4200);
+  }
+}
+
+/* ================= DECK ENGINE ================= */
+const slideEls = Array.from(document.querySelectorAll('.slide'));
+let cur = 0;
+const dotsWrap = $('dots');
+slideEls.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'dot'; b.setAttribute('aria-label', 'Slide ' + (i+1) + ': ' + (s.dataset.title||''));
+  b.onclick = () => { sfx('click'); go(i); };
+  dotsWrap.appendChild(b);
+});
+const dots = Array.from(dotsWrap.children);
+const menuList = $('menuList');
+slideEls.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'menu-item';
+  b.innerHTML = '<span class="mn">' + (i+1) + '</span><span>' + (s.dataset.title || ('Slide ' + (i+1))) + '</span>';
+  b.onclick = () => { sfx('click'); $('menuOverlay').classList.add('hidden'); go(i); };
+  menuList.appendChild(b);
+});
+function go(i) {
+  if (i < 0 || i >= slideEls.length) return;
+  slideEls[cur].classList.remove('active');
+  cur = i;
+  slideEls[cur].classList.add('active');
+  dots.forEach((d, j) => d.classList.toggle('on', j === i));
+  Array.from(menuList.children).forEach((m, j) => m.classList.toggle('on', j === i));
+  $('counter').textContent = (i+1) + ' / ' + slideEls.length;
+  $('pbar').style.width = ((i+1) / slideEls.length * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const hook = hooks[slideEls[cur].id];
+  if (hook) hook();
+}
+function next() { sfx('click'); go(Math.min(cur+1, slideEls.length-1)); }
+function prev() { sfx('click'); go(Math.max(cur-1, 0)); }
+$('btnNext').onclick = next;
+$('btnPrev').onclick = prev;
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') next();
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
+  else if (e.key === 'Escape') $('menuOverlay').classList.add('hidden');
+});
+let touchX = 0;
+document.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive:true });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 65 && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { dx < 0 ? next() : prev(); }
+}, { passive:true });
+$('menuBtn').onclick = () => { sfx('click'); $('menuOverlay').classList.remove('hidden'); };
+$('menuClose').onclick = () => { sfx('click'); $('menuOverlay').classList.add('hidden'); };
+$('menuOverlay').addEventListener('click', (e) => { if (e.target === $('menuOverlay')) $('menuOverlay').classList.add('hidden'); });
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { sfx('click'); go(+b.dataset.go); }));
+
+/* ================= COVER ================= */
+const namaInput = $('namaInput');
+if (appState.nama) namaInput.value = appState.nama;
+function syncName(value) {
+  appState.nama = (value || '').trim();
+  try { localStorage.setItem(LS_NAMA, appState.nama); } catch(e) {}
+  const nh = $('namaHasil'); if (nh && nh.value !== appState.nama) nh.value = appState.nama;
+}
+namaInput.addEventListener('input', () => syncName(namaInput.value));
+$('startBtn').onclick = () => { sfx('fanfare'); confettiFire(50); go(1); };
+
+/* ================= DEMO BAGI RATA ================= */
+const demoStage = $('demoStage');
+function demoRun(total, groups, fruit) {
+  let running = false;
+  demoStage.innerHTML =
+    '<div class="fruit-row">' + fruit.repeat(total) + '</div>' +
+    '<div class="demo-hint">Tekan <b>Bagi Rata!</b> — benda akan dibagikan bergantian ke tiap wadah.</div>' +
+    '<div class="baskets-row" id="basketsRow"></div>' +
+    '<div class="demo-eq hidden" id="demoEq"></div>' +
+    '<button class="btn btn-primary" id="demoBtn">Bagi Rata! ✋</button>';
+  const row = $('basketsRow');
+  for (let g = 0; g < groups; g++) {
+    const b = document.createElement('div');
+    b.className = 'basket';
+    b.innerHTML = '<div class="basket-items"></div><div class="basket-cap">Wadah ' + (g+1) + ': <b>0</b></div>';
+    row.appendChild(b);
+  }
+  const demoBtn = $('demoBtn');
+  demoBtn.onclick = () => {
+    if (running) return;
+    running = true;
+    $('demoBtn').disabled = true;
+    const baskets = Array.from(row.querySelectorAll('.basket'));
+    const caps = baskets.map(b => b.querySelector('b'));
+    for (let i = 0; i < total; i++) {
+      setTimeout(() => {
+        const t = document.createElement('span');
+        t.className = 'pop'; t.textContent = fruit;
+        baskets[i % groups].querySelector('.basket-items').appendChild(t);
+        caps[i % groups].textContent = (+caps[i % groups].textContent + 1);
+        sfx('pop');
+      }, 260 * i);
+    }
+    setTimeout(() => {
+      const eq = $('demoEq');
+      eq.innerHTML = total + ' ÷ ' + groups + ' = <span>' + (total/groups) + '</span> — semua wadah sama banyak! ✅';
+      eq.classList.remove('hidden');
+      sfx('correct');
+      demoBtn.textContent = 'Ulangi 🔁';
+      demoBtn.disabled = false;
+      running = false;
+    }, 260 * total + 350);
+  };
+}
+document.querySelectorAll('.preset-bagi').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.preset-bagi').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  sfx('click');
+  demoRun(+b.dataset.total, +b.dataset.groups, b.dataset.fruit);
+}));
+demoRun(6, 2, '🍎');
+
+/* ================= ARRAY PERKALIAN ================= */
+let arrRows = 3, arrCols = 4;
+function renderArray() {
+  const grid = $('arrayGrid');
+  let html = '';
+  for (let r = 0; r < arrRows; r++) {
+    html += '<div class="dotrow">';
+    for (let c = 0; c < arrCols; c++) html += '<span class="array-dot pop" style="animation-delay:' + ((r*arrCols+c)*0.03) + 's"></span>';
+    html += '</div>';
+  }
+  grid.innerHTML = html;
+  $('arrayLegend').textContent = arrRows + ' baris × ' + arrCols + ' tiap baris = ' + (arrRows*arrCols) + '  →  ' + (arrRows*arrCols) + ' ÷ ' + arrRows + ' = ' + arrCols;
+}
+$('arrayFlip').onclick = () => { sfx('pop'); const t = arrRows; arrRows = arrCols; arrCols = t; renderArray(); };
+renderArray();
+document.querySelectorAll('.fact-card').forEach(c => c.addEventListener('click', () => {
+  c.classList.toggle('open');
+  c.innerHTML = c.classList.contains('open') ? c.dataset.f : '<span class="front">' + (c.dataset.f.includes('÷') ? '? ÷ ? = ?' : '? × ? = ?') + '</span>';
+  sfx('pop');
+}));
+
+/* ================= CHIPS (latihan terbimbing) ================= */
+document.querySelectorAll('.chips[data-yes]').forEach(c => {
+  const fb = c.parentElement.querySelector('.chips-fb');
+  c.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b || c.classList.contains('done')) return;
+    c.classList.add('done');
+    const ok = b.dataset.ok === '1';
+    Array.from(c.children).forEach(x => { x.disabled = true; });
+    b.classList.add(ok ? 'correct' : 'wrong');
+    if (!ok) { const r = c.querySelector('[data-ok="1"]'); if (r) r.classList.add('correct'); }
+    fb.textContent = ok ? c.dataset.yes : c.dataset.no;
+    fb.classList.remove('hidden', 'ok', 'no');
+    fb.classList.add(ok ? 'ok' : 'no');
+    sfx(ok ? 'correct' : 'wrong');
+  });
+});
+</script>
+<script>
+/* ================= PENGURANGAN BERULANG ================= */
+const kurang = { a:12, b:3, n:12, count:0, hist:[], celebrated:false };
+function kurangRender() {
+  $('kurangNum').textContent = kurang.n;
+  $('kurangCount').textContent = kurang.count;
+  $('kurangEq').textContent = kurang.a + ' ÷ ' + kurang.b + ' = ?';
+  $('kurangBtn').textContent = 'Kurangi ' + kurang.b + '! ➖';
+  $('kurangHist').innerHTML = kurang.hist.length
+    ? kurang.hist.map((h, i) => '<span class="hist-chip">' + h + ' <small>(' + (i+1) + '×)</small></span>').join('')
+    : '<span class="muted">Belum ada pengurangan… tekan tombol oranye!</span>';
+  const res = $('kurangResult');
+  if (kurang.n === 0 && kurang.count > 0) {
+    res.classList.remove('hidden');
+    res.innerHTML = '🎉 <b>Selesai!</b> ' + kurang.a + ' dikurangi ' + kurang.b + ' sebanyak <b>' + kurang.count + ' kali</b> sampai habis. Jadi <b>' + kurang.a + ' ÷ ' + kurang.b + ' = ' + kurang.count + '</b>!';
+    $('kurangBtn').disabled = true;
+    if (!kurang.celebrated) { kurang.celebrated = true; sfx('fanfare'); confettiFire(45); }
+  } else {
+    res.classList.add('hidden');
+    $('kurangBtn').disabled = false;
+  }
+}
+function kurangSet(a, b) { kurang.a = a; kurang.b = b; kurang.n = a; kurang.count = 0; kurang.hist = []; kurang.celebrated = false; kurangRender(); }
+$('kurangBtn').onclick = () => {
+  if (kurang.n <= 0) return;
+  const prevN = kurang.n;
+  kurang.n -= kurang.b;
+  kurang.count++;
+  kurang.hist.push(prevN + ' − ' + kurang.b + ' = ' + kurang.n);
+  const num = $('kurangNum');
+  num.classList.remove('bump'); void num.offsetWidth; num.classList.add('bump');
+  sfx('pop');
+  kurangRender();
+};
+$('kurangReset').onclick = () => { sfx('click'); kurangSet(kurang.a, kurang.b); };
+document.querySelectorAll('.preset-k').forEach(b => b.addEventListener('click', () => { sfx('click'); kurangSet(+b.dataset.a, +b.dataset.b); }));
+kurangRender();
+
+/* ================= METODE TUSUK SATE ================= */
+function dotsRow(n, cls) {
+  let s = '';
+  for (let i = 0; i < n; i++) s += '<i class="meat dot ' + (cls||'') + '" style="animation-delay:' + (i*0.05) + 's"></i>';
+  return '<div class="dots-row">' + s + '</div>';
+}
+function skewersRow(n, per) {
+  let s = '';
+  for (let i = 0; i < n; i++) {
+    let m = '';
+    for (let p = 0; p < per; p++) m += '<i class="meat" style="animation-delay:' + (i*0.1 + p*0.08) + 's"></i>';
+    s += '<div class="skewer">' + m + '</div>';
+  }
+  return '<div class="skewers">' + s + '</div>';
+}
+function resHTML(eq, check, poro) {
+  return '<div class="res-eq">' + eq + '</div><div class="res-check">Cek: ' + check + '</div><pre class="poro">' + poro + '</pre>';
+}
+function makeSatay(rootId, digits, div, steps) {
+  const root = $(rootId);
+  root.innerHTML =
+    '<div class="satay-head"><span class="satay-expr">' + digits.join('') + ' ÷ ' + div + ' = ?</span>' +
+    '<span class="satay-badge">Tusuk sate berisi ' + div + ' 🍢</span></div>' +
+    '<div class="digit-row" id="' + rootId + '-digits"></div>' +
+    '<div class="q-row" id="' + rootId + '-q"></div>' +
+    '<div class="work-row">' +
+      '<div class="work" id="' + rootId + '-w0"><span class="work-label">Angka depan: ' + digits[0] + '</span></div>' +
+      '<div class="work" id="' + rootId + '-w1"><span class="work-label">Angka belakang: ' + digits[1] + '</span></div>' +
+    '</div>' +
+    '<div class="satay-note" id="' + rootId + '-note">Tekan tombol di bawah untuk mulai!</div>' +
+    '<div class="satay-result hidden" id="' + rootId + '-res"></div>' +
+    '<div class="satay-ctrl"><button class="btn btn-primary" id="' + rootId + '-btn">Mulai ▶</button></div>';
+  const digitsEl = $(rootId + '-digits');
+  digits.forEach(d => digitsEl.insertAdjacentHTML('beforeend', '<div class="digitbox">' + d + '</div>'));
+  const qEl = $(rootId + '-q');
+  digits.forEach(() => qEl.insertAdjacentHTML('beforeend', '<div class="qslot">?</div>'));
+  const btn = $(rootId + '-btn'), note = $(rootId + '-note');
+  let i = -1;
+  function reset() {
+    digitsEl.classList.remove('split');
+    qEl.querySelectorAll('.qslot').forEach(q => { q.textContent = '?'; q.classList.remove('fill'); });
+    $(rootId + '-w0').innerHTML = '<span class="work-label">Angka depan: ' + digits[0] + '</span>';
+    $(rootId + '-w1').innerHTML = '<span class="work-label">Angka belakang: ' + digits[1] + '</span>';
+    $(rootId + '-res').classList.add('hidden');
+    note.textContent = 'Tekan tombol di bawah untuk mulai!';
+    btn.textContent = 'Mulai ▶';
+  }
+  function paint(st) {
+    if (st.split) digitsEl.classList.add('split');
+    if (st.clearWork) { $(rootId + '-w0').innerHTML = ''; $(rootId + '-w1').innerHTML = ''; }
+    if (st.work !== undefined) $(rootId + '-w' + (st.slot || 0)).innerHTML = st.work;
+    if (st.q !== undefined) { const q = qEl.children[st.qslot]; q.textContent = st.q; q.classList.add('fill'); }
+    if (st.result) { const r = $(rootId + '-res'); r.classList.remove('hidden'); r.innerHTML = st.result; }
+  }
+  btn.onclick = () => {
+    sfx('click');
+    i++;
+    if (i >= steps.length) { i = -1; reset(); return; }
+    const st = steps[i];
+    paint(st);
+    note.innerHTML = st.note || '';
+    btn.textContent = st.btn || 'Lanjut ▶';
+    if (st.sfx) sfx(st.sfx);
+    if (st.party) confettiFire(60);
+  };
+}
+makeSatay('satay-ex1', ['4','2'], 2, [
+  { note:'Ini <b>42</b> dan pembaginya <b>2</b>. Ayo bagi dengan metode tusuk sate!', btn:'Pisahkan angkanya ✂️' },
+  { split:true, note:'42 dipisah menjadi <b>4</b> dan <b>2</b>. Kerjakan dari angka depan: <b>4</b> dulu!', btn:'Siapkan bulatan 🔵', sfx:'pop' },
+  { clearWork:true, work:dotsRow(4), slot:0, note:'Angka 4 → buat <b>4 bulatan</b>. Setiap tusuk sate berisi <b>2</b> bulatan (pembaginya 2).', btn:'Tusuk sate! 🍢' },
+  { work:skewersRow(2,2) + '<span class="sisa">sisa 0</span>', slot:0, q:2, qslot:0, note:'4 bulatan dibagi ke tusuk sate berisi 2 → dapat <b>2 tusuk</b>. Jadi <b>4 ÷ 2 = 2, sisa 0</b>. Tulis <b>2</b> di hasil!', btn:'Lanjut ke angka 2 ▶', sfx:'correct' },
+  { work:'<div class="carry">sisa 0 diletakkan di bilangan setelahnya → 0 + 2 = <b>2</b></div>' + dotsRow(2), slot:1, note:'Sisa 0 digabung dengan angka 2 → tetap <b>2</b>. Siapkan 2 bulatan!', btn:'Tusuk sate! 🍢', sfx:'pop' },
+  { work:skewersRow(1,2), slot:1, q:1, qslot:1, note:'2 bulatan ÷ isi 2 → dapat <b>1 tusuk</b>. Jadi <b>2 ÷ 2 = 1</b>. Tulis <b>1</b>!', btn:'Lihat hasilnya 🎉', sfx:'correct' },
+  { result:resHTML('42 ÷ 2 = 21', '21 × 2 = 42 ✓', '  21\n2)42'), party:true, note:'Hebat! <b>42 ÷ 2 = 21</b> — ada 21 tusuk sate, tiap tusuk berisi 2. Sekarang coba Contoh 2 di tab atas!', btn:'Ulangi 🔁', sfx:'fanfare' }
+]);
+makeSatay('satay-ex2', ['5','2'], 2, [
+  { note:'Sekarang <b>52 ÷ 2</b>. Caranya sama, tapi hati-hati: 5 tidak bisa dibagi 2 rata!', btn:'Pisahkan angkanya ✂️' },
+  { split:true, note:'52 dipisah menjadi <b>5</b> dan <b>2</b>. Mulai dari angka depan: <b>5</b>!', btn:'Siapkan bulatan 🔵', sfx:'pop' },
+  { clearWork:true, work:dotsRow(5), slot:0, note:'Angka 5 → buat <b>5 bulatan</b>. Tiap tusuk sate berisi 2.', btn:'Tusuk sate! 🍢' },
+  { work:skewersRow(2,2) + '<span class="sisa hot">sisa 1 ⚠️</span>', slot:0, q:2, qslot:0, note:'5 ÷ 2 = <b>2 tusuk</b>, tetapi <b>bersisa 1</b>! Tulis <b>2</b> di hasil. Sisa jangan dibuang ya!', btn:'Pindahkan sisanya ➡️', sfx:'correct' },
+  { work:'<div class="carry">sisa 1 diletakkan di bilangan setelahnya → 1 &amp; 2 menjadi <b>12</b></div>' + dotsRow(12, 'small'), slot:1, note:'Sisa 1 diletakkan di bilangan setelahnya: digabung dengan angka 2 menjadi <b>12</b>! Sekarang kerjakan 12 bulatan.', btn:'Tusuk sate! 🍢', sfx:'pop' },
+  { work:skewersRow(6,2), slot:1, q:6, qslot:1, note:'12 ÷ 2 = <b>6 tusuk</b> (tiap tusuk berisi 2). Tulis <b>6</b> di hasil!', btn:'Lihat hasilnya 🎉', sfx:'correct' },
+  { result:resHTML('52 ÷ 2 = 26', '26 × 2 = 52 ✓', '  26\n2)52'), party:true, note:'Mantap! <b>52 ÷ 2 = 26</b>. Ingat aturan emasnya: <b>kalau bersisa, sisanya diletakkan di bilangan setelahnya!</b>', btn:'Ulangi 🔁', sfx:'fanfare' }
+]);
+document.querySelectorAll('.tab[data-satay]').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab[data-satay]').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  $('satay-ex1').classList.toggle('hidden', t.dataset.satay !== 'satay-ex1');
+  $('satay-ex2').classList.toggle('hidden', t.dataset.satay !== 'satay-ex2');
+  sfx('click');
+}));
+</script>
+<script>
+/* ================= DATA SOAL ================= */
+const KURANG_Q = [
+  { q:'20 ÷ 4 — kalau 20 terus-menerus dikurangi 4, berapa <b>kali</b> pengurangan sampai habis (0)?',
+    choices:['3 kali','4 kali','5 kali','6 kali'], a:2,
+    steps:['20 − 4 = 16 (1 kali)','16 − 4 = 12 (2 kali)','12 − 4 = 8 (3 kali)','8 − 4 = 4 (4 kali)','4 − 4 = 0 (5 kali) → jadi 20 ÷ 4 = 5'] },
+  { q:'18 ÷ 3 = ?',
+    choices:['5','6','7','8'], a:1,
+    steps:['Kurangi 3 terus-menerus: 18 → 15 → 12 → 9 → 6 → 3 → 0, yaitu 6 kali.','Cek dengan perkalian: 6 × 3 = 18 ✓'] }
+];
+const MENDALAM_Q = [
+  { q:'6 ÷ 2 = ?', choices:['2','3','4','6'], a:1,
+    steps:['Bagi 6 apel ke 2 wadah sama banyak → tiap wadah 3.','Cek: 3 × 2 = 6 ✓'] },
+  { q:'14 ÷ 2 = ?', choices:['5','6','7','8'], a:2,
+    steps:['Ingat: 7 × 2 = 14, jadi 14 ÷ 2 = 7.','Cek dengan pengurangan: 14 − 2 sebanyak 7 kali sampai 0 ✓'] },
+  { q:'Jika <b>4 × 3 = 12</b>, maka <b>12 ÷ 3 = ?</b>', choices:['3','4','6','12'], a:1,
+    steps:['Pembagian adalah kebalikan perkalian.','4 × 3 = 12 → 12 ÷ 3 = 4.','Keluarga fakta: 4×3=12, 3×4=12, 12÷3=4, 12÷4=3.'] },
+  { q:'15 ÷ 3 — berapa <b>kali</b> kita mengurangi 3 sampai habis?', choices:['3 kali','4 kali','5 kali','6 kali'], a:2,
+    steps:['15 − 3 = 12 (1×)','12 − 3 = 9 (2×)','9 − 3 = 6 (3×)','6 − 3 = 3 (4×)','3 − 3 = 0 (5×) → 15 ÷ 3 = 5'] },
+  { q:'Metode tusuk sate: <b>28 ÷ 2</b>. Angka depan 2 ÷ 2 = 1 (sisa 0), lalu 8 ÷ 2 = 4. Hasil akhirnya?', choices:['14','41','12','24'], a:0,
+    steps:['Pisahkan: 2 dan 8.','2 bulatan ÷ isi 2 → 1 tusuk. Tulis 1, sisa 0.','Sisa 0 + 8 = 8 → 8 bulatan ÷ isi 2 → 4 tusuk. Tulis 4.','Hasil: 14. Cek: 14 × 2 = 28 ✓'] },
+  { q:'Metode tusuk sate: <b>52 ÷ 2</b>. 5 ÷ 2 = 2 sisa 1, sisa 1 diletakkan di bilangan setelahnya menjadi 12. Hasil akhirnya?', choices:['26','62','25','16'], a:0,
+    steps:['5 bulatan → 2 tusuk berisi 2, sisa 1. Tulis 2.','Sisa 1 diletakkan di bilangan setelahnya → menjadi 12.','12 ÷ 2 = 6 tusuk. Tulis 6.','Hasil: 26. Cek: 26 × 2 = 52 ✓'] }
+];
+const SEPULUH_Q = [
+  { tag:'Contoh Soal', q:'8 ÷ 2 = ?', choices:['2','3','4','6'], a:2,
+    steps:['4 × 2 = 8, jadi 8 ÷ 2 = 4.','Atau kurangi 2 terus: 8→6→4→2→0, yaitu 4 kali.'] },
+  { tag:'Contoh Soal', q:'15 ÷ 3 = ?', choices:['4','5','6','3'], a:1,
+    steps:['5 × 3 = 15 → 15 ÷ 3 = 5.','Pengurangan berulang 5 kali: 15→12→9→6→3→0.'] },
+  { tag:'Soal Cerita', q:'Bu Guru membagi <b>12 penghapus</b> sama banyak ke <b>4 meja</b> kelompok. Berapa penghapus di tiap meja?', choices:['2','3','4','6'], a:1,
+    steps:['Yang diketahui: 12 penghapus, dibagi ke 4 meja.','12 ÷ 4 = 3.','Tiap meja mendapat 3 penghapus. Cek: 3 × 4 = 12 ✓'] },
+  { tag:'Contoh Soal', q:'24 ÷ 2 = ? <i>(pakai tusuk sate)</i>', choices:['12','21','14','24'], a:0,
+    steps:['Pisahkan: 2 dan 4.','2 ÷ 2 = 1 tusuk. Tulis 1, sisa 0.','Sisa 0 + 4 = 4 → 4 ÷ 2 = 2 tusuk. Tulis 2.','Hasil: 12. Cek: 12 × 2 = 24 ✓'] },
+  { tag:'Soal Cerita', q:'Ada <b>18 stroberi</b>. Setiap kantong diisi <b>6 stroberi</b>. Berapa banyak kantong yang terisi?', choices:['2','3','4','6'], a:1,
+    steps:['Tiap kantong 6 stroberi → 18 ÷ 6.','6 × 3 = 18, jadi 18 ÷ 6 = 3.','Ada 3 kantong terisi stroberi.'] },
+  { tag:'Contoh Soal', q:'10 ÷ 5 = ?', choices:['2','4','5','10'], a:0,
+    steps:['2 × 5 = 10 → 10 ÷ 5 = 2.','10 − 5 = 5, 5 − 5 = 0 → dikurangi 2 kali.'] },
+  { tag:'Soal Cerita', q:'<b>20 siswa</b> dibagi rata menjadi beberapa kelompok. Tiap kelompok berisi <b>4 siswa</b>. Berapa banyak kelompok?', choices:['4','5','6','8'], a:1,
+    steps:['Yang diketahui: 20 siswa, tiap kelompok 4 siswa.','20 ÷ 4 = 5, karena 4 × 5 = 20.','Jadi ada 5 kelompok.'] },
+  { tag:'Contoh Soal', q:'36 ÷ 3 = ?', choices:['12','13','21','18'], a:0,
+    steps:['Tusuk sate: pisahkan 3 dan 6.','3 ÷ 3 = 1 (sisa 0). Tulis 1.','6 ÷ 3 = 2. Tulis 2.','Hasil: 12. Cek: 12 × 3 = 36 ✓'] },
+  { tag:'Soal Cerita', q:'Rara punya <b>21 permen</b>. Semua permen dibagi sama banyak kepada <b>3 temannya</b>. Tiap teman mendapat … permen.', choices:['6','7','8','9'], a:1,
+    steps:['Yang diketahui: 21 permen, dibagi ke 3 teman.','21 ÷ 3 = 7, karena 7 × 3 = 21.','Tiap teman mendapat 7 permen.'] },
+  { tag:'Soal Cerita', q:'Pak Danu memetik <b>42 jeruk</b>. Jeruk ditata sama banyak ke dalam <b>2 keranjang</b>. Tiap keranjang berisi … jeruk.', choices:['12','21','24','42'], a:1,
+    steps:['Yang diketahui: 42 jeruk, 2 keranjang sama banyak.','Tusuk sate: 42 ÷ 2 → 4 ÷ 2 = 2 (sisa 0), lalu 2 ÷ 2 = 1 → 21.','Tiap keranjang berisi 21 jeruk. Cek: 21 × 2 = 42 ✓'] }
+];
+
+/* ================= QUIZ ENGINE ================= */
+const YES_MSGS = ['Hebat! 🎉','Betul sekali! 🌟','Keren, kamu bisa! 👏','Pintar! Kamu anak pembagian! 🐼'];
+const NO_MSGS = ['Ayo pelajari pembahasannya 🐼','Tidak apa-apa, kita belajar bareng! 💪','Hampir! Lihat langkahnya ya.'];
+function starHTML(n) { return '★'.repeat(n) + '☆'.repeat(Math.max(0, 5-n)); }
+function starsFor(b, t) { return t ? Math.round(b / t * 5) : 0; }
+function createQuiz(cfg) {
+  const host = $(cfg.host);
+  if (!host) return;
+  let curQ = 0, correct = 0, answered = false;
+  function render() {
+    if (curQ >= cfg.data.length) { finish(); return; }
+    const q = cfg.data[curQ];
+    answered = false;
+    host.innerHTML =
+      '<div class="quiz-top"><span class="qnum">Soal ' + (curQ+1) + ' dari ' + cfg.data.length + '</span><span class="qscore">✔ Benar: ' + correct + '</span></div>' +
+      '<div class="card qcard">' +
+        (q.tag ? '<span class="qtag ' + (q.tag === 'Soal Cerita' ? 't-green' : 't-blue') + '">' + q.tag + '</span>' : '') +
+        '<div class="qtext">' + q.q + '</div>' +
+        '<div class="qchoices">' + q.choices.map((c, i) => '<button class="chip-ans" data-i="' + i + '">' + c + '</button>').join('') + '</div>' +
+        '<div class="qfb hidden"></div>' +
+        '<div class="qsteps hidden">' + q.steps.map((s, i) => '<div class="qstep" style="animation-delay:' + (i*0.08) + 's"><b>' + (i+1) + '.</b> ' + s + '</div>').join('') + '</div>' +
+        '<div class="qnav"><button class="btn btn-blue qnext hidden">' + (curQ+1 === cfg.data.length ? 'Lihat Skor 🏁' : 'Soal Berikutnya ▶') + '</button></div>' +
+      '</div>';
+    host.querySelectorAll('.chip-ans').forEach(b => b.onclick = () => pick(+b.dataset.i, b));
+    host.querySelector('.qnext').onclick = () => { sfx('click'); curQ++; render(); };
+  }
+  function pick(i, b) {
+    if (answered) return;
+    answered = true;
+    const q = cfg.data[curQ];
+    const ok = i === q.a;
+    const all = host.querySelectorAll('.chip-ans');
+    all.forEach(x => { x.disabled = true; });
+    b.classList.add(ok ? 'correct' : 'wrong');
+    if (!ok) all[q.a].classList.add('correct');
+    if (ok) correct++;
+    const fb = host.querySelector('.qfb');
+    fb.classList.remove('hidden', 'ok', 'no');
+    fb.classList.add(ok ? 'ok' : 'no');
+    fb.innerHTML = ok
+      ? YES_MSGS[Math.floor(Math.random()*YES_MSGS.length)] + ' Jawabanmu: <b>' + q.choices[q.a] + '</b>'
+      : NO_MSGS[Math.floor(Math.random()*NO_MSGS.length)] + ' Jawaban yang benar: <b>' + q.choices[q.a] + '</b>';
+    host.querySelector('.qsteps').classList.remove('hidden');
+    host.querySelector('.qnext').classList.remove('hidden');
+    sfx(ok ? 'correct' : 'wrong');
+  }
+  function finish() {
+    const t = cfg.data.length;
+    const pct = Math.round(correct / t * 100);
+    const msg = pct >= 90 ? 'Luar biasa! Kamu juaranya! 🏆'
+      : pct >= 70 ? 'Hebat! Hampir sempurna! 🌟'
+      : pct >= 50 ? 'Bagus! Terus berlatih ya! 💪'
+      : 'Ayo ulangi lagi, kamu pasti bisa! 🐼';
+    appState.scores[cfg.key] = { b: correct, t: t };
+    host.innerHTML =
+      '<div class="card qdone">' +
+        '<div class="qdone-title">🏁 Selesai!</div>' +
+        '<div class="stars big">' + starHTML(starsFor(correct, t)) + '</div>' +
+        '<div class="qdone-score"><b>' + correct + '</b> / ' + t + ' benar (' + pct + '%)</div>' +
+        '<div class="qdone-msg">' + msg + '</div>' +
+        '<div class="qdone-actions">' +
+          '<button class="btn btn-ghost" id="' + cfg.host + '-retry">Ulangi 🔁</button>' +
+          (cfg.hasil ? '<button class="btn btn-primary" id="' + cfg.host + '-hasil">Lihat Hasil Kerja 📋</button>' : '') +
+          (cfg.nextGo !== undefined ? '<button class="btn btn-blue" id="' + cfg.host + '-next">Lanjut ➡️</button>' : '') +
+        '</div>' +
+      '</div>';
+    $(cfg.host + '-retry').onclick = () => { sfx('click'); curQ = 0; correct = 0; render(); };
+    if (cfg.hasil) $(cfg.host + '-hasil').onclick = () => { sfx('click'); go(slideIndex('slide-hasil')); };
+    if (cfg.nextGo !== undefined) $(cfg.host + '-next').onclick = () => { sfx('click'); go(cfg.nextGo); };
+    sfx('fanfare'); confettiFire(60);
+    updateHasil();
+  }
+  render();
+}
+function slideIndex(id) { return slideEls.findIndex(s => s.id === id); }
+createQuiz({ host:'quiz-kurang', key:'kurang', data:KURANG_Q, hasil:true });
+createQuiz({ host:'quiz-mendalam', key:'mendalam', data:MENDALAM_Q, nextGo:8, hasil:true });
+createQuiz({ host:'quiz-sepuluh', key:'sepuluh', data:SEPULUH_Q, nextGo:9, hasil:true });
+</script>
+<script>
+/* ================= HASIL KERJA ================= */
+function tanggalHariIni() {
+  try { return new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' }); }
+  catch(e) { return new Date().toDateString(); }
+}
+function updateHasil() {
+  const list = $('skorList');
+  if (!list) return;
+  const rows = [['Latihan Pengurangan Berulang','kurang'], ['Latihan Mendalam','mendalam'], ['Kuis Contoh Soal &amp; Soal Cerita','sepuluh']];
+  let tb = 0, tt = 0, ada = false;
+  list.innerHTML = rows.map(r => {
+    const s = appState.scores[r[1]];
+    if (!s) return '<div class="skor-row"><span>' + r[0] + '</span><span class="muted">Belum dikerjakan</span></div>';
+    ada = true; tb += s.b; tt += s.t;
+    return '<div class="skor-row"><span>' + r[0] + '</span><span><b>' + s.b + '/' + s.t + '</b> <span class="stars">' + starHTML(starsFor(s.b, s.t)) + '</span></span></div>';
+  }).join('');
+  const total = $('skorTotal');
+  if (ada) {
+    const pct = Math.round(tb / tt * 100);
+    const badge = pct >= 80 ? '🏅 <b>Ahli Pembagian!</b>' : pct >= 60 ? '🌟 <b>Pembagi Hebat!</b>' : '💪 <b>Calon Pembagi</b> — ayo ulangi latihannya!';
+    total.innerHTML = '<div class="skor-total">Total: <b>' + tb + '/' + tt + '</b> benar (' + pct + '%) — ' + badge + '</div>';
+  } else {
+    total.innerHTML = '<div class="muted">Kerjakan latihan dulu, total skor dan bintangmu muncul di sini.</div>';
+  }
+}
+const namaHasil = $('namaHasil');
+if (appState.nama) namaHasil.value = appState.nama;
+namaHasil.addEventListener('input', () => { namaInput.value = namaHasil.value; syncName(namaHasil.value); });
+
+/* ================= GALERI KARYA ================= */
+const gal = [];
+function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+$('fileInput').addEventListener('change', (e) => {
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  files.forEach(f => {
+    if (!f.type.startsWith('image/') || gal.length >= 12) return;
+    gal.push({ url: URL.createObjectURL(f), name: f.name });
+  });
+  if (files.length) { sfx('correct'); confettiFire(25); }
+  renderGal();
+});
+function renderGal() {
+  const g = $('galGrid');
+  g.innerHTML = gal.length
+    ? gal.map((it, i) =>
+        '<figure class="gal-item"><img src="' + it.url + '" alt="Karya siswa ' + escapeHtml(it.name) + '">' +
+        '<button class="gal-del" data-i="' + i + '" title="Hapus foto">✕</button>' +
+        '<figcaption>' + escapeHtml(it.name) + '</figcaption></figure>').join('')
+    : '<div class="muted">Belum ada karya yang diunggah. Tekan 📷 Pilih Foto Karya untuk memajang karyamu!</div>';
+  g.querySelectorAll('.gal-del').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    URL.revokeObjectURL(gal[i].url);
+    gal.splice(i, 1);
+    renderGal();
+    sfx('click');
+  });
+}
+renderGal();
+
+/* ================= REFLEKSI ================= */
+const MOODS = {
+  '😄':'Wah, kamu hebat! Aku ikut senang sekali! 🎉',
+  '🙂':'Bagus! Aku senang belajar bareng kamu. 🌟',
+  '😐':'Tidak apa-apa. Nanti kita ulangi bagian tusuk sate bareng ya!',
+  '😟':'Semangat! Kita bisa pelan-pelan, aku temani kamu. 🐼'
+};
+const refState = { mood:null, bisa:[], teks1:'', teks2:'' };
+if (appState.refleksi) { refState.mood = appState.refleksi.mood; refState.bisa = appState.refleksi.bisa || []; refState.teks1 = appState.refleksi.teks1 || ''; refState.teks2 = appState.refleksi.teks2 || ''; }
+function refSave() {
+  refState.teks1 = $('refTeks1').value;
+  refState.teks2 = $('refTeks2').value;
+  refState.bisa = Array.from(document.querySelectorAll('#candoList input:checked')).map(c => c.value);
+  try { localStorage.setItem(LS_REF, JSON.stringify(refState)); } catch(e) {}
+  const t = $('refToast');
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), 2200);
+  sfx('correct');
+}
+$('refSave').onclick = refSave;
+document.querySelectorAll('#moodRow .mood-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#moodRow .mood-btn').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  refState.mood = b.dataset.m;
+  const fb = $('moodFb');
+  fb.textContent = 'Kamu memilih ' + b.dataset.m + ' — ' + MOODS[b.dataset.m];
+  fb.classList.remove('hidden', 'ok', 'no');
+  fb.classList.add('ok');
+  $('moodBobo').textContent = MOODS[b.dataset.m];
+  sfx('pop');
+  try { localStorage.setItem(LS_REF, JSON.stringify(refState)); } catch(e) {}
+}));
+function refRestore() {
+  if (refState.mood) {
+    const b = document.querySelector('#moodRow .mood-btn[data-m="' + refState.mood + '"]');
+    if (b) {
+      b.classList.add('on');
+      const fb = $('moodFb');
+      fb.textContent = 'Kamu memilih ' + refState.mood + ' — ' + MOODS[refState.mood];
+      fb.classList.remove('hidden', 'ok', 'no');
+      fb.classList.add('ok');
+    }
+  }
+  refState.bisa.forEach(v => {
+    const c = document.querySelector('#candoList input[value="' + v + '"]');
+    if (c) c.checked = true;
+  });
+  $('refTeks1').value = refState.teks1 || '';
+  $('refTeks2').value = refState.teks2 || '';
+}
+refRestore();
+
+/* ================= HOOKS & INIT ================= */
+const hooks = {
+  'slide-hasil': () => {
+    $('hasilTanggal').textContent = tanggalHariIni();
+    updateHasil();
+    renderGal();
+  },
+  'slide-thanks': () => { confettiFire(80); sfx('fanfare'); }
+};
+go(0);
+</script>
+</body>
+</html>
