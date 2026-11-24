@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penjumlahan & Pengurangan Bilangan Bulat (Kelas 5 SD)</title>
+<style>
+:root{
+  --ink:#172554; --ink-soft:#475569;
+  --blue:#2563eb; --blue-lt:#dbeafe;
+  --red:#dc2626; --red-lt:#fee2e2;
+  --green:#16a34a; --green-lt:#dcfce7;
+  --amber:#d97706; --amber-lt:#fef3c7;
+  --purple:#7c3aed; --purple-lt:#ede9fe;
+  --pink:#ec4899; --pink-lt:#fce7f3;
+  --card:#ffffff; --line:#e2e8f0;
+  --radius:22px;
+  --shadow:0 10px 30px rgba(30,41,59,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Comic Sans MS','Comic Neue','Segoe UI',Verdana,sans-serif;color:var(--ink);background:linear-gradient(160deg,#dbeafe 0%,#fce7f3 45%,#dcfce7 100%) fixed;}
+.app{max-width:1060px;margin:0 auto;padding:14px 16px 120px}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:8px;z-index:80;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(8px);border:1px solid var(--line);
+  border-radius:18px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:10px}
+.brand{font-weight:800;display:flex;gap:8px;align-items:center;font-size:17px}
+.brand .logo{font-size:24px}
+.top-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.icon-btn{font-size:15px;font-weight:800;padding:8px 14px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;font-family:inherit}
+.icon-btn:hover{background:var(--blue-lt)}
+.lang-pill{display:flex;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.lang-pill button{border:none;background:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:8px 12px;cursor:pointer;color:var(--ink-soft)}
+.lang-pill button.on{background:var(--blue);color:#fff}
+.progress{height:10px;background:#fff;border-radius:99px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line);margin-bottom:12px}
+#progFill{height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6);transition:width .3s;border-radius:99px}
+
+/* ---------- slides ---------- */
+.slide{display:none;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 34px 34px;margin-bottom:8px}
+.slide.active{display:block;animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.kicker{display:inline-block;background:var(--purple-lt);color:var(--purple);font-weight:800;font-size:13px;letter-spacing:.6px;padding:6px 14px;border-radius:99px;text-transform:uppercase;margin-bottom:8px}
+h2.slide-title{font-size:33px;margin:4px 0 14px;line-height:1.15}
+h3{margin:0 0 6px;font-size:19px}
+.lead{font-size:18.5px;color:var(--ink-soft);line-height:1.6;margin:6px 0 14px}
+.hidden{display:none!important}
+.chip{display:inline-flex;align-items:center;background:var(--blue-lt);border:2px solid #bfdbfe;color:#1e40af;padding:6px 14px;border-radius:99px;font-weight:700;font-size:15px}
+.grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid3{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:#f8fafc;border:2px solid var(--line);border-radius:16px;padding:16px 18px}
+.card .emo{font-size:30px;display:inline-block;margin-bottom:4px}
+.card p{margin:6px 0 0;line-height:1.55;font-size:16px}
+.tip{background:var(--amber-lt);border:2px dashed #f59e0b;border-radius:16px;padding:14px 18px}
+.didyou{background:var(--purple-lt);border:2px solid #ddd6fe;border-radius:16px;padding:14px 18px}
+.tiny-note{font-size:14px;color:var(--ink-soft);margin-top:8px}
+.big-red{color:var(--red);font-weight:800}
+.big-blue{color:var(--blue);font-weight:800}
+
+/* ---------- cover ---------- */
+.cover{background:linear-gradient(150deg,#3b82f6,#ec4899 55%,#f59e0b);color:#fff;text-align:center;padding:56px 30px;position:relative;overflow:hidden}
+.cover .kicker{background:rgba(255,255,255,.22);color:#fff}
+.cover-title{font-size:56px;margin:10px 0 4px;text-shadow:0 4px 0 rgba(0,0,0,.18);letter-spacing:.5px;line-height:1.1}
+.cover-sub{font-size:20px;max-width:700px;margin:10px auto 18px;color:#fff7ed;line-height:1.5}
+.cover-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0 26px}
+.cover .chip{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.4)}
+.start-btn{font-size:22px;font-weight:800;background:#22c55e;color:#fff;border:none;padding:16px 36px;border-radius:99px;cursor:pointer;box-shadow:0 6px 0 #15803d;transition:transform .1s;font-family:inherit}
+.start-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #15803d}
+.cover .tiny-note{color:#ffe4e6}
+.floaties span{position:absolute;font-size:44px;animation:float 6s ease-in-out infinite;opacity:.92;pointer-events:none}
+.floaties span:nth-child(1){top:8%;left:6%;animation-delay:0s}
+.floaties span:nth-child(2){top:12%;right:8%;animation-delay:1.2s}
+.floaties span:nth-child(3){bottom:20%;left:10%;animation-delay:2.1s}
+.floaties span:nth-child(4){bottom:14%;right:6%;animation-delay:3s}
+.floaties span:nth-child(5){top:45%;right:16%;animation-delay:4.2s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-18px) rotate(8deg)}}
+
+/* ---------- generic bits ---------- */
+ol.custom{list-style:none;padding:0;margin:10px 0;counter-reset:obj}
+ol.custom li{counter-increment:obj;display:flex;gap:12px;margin:12px 0;font-size:17px;line-height:1.55;align-items:flex-start}
+ol.custom li::before{content:counter(obj);background:var(--blue);color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;font-size:16px}
+.numstrip{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:24px;font-weight:800;margin:12px 0}
+.numchip{background:#fff;border:2px solid var(--line);padding:6px 14px;border-radius:12px}
+.numchip.neg{color:var(--red);border-color:#fecaca;background:var(--red-lt)}
+.numchip.pos{color:var(--green);border-color:#bbf7d0;background:var(--green-lt)}
+.numchip.zero{color:var(--amber);border-color:#fde68a;background:var(--amber-lt)}
+.mini-btn{font-family:inherit;font-size:16px;font-weight:800;background:var(--amber);color:#fff;border:none;padding:10px 18px;border-radius:99px;cursor:pointer;box-shadow:0 3px 0 #b45309}
+.mini-btn:active{transform:translateY(2px);box-shadow:none}
+.mini-btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.mini-btn.star{background:var(--purple);box-shadow:0 3px 0 #5b21b6}
+.reveal-box{background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:14px 18px;margin-top:12px;font-size:17px;line-height:1.55;animation:pop .3s}
+.write-line{border-bottom:2px dotted #94a3b8;height:34px;margin-top:14px}
+.eqline{font-size:22px;font-weight:800;text-align:center;margin:8px 0;letter-spacing:1px}
+.eqline .op{color:var(--pink)}
+.hl{background:linear-gradient(transparent 55%,#fde68a 55%);padding:0 2px}
+
+/* ---------- rule explorer ---------- */
+.rx{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.rx-slot{display:flex;flex-direction:column;align-items:center;gap:8px}
+.rx-val{font-size:40px;font-weight:800;background:#f8fafc;border:3px solid var(--line);border-radius:18px;padding:8px 24px;min-width:96px;text-align:center}
+.rx-signs{display:flex;gap:8px}
+.rx-signs button{font-family:inherit;font-size:26px;font-weight:800;width:54px;height:48px;border-radius:14px;border:2px solid var(--line);background:#fff;cursor:pointer}
+.rx-signs button.sel.pos{background:var(--green-lt);border-color:#22c55e;color:var(--green)}
+.rx-signs button.sel.neg{background:var(--red-lt);border-color:#ef4444;color:var(--red)}
+.rx-op{font-size:42px;font-weight:800;color:var(--pink)}
+.rx-out{background:var(--blue-lt);border:3px solid #93c5fd;border-radius:18px;padding:14px 22px;text-align:center;max-width:460px}
+.rx-rule{font-size:17px;font-weight:800;color:#1e40af;margin-bottom:6px}
+.rx-eq{font-size:26px;font-weight:800}
+
+/* ---------- number line machine ---------- */
+.nl-belt{position:relative;background:#eff6ff;border:2px solid #bfdbfe;border-radius:18px;padding:56px 30px 12px;margin:14px 0}
+.nl-track{position:relative;height:64px}
+.tick{position:absolute;bottom:0;transform:translateX(-50%);background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 2px;font-family:inherit}
+.tick-line{width:3px;height:26px;background:#93c5fd;border-radius:2px}
+.tick-num{font-size:15px;font-weight:700;color:#1e40af}
+.tick.zero .tick-num{color:var(--red)}
+.tick.zero .tick-line{background:#f87171;height:32px}
+.nl-marker{position:absolute;bottom:36px;font-size:36px;transform:translateX(-50%);transition:left .25s ease;filter:drop-shadow(0 3px 3px rgba(0,0,0,.2));z-index:3}
+.nl-marker.hop{animation:hop .3s}
+@keyframes hop{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-18px)}}
+.nl-ctrl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.nl-presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.nl-presets button{font-family:inherit;font-size:17px;font-weight:800;padding:10px 16px;border-radius:14px;border:2px solid var(--line);background:#fff;cursor:pointer}
+.nl-presets button:hover{background:var(--blue-lt)}
+.nl-read{font-size:20px;font-weight:800;min-width:100%;text-align:center;margin-top:8px}
+.play-btn{font-family:inherit;font-size:19px;font-weight:800;background:var(--blue);color:#fff;border:none;padding:12px 22px;border-radius:99px;cursor:pointer;box-shadow:0 4px 0 #1e40af}
+.play-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1e40af}
+
+/* ---------- opposite machine ---------- */
+.om{background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px 18px;margin-top:14px}
+.om-stage{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:40px;font-weight:800;min-height:80px}
+.om-box{background:#f8fafc;border:3px solid var(--line);border-radius:16px;padding:8px 18px;min-width:70px;text-align:center}
+.om-box.flip{border-color:var(--pink);background:var(--pink-lt);color:var(--pink);animation:pop .4s}
+.om-arrow{font-size:30px;color:var(--amber)}
+.om-mode{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0 4px}
+.om-mode button{font-family:inherit;font-size:18px;font-weight:800;padding:10px 18px;border-radius:14px;border:2px solid var(--line);background:#fff;cursor:pointer}
+.om-mode button.on{background:var(--purple-lt);border-color:var(--purple);color:var(--purple)}
+.om-foot{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.om-result{font-size:20px;font-weight:800;min-height:30px}
+.om-result.ok{color:var(--green)}
+.om-slider{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:6px}
+.om-slider input{width:220px;cursor:pointer}
+.om-slider b{font-size:22px;min-width:44px;text-align:center}
+
+/* ---------- star rule (a-(-b)) ---------- */
+.star-box{background:linear-gradient(140deg,#ede9fe,#fce7f3);border:3px solid #c4b5fd;border-radius:20px;padding:18px 22px;margin-top:14px}
+.star-eq{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:44px;font-weight:800;margin:6px 0}
+.star-eq .part{background:#fff;border:3px solid #c4b5fd;border-radius:16px;padding:6px 20px;min-width:90px;text-align:center}
+.star-eq .plus{color:var(--pink);font-size:46px}
+.flip-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.flipcard{width:150px;height:96px;perspective:800px;cursor:pointer;background:none;border:none;padding:0}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flipcard.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;border-radius:16px;border:3px solid #f472b6;background:#fff}
+.flip-back{transform:rotateY(180deg);background:var(--green-lt);border-color:#22c55e;color:var(--green)}
+.mini-quiz{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.mini-quiz button{font-family:inherit;font-size:22px;font-weight:800;padding:12px 22px;border-radius:14px;border:3px solid var(--line);background:#fff;cursor:pointer;min-width:90px}
+.mini-quiz button.good{background:var(--green-lt);border-color:#22c55e;color:var(--green)}
+.mini-quiz button.bad{background:var(--red-lt);border-color:#ef4444;color:var(--red);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.debt{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;background:#fff;border:2px dashed #f59e0b;border-radius:16px;padding:12px;margin-top:12px;font-size:19px;font-weight:700}
+.debt .coin{font-size:30px}
+
+/* ---------- reference table ---------- */
+.reftbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:12px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 0 0 2px var(--line)}
+.reftbl th{background:var(--blue);color:#fff;padding:12px 10px;font-size:16px;text-align:left}
+.reftbl td{padding:12px 14px;border-top:2px solid #f1f5f9;font-size:16.5px}
+.reftbl tr:nth-child(even) td{background:#f8fafc}
+.reftbl .f{font-weight:800;font-size:18px;white-space:nowrap}
+.reftbl .ex{font-weight:800;white-space:nowrap}
+.tag{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:800}
+.tag.star{background:var(--purple-lt);color:var(--purple);border:2px solid #ddd6fe}
+
+/* ---------- thermometer story ---------- */
+.th-wrap{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.th-tube{width:46px;height:220px;background:#f1f5f9;border-radius:99px;position:relative;border:3px solid #cbd5e1;flex:none}
+.th-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,#f97316,#ef4444);transition:height .4s,background .4s;border-radius:99px}
+.th-zero{position:absolute;left:-8px;right:-8px;bottom:33.33%;border-top:3px dashed #334155;z-index:2}
+.th-zero span{position:absolute;left:calc(100% + 8px);top:-11px;font-weight:800;color:#334155;font-size:13px}
+.th-side{flex:1;min-width:240px}
+.th-read{font-size:30px;font-weight:800;margin-bottom:8px}
+.trace{background:#f8fafc;border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin-top:10px;font-size:17px;line-height:1.7}
+.trace div{animation:pop .25s}
+.stepbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
+/* ---------- sea level story ---------- */
+.sea-wrap{display:flex;gap:24px;flex-wrap:wrap;margin-top:12px}
+.sea-scale{position:relative;width:64px;height:300px;background:linear-gradient(180deg,#dbeafe 0%,#dbeafe 12%,#bfdbfe 12%,#bfdbfe 20%,#7dd3fc 20%,#38bdf8 45%,#0284c7 100%);border-radius:14px;border:3px solid #93c5fd;flex:none;overflow:visible}
+.sea-line{position:absolute;top:12%;left:-6px;right:-6px;border-top:3px dashed #1e3a8a}
+.sea-line span{position:absolute;left:calc(100% + 6px);top:-12px;font-size:12.5px;font-weight:800;color:#1e3a8a;white-space:nowrap}
+.sea-obj{position:absolute;left:50%;transform:translateX(-50%);font-size:32px;transition:top .5s;filter:drop-shadow(0 3px 3px rgba(0,0,0,.2));z-index:3}
+.sea-side{flex:1;min-width:250px}
+.sea-read{font-size:19px;font-weight:800;line-height:1.6}
+
+/* ---------- olympiad story ---------- */
+.oly-wrap{display:flex;gap:24px;flex-wrap:wrap;margin-top:12px}
+.oly-scale{position:relative;width:70px;height:280px;background:#f8fafc;border:3px solid var(--line);border-radius:14px;flex:none}
+.oly-zero{position:absolute;left:-6px;right:-6px;bottom:40%;border-top:3px dashed #334155}
+.oly-zero span{position:absolute;left:calc(100% + 6px);top:-12px;font-size:12.5px;font-weight:800;color:#334155}
+.oly-marker{position:absolute;left:50%;transform:translateX(-50%);font-size:30px;transition:bottom .4s;z-index:3}
+.oly-side{flex:1;min-width:250px}
+.oly-log{background:#f8fafc;border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin-top:10px;font-size:17px;line-height:1.7;min-height:74px}
+.oly-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.oly-score{font-size:30px;font-weight:800;margin:4px 0}
+
+/* ---------- practice dashboard & quiz ---------- */
+.q-head{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.q-type{background:var(--purple-lt);color:var(--purple);border-color:#ddd6fe}
+.story{display:flex;gap:14px;background:#fffbeb;border:2px solid #fde68a;border-radius:16px;padding:16px 18px;margin:10px 0 14px;font-size:17px;line-height:1.6}
+.story-emoji{font-size:36px;flex:none;line-height:1}
+.q-text{font-size:20px;font-weight:800;margin:4px 0 14px;line-height:1.5}
+.ans-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ans-input{font-family:inherit;font-size:24px;font-weight:700;padding:12px 16px;border-radius:14px;border:3px solid var(--blue);width:230px;color:var(--ink)}
+.ans-input:focus{outline:3px solid #93c5fd}
+.check-btn{font-family:inherit;font-size:19px;font-weight:800;background:var(--green);color:#fff;border:none;padding:13px 26px;border-radius:99px;cursor:pointer;box-shadow:0 4px 0 #15803d}
+.check-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #15803d}
+.q-feedback{margin-top:14px}
+.fb{font-size:19px;font-weight:800;padding:12px 16px;border-radius:14px;margin:8px 0;animation:pop .3s;line-height:1.5}
+.fb.ok{background:var(--green-lt);color:var(--green);border:2px solid #86efac}
+.fb.no{background:var(--red-lt);color:var(--red);border:2px solid #fca5a5}
+.fb.info{background:#eff6ff;color:var(--blue);border:2px solid #bfdbfe}
+.pembahasan{background:var(--amber-lt);border:2px solid #fcd34d;border-radius:16px;padding:14px 18px;margin-top:10px;line-height:1.6;font-size:16.5px}
+.pb-title{font-weight:800;margin-bottom:6px;color:var(--amber);font-size:16px}
+.pb-step{margin:6px 0 6px 0;padding-left:12px;border-left:3px solid #fbbf24}
+.dash-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+#dashScore{font-weight:800;font-size:17px}
+.dash{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:10px;margin:14px 0}
+.dash button{font-family:inherit;height:52px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:800;font-size:18px;cursor:pointer}
+.dash button:hover{background:var(--blue-lt)}
+.dash button.ok{background:var(--green-lt);border-color:#22c55e;color:var(--green)}
+.dash button.no{background:var(--red-lt);border-color:#ef4444;color:var(--red)}
+.dash button.cur{outline:3px solid var(--blue)}
+
+/* ---------- menu overlay & footer ---------- */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.menu-panel{background:#fff;border-radius:22px;max-width:920px;width:100%;max-height:82vh;overflow:auto;padding:20px 24px;box-shadow:var(--shadow)}
+.menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.menu-head h3{font-size:22px;margin:0}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.menu-grid button{font-family:inherit;text-align:left;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:#f8fafc;cursor:pointer;font-weight:700;display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--ink);line-height:1.3}
+.menu-grid button:hover{background:var(--blue-lt)}
+.menu-grid button.cur{background:var(--blue-lt);border-color:var(--blue)}
+.menu-grid .mn{background:var(--blue);color:#fff;border-radius:8px;min-width:28px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;font-weight:800}
+footer.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px;z-index:70;display:flex;justify-content:center;align-items:center;gap:14px}
+.nav-btn{font-family:inherit;font-size:18px;font-weight:800;padding:12px 24px;border-radius:99px;border:2px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.nav-btn:hover:not(:disabled){background:var(--blue-lt)}
+.nav-btn:disabled{opacity:.4;cursor:default}
+.counter{font-weight:800;color:var(--ink-soft);min-width:90px;text-align:center;font-size:15px}
+
+@media(max-width:680px){
+  h2.slide-title{font-size:25px}
+  .cover-title{font-size:38px}
+  .slide{padding:20px 16px}
+  .app{padding:10px 10px 130px}
+  .rx-val{font-size:30px;min-width:80px}
+  .rx-op{font-size:32px}
+  .rx-eq{font-size:20px}
+  .tick-num{font-size:11px}
+  .star-eq{font-size:30px}
+  .star-eq .plus{font-size:32px}
+  .eqline{font-size:18px}
+  .reftbl td,.reftbl th{padding:9px 8px;font-size:14.5px}
+  .reftbl .f{font-size:15px}
+  header.top{flex-wrap:wrap}
+  .om-stage{font-size:30px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="top">
+  <div class="brand"><span class="logo">➕➖</span><span data-en="Addition &amp; Subtraction of Integers • Grade 5" data-id="Penjumlahan &amp; Pengurangan Bilangan Bulat • Kelas 5 SD">Penjumlahan &amp; Pengurangan Bilangan Bulat • Kelas 5 SD</span></div>
+  <div class="top-right">
+    <button id="menuBtn" class="icon-btn">☰ <span data-en="Slides" data-id="Slide">Slide</span></button>
+    <div class="lang-pill" id="langPill">
+      <button data-lang="id" class="on">🇮🇩 ID</button>
+      <button data-lang="en">🇬🇧 EN</button>
+    </div>
+    <button id="fsBtn" class="icon-btn" title="Fullscreen">⛶</button>
+  </div>
+</header>
+
+<div class="progress"><div id="progFill"></div></div>
+
+<div id="menuOv" class="overlay hidden">
+  <div class="menu-panel">
+    <div class="menu-head"><h3 data-en="All slides — jump anywhere!" data-id="Semua slide — lompat ke mana saja!">Semua slide — lompat ke mana saja!</h3><button id="menuClose" class="icon-btn">✕</button></div>
+    <div id="menuGrid" class="menu-grid"></div>
+  </div>
+</div>
+
+<main class="deck" id="deck">
+
+<!-- ============ SLIDE 1 : COVER ============ -->
+<section class="slide cover" data-title-en="Cover" data-title-id="Sampul">
+  <div class="floaties"><span>🌡️</span><span>🚢</span><span>✈️</span><span>🥇</span><span>➕</span></div>
+  <div class="kicker" data-en="Cambridge Primary Mathematics • Grade 5" data-id="Matematika Cambridge Primary • Kelas 5 SD">Matematika Cambridge Primary • Kelas 5 SD</div>
+  <h1 class="cover-title" data-en="Addition &amp; Subtraction of Integers!" data-id="Penjumlahan &amp; Pengurangan Bilangan Bulat!">Penjumlahan &amp; Pengurangan Bilangan Bulat!</h1>
+  <p class="cover-sub" data-en="Master + and − on the number line, crack the secret of a − (−b), and win 30 real-life story challenges!" data-id="Kuasai + dan − di garis bilangan, pecahkan rahasia bentuk a − (−b), dan menangkan 30 tantangan soal cerita kehidupan nyata!">Kuasai + dan − di garis bilangan, pecahkan rahasia bentuk a − (−b), dan menangkan 30 tantangan soal cerita kehidupan nyata!</p>
+  <div class="cover-chips">
+    <span class="chip" data-en="🎬 47 slides" data-id="🎬 47 slide">🎬 47 slide</span>
+    <span class="chip" data-en="🎮 6 interactive visuals" data-id="🎮 6 visual interaktif">🎮 6 visual interaktif</span>
+    <span class="chip" data-en="✏️ 30 story problems + pembahasan" data-id="✏️ 30 soal cerita + pembahasan">✏️ 30 soal cerita + pembahasan</span>
+    <span class="chip" data-en="🌐 EN ⇄ ID translation" data-id="🌐 Terjemahan EN ⇄ ID">🌐 Terjemahan EN ⇄ ID</span>
+  </div>
+  <button class="start-btn" id="startBtn" data-en="Start the lesson ▶" data-id="Mulai pelajaran ▶">Mulai pelajaran ▶</button>
+  <p class="tiny-note" data-en="Tip: tap 🇮🇩 ID / 🇬🇧 EN (top right) at any time to translate every slide, question and explanation." data-id="Tips: tekan 🇮🇩 ID / 🇬🇧 EN (kanan atas) kapan saja untuk menerjemahkan semua slide, soal, dan pembahasan.">Tips: tekan 🇮🇩 ID / 🇬🇧 EN (kanan atas) kapan saja untuk menerjemahkan semua slide, soal, dan pembahasan.</p>
+</section>
+
+<!-- ============ SLIDE 2 : APERSEPSI ============ -->
+<section class="slide" data-title-en="Warm-Up (Apperception)" data-title-id="Apersepsi">
+  <div class="kicker" data-en="Before we start" data-id="Sebelum mulai">Sebelum mulai</div>
+  <h2 class="slide-title" data-en="Warm-Up! Temperature Race 🌡️" data-id="Apersepsi: Lomba Suhu! 🌡️">Apersepsi: Lomba Suhu! 🌡️</h2>
+  <p class="lead" data-en="This morning the weather report said something funny: the temperature was <b>−4°C</b> at dawn, then it <b>rose 9 degrees</b> by noon. Two hours later it <b>dropped 5 degrees</b>." data-id="Pagi tadi laporan cuaca mengatakan hal yang menarik: suhu <b>−4°C</b> saat fajar, lalu <b>naik 9 derajat</b> pada siang hari. Dua jam kemudian suhu <b>turun 5 derajat</b>.">Pagi tadi laporan cuaca mengatakan hal yang menarik: suhu <b>−4°C</b> saat fajar, lalu <b>naik 9 derajat</b> pada siang hari. Dua jam kemudian suhu <b>turun 5 derajat</b>.</p>
+  <div class="grid2">
+    <div class="card">
+      <span class="emo">🤔</span>
+      <h3 data-en="Think with a friend" data-id="Berpikirlah bersama teman">Think with a friend</h3>
+      <p data-en="1. What was the temperature at noon?<br>2. What was the temperature after it dropped?<br>3. Which maths operations did you just use?" data-id="1. Berapa suhu pada siang hari?<br>2. Berapa suhu setelah turun?<br>3. Operasi matematika apa saja yang baru saja kamu gunakan?">1. Berapa suhu pada siang hari?<br>2. Berapa suhu setelah turun?<br>3. Operasi matematika apa saja yang baru saja kamu gunakan?</p>
+    </div>
+    <div class="card tip">
+      <h3 data-en="💬 Talk about it" data-id="💬 Diskusikan">💬 Talk about it</h3>
+      <p data-en="Rising 9 degrees feels like <b>adding</b>. A drop of 5 degrees feels like <b>subtracting</b>. And when the temperature is below zero we use <b>negative numbers</b>. Today we turn those feelings into exact maths rules!" data-id="Naik 9 derajat terasa seperti <b>menambah</b>. Turun 5 derajat terasa seperti <b>mengurangi</b>. Dan saat suhu di bawah nol kita memakai <b>bilangan negatif</b>. Hari ini kita ubah perasaan itu menjadi aturan matematika yang tepat!">Naik 9 derajat terasa seperti <b>menambah</b>. Turun 5 derajat terasa seperti <b>mengurangi</b>. Dan saat suhu di bawah nol kita memakai <b>bilangan negatif</b>. Hari ini kita ubah perasaan itu menjadi aturan matematika yang tepat!</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;background:#fff">
+    <h3 data-en="✍️ Write your guess, then reveal!" data-id="✍️ Tuliskan tebakanmu, lalu buka!">✍️ Tuliskan tebakanmu, lalu buka!</h3>
+    <div class="write-line"></div>
+    <button id="warmBtn" class="mini-btn" data-en="Reveal the answers 💡" data-id="Tampilkan jawaban 💡">Tampilkan jawaban 💡</button>
+    <div id="warmAns" class="reveal-box hidden" data-en="<b>1.</b> Noon: −4 + 9 = <b>5°C</b>. &nbsp;<b>2.</b> After the drop: 5 − 5 = <b>0°C</b>. &nbsp;<b>3.</b> You used <b>addition</b> and <b>subtraction</b> of integers! Today's mission is to master exactly these two operations — even when the numbers are negative. 🚀" data-id="<b>1.</b> Siang: −4 + 9 = <b>5°C</b>. &nbsp;<b>2.</b> Setelah turun: 5 − 5 = <b>0°C</b>. &nbsp;<b>3.</b> Kamu menggunakan <b>penjumlahan</b> dan <b>pengurangan</b> bilangan bulat! Misi hari ini adalah menguasai dua operasi itu — bahkan saat bilangannya negatif. 🚀"><b>1.</b> Siang: −4 + 9 = <b>5°C</b>. &nbsp;<b>2.</b> Setelah turun: 5 − 5 = <b>0°C</b>. &nbsp;<b>3.</b> Kamu menggunakan <b>penjumlahan</b> dan <b>pengurangan</b> bilangan bulat! Misi hari ini adalah menguasai dua operasi itu — bahkan saat bilangannya negatif. 🚀</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3 : TUJUAN ============ -->
+<section class="slide" data-title-en="Learning Objectives" data-title-id="Tujuan Pembelajaran">
+  <div class="kicker" data-en="Our goals today" data-id="Tujuan hari ini">Tujuan hari ini</div>
+  <h2 class="slide-title" data-en="Learning Objectives 🎯" data-id="Tujuan Pembelajaran 🎯">Tujuan Pembelajaran 🎯</h2>
+  <p class="lead" data-en="By the end of today's adventure, you will be able to:" data-id="Setelah petualangan hari ini, kamu akan mampu:">Setelah petualangan hari ini, kamu akan mampu:</p>
+  <ol class="custom">
+    <li data-en="<b>Explain and use</b> the two addition rules for integers (same signs and different signs) with the number line as proof." data-id="<b>Menjelaskan dan menggunakan</b> dua aturan penjumlahan bilangan bulat (tanda sama dan tanda beda) dengan garis bilangan sebagai bukti."><b>Menjelaskan dan menggunakan</b> dua aturan penjumlahan bilangan bulat (tanda sama dan tanda beda) dengan garis bilangan sebagai bukti.</li>
+    <li data-en="<b>Rewrite</b> every subtraction as an addition of the opposite: a − b = a + (−b)." data-id="<b>Mengubah</b> setiap pengurangan menjadi penjumlahan lawannya: a − b = a + (−b)."><b>Mengubah</b> setiap pengurangan menjadi penjumlahan lawannya: a − b = a + (−b).</li>
+    <li data-en="<b>Master the star rule</b> a − (−b) = a + b: subtracting a negative number is the same as adding!" data-id="<b>Menguasai aturan bintang</b> a − (−b) = a + b: mengurangi bilangan negatif sama saja dengan menambahkan!"><b>Menguasai aturan bintang</b> a − (−b) = a + b: mengurangi bilangan negatif sama saja dengan menambahkan!</li>
+    <li data-en="<b>Visualise</b> addition and subtraction in real life: temperatures, submarines and planes, and olympiad scores." data-id="<b>Memvisualkan</b> penjumlahan dan pengurangan dalam kehidupan nyata: suhu, kapal selam dan pesawat, serta nilai olimpiade."><b>Memvisualkan</b> penjumlahan dan pengurangan dalam kehidupan nyata: suhu, kapal selam dan pesawat, serta nilai olimpiade.</li>
+    <li data-en="<b>Solve</b> 30 real-life story problems — and check every answer with its own explanation (pembahasan)." data-id="<b>Menyelesaikan</b> 30 soal cerita kehidupan nyata — dan memeriksa setiap jawaban dengan pembahasannya."><b>Menyelesaikan</b> 30 soal cerita kehidupan nyata — dan memeriksa setiap jawaban dengan pembahasannya.</li>
+    <li data-en="<b>Work neatly</b>: change subtraction to addition first, then apply the addition rules step by step." data-id="<b>Bekerja rapi</b>: ubah dulu pengurangan menjadi penjumlahan lawan, lalu kerjakan aturan penjumlahan selangkah demi selangkah."><b>Bekerja rapi</b>: ubah dulu pengurangan menjadi penjumlahan lawan, lalu kerjakan aturan penjumlahan selangkah demi selangkah.</li>
+  </ol>
+</section>
+
+<!-- ============ SLIDE 4 : RECALL ============ -->
+<section class="slide" data-title-en="Quick Recall" data-title-id="Ingat Kembali">
+  <div class="kicker" data-en="30-second recap" data-id="Rekap 30 detik">Rekap 30 detik</div>
+  <h2 class="slide-title" data-en="Quick Recall: The Integer World 🌍" data-id="Ingat Kembali: Dunia Bilangan Bulat 🌍">Ingat Kembali: Dunia Bilangan Bulat 🌍</h2>
+  <div class="grid3">
+    <div class="card" style="background:var(--red-lt);border-color:#fca5a5">
+      <span class="emo">⬅️</span>
+      <h3 data-en="Negative = below zero" data-id="Negatif = di bawah nol">Negatif = di bawah nol</h3>
+      <p data-en="Debts, cold temperatures, underground, below sea level. Further <b>left</b> = smaller." data-id="Utang, suhu dingin, di bawah tanah, di bawah permukaan laut. Semakin ke <b>kiri</b> = semakin kecil.">Utang, suhu dingin, di bawah tanah, di bawah permukaan laut. Semakin ke <b>kiri</b> = semakin kecil.</p>
+    </div>
+    <div class="card" style="background:var(--amber-lt);border-color:#fde68a">
+      <span class="emo">⚖️</span>
+      <h3 data-en="Zero = the middle" data-id="Nol = titik tengah">Nol = titik tengah</h3>
+      <p data-en="Sea level, the ground floor, a neutral score. Zero is neither negative nor positive." data-id="Permukaan laut, lantai dasar, skor netral. Nol bukan negatif dan bukan positif.">Permukaan laut, lantai dasar, skor netral. Nol bukan negatif dan bukan positif.</p>
+    </div>
+    <div class="card" style="background:var(--green-lt);border-color:#86efac">
+      <span class="emo">➡️</span>
+      <h3 data-en="Positive = above zero" data-id="Positif = di atas nol">Positif = di atas nol</h3>
+      <p data-en="Savings, warm temperatures, heights. Further <b>right</b> = bigger." data-id="Tabungan, suhu hangat, ketinggian. Semakin ke <b>kanan</b> = semakin besar.">Tabungan, suhu hangat, ketinggian. Semakin ke <b>kanan</b> = semakin besar.</p>
+    </div>
+  </div>
+  <div class="didyou" style="margin-top:16px">
+    <p style="margin:0" data-en="🔁 <b>Opposite numbers (lawan)</b>: +4 and −4 are the same distance from 0 but on opposite sides. They are a <i>pair of opposites</i> — and opposites are the secret hero of today's lesson, because <b>subtracting is adding the opposite!</b>" data-id="🔁 <b>Bilangan lawan</b>: +4 dan −4 berjarak sama dari 0 tetapi di sisi berlawanan. Mereka <i>pasangan lawan</i> — dan bilangan lawan adalah pahlawan rahasia pelajaran hari ini, karena <b>mengurangi = menjumlahkan lawannya!</b>">🔁 <b>Bilangan lawan</b>: +4 dan −4 berjarak sama dari 0 tetapi di sisi berlawanan. Mereka <i>pasangan lawan</i> — dan bilangan lawan adalah pahlawan rahasia pelajaran hari ini, karena <b>mengurangi = menjumlahkan lawannya!</b></p>
+  </div>
+  <div class="numstrip">
+    <span class="numchip neg">−4</span><span class="numchip neg">−3</span><span class="numchip neg">−2</span><span class="numchip neg">−1</span><span class="numchip zero">0</span><span class="numchip pos">1</span><span class="numchip pos">2</span><span class="numchip pos">3</span><span class="numchip pos">4</span>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 : ATURAN PENJUMLAHAN ============ -->
+<section class="slide" data-title-en="Addition Rules (Rule Explorer)" data-title-id="Aturan Penjumlahan">
+  <div class="kicker" data-en="Material 1 • Addition" data-id="Materi 1 • Penjumlahan">Materi 1 • Penjumlahan</div>
+  <h2 class="slide-title" data-en="Addition Rules — Explore Them Yourself! 🧪" data-id="Aturan Penjumlahan — Telusuri Sendiri! 🧪">Aturan Penjumlahan — Telusuri Sendiri! 🧪</h2>
+  <p class="lead" data-en="Pick a sign for each number below and watch the machine tell you which rule to use. Try all four combinations!" data-id="Pilih tanda untuk setiap bilangan di bawah dan lihat mesin memberitahukan aturan yang digunakan. Coba keempat kombinasinya!">Pilih tanda untuk setiap bilangan di bawah dan lihat mesin memberitahukan aturan yang digunakan. Coba keempat kombinasinya!</p>
+  <div class="rx">
+    <div class="rx-slot">
+      <div class="rx-val" id="rxA">3</div>
+      <div class="rx-signs" id="rxSignsA">
+        <button data-s="1" data-base="3">+3</button>
+        <button data-s="-1" data-base="3">−3</button>
+      </div>
+    </div>
+    <div class="rx-op">+</div>
+    <div class="rx-slot">
+      <div class="rx-val" id="rxB">5</div>
+      <div class="rx-signs" id="rxSignsB">
+        <button data-s="1" data-base="5">+5</button>
+        <button data-s="-1" data-base="5">−5</button>
+      </div>
+    </div>
+    <div class="rx-op">=</div>
+    <div class="rx-val" id="rxSum">?</div>
+  </div>
+  <div class="rx-out" id="rxOut">
+    <div class="rx-rule" id="rxRule"></div>
+    <div class="rx-eq" id="rxEq"></div>
+    <div id="rxWhy" style="font-size:15.5px;margin-top:8px;line-height:1.5"></div>
+  </div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="card">
+      <span class="emo">🧲</span>
+      <h3 data-en="Rule 1 — Same signs: ADD" data-id="Aturan 1 — Tanda sama: JUMLAHKAN">Aturan 1 — Tanda sama: JUMLAHKAN</h3>
+      <p data-en="Add the absolute values, keep the sign. <b>−3 + (−5) = −8</b>: owing 3 then owing 5 makes a bigger debt of 8." data-id="Jumlahkan nilai mutlaknya, pertahankan tandanya. <b>−3 + (−5) = −8</b>: berutang 3 lalu berutang 5 membuat utang lebih besar, 8.">Jumlahkan nilai mutlaknya, pertahankan tandanya. <b>−3 + (−5) = −8</b>: berutang 3 lalu berutang 5 membuat utang lebih besar, 8.</p>
+    </div>
+    <div class="card">
+      <span class="emo">⚔️</span>
+      <h3 data-en="Rule 2 — Different signs: SUBTRACT" data-id="Aturan 2 — Tanda beda: KURANGKAN">Aturan 2 — Tanda beda: KURANGKAN</h3>
+      <p data-en="Subtract the smaller absolute value from the bigger one, and take the sign of the <b>stronger</b> number (the one with the bigger absolute value). <b>3 + (−5) = −2</b>: the debt of 5 beats the money of 3, so you stay short by 2." data-id="Kurangkan nilai mutlak yang kecil dari yang besar, ambil tanda bilangan yang <b>lebih kuat</b> (nilai mutlaknya lebih besar). <b>3 + (−5) = −2</b>: utang 5 mengalahkan uang 3, jadi kamu masih kurang 2.">Kurangkan nilai mutlak yang kecil dari yang besar, ambil tanda bilangan yang <b>lebih kuat</b> (nilai mutlaknya lebih besar). <b>3 + (−5) = −2</b>: utang 5 mengalahkan uang 3, jadi kamu masih kurang 2.</p>
+    </div>
+  </div>
+</section>
+<!-- ============ SLIDE 6 : GARIS BILANGAN (HOP MACHINE) ============ -->
+<section class="slide" data-title-en="Adding on the Number Line" data-title-id="Penjumlahan di Garis Bilangan">
+  <div class="kicker" data-en="Material 2 • Visual proof" data-id="Materi 2 • Bukti visual">Materi 2 • Bukti visual</div>
+  <h2 class="slide-title" data-en="Watch Addition Hop on the Number Line 🐸" data-id="Lihat Penjumlahan Melompat di Garis Bilangan 🐸">Lihat Penjumlahan Melompat di Garis Bilangan 🐸</h2>
+  <p class="lead" data-en="Adding a <b>positive</b> number hops to the <b>right</b>. Adding a <b>negative</b> number hops to the <b>left</b>. Choose an example and press play!" data-id="Menambahkan bilangan <b>positif</b> melompat ke <b>kanan</b>. Menambahkan bilangan <b>negatif</b> melompat ke <b>kiri</b>. Pilih contoh lalu tekan putar!">Menambahkan bilangan <b>positif</b> melompat ke <b>kanan</b>. Menambahkan bilangan <b>negatif</b> melompat ke <b>kiri</b>. Pilih contoh lalu tekan putar!</p>
+  <div class="nl-belt">
+    <div class="nl-track" id="hopTrack"><div class="nl-marker" id="hopMarker">🐸</div></div>
+  </div>
+  <div class="nl-ctrl">
+    <button id="hopPlay" class="play-btn" data-en="▶ Play the hops" data-id="▶ Putar lompatan">▶ Putar lompatan</button>
+    <div class="nl-read" id="hopRead"></div>
+  </div>
+  <div class="nl-presets" id="hopPresets">
+    <button data-a="-4" data-b="9">−4 + 9</button>
+    <button data-a="3" data-b="-5">3 + (−5)</button>
+    <button data-a="-3" data-b="-5">−3 + (−5)</button>
+    <button data-a="5" data-b="-9">5 + (−9)</button>
+    <button data-a="-6" data-b="6">−6 + 6</button>
+  </div>
+  <div class="trace" id="hopTrace"></div>
+  <div class="card tip" style="margin-top:14px">
+    <p style="margin:0" data-en="🔎 Notice: <b>−6 + 6 = 0</b>! A number plus its opposite always lands back at zero — they cancel each other out. Remember this pair, it powers the subtraction rules later!" data-id="🔎 Perhatikan: <b>−6 + 6 = 0</b>! Sebuah bilangan ditambah lawannya selalu kembali ke nol — keduanya saling menghapus. Ingat pasangan ini, ia menjadi kunci aturan pengurangan nanti!">🔎 Perhatikan: <b>−6 + 6 = 0</b>! Sebuah bilangan ditambah lawannya selalu kembali ke nol — keduanya saling menghapus. Ingat pasangan ini, ia menjadi kunci aturan pengurangan nanti!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 : PENGURANGAN = MENAMBAH LAWAN ============ -->
+<section class="slide" data-title-en="Subtraction = Adding the Opposite" data-title-id="Pengurangan = Menambah Lawan">
+  <div class="kicker" data-en="Material 3 • Subtraction" data-id="Materi 3 • Pengurangan">Materi 3 • Pengurangan</div>
+  <h2 class="slide-title" data-en="The Big Secret: a − b = a + (−b) 🤫" data-id="Rahasia Besar: a − b = a + (−b) 🤫">Rahasia Besar: a − b = a + (−b) 🤫</h2>
+  <p class="lead" data-en="Subtraction and adding the opposite always give the same answer. So from today we can <b>rewrite every subtraction as an addition</b>, then use the addition rules we just learned. Two operations become one!" data-id="Pengurangan dan penjumlahan lawan selalu memberikan hasil yang sama. Jadi mulai hari ini kita bisa <b>mengubah setiap pengurangan menjadi penjumlahan</b>, lalu memakai aturan penjumlahan yang baru dipelajari. Dua operasi menjadi satu!">Pengurangan dan penjumlahan lawan selalu memberikan hasil yang sama. Jadi mulai hari ini kita bisa <b>mengubah setiap pengurangan menjadi penjumlahan</b>, lalu memakai aturan penjumlahan yang baru dipelajari. Dua operasi menjadi satu!</p>
+  <div class="om">
+    <div class="om-mode">
+      <button id="omModeSub" class="on" data-en="Mode 1: a − b (subtract a positive)" data-id="Mode 1: a − b (mengurangi bilangan positif)">Mode 1: a − b (mengurangi bilangan positif)</button>
+      <button id="omModeStar" data-en="Mode 2: a − (−b) ⭐" data-id="Mode 2: a − (−b) ⭐">Mode 2: a − (−b) ⭐</button>
+    </div>
+    <div class="om-slider">
+      <span data-en="start a:" data-id="mulai a:">mulai a:</span>
+      <div class="rx-signs" id="omSignsA">
+        <button data-base="5" data-s="1">+5</button>
+        <button data-base="5" data-s="-1">−5</button>
+      </div>
+      <span data-en="size b:" data-id="besar b:">besar b:</span>
+      <input type="range" id="omB" min="1" max="9" step="1" value="3">
+      <b id="omBVal">3</b>
+    </div>
+    <div class="om-stage" id="omStage"></div>
+    <div class="om-foot">
+      <button id="omTransform" class="mini-btn star" data-en="✨ Rewrite as addition" data-id="✨ Ubah menjadi penjumlahan">✨ Ubah menjadi penjumlahan</button>
+      <button id="omSolve" class="mini-btn" data-en="🧮 Compute the answer" data-id="🧮 Hitung hasilnya">🧮 Hitung hasilnya</button>
+    </div>
+    <div class="om-result" id="omResult"></div>
+  </div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <h3 data-en="📖 Why is it the same?" data-id="📖 Mengapa hasilnya sama?">📖 Mengapa hasilnya sama?</h3>
+      <p data-en="Think of money: <b>spending Rp3,000</b> (subtract +3) leaves you exactly as rich as <b>adding a debt of Rp3,000</b> (add −3). Taking 3 steps forward or 3 steps backward-penalty — the position on the number line changes the same way." data-id="Bayangkan uang: <b>membelanjakan Rp3.000</b> (mengurangi +3) membuat kamu sama kaya seperti <b>menambahkan utang Rp3.000</b> (menambah −3). Melangkah 3 kali ke depan atau denda 3 langkah ke belakang — posisi di garis bilangan berubah dengan cara yang sama.">Bayangkan uang: <b>membelanjakan Rp3.000</b> (mengurangi +3) membuat kamu sama kaya seperti <b>menambahkan utang Rp3.000</b> (menambah −3). Melangkah 3 kali ke depan atau denda 3 langkah ke belakang — posisi di garis bilangan berubah dengan cara yang sama.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="🧾 The recipe" data-id="🧾 Resepnya">🧾 Resepnya</h3>
+      <p data-en="<b>1.</b> Keep the first number as it is.<br><b>2.</b> Change − into +.<br><b>3.</b> Replace the second number with its opposite.<br>Example: 5 − 7 → 5 + (−7) → −2." data-id="<b>1.</b> Pertahankan bilangan pertama apa adanya.<br><b>2.</b> Ubah − menjadi +.<br><b>3.</b> Ganti bilangan kedua dengan lawannya.<br>Contoh: 5 − 7 → 5 + (−7) → −2."><b>1.</b> Pertahankan bilangan pertama apa adanya.<br><b>2.</b> Ubah − menjadi +.<br><b>3.</b> Ganti bilangan kedua dengan lawannya.<br>Contoh: 5 − 7 → 5 + (−7) → −2.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 : BINTANG a-(-b) ============ -->
+<section class="slide" data-title-en="⭐ The Star Rule: a − (−b) = a + b" data-title-id="Aturan Bintang: a − (−b) = a + b">
+  <div class="kicker" data-en="Material 4 • Today's highlight" data-id="Materi 4 • Bintang hari ini">Materi 4 • Bintang hari ini</div>
+  <h2 class="slide-title" data-en="⭐ The Star Rule: a − (−b) = a + b" data-id="⭐ Aturan Bintang: a − (−b) = a + b">⭐ Aturan Bintang: a − (−b) = a + b</h2>
+  <div class="star-box">
+    <div class="star-eq">
+      <span class="part" id="starA">6</span>
+      <span class="part" id="starMid" style="color:var(--red)">− (−2)</span>
+      <span class="plus" id="starArrow">→</span>
+      <span class="part" id="starA2">6</span>
+      <span class="plus">+</span>
+      <span class="part" id="starB2" style="color:var(--green)">2</span>
+      <span class="plus">=</span>
+      <span class="part" id="starOut">8</span>
+    </div>
+    <div class="om-slider">
+      <span data-en="start a:" data-id="mulai a:">mulai a:</span>
+      <input type="range" id="starAIn" min="1" max="9" step="1" value="6">
+      <span data-en="size b:" data-id="besar b:">besar b:</span>
+      <input type="range" id="starBIn" min="1" max="9" step="1" value="2">
+    </div>
+    <p class="eqline" style="font-size:19px" data-en="Subtracting a <b>negative</b> number becomes <b class='big-blue'>adding</b>! The two minus signs flip into one plus." data-id="Mengurangi bilangan <b>negatif</b> berubah menjadi <b class='big-blue'>menambah</b>! Dua tanda negatif menyatu menjadi satu tanda plus.">Mengurangi bilangan <b>negatif</b> berubah menjadi <b class="big-blue">menambah</b>! Dua tanda negatif menyatu menjadi satu tanda plus.</p>
+  </div>
+  <div class="debt">
+    <span class="coin">💸</span>
+    <span data-en="Debt story: owing Rp2,000 (−2,000). <b>Removing</b> that debt is <b>−(−2,000) = +2,000</b> — you become Rp2,000 richer!" data-id="Cerita utang: kamu berutang Rp2.000 (−2.000). <b>Menghapus</b> utang itu berarti <b>−(−2.000) = +2.000</b> — kamu menjadi Rp2.000 lebih kaya!">Cerita utang: kamu berutang Rp2.000 (−2.000). <b>Menghapus</b> utang itu berarti <b>−(−2.000) = +2.000</b> — kamu menjadi Rp2.000 lebih kaya!</span>
+  </div>
+  <h3 style="margin-top:18px" data-en="🎮 Flip the cards — tap each double negative!" data-id="🎮 Balikkan kartunya — ketuk setiap minus ganda!">🎮 Balikkan kartunya — ketuk setiap minus ganda!</h3>
+  <div class="flip-row" id="flipRow">
+    <button class="flipcard"><div class="flip-inner"><div class="flip-face">−(−7)</div><div class="flip-face flip-back">+7</div></div></button>
+    <button class="flipcard"><div class="flip-inner"><div class="flip-face">−(−12)</div><div class="flip-face flip-back">+12</div></div></button>
+    <button class="flipcard"><div class="flip-inner"><div class="flip-face">−(−20)</div><div class="flip-face flip-back">+20</div></div></button>
+    <button class="flipcard"><div class="flip-inner"><div class="flip-face">−(−1)</div><div class="flip-face flip-back">+1</div></div></button>
+  </div>
+  <div class="card" style="margin-top:14px;background:#fff">
+    <h3 data-en="🧠 Mini quiz: 4 − (−6) = ?" data-id="🧠 Kuis mini: 4 − (−6) = ?">🧠 Kuis mini: 4 − (−6) = ?</h3>
+    <p class="tiny-note" data-en="Rewrite first, then compute. Tap one option." data-id="Ubah dulu bentuknya, lalu hitung. Ketuk salah satu pilihan.">Ubah dulu bentuknya, lalu hitung. Ketuk salah satu pilihan.</p>
+    <div class="mini-quiz" id="starQuiz">
+      <button data-v="-2">−2</button>
+      <button data-v="2">2</button>
+      <button data-v="10">10</button>
+      <button data-v="-10">−10</button>
+    </div>
+    <div id="starQuizMsg" class="om-result"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 : TABEL REFERENSI ============ -->
+<section class="slide" data-title-en="Cheat Sheet" data-title-id="TabelReferensi">
+  <div class="kicker" data-en="Material 5 • Cheat sheet" data-id="Materi 5 • Tabel referensi">Materi 5 • Tabel referensi</div>
+  <h2 class="slide-title" data-en="Your Cheat Sheet 📋" data-id="Tabel Referensi Cepat 📋">Tabel Referensi Cepat 📋</h2>
+  <p class="lead" data-en="Six shapes cover every question you will meet. The last one wears the star!" data-id="Enam bentuk mencakup semua soal yang akan kamu temui. Yang terakhir memakai bintang!">Enam bentuk mencakup semua soal yang akan kamu temui. Yang terakhir memakai bintang!</p>
+  <table class="reftbl">
+    <tr><th data-en="Shape" data-id="Bentuk">Bentuk</th><th data-en="What to do" data-id="Cara mengerjakan">Cara mengerjakan</th><th data-en="Example" data-id="Contoh">Contoh</th></tr>
+    <tr><td class="f">(+a) + (+b)</td><td data-en="Add, result positive" data-id="Jumlahkan, hasil positif">Jumlahkan, hasil positif</td><td class="ex">4 + 3 = 7</td></tr>
+    <tr><td class="f">(−a) + (−b)</td><td data-en="Add, result negative" data-id="Jumlahkan, hasil negatif">Jumlahkan, hasil negatif</td><td class="ex">−4 + (−3) = −7</td></tr>
+    <tr><td class="f">(+a) + (−b)</td><td data-en="Subtract values, sign of the stronger number" data-id="Kurangkan nilai, ikuti tanda bilangan terkuat">Kurangkan nilai, ikuti tanda bilangan terkuat</td><td class="ex">4 + (−9) = −5</td></tr>
+    <tr><td class="f">a − b</td><td data-en="Rewrite: a + (−b)" data-id="Ubah: a + (−b)">Ubah: a + (−b)</td><td class="ex">5 − 7 = 5 + (−7) = −2</td></tr>
+    <tr><td class="f">a − (−b) <span class="tag star" data-en="STAR ⭐" data-id="BINTANG ⭐">BINTANG ⭐</span></td><td data-en="Rewrite: a + b — subtracting a negative is adding!" data-id="Ubah: a + b — mengurangi negatif berarti menambah!">Ubah: a + b — mengurangi negatif berarti menambah!</td><td class="ex">5 − (−3) = 5 + 3 = 8</td></tr>
+    <tr><td class="f">a + b − c</td><td data-en="Left to right: rewrite each − , then add step by step" data-id="Dari kiri: ubah setiap − , lalu tambahkan selangkah">Dari kiri: ubah setiap − , lalu tambahkan selangkah</td><td class="ex">−3 + 8 − 5 = 5 − 5 = 0</td></tr>
+  </table>
+  <div class="card tip" style="margin-top:16px">
+    <p style="margin:0" data-en="🗝️ <b>Golden workflow</b>: (1) rewrite every subtraction as adding the opposite, (2) work from left to right one pair at a time, (3) check with the number line in your head. In Indonesian: <i>minus bertemu minus jadi plus</i> — the minus in front of a bracket eats the minus inside!" data-id="🗝️ <b>Alur emas</b>: (1) ubah semua pengurangan menjadi penjumlahan lawan, (2) kerjakan dari kiri ke kanan sepasang demi sepasang, (3) periksa dengan garis bilangan di kepalamu. <i>Minus bertemu minus jadi plus</i> — tanda minus di depan kurung melahap minus di dalam kurung!">🗝️ <b>Alur emas</b>: (1) ubah semua pengurangan menjadi penjumlahan lawan, (2) kerjakan dari kiri ke kanan sepasang demi sepasang, (3) periksa dengan garis bilangan di kepalamu. <i>Minus bertemu minus jadi plus</i> — tanda minus di depan kurung melahap minus di dalam kurung!</p>
+  </div>
+</section>
+<!-- ============ SLIDE 10 : CERITA 1 SUHU ============ -->
+<section class="slide" data-title-en="Visual Story 1: Temperature" data-title-id="Cerita Visual 1: Suhu">
+  <div class="kicker" data-en="Visual story 1 • Temperature" data-id="Cerita visual 1 • Suhu">Cerita visual 1 • Suhu</div>
+  <h2 class="slide-title" data-en="Story 1: The Freezer Morning ❄️" data-id="Cerita 1: Pagi di Kota Dingin ❄️">Cerita 1: Pagi di Kota Dingin ❄️</h2>
+  <div class="story"><span class="story-emoji">🌡️</span><div data-en="At dawn, the temperature in a mountain town was <b>−4°C</b>. By noon it had <b>risen 9 degrees</b>. In the evening it <b>fell 5 degrees</b>. What was the temperature in the evening?" data-id="Saat fajar, suhu di sebuah kota pegunungan <b>−4°C</b>. Pada siang hari suhu <b>naik 9 derajat</b>. Pada sore hari suhu <b>turun 5 derajat</b>. Berapa suhu pada sore hari?">Saat fajar, suhu di sebuah kota pegunungan <b>−4°C</b>. Pada siang hari suhu <b>naik 9 derajat</b>. Pada sore hari suhu <b>turun 5 derajat</b>. Berapa suhu pada sore hari?</div></div>
+  <p class="q-text" data-en="Play the story on the thermometer — watch each step change the level!" data-id="Putar ceritanya pada termometer — lihat setiap langkah mengubah level!">Putar ceritanya pada termometer — lihat setiap langkah mengubah level!</p>
+  <div class="th-wrap">
+    <div class="th-tube"><div class="th-fill" id="stThFill"></div><div class="th-zero"><span>0°</span></div></div>
+    <div class="th-side">
+      <div class="th-read" id="stThRead"></div>
+      <div class="stepbtns">
+        <button class="mini-btn" id="stUp" data-en="⬆ Naik 9°C (+9)" data-id="⬆ Naik 9°C (+9)">⬆ Naik 9°C (+9)</button>
+        <button class="mini-btn" id="stDown" data-en="⬇ Turun 5°C (−5)" data-id="⬇ Turun 5°C (−5)">⬇ Turun 5°C (−5)</button>
+        <button class="mini-btn ghost" id="stReset" data-en="↺ Reset ke −4°C" data-id="↺ Reset ke −4°C">↺ Reset ke −4°C</button>
+      </div>
+      <div class="trace" id="stTrace"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;background:#fff">
+    <h3 data-en="🧮 The maths behind the story" data-id="🧮 Matematika di balik cerita">🧮 Matematika di balik cerita</h3>
+    <div class="eqline">−4 + 9 − 5 = 5 − 5 = <b>0°C</b></div>
+    <p class="tiny-note" data-en="Rising = adding, falling = subtracting. One mixed expression tells the whole story — work it left to right!" data-id="Naik = menambah, turun = mengurangi. Satu ekspresi campuran menceritakan seluruh kisah — kerjakan dari kiri ke kanan!">Naik = menambah, turun = mengurangi. Satu ekspresi campuran menceritakan seluruh kisah — kerjakan dari kiri ke kanan!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11 : CERITA 2 LAUT ============ -->
+<section class="slide" data-title-en="Visual Story 2: Submarine &amp; Plane" data-title-id="Cerita Visual 2: Kapal Selam &amp; Pesawat">
+  <div class="kicker" data-en="Visual story 2 • Sea level" data-id="Cerita visual 2 • Permukaan laut">Cerita visual 2 • Permukaan laut</div>
+  <h2 class="slide-title" data-en="Story 2: How Far Apart Are They? 🚢✈️" data-id="Cerita 2: Seberapa Jauh Mereka Berjarak? 🚢✈️">Cerita 2: Seberapa Jauh Mereka Berjarak? 🚢✈️</h2>
+  <div class="story"><span class="story-emoji">🌊</span><div data-en="A plane cruises at <b>+9,000 m</b> above sea level while a submarine dives at <b>−120 m</b> below sea level. The captain asks: how far apart are the plane and the submarine?" data-id="Sebuah pesawat terbang di <b>+9.000 m</b> di atas permukaan laut, sementara kapal selam menyelam di <b>−120 m</b> di bawah permukaan laut. Kapten bertanya: seberapa jauh pesawat dan kapal selam berjarak?">Sebuah pesawat terbang di <b>+9.000 m</b> di atas permukaan laut, sementara kapal selam menyelam di <b>−120 m</b> di bawah permukaan laut. Kapten bertanya: seberapa jauh pesawat dan kapal selam berjarak?</div></div>
+  <div class="sea-wrap">
+    <div class="sea-scale">
+      <div class="sea-line"><span data-en="sea level = 0" data-id="permukaan laut = 0">permukaan laut = 0</span></div>
+      <div class="sea-obj" id="seaPlane" style="top:6%">✈️</div>
+      <div class="sea-obj" id="seaSub" style="top:88%">🚢</div>
+    </div>
+    <div class="sea-side">
+      <div class="sea-read" id="seaRead"></div>
+      <div class="om-slider">
+        <span data-en="plane:" data-id="pesawat:">pesawat:</span>
+        <select id="seaPlaneSel" style="font-family:inherit;font-weight:700;padding:6px 10px;border-radius:10px;border:2px solid var(--line)">
+          <option value="6000">+6,000 m</option>
+          <option value="9000" selected>+9,000 m</option>
+          <option value="12000">+12,000 m</option>
+        </select>
+        <span data-en="submarine:" data-id="kapal selam:">kapal selam:</span>
+        <select id="seaSubSel" style="font-family:inherit;font-weight:700;padding:6px 10px;border-radius:10px;border:2px solid var(--line)">
+          <option value="-60">−60 m</option>
+          <option value="-120" selected>−120 m</option>
+          <option value="-300">−300 m</option>
+        </select>
+      </div>
+      <div class="stepbtns">
+        <button class="mini-btn star" id="seaShow" data-en="⭐ Show the distance!" data-id="⭐ Tampilkan jaraknya!">⭐ Tampilkan jaraknya!</button>
+      </div>
+      <div class="trace" id="seaTrace"></div>
+    </div>
+  </div>
+  <div class="star-box" style="margin-top:18px">
+    <p style="margin:0;font-size:17px;line-height:1.6" data-en="⭐ Here is the star rule in action! The distance is <b>top position minus bottom position</b>: <b>9,000 − (−120) = 9,000 + 120 = 9,120 m</b>. Subtracting the negative depth <b>adds</b> it to the height. The gap between a high positive and a deep negative is always <b>bigger</b> than either number!" data-id="⭐ Di sinilah aturan bintang bekerja! Jarak = <b>posisi atas dikurangi posisi bawah</b>: <b>9.000 − (−120) = 9.000 + 120 = 9.120 m</b>. Mengurangi kedalaman negatif justru <b>menambahkan</b> nilainya pada ketinggian. Jarak antara titik positif yang tinggi dan titik negatif yang dalam selalu <b>lebih besar</b> daripada kedua bilangan itu!">⭐ Di sinilah aturan bintang bekerja! Jarak = <b>posisi atas dikurangi posisi bawah</b>: <b>9.000 − (−120) = 9.000 + 120 = 9.120 m</b>. Mengurangi kedalaman negatif justru <b>menambahkan</b> nilainya pada ketinggian. Jarak antara titik positif yang tinggi dan titik negatif yang dalam selalu <b>lebih besar</b> daripada kedua bilangan itu!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12 : CERITA 3 OLIMPIADE ============ -->
+<section class="slide" data-title-en="Visual Story 3: Olympiad Score" data-title-id="Cerita Visual 3: Nilai Olimpiade">
+  <div class="kicker" data-en="Visual story 3 • Olympiad score" data-id="Cerita visual 3 • Nilai olimpiade">Cerita visual 3 • Nilai olimpiade</div>
+  <h2 class="slide-title" data-en="Story 3: The Point Roller-Coaster 🥇" data-id="Cerita 3: Roller-Coaster Poin 🥇">Cerita 3: Roller-Coaster Poin 🥇</h2>
+  <div class="story"><span class="story-emoji">🏆</span><div data-en="In a maths olympiad, every <b>correct answer is worth +4 points</b> but every <b>wrong answer costs −2 points</b>. Starting from 0, Sari answers two correctly, then misses one. Track her score on the scale!" data-id="Dalam olimpiade matematika, setiap <b>jawaban benar bernilai +4 poin</b> tetapi setiap <b>jawaban salah mengurangi −2 poin</b>. Mulai dari 0, Sari menjawab dua soal dengan benar, lalu salah satu soal. Ikuti skornya pada skala!">Dalam olimpiade matematika, setiap <b>jawaban benar bernilai +4 poin</b> tetapi setiap <b>jawaban salah mengurangi −2 poin</b>. Mulai dari 0, Sari menjawab dua soal dengan benar, lalu salah satu soal. Ikuti skornya pada skala!</div></div>
+  <div class="oly-wrap">
+    <div class="oly-scale">
+      <div class="oly-zero"><span>0</span></div>
+      <div class="oly-marker" id="olyMarker">🎈</div>
+    </div>
+    <div class="oly-side">
+      <div data-en="Score now:" data-id="Skor sekarang:">Skor sekarang:</div>
+      <div class="oly-score" id="olyScore">0</div>
+      <div class="oly-btns">
+        <button class="mini-btn" id="olyOk" data-en="✅ Correct (+4)" data-id="✅ Benar (+4)">✅ Benar (+4)</button>
+        <button class="mini-btn" style="background:var(--red)" id="olyNo" data-en="❌ Wrong (−2)" data-id="❌ Salah (−2)">❌ Salah (−2)</button>
+        <button class="mini-btn ghost" id="olyReset" data-en="↺ Reset" data-id="↺ Reset">↺ Reset</button>
+      </div>
+      <div class="oly-log" id="olyLog"></div>
+    </div>
+  </div>
+  <div class="card tip" style="margin-top:16px">
+    <p style="margin:0" data-en="🔎 After two correct answers: 0 + 4 + 4 = <b>8</b>. One mistake then pulls it down: 8 + (−2) = <b>6</b>. If she made many mistakes the score could even go <b>below zero</b> — try it! Adding a negative always pulls the score down." data-id="🔎 Setelah dua jawaban benar: 0 + 4 + 4 = <b>8</b>. Satu kesalahan menurunkannya: 8 + (−2) = <b>6</b>. Jika dia banyak salah, skor bisa <b>di bawah nol</b> — coba saja! Menambah bilangan negatif selalu menurunkan skor.">🔎 Setelah dua jawaban benar: 0 + 4 + 4 = <b>8</b>. Satu kesalahan menurunkannya: 8 + (−2) = <b>6</b>. Jika dia banyak salah, skor bisa <b>di bawah nol</b> — coba saja! Menambah bilangan negatif selalu menurunkan skor.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13 : STRATEGI ============ -->
+<section class="slide" data-title-en="4-Step Strategy" data-title-id="Strategi 4 Langkah">
+  <div class="kicker" data-en="How to attack any story problem" data-id="Cara menyerang soal cerita apa pun">Cara menyerang soal cerita apa pun</div>
+  <h2 class="slide-title" data-en="The 4-Step Strategy 🪜" data-id="Strategi 4 Langkah 🪜">Strategi 4 Langkah 🪜</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 data-en="🪜 The steps" data-id="🪜 Langkahnya">🪜 The steps</h3>
+      <p>
+      <b>1.</b> <span data-en="<b>Understand</b> — what does the story tell? Mark rises and falls, gains and losses." data-id="<b>Pahami</b> — apa isi cerita? Tandai naik dan turun, untung dan rugi."><b>Pahami</b> — apa isi cerita? Tandai naik dan turun, untung dan rugi.</span><br>
+      <b>2.</b> <span data-en="<b>Translate</b> — write the expression with integers." data-id="<b>Terjemahkan</b> — tuliskan ekspresinya dengan bilangan bulat."><b>Terjemahkan</b> — tuliskan ekspresinya dengan bilangan bulat.</span><br>
+      <b>3.</b> <span data-en="<b>Rewrite</b> — change every subtraction into adding the opposite." data-id="<b>Ubah</b> — tulis ulang setiap pengurangan menjadi penjumlahan lawan."><b>Ubah</b> — tulis ulang setiap pengurangan menjadi penjumlahan lawan.</span><br>
+      <b>4.</b> <span data-en="<b>Solve &amp; answer</b> — work left to right and answer the question asked." data-id="<b>Selesaikan &amp; jawab</b> — kerjakan dari kiri ke kanan, lalu jawab pertanyaannya."><b>Selesaikan &amp; jawab</b> — kerjakan dari kiri ke kanan, lalu jawab pertanyaannya.</span></p>
+    </div>
+    <div class="card" style="background:#fff">
+      <h3 data-en="✏️ Worked example" data-id="✏️ Contoh pengerjaan">✏️ Contoh pengerjaan</h3>
+      <p data-en=""<i>Dawn: −4°C. Noon: +9°C. Evening: −5°C. Final temperature?</i>" — aha, this is the story from slide 10!" data-id=""<i>Fajar: −4°C. Siang: +9°C. Sore: −5°C. Berapa suhu akhir?</i>" — ah, ini cerita di slide 10!">"<i>Fajar: −4°C. Siang: +9°C. Sore: −5°C. Berapa suhu akhir?</i>" — ah, ini cerita di slide 10!</p>
+      <div class="trace" style="font-size:18px">
+        <div><b>1.</b> Naik → tambah, turun → kurang ✔</div>
+        <div><b>2.</b> −4 + 9 − 5</div>
+        <div><b>3.</b> −4 + 9 + (−5)</div>
+        <div><b>4.</b> 5 + (−5) = <b>0 → suhu 0°C</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="didyou" style="margin-top:16px">
+    <p style="margin:0" data-en="🚦 Watch the words: <i>naik, untung, dapat, setoran, benar</i> usually mean <b>add</b>; <i>turun, rugi, bayar, salah, utang baru</i> usually mean <b>subtract</b>. But careful — sometimes the subtraction itself is of a negative number, and that's when the ⭐ star rule appears!" data-id="🚦 Perhatikan kata kuncinya: <i>naik, untung, dapat, setoran, benar</i> biasanya berarti <b>menambah</b>; <i>turun, rugi, bayar, salah, utang baru</i> biasanya berarti <b>mengurangi</b>. Namun hati-hati — kadang bilangan yang dikurangkan justru negatif, dan di situlah aturan ⭐ bintang muncul!">🚦 Perhatikan kata kuncinya: <i>naik, untung, dapat, setoran, benar</i> biasanya berarti <b>menambah</b>; <i>turun, rugi, bayar, salah, utang baru</i> biasanya berarti <b>mengurangi</b>. Namun hati-hati — kadang bilangan yang dikurangkan justru negatif, dan di situlah aturan ⭐ bintang muncul!</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14 : PRACTICE DASHBOARD ============ -->
+<section class="slide" data-title-en="Practice: 30 Challenges" data-title-id="Latihan: 30 Soal">
+  <div class="kicker" data-en="Practice time" data-id="Waktu latihan">Waktu latihan</div>
+  <h2 class="slide-title" data-en="Your Turn: 30 Story Challenges! 💪" data-id="Giliranmu: 30 Tantangan Cerita! 💪">Giliranmu: 30 Tantangan Cerita! 💪</h2>
+  <p class="lead" data-en="Read each short story, write your answer, then press <b>Check Answer</b>. Every question comes with instant feedback and a full step-by-step explanation (<b>pembahasan</b>)." data-id="Baca setiap cerita pendek, tulis jawabanmu, lalu tekan <b>Cek Jawaban</b>. Setiap soal dilengkapi umpan balik langsung dan <b>pembahasan</b> langkah demi langkah.">Baca setiap cerita pendek, tulis jawabanmu, lalu tekan <b>Cek Jawaban</b>. Setiap soal dilengkapi umpan balik langsung dan <b>pembahasan</b> langkah demi langkah.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">
+    <span class="chip" data-en="➕ Q1–Q10: addition (same &amp; different signs)" data-id="➕ Soal 1–10: penjumlahan (tanda sama &amp; beda)">➕ Soal 1–10: penjumlahan (tanda sama &amp; beda)</span>
+    <span class="chip" style="background:var(--pink-lt);border-color:#fbcfe8;color:#be185d" data-en="➖ Q11–Q20: subtraction — watch for a − (−b) ⭐" data-id="➖ Soal 11–20: pengurangan — waspadai a − (−b) ⭐">➖ Soal 11–20: pengurangan — waspadai a − (−b) ⭐</span>
+    <span class="chip" style="background:var(--green-lt);border-color:#86efac;color:var(--green)" data-en="🧮 Q21–Q30: two-step mixed stories" data-id="🧮 Soal 21–30: cerita campuran dua langkah">🧮 Soal 21–30: cerita campuran dua langkah</span>
+  </div>
+  <div class="dash-top">
+    <span id="dashScore"></span>
+    <button id="dashReset" class="mini-btn ghost" data-en="Reset all answers 🔄" data-id="Reset semua jawaban 🔄">Reset semua jawaban 🔄</button>
+  </div>
+  <div id="dashGrid" class="dash"></div>
+  <p class="tiny-note" data-en="Green = correct on your last check, red = still not right. Tap any number to jump to that question, or open questions from the ☰ Slides menu." data-id="Hijau = benar pada pemeriksaan terakhirmu, merah = belum tepat. Ketuk nomornya untuk melompat ke soal tersebut, atau buka soal dari menu ☰ Slide.">Hijau = benar pada pemeriksaan terakhirmu, merah = belum tepat. Ketuk nomornya untuk melompat ke soal tersebut, atau buka soal dari menu ☰ Slide.</p>
+</section>
+
+<!--QUIZ_SLIDES-->
+
+<!-- ============ SLIDE 45 : KESIMPULAN ============ -->
+<section class="slide" data-title-en="Conclusion" data-title-id="Kesimpulan">
+  <div class="kicker" data-en="Wrap-up" data-id="Penutup">Penutup</div>
+  <h2 class="slide-title" data-en="Conclusion 🌟" data-id="Kesimpulan 🌟">Kesimpulan 🌟</h2>
+  <p class="lead" data-en="Today you became a <b>Plus-Minus Master</b>! Let's pin down the big ideas:" data-id="Hari ini kamu menjadi <b>Master Plus-Minus</b>! Mari kita sematkan ide-ide besar:">Hari ini kamu menjadi <b>Master Plus-Minus</b>! Mari kita sematkan ide-ide besar:</p>
+  <ol class="custom">
+    <li data-en="<b>Same signs — add and keep the sign</b>: 3+5=8 and −3+(−5)=−8." data-id="<b>Tanda sama — jumlahkan dan pertahankan tandanya</b>: 3+5=8 dan −3+(−5)=−8."><b>Tanda sama — jumlahkan dan pertahankan tandanya</b>: 3+5=8 dan −3+(−5)=−8.</li>
+    <li data-en="<b>Different signs — subtract and take the stronger sign</b>: 3+(−5)=−2 and −3+5=2." data-id="<b>Tanda beda — kurangkan dan ikuti tanda yang terkuat</b>: 3+(−5)=−2 dan −3+5=2."><b>Tanda beda — kurangkan dan ikuti tanda yang terkuat</b>: 3+(−5)=−2 dan −3+5=2.</li>
+    <li data-en="<b>Subtraction is adding the opposite</b>: a − b = a + (−b). Two operations become one!" data-id="<b>Pengurangan adalah penjumlahan lawan</b>: a − b = a + (−b). Dua operasi menjadi satu!"><b>Pengurangan adalah penjumlahan lawan</b>: a − b = a + (−b). Dua operasi menjadi satu!</li>
+    <li data-en="<b>The star rule</b>: a − (−b) = a + b. Minus meeting minus becomes plus — like removing a debt makes you richer." data-id="<b>Aturan bintang</b>: a − (−b) = a + b. Minus bertemu minus menjadi plus — seperti menghapus utang membuatmu lebih kaya."><b>Aturan bintang</b>: a − (−b) = a + b. Minus bertemu minus menjadi plus — seperti menghapus utang membuatmu lebih kaya.</li>
+    <li data-en="<b>Stories become expressions</b>: rises and gains are +, falls and losses are −; then work left to right." data-id="<b>Cerita menjadi ekspresi</b>: kenaikan dan keuntungan bernilai +, penurunan dan kerugian bernilai −; lalu kerjakan dari kiri ke kanan."><b>Cerita menjadi ekspresi</b>: kenaikan dan keuntungan bernilai +, penurunan dan kerugian bernilai −; lalu kerjakan dari kiri ke kanan.</li>
+    <li data-en="<b>Distances across zero</b> (plane vs submarine, warm vs freezing) always use the star rule — and the result is bigger than either number." data-id="<b>Jarak melintasi nol</b> (pesawat vs kapal selam, panas vs beku) selalu memakai aturan bintang — dan hasilnya lebih besar daripada kedua bilangan itu."><b>Jarak melintasi nol</b> (pesawat vs kapal selam, panas vs beku) selalu memakai aturan bintang — dan hasilnya lebih besar daripada kedua bilangan itu.</li>
+  </ol>
+</section>
+
+<!-- ============ SLIDE 46 : REFLEKSI ============ -->
+<section class="slide" data-title-en="Reflection" data-title-id="Refleksi">
+  <div class="kicker" data-en="Look back" data-id="Melihat ke belakang">Melihat ke belakang</div>
+  <h2 class="slide-title" data-en="Reflection 🪞" data-id="Refleksi 🪞">Refleksi 🪞</h2>
+  <p class="lead" data-en="Great mathematicians always look back at their journey. Use the <b>3 – 2 – 1</b> routine (answer aloud or in your notebook):" data-id="Ahli matematika yang hebat selalu melihat kembali perjalanannya. Gunakan rutinitas <b>3 – 2 – 1</b> (jawab dengan bersuara atau di buku catatanmu):">Ahli matematika yang hebat selalu melihat kembali perjalanannya. Gunakan rutinitas <b>3 – 2 – 1</b> (jawab dengan bersuara atau di buku catatanmu):</p>
+  <div class="grid3">
+    <div class="card">
+      <span class="emo">3️⃣</span>
+      <h3 data-en="Three things I learned today…" data-id="Tiga hal yang saya pelajari hari ini…">Tiga hal yang saya pelajari hari ini…</h3>
+      <div class="write-line"></div><div class="write-line"></div><div class="write-line"></div>
+    </div>
+    <div class="card">
+      <span class="emo">2️⃣</span>
+      <h3 data-en="Two stories where I can use these operations…" data-id="Dua cerita di mana saya bisa memakai operasi ini…">Dua cerita di mana saya bisa memakai operasi ini…</h3>
+      <div class="write-line"></div><div class="write-line"></div>
+    </div>
+    <div class="card">
+      <span class="emo">1️⃣</span>
+      <h3 data-en="One thing I still want to ask…" data-id="Satu hal yang masih ingin saya tanyakan…">Satu hal yang masih ingin saya tanyakan…</h3>
+      <div class="write-line"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;background:#fff">
+    <h3 data-en="😎 Confidence check: how do you feel about a − (−b) now?" data-id="😎 Cek rasa percaya diri: bagaimana perasaanmu tentang a − (−b) sekarang?">😎 Cek rasa percaya diri: bagaimana perasaanmu tentang a − (−b) sekarang?</h3>
+    <div class="conf-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+      <button class="conf-btn" data-conf="1" style="font-family:inherit;font-size:19px;font-weight:800;padding:14px 20px;border-radius:16px;border:3px solid var(--line);background:#fff;cursor:pointer" data-en="😅 Still confused" data-id="😅 Masih bingung">😅 Masih bingung</button>
+      <button class="conf-btn" data-conf="2" style="font-family:inherit;font-size:19px;font-weight:800;padding:14px 20px;border-radius:16px;border:3px solid var(--line);background:#fff;cursor:pointer" data-en="🙂 Getting there" data-id="🙂 Mulai paham">🙂 Mulai paham</button>
+      <button class="conf-btn" data-conf="3" style="font-family:inherit;font-size:19px;font-weight:800;padding:14px 20px;border-radius:16px;border:3px solid var(--line);background:#fff;cursor:pointer" data-en="🤩 Star-rule master!" data-id="🤩 Master aturan bintang!">🤩 Master aturan bintang!</button>
+    </div>
+    <div id="confMsg" class="reveal-box hidden"></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 47 : THANK YOU ============ -->
+<section class="slide cover" data-title-en="Thank You" data-title-id="Terima Kasih">
+  <div class="floaties"><span>🎉</span><span>⭐</span><span>🥳</span><span>🌟</span><span>🎈</span></div>
+  <div class="kicker" data-en="Mission complete" data-id="Misi selesai">Misi selesai</div>
+  <h1 class="cover-title" data-en="Thank You for Today! 🎉" data-id="Terima Kasih untuk Hari Ini! 🎉">Terima Kasih untuk Hari Ini! 🎉</h1>
+  <p class="cover-sub" data-en="You hopped along the number line, rewrote subtraction as addition, cracked the star rule a − (−b) = a + b, and conquered 30 story challenges about temperatures, submarines, planes and olympiads. Keep rewriting, keep checking — see you on the next maths adventure! 👋" data-id="Kamu telah melompat di garis bilangan, mengubah pengurangan menjadi penjumlahan, memecahkan aturan bintang a − (−b) = a + b, dan menaklukkan 30 tantangan cerita tentang suhu, kapal selam, pesawat, dan olimpiade. Teruslah mengubah bentuk dan memeriksa jawaban — sampai jumpa di petualangan matematika berikutnya! 👋">Kamu telah melompat di garis bilangan, mengubah pengurangan menjadi penjumlahan, memecahkan aturan bintang a − (−b) = a + b, dan menaklukkan 30 tantangan cerita tentang suhu, kapal selam, pesawat, dan olimpiade. Teruslah mengubah bentuk dan memeriksa jawaban — sampai jumpa di petualangan matematika berikutnya! 👋</p>
+  <div class="cover-chips">
+    <span class="chip" data-en="⭐ Great job, Plus-Minus Master!" data-id="⭐ Kerja bagus, Master Plus-Minus!">⭐ Kerja bagus, Master Plus-Minus!</span>
+    <span class="chip" data-en="📚 Cambridge Primary Mathematics • Stage 5" data-id="📚 Matematika Cambridge Primary • Kelas 5 SD">📚 Matematika Cambridge Primary • Kelas 5 SD</span>
+  </div>
+  <button class="start-btn" id="backStartBtn" data-en="🔁 Back to the start" data-id="🔁 Kembali ke awal">🔁 Kembali ke awal</button>
+</section>
+
+</main>
+
+<footer class="nav">
+  <button id="prevBtn" class="nav-btn">⬅ <span data-en="Back" data-id="Mundur">Mundur</span></button>
+  <div class="counter" id="counter">1 / 47</div>
+  <button id="nextBtn" class="nav-btn"><span data-en="Next" data-id="Lanjut">Lanjut</span> ➡</button>
+</footer>
+
+<script>
+"use strict";
+/* =====================================================
+   Penjumlahan & Pengurangan Bilangan Bulat
+   Interactive lesson (Grade 5) — single file, EN ⇄ ID
+   ===================================================== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+let lang = "id";
+try { const saved = localStorage.getItem("addsub-lang"); if (saved === "id" || saved === "en") lang = saved; } catch (e) {}
+try { localStorage.setItem("addsub-lang", lang); } catch (e) {}
+
+/* ---------- dynamic strings ---------- */
+const T = {
+  docTitle:  { id: "Penjumlahan & Pengurangan Bilangan Bulat (Kelas 5 SD)", en: "Addition & Subtraction of Integers (Grade 5)" },
+  challenge: { id: "Soal {n} dari 30", en: "Challenge {n} of 30" },
+  menuChallenge: { id: "Soal {n}", en: "Challenge {n}" },
+  tAdd:      { id: "➕ Penjumlahan", en: "➕ Addition" },
+  tSub:      { id: "➖ Pengurangan", en: "➖ Subtraction" },
+  tMix:      { id: "🧮 Dua langkah", en: "🧮 Two steps" },
+  check:     { id: "✅ Cek Jawaban", en: "✅ Check Answer" },
+  ok:        { id: "🎉 Benar! Kerja bagus!", en: "🎉 Correct! Well done!" },
+  no:        { id: "❌ Belum tepat. Baca pembahasannya di bawah!", en: "❌ Not quite. Read the explanation below!" },
+  your:      { id: "Jawabanmu: {v}", en: "Your answer: {v}" },
+  right:     { id: "Jawaban benar: {v}", en: "Correct answer: {v}" },
+  pbTitle:   { id: "📖 Cara mengerjakan (pembahasan)", en: "📖 How to solve it (explanation)" },
+  phA:       { id: "Ketik bilangan, mis. -5", en: "Type a number, e.g. -5" },
+  scoreLine: { id: "Terjawab: {a}/30 • Benar: {c}", en: "Answered: {a}/30 • Correct: {c}" },
+  invalidA:  { id: "🤔 Hmm, jawaban belum terbaca. Ketik satu bilangan bulat (boleh diawali tanda negatif, mis. -5).", en: "🤔 Hmm, I could not read that. Type one whole number (you may start with a minus sign, like -5)." },
+  rxR1:      { id: "Aturan 1 — Tanda SAMA: jumlahkan, pertahankan tanda!", en: "Rule 1 — SAME signs: add and keep the sign!" },
+  rxR2:      { id: "Aturan 2 — Tanda BEDA: kurangkan, ikuti tanda yang terkuat!", en: "Rule 2 — DIFFERENT signs: subtract, keep the stronger sign!" },
+  rxW1p:     { id: "Dua bilangan positif bergerak searah ke kanan — makin jauh, makin besar.", en: "Two positives march right together — further, bigger." },
+  rxW1n:     { id: "Dua utang berjumlah utang yang lebih besar — hasilnya pasti negatif.", en: "Two debts pile into a bigger debt — the result is negative." },
+  rxW2a:     { id: "Uang 5 melawan utang 3: uang menang, sisa 2 — positif!", en: "Money 5 fights debt 3: money wins, 2 left — positive!" },
+  rxW2b:     { id: "Uang 3 melawan utang 5: utang menang, kurang 2 — negatif!", en: "Money 3 fights debt 5: debt wins, 2 short — negative!" },
+  hopStart:  { id: "Mulai di {a}, lalu {b} melompat {d}.", en: "Start at {a}, then {b} hops {d}." },
+  hopEq:     { id: "{a} + ({b}) = {r}", en: "{a} + ({b}) = {r}" },
+  hopLeft:   { id: "ke kiri ⬅", en: "to the left ⬅" },
+  hopRight:  { id: "ke kanan ➡", en: "to the right ➡" },
+  omSub:     { id: "{a} − {b}", en: "{a} − {b}" },
+  omSubTo:   { id: "{a} − {b} = {a} + (−{b})", en: "{a} − {b} = {a} + (−{b})" },
+  omStar:    { id: "{a} − (−{b})", en: "{a} − (−{b})" },
+  omStarTo:  { id: "{a} − (−{b}) = {a} + {b} ⭐", en: "{a} − (−{b}) = {a} + {b} ⭐" },
+  omAnswer:  { id: "Hasil: {e} = {r}", en: "Answer: {e} = {r}" },
+  omHint1:   { id: "Klik ✨ dulu: pertahankan a, ubah − menjadi +, ganti bilangan kedua dengan lawannya.", en: "Click ✨ first: keep a, change − into +, replace the second number with its opposite." },
+  omHint2:   { id: "Pakai aturan bintang: minus bertemu minus menjadi plus!", en: "Use the star rule: minus meeting minus becomes plus!" },
+  starOk:    { id: "🎉 Tepat! 4 − (−6) = 4 + 6 = 10. Aturan bintang berhasil!", en: "🎉 Right! 4 − (−6) = 4 + 6 = 10. Star rule success!" },
+  starNo:    { id: "❌ Belum. Ubah dulu: 4 − (−6) = 4 + 6, lalu hitung!", en: "❌ Not yet. Rewrite first: 4 − (−6) = 4 + 6, then compute!" },
+  stTrace0:  { id: "Fajar: −4°C", en: "Dawn: −4°C" },
+  stTraceUp: { id: "Naik 9: −4 + 9 = 5", en: "Rise 9: −4 + 9 = 5" },
+  stTraceDn: { id: "Turun 5: 5 − 5 = 0", en: "Fall 5: 5 − 5 = 0" },
+  thC:       { id: "{v}°C", en: "{v}°C" },
+  thNeg:     { id: "🥶 negatif — di bawah nol!", en: "🥶 negative — below zero!" },
+  thZero:    { id: "😐 tepat nol — titik beku!", en: "😐 exactly zero — freezing point!" },
+  thPos:     { id: "🔥 positif — di atas nol!", en: "🔥 positive — above zero!" },
+  seaRead:   { id: "Pesawat: <b>+{p} m</b> • Kapal selam: <b>−{s} m</b>", en: "Plane: <b>+{p} m</b> • Submarine: <b>−{s} m</b>" },
+  seaEq:     { id: "Jarak = {p} − (−{s}) = {p} + {s} = <b>{d} m</b> ⭐", en: "Distance = {p} − (−{s}) = {p} + {s} = <b>{d} m</b> ⭐" },
+  olyLine:   { id: "Soal {n}: {res} → {a} + {d} = {t}", en: "Q{n}: {res} → {a} + {d} = {t}" },
+  olyOK:     { id: "benar (+4)", en: "correct (+4)" },
+  olyNO:     { id: "salah (−2)", en: "wrong (−2)" },
+  olyBelow:  { id: "📉 Skor sekarang NEGATIF — di bawah nol!", en: "📉 The score is now NEGATIVE — below zero!" },
+  conf1:     { id: "Tidak apa-apa! Ulangi slide aturan bintang dan mainkan mesinnya, lalu coba soal 11–20 lagi. Kamu pasti bisa! 💪", en: "It's okay! Replay the star-rule slides and the machines, then retry Q11–Q20. You've got this! 💪" },
+  conf2:     { id: "Bagus! Kerjakan lagi soal-soal dengan bentuk a − (−b) dan periksa pembahasannya langkah demi langkah.", en: "Nice! Redo the a − (−b) questions and read the step-by-step explanations." },
+  conf3:     { id: "Luar biasa! Kamu resmi menjadi Master Plus-Minus — minus bertemu minus jadi plus! 🌟", en: "Fantastic! You are now a certified Plus-Minus Master — minus meets minus becomes plus! 🌟" }
+};
+function t(key, vars) {
+  let s = (T[key] && T[key][lang]) || T[key].id || "";
+  if (vars) for (const k in vars) s = s.split("{" + k + "}").join(vars[k]);
+  return s;
+}
+
+/* =====================================================
+   30 SOAL CERITA (bilingual id/en)
+   type add: answer = n0 + n1 | sub: n0 − n1 | mix: Σ nums
+   ===================================================== */
+const QUESTIONS = [
+/* ---- BAGIAN 1 : PENJUMLAHAN (Q1–Q10) ---- */
+{ type:"add", emoji:"🌡️", nums:[-4,9], answer:5,
+  id:{story:"Saat fajar suhu di kota pegunungan <b>−4°C</b>, lalu pada siang hari suhu <b>naik 9 derajat</b>.",
+      q:"Berapakah suhu pada siang hari? (tulis hasil −4 + 9)",
+      ex:'<div class="pb-step"><b>1. Terjemahkan:</b> naik 9 derajat berarti menambah: −4 + 9.</div><div class="pb-step"><b>2. Pilih aturan:</b> tanda beda → kurangkan nilai mutlak: 9 − 4 = 5.</div><div class="pb-step"><b>3. Tentukan tanda:</b> bilangan terkuat adalah +9 (|9| &gt; |−4|), jadi hasil positif: <b>5</b>.</div><div class="pb-step"><b>Jawab:</b> suhu siang hari <b>5°C</b>.</div>'},
+  en:{story:"At dawn the temperature in a mountain town was <b>−4°C</b>, then by noon it had <b>risen 9 degrees</b>.",
+      q:"What was the temperature at noon? (write the result of −4 + 9)",
+      ex:'<div class="pb-step"><b>1. Translate:</b> rising 9 degrees means adding: −4 + 9.</div><div class="pb-step"><b>2. Pick the rule:</b> different signs → subtract absolute values: 9 − 4 = 5.</div><div class="pb-step"><b>3. Choose the sign:</b> the stronger number is +9 (|9| &gt; |−4|), so the result is positive: <b>5</b>.</div><div class="pb-step"><b>Answer:</b> the noon temperature is <b>5°C</b>.</div>'} },
+{ type:"add", emoji:"🎮", nums:[50,-20], answer:30,
+  id:{story:"Dalam sebuah game, skor Raka pada ronde pertama <b>+50</b>, tetapi pada ronde kedua ia kehilangan poin sehingga skor rondenya <b>−20</b>.",
+      q:"Berapakah total skor Raka setelah dua ronde?",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> +50 + (−20).</div><div class="pb-step"><b>2. Tanda beda:</b> kurangkan nilai mutlak: 50 − 20 = 30.</div><div class="pb-step"><b>3. Tanda terkuat:</b> +50 menang (|50| &gt; |−20|) → hasil positif: <b>30</b>.</div>'},
+  en:{story:"In a video game, Raka scored <b>+50</b> in round 1, but lost points in round 2 for a score of <b>−20</b>.",
+      q:"What is Raka's total score after the two rounds?",
+      ex:'<div class="pb-step"><b>1. Write it:</b> +50 + (−20).</div><div class="pb-step"><b>2. Different signs:</b> subtract absolute values: 50 − 20 = 30.</div><div class="pb-step"><b>3. Stronger sign:</b> +50 wins (|50| &gt; |−20|) → positive result: <b>30</b>.</div>'} },
+{ type:"add", emoji:"🚢", nums:[-80,-45], answer:-125,
+  id:{story:"Sebuah kapal selam sudah berada di kedalaman <b>−80 m</b>, lalu ia <b>menyelam 45 m lagi</b> ke bawah.",
+      q:"Di kedalaman berapa kapal selam itu sekarang? (tulis hasil −80 + (−45))",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −80 + (−45).</div><div class="pb-step"><b>2. Tanda sama (aturan 1):</b> jumlahkan nilai mutlak: 80 + 45 = 125.</div><div class="pb-step"><b>3. Pertahankan tanda negatif:</b> hasil <b>−125</b> — semakin dalam, semakin negatif!</div>'},
+  en:{story:"A submarine is already at a depth of <b>−80 m</b>, then it <b>dives 45 m further</b> down.",
+      q:"At what depth is the submarine now? (write the result of −80 + (−45))",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −80 + (−45).</div><div class="pb-step"><b>2. Same signs (Rule 1):</b> add absolute values: 80 + 45 = 125.</div><div class="pb-step"><b>3. Keep the negative sign:</b> result <b>−125</b> — deeper always means more negative!</div>'} },
+{ type:"add", emoji:"🐷", nums:[12000,5000], answer:17000,
+  id:{story:"Lina sudah menabung <b>Rp12.000</b>. Hari ini ia menyisihkan uang jajan lagi sebesar <b>Rp5.000</b> untuk ditambahkan ke celengan.",
+      q:"Berapakah isi celengan Lina sekarang? (tulis satu bilangan, mis. 17000)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> +12.000 + (+5.000).</div><div class="pb-step"><b>2. Tanda sama, keduanya positif (aturan 1):</b> 12.000 + 5.000 = 17.000.</div><div class="pb-step"><b>Jawab:</b> isi celengan sekarang <b>Rp17.000</b>.</div>'},
+  en:{story:"Lina has saved <b>Rp12,000</b>. Today she adds another <b>Rp5,000</b> from her pocket money.",
+      q:"How much money is in Lina's piggy bank now? (type one number, e.g. 17000)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> +12,000 + (+5,000).</div><div class="pb-step"><b>2. Same signs, both positive (Rule 1):</b> 12,000 + 5,000 = 17,000.</div><div class="pb-step"><b>Answer:</b> the piggy bank holds <b>Rp17,000</b> now.</div>'} },
+{ type:"add", emoji:"🛗", nums:[-3,7], answer:4,
+  id:{story:"Sebuah lift berhenti di lantai <b>−3</b> (basement 3), lalu <b>naik 7 lantai</b>.",
+      q:"Di lantai berapa lift itu berhenti? (tulis hasil −3 + 7)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −3 + 7.</div><div class="pb-step"><b>2. Tanda beda:</b> 7 − 3 = 4.</div><div class="pb-step"><b>3. Tanda terkuat:</b> +7 menang → hasil <b>4</b>. Lift berhenti di lantai 4.</div>'},
+  en:{story:"An elevator stops at floor <b>−3</b> (basement 3), then <b>rises 7 floors</b>.",
+      q:"At which floor does the elevator stop? (write the result of −3 + 7)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −3 + 7.</div><div class="pb-step"><b>2. Different signs:</b> 7 − 3 = 4.</div><div class="pb-step"><b>3. Stronger sign:</b> +7 wins → result <b>4</b>. The lift stops at floor 4.</div>'} },
+{ type:"add", emoji:"🧊", nums:[-2,-6], answer:-8,
+  id:{story:"Malam di dataran tinggi, suhu awal <b>−2°C</b>. Sepanjang malam suhu <b>turun 6 derajat lagi</b> (berarti menambah bilangan negatif −6).",
+      q:"Berapakah suhu pada dini hari? (tulis hasil −2 + (−6))",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −2 + (−6).</div><div class="pb-step"><b>2. Tanda sama (aturan 1):</b> 2 + 6 = 8.</div><div class="pb-step"><b>3. Pertahankan tanda negatif:</b> hasil <b>−8</b>. Dini hari makin beku!</div>'},
+  en:{story:"At night in the highlands the temperature starts at <b>−2°C</b>. Through the night it <b>falls 6 more degrees</b> (that is adding −6).",
+      q:"What is the temperature before dawn? (write the result of −2 + (−6))",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −2 + (−6).</div><div class="pb-step"><b>2. Same signs (Rule 1):</b> 2 + 6 = 8.</div><div class="pb-step"><b>3. Keep the negative sign:</b> result <b>−8</b>. Brrr!</div>'} },
+{ type:"add", emoji:"✈️", nums:[8500,1200], answer:9700,
+  id:{story:"Sebuah pesawat terbang pada ketinggian <b>+8.500 m</b>. Untuk melewati awan badai, pilot <b>menaikkan pesawat 1.200 m</b> lagi.",
+      q:"Di ketinggian berapa pesawat itu sekarang? (tulis satu bilangan, mis. 9700)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> +8.500 + (+1.200).</div><div class="pb-step"><b>2. Tanda sama, keduanya positif:</b> 8.500 + 1.200 = 9.700.</div><div class="pb-step"><b>Jawab:</b> ketinggian pesawat sekarang <b>+9.700 m</b>.</div>'},
+  en:{story:"A plane cruises at <b>+8,500 m</b>. To fly above a storm cloud, the pilot <b>climbs another 1,200 m</b>.",
+      q:"At what altitude is the plane now? (type one number, e.g. 9700)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> +8,500 + (+1,200).</div><div class="pb-step"><b>2. Same signs, both positive:</b> 8,500 + 1,200 = 9,700.</div><div class="pb-step"><b>Answer:</b> the plane is now at <b>+9,700 m</b>.</div>'} },
+{ type:"add", emoji:"💳", nums:[-5000,-3000], answer:-8000,
+  id:{story:"Saldo rekening Tono <b>−Rp5.000</b> (ia berutang). Karena kebutuhan mendesak, ia berutang <b>Rp3.000 lagi</b> (menambah −3.000).",
+      q:"Berapakah saldo rekening Tono sekarang? (tulis satu bilangan, mis. -8000)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −5.000 + (−3.000).</div><div class="pb-step"><b>2. Tanda sama (aturan 1):</b> 5.000 + 3.000 = 8.000.</div><div class="pb-step"><b>3. Pertahankan tanda negatif:</b> hasil <b>−8.000</b>. Utang yang berjumlah utang adalah utang yang lebih besar!</div>'},
+  en:{story:"Tono's account balance is <b>−Rp5,000</b> (he owes money). For an urgent need he <b>borrows Rp3,000 more</b> (adding −3,000).",
+      q:"What is Tono's account balance now? (type one number, e.g. -8000)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −5,000 + (−3,000).</div><div class="pb-step"><b>2. Same signs (Rule 1):</b> 5,000 + 3,000 = 8,000.</div><div class="pb-step"><b>3. Keep the negative sign:</b> result <b>−8,000</b>. Debts added to debts make a bigger debt!</div>'} },
+{ type:"add", emoji:"🏆", nums:[-15,-25], answer:-40,
+  id:{story:"Tim Garuda menempati dua ronde buruk dalam kuis olimpiade: skor ronde pertama <b>−15</b> dan ronde kedua <b>−25</b>.",
+      q:"Berapakah jumlah skor kedua ronde itu? (tulis hasil −15 + (−25))",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −15 + (−25).</div><div class="pb-step"><b>2. Tanda sama (aturan 1):</b> 15 + 25 = 40.</div><div class="pb-step"><b>3. Pertahankan tanda negatif:</b> hasil <b>−40</b>. Kuis olimpiade bisa sangat kejam!</div>'},
+  en:{story:"Team Garuda had two rough rounds in a quiz olympiad: round one scored <b>−15</b> and round two <b>−25</b>.",
+      q:"What is the total of the two rounds? (write the result of −15 + (−25))",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −15 + (−25).</div><div class="pb-step"><b>2. Same signs (Rule 1):</b> 15 + 25 = 40.</div><div class="pb-step"><b>3. Keep the negative sign:</b> result <b>−40</b>. Olympiads can be tough!</div>'} },
+{ type:"add", emoji:"🐟", nums:[-60,25], answer:-35,
+  id:{story:"Seekor ikan berenang di kedalaman <b>−60 m</b>. Ia melompat ke atas sebanyak <b>25 m</b> untuk menangkap makanan.",
+      q:"Di kedalaman berapa ikan itu sekarang? (tulis hasil −60 + 25)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −60 + 25.</div><div class="pb-step"><b>2. Tanda beda:</b> 60 − 25 = 35.</div><div class="pb-step"><b>3. Tanda terkuat:</b> −60 menang (|−60| &gt; |25|) → hasil <b>−35</b>. Ikan masih di bawah permukaan laut.</div>'},
+  en:{story:"A fish swims at a depth of <b>−60 m</b>. It leaps up <b>25 m</b> to catch food.",
+      q:"At what depth is the fish now? (write the result of −60 + 25)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −60 + 25.</div><div class="pb-step"><b>2. Different signs:</b> 60 − 25 = 35.</div><div class="pb-step"><b>3. Stronger sign:</b> −60 wins (|−60| &gt; |25|) → result <b>−35</b>. The fish is still below sea level.</div>'} },
+/* ---- BAGIAN 2 : PENGURANGAN (Q11–Q20) ---- */
+{ type:"sub", emoji:"🌡️", nums:[11,3], answer:8,
+  id:{story:"Sore hari suhu di kota pesisir <b>11°C</b>, sedangkan pagi hari suhunya <b>3°C</b>.",
+      q:"Berapa derajat kenaikan suhu dari pagi ke sore? (tulis 11 − 3)",
+      ex:'<div class="pb-step"><b>1. Terjemahkan:</b> kenaikan = suhu akhir − suhu awal = 11 − 3.</div><div class="pb-step"><b>2. Boleh diubah:</b> 11 + (−3).</div><div class="pb-step"><b>3. Tanda beda:</b> 11 − 3 = <b>8</b>. Suhu naik 8 derajat.</div>'},
+  en:{story:"In the evening the temperature of a coastal town is <b>11°C</b>, while in the morning it was <b>3°C</b>.",
+      q:"By how many degrees did the temperature rise from morning to evening? (write 11 − 3)",
+      ex:'<div class="pb-step"><b>1. Translate:</b> rise = final − initial = 11 − 3.</div><div class="pb-step"><b>2. Rewrite:</b> 11 + (−3).</div><div class="pb-step"><b>3. Different signs:</b> 11 − 3 = <b>8</b>. The temperature rose 8 degrees.</div>'} },
+{ type:"sub", emoji:"❄️", nums:[4,-6], answer:10,
+  id:{story:"Di siang hari suhu kota A <b>4°C</b>. Pada malam hari suhu turun hingga <b>−6°C</b>.",
+      q:"Berapakah selisih suhu siang dan malam? (tulis hasil 4 − (−6)) ⭐",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 4 − (−6) — pengurangan bilangan negatif!</div><div class="pb-step"><b>2. Aturan bintang ⭐:</b> minus bertemu minus menjadi plus: 4 + 6.</div><div class="pb-step"><b>3. Hitung:</b> 4 + 6 = <b>10</b>.</div><div class="pb-step"><b>Jawab:</b> selisih suhu <b>10 derajat</b> — malamnya terasa jauh lebih dingin!</div>'},
+  en:{story:"At midday the temperature of city A is <b>4°C</b>. At night it drops to <b>−6°C</b>.",
+      q:"What is the difference between the day and night temperatures? (write the result of 4 − (−6)) ⭐",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 4 − (−6) — subtracting a negative number!</div><div class="pb-step"><b>2. Star rule ⭐:</b> minus meets minus becomes plus: 4 + 6.</div><div class="pb-step"><b>3. Compute:</b> 4 + 6 = <b>10</b>.</div><div class="pb-step"><b>Answer:</b> the difference is <b>10 degrees</b> — the night feels far colder!</div>'} },
+{ type:"sub", emoji:"✈️", nums:[9000,-200], answer:9200,
+  id:{story:"Sebuah pesawat terbang di ketinggian <b>+9.000 m</b> dan kapal selam menyelam di <b>−200 m</b>.",
+      q:"Berapakah jarak antara pesawat dan kapal selam? (tulis hasil 9000 − (−200)) ⭐",
+      ex:'<div class="pb-step"><b>1. Terjemahkan:</b> jarak = posisi atas − posisi bawah = 9.000 − (−200).</div><div class="pb-step"><b>2. Aturan bintang ⭐:</b> 9.000 + 200.</div><div class="pb-step"><b>3. Hitung:</b> <b>9.200</b> — jaraknya lebih besar daripada ketinggian pesawat itu sendiri!</div>'},
+  en:{story:"A plane flies at an altitude of <b>+9,000 m</b> and a submarine dives at <b>−200 m</b>.",
+      q:"How far apart are the plane and the submarine? (write the result of 9000 − (−200)) ⭐",
+      ex:'<div class="pb-step"><b>1. Translate:</b> distance = top − bottom = 9,000 − (−200).</div><div class="pb-step"><b>2. Star rule ⭐:</b> 9,000 + 200.</div><div class="pb-step"><b>3. Compute:</b> <b>9,200</b> — the gap is bigger than the plane’s altitude itself!</div>'} },
+{ type:"sub", emoji:"🎯", nums:[25,-10], answer:35,
+  id:{story:"Skor olimpiade Ayu <b>25</b>, sedangkan skor tim Bima <b>−10</b> karena banyak jawaban salah.",
+      q:"Berapakah selisih skor Ayu dan tim Bima? (tulis hasil 25 − (−10)) ⭐",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 25 − (−10).</div><div class="pb-step"><b>2. Aturan bintang ⭐:</b> 25 + 10.</div><div class="pb-step"><b>3. Hitung:</b> <b>35</b>. Mengurangi skor negatif membuat selisihnya makin besar!</div>'},
+  en:{story:"Ayu's olympiad score is <b>25</b>, while Bima's team score is <b>−10</b> because of many wrong answers.",
+      q:"What is the difference between Ayu's score and Bima's team score? (write the result of 25 − (−10)) ⭐",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 25 − (−10).</div><div class="pb-step"><b>2. Star rule ⭐:</b> 25 + 10.</div><div class="pb-step"><b>3. Compute:</b> <b>35</b>. Subtracting a negative score makes the gap even bigger!</div>'} },
+{ type:"sub", emoji:"💳", nums:[-2000,-2000], answer:0,
+  id:{story:"Saldo Dodi <b>−2.000</b> karena ia berutang Rp2.000 kepada temannya. Hari ini temannya <b>menghapus seluruh utang</b> itu.",
+      q:"Berapakah saldo Dodi sekarang? (tulis hasil −2000 − (−2000)) ⭐",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −2.000 − (−2.000) — menghapus utang = mengurangi bilangan negatif.</div><div class="pb-step"><b>2. Aturan bintang ⭐:</b> −2.000 + 2.000.</div><div class="pb-step"><b>3. Lawan saling menghapus:</b> hasil <b>0</b>. Dodi bebas utang!</div>'},
+  en:{story:"Dodi's balance is <b>−2,000</b> because he owes his friend Rp2,000. Today his friend <b>erases the whole debt</b>.",
+      q:"What is Dodi's balance now? (write the result of −2000 − (−2000)) ⭐",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −2,000 − (−2,000) — erasing a debt means subtracting a negative.</div><div class="pb-step"><b>2. Star rule ⭐:</b> −2,000 + 2,000.</div><div class="pb-step"><b>3. Opposites cancel:</b> result <b>0</b>. Dodi is debt-free!</div>'} },
+{ type:"sub", emoji:"🐟", nums:[-15,-50], answer:35,
+  id:{story:"Seekor ikan kecil berenang di <b>−15 m</b>, sedangkan induknya menyelam lebih dalam di <b>−50 m</b>.",
+      q:"Berapakah jarak (perubahan posisi) dari induk ikan ke ikan kecil? (tulis hasil −15 − (−50)) ⭐",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −15 − (−50) = akhir − awal.</div><div class="pb-step"><b>2. Aturan bintang ⭐:</b> −15 + 50.</div><div class="pb-step"><b>3. Tanda beda:</b> 50 − 15 = <b>35</b>. Ikan kecil 35 m di atas induknya.</div>'},
+  en:{story:"A small fish swims at <b>−15 m</b>, while its parent dives deeper at <b>−50 m</b>.",
+      q:"What is the distance (position change) from the parent fish up to the small fish? (write the result of −15 − (−50)) ⭐",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −15 − (−50) = final − initial.</div><div class="pb-step"><b>2. Star rule ⭐:</b> −15 + 50.</div><div class="pb-step"><b>3. Different signs:</b> 50 − 15 = <b>35</b>. The small fish is 35 m above its parent.</div>'} },
+{ type:"sub", emoji:"🌡️", nums:[7,15], answer:-8,
+  id:{story:"Saat matahari terbenam suhu di padang rumput <b>7°C</b>. Selama malam suhu <b>turun 15 derajat</b>.",
+      q:"Berapakah suhu di malam hari? (tulis hasil 7 − 15)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 7 − 15.</div><div class="pb-step"><b>2. Ubah ke penjumlahan:</b> 7 + (−15).</div><div class="pb-step"><b>3. Tanda beda, terkuat −15:</b> 15 − 7 = 8, hasil <b>−8</b>. Malam beku!</div>'},
+  en:{story:"At sunset the temperature on a meadow is <b>7°C</b>. Overnight it <b>falls 15 degrees</b>.",
+      q:"What is the temperature at night? (write the result of 7 − 15)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 7 − 15.</div><div class="pb-step"><b>2. Rewrite as addition:</b> 7 + (−15).</div><div class="pb-step"><b>3. Different signs, stronger −15:</b> 15 − 7 = 8, result <b>−8</b>. Freezing night!</div>'} },
+{ type:"sub", emoji:"🎮", nums:[-8,12], answer:-20,
+  id:{story:"Skor tim pada ronde pertama <b>12</b>, tetapi pada ronde kedua hanya <b>−8</b>.",
+      q:"Berapakah perubahan skor dari ronde pertama ke ronde kedua? (tulis hasil −8 − 12)",
+      ex:'<div class="pb-step"><b>1. Terjemahkan:</b> perubahan = skor akhir − skor awal = −8 − 12.</div><div class="pb-step"><b>2. Ubah ke penjumlahan:</b> −8 + (−12).</div><div class="pb-step"><b>3. Tanda sama:</b> 8 + 12 = 20, pertahankan negatif → <b>−20</b>. Skor turun 20 poin.</div>'},
+  en:{story:"A team scored <b>12</b> in round one, but only <b>−8</b> in round two.",
+      q:"What is the change in score from round one to round two? (write the result of −8 − 12)",
+      ex:'<div class="pb-step"><b>1. Translate:</b> change = final − initial = −8 − 12.</div><div class="pb-step"><b>2. Rewrite as addition:</b> −8 + (−12).</div><div class="pb-step"><b>3. Same signs:</b> 8 + 12 = 20, keep negative → <b>−20</b>. The score dropped by 20 points.</div>'} },
+{ type:"sub", emoji:"🏔️", nums:[-100,3500], answer:-3600,
+  id:{story:"Sebuah pesawat kecil terbang di ketinggian <b>+3.500 m</b> lalu mendarat di lembah yang berada <b>−100 m</b> di bawah permukaan laut.",
+      q:"Berapakah perubahan ketinggian pesawat? (tulis hasil −100 − 3500; hasil negatif berarti turun)",
+      ex:'<div class="pb-step"><b>1. Terjemahkan:</b> perubahan = posisi akhir − posisi awal = −100 − 3.500.</div><div class="pb-step"><b>2. Ubah ke penjumlahan:</b> −100 + (−3.500).</div><div class="pb-step"><b>3. Tanda sama:</b> 100 + 3.500 = 3.600, pertahankan negatif → <b>−3.600</b>. Pesawat turun 3.600 m!</div>'},
+  en:{story:"A small plane flies at <b>+3,500 m</b> then lands in a valley that lies <b>−100 m</b> below sea level.",
+      q:"What is the plane's change in altitude? (write the result of −100 − 3500; a negative result means descending)",
+      ex:'<div class="pb-step"><b>1. Translate:</b> change = final − initial = −100 − 3,500.</div><div class="pb-step"><b>2. Rewrite as addition:</b> −100 + (−3,500).</div><div class="pb-step"><b>3. Same signs:</b> 100 + 3,500 = 3,600, keep negative → <b>−3,600</b>. The plane descended 3,600 m!</div>'} },
+{ type:"sub", emoji:"✈️", nums:[12000,2500], answer:9500,
+  id:{story:"Pesawat penumpang terbang di ketinggian <b>+12.000 m</b>. Untuk memasuki jalur pendaratan, pilot <b>menurunkan pesawat 2.500 m</b>.",
+      q:"Di ketinggian berapa pesawat itu sekarang? (tulis hasil 12000 − 2500)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 12.000 − 2.500.</div><div class="pb-step"><b>2. Ubah ke penjumlahan:</b> 12.000 + (−2.500).</div><div class="pb-step"><b>3. Tanda beda, terkuat +12.000:</b> 12.000 − 2.500 = <b>9.500</b>.</div>'},
+  en:{story:"A passenger plane cruises at <b>+12,000 m</b>. To enter the landing path, the pilot <b>descends 2,500 m</b>.",
+      q:"At what altitude is the plane now? (write the result of 12000 − 2500)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 12,000 − 2,500.</div><div class="pb-step"><b>2. Rewrite as addition:</b> 12,000 + (−2,500).</div><div class="pb-step"><b>3. Different signs, stronger +12,000:</b> 12,000 − 2,500 = <b>9,500</b>.</div>'} },
+/* ---- BAGIAN 3 : DUA LANGKAH (Q21–Q30) ---- */
+{ type:"mix", emoji:"🌡️", nums:[-3,8,-5], answer:0,
+  id:{story:"Pagi hari suhu kota kering <b>−3°C</b>. Sekitar tengah hari suhu <b>naik 8 derajat</b>, tetapi sore hari <b>turun 5 derajat</b>.",
+      q:"Berapakah suhu pada sore hari? (tulis hasil −3 + 8 − 5)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −3 + 8 − 5.</div><div class="pb-step"><b>2. Ubah pengurangan:</b> −3 + 8 + (−5).</div><div class="pb-step"><b>3. Kiri dulu:</b> −3 + 8 = 5 (tanda beda).</div><div class="pb-step"><b>4. Lanjut:</b> 5 + (−5) = <b>0</b> — lawan saling menghapus! Suhu sore <b>0°C</b>.</div>'},
+  en:{story:"In the morning the temperature of a dry town is <b>−3°C</b>. Around midday it <b>rises 8 degrees</b>, but in the evening it <b>falls 5 degrees</b>.",
+      q:"What is the temperature in the evening? (write the result of −3 + 8 − 5)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −3 + 8 − 5.</div><div class="pb-step"><b>2. Rewrite the subtraction:</b> −3 + 8 + (−5).</div><div class="pb-step"><b>3. Left pair first:</b> −3 + 8 = 5 (different signs).</div><div class="pb-step"><b>4. Continue:</b> 5 + (−5) = <b>0</b> — opposites cancel! Evening temperature <b>0°C</b>.</div>'} },
+{ type:"mix", emoji:"🏆", nums:[40,-15,10], answer:35,
+  id:{story:"Tim olimpiade menjalani tiga ronde: skor ronde pertama <b>+40</b>, ronde kedua <b>−15</b>, dan ronde ketiga <b>+10</b>.",
+      q:"Berapakah skor total tim itu? (tulis hasil 40 + (−15) + 10)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 40 + (−15) + 10.</div><div class="pb-step"><b>2. Pasangan kiri:</b> 40 + (−15) = 25 (tanda beda).</div><div class="pb-step"><b>3. Lanjut:</b> 25 + 10 = <b>35</b>. Kenaikan di awal menyelamatkan tim!</div>'},
+  en:{story:"An olympiad team plays three rounds: round one scores <b>+40</b>, round two <b>−15</b>, and round three <b>+10</b>.",
+      q:"What is the team's total score? (write the result of 40 + (−15) + 10)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 40 + (−15) + 10.</div><div class="pb-step"><b>2. Left pair:</b> 40 + (−15) = 25 (different signs).</div><div class="pb-step"><b>3. Continue:</b> 25 + 10 = <b>35</b>. The strong start saved the team!</div>'} },
+{ type:"mix", emoji:"🚢", nums:[-120,70,-30], answer:-80,
+  id:{story:"Sebuah kapal selam berada di <b>−120 m</b>. Ia <b>naik 70 m</b> untuk memeriksa sensor, lalu <b>turun 30 m</b> kembali.",
+      q:"Di kedalaman berapa kapal selam itu sekarang? (tulis hasil −120 + 70 − 30)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −120 + 70 − 30.</div><div class="pb-step"><b>2. Ubah pengurangan:</b> −120 + 70 + (−30).</div><div class="pb-step"><b>3. Pasangan kiri:</b> −120 + 70 = −50 (terkuat −120).</div><div class="pb-step"><b>4. Lanjut:</b> −50 + (−30) = <b>−80</b> (tanda sama). Kapal selam di kedalaman 80 m.</div>'},
+  en:{story:"A submarine sits at <b>−120 m</b>. It <b>rises 70 m</b> to check a sensor, then <b>dives 30 m</b> again.",
+      q:"At what depth is the submarine now? (write the result of −120 + 70 − 30)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −120 + 70 − 30.</div><div class="pb-step"><b>2. Rewrite the subtraction:</b> −120 + 70 + (−30).</div><div class="pb-step"><b>3. Left pair:</b> −120 + 70 = −50 (stronger −120).</div><div class="pb-step"><b>4. Continue:</b> −50 + (−30) = <b>−80</b> (same signs). The submarine sits at 80 m deep.</div>'} },
+{ type:"mix", emoji:"💰", nums:[15000,-18000,5000], answer:2000,
+  id:{story:"Saldo toko Bu Sari <b>Rp15.000</b>. Untuk membeli stok ia <b>membelanjakan Rp18.000</b> (saldo sementara menjadi negatif), lalu pelanggan <b>membayar Rp5.000</b>.",
+      q:"Berapakah saldo toko Bu Sari sekarang? (tulis satu bilangan, mis. 2000)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 15.000 + (−18.000) + 5.000.</div><div class="pb-step"><b>2. Pasangan kiri:</b> 15.000 + (−18.000) = −3.000 (terkuat −18.000).</div><div class="pb-step"><b>3. Lanjut:</b> −3.000 + 5.000 = <b>2.000</b>. Saldo kembali positif!</div>'},
+  en:{story:"Bu Sari's shop balance is <b>Rp15,000</b>. To buy stock she <b>spends Rp18,000</b> (the balance briefly goes negative), then a customer <b>pays Rp5,000</b>.",
+      q:"What is Bu Sari's shop balance now? (type one number, e.g. 2000)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 15,000 + (−18,000) + 5,000.</div><div class="pb-step"><b>2. Left pair:</b> 15,000 + (−18,000) = −3,000 (stronger −18,000).</div><div class="pb-step"><b>3. Continue:</b> −3,000 + 5,000 = <b>2,000</b>. The balance is positive again!</div>'} },
+{ type:"mix", emoji:"🛗", nums:[-4,8,-2], answer:2,
+  id:{story:"Teknisi memulai perjalanan lift dari lantai <b>−4</b> (basement). Ia <b>naik 8 lantai</b> untuk memeriksa kantor, lalu <b>turun 2 lantai</b> ke ruang mesin.",
+      q:"Di lantai berapa teknisi itu berhenti? (tulis hasil −4 + 8 − 2)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −4 + 8 − 2.</div><div class="pb-step"><b>2. Ubah pengurangan:</b> −4 + 8 + (−2).</div><div class="pb-step"><b>3. Pasangan kiri:</b> −4 + 8 = 4.</div><div class="pb-step"><b>4. Lanjut:</b> 4 + (−2) = <b>2</b>. Teknisi berhenti di lantai 2.</div>'},
+  en:{story:"A technician starts the elevator from floor <b>−4</b> (basement). He <b>rises 8 floors</b> to inspect the office, then <b>goes down 2 floors</b> to the machine room.",
+      q:"At which floor does the technician stop? (write the result of −4 + 8 − 2)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −4 + 8 − 2.</div><div class="pb-step"><b>2. Rewrite the subtraction:</b> −4 + 8 + (−2).</div><div class="pb-step"><b>3. Left pair:</b> −4 + 8 = 4.</div><div class="pb-step"><b>4. Continue:</b> 4 + (−2) = <b>2</b>. The technician stops at floor 2.</div>'} },
+{ type:"mix", emoji:"❄️", nums:[5,-12,9], answer:2,
+  id:{story:"Suhu siang hari <b>5°C</b>. Malam hari suhu <b>turun 12 derajat</b>, tetapi menjelang pagi <b>naik 9 derajat</b>.",
+      q:"Berapakah suhu menjelang pagi? (tulis hasil 5 − 12 + 9)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 5 − 12 + 9.</div><div class="pb-step"><b>2. Ubah pengurangan:</b> 5 + (−12) + 9.</div><div class="pb-step"><b>3. Pasangan kiri:</b> 5 + (−12) = −7 (terkuat −12).</div><div class="pb-step"><b>4. Lanjut:</b> −7 + 9 = <b>2</b>. Pagi terasa sejuk, 2°C.</div>'},
+  en:{story:"The day temperature is <b>5°C</b>. At night it <b>falls 12 degrees</b>, but toward dawn it <b>rises 9 degrees</b>.",
+      q:"What is the temperature toward dawn? (write the result of 5 − 12 + 9)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 5 − 12 + 9.</div><div class="pb-step"><b>2. Rewrite the subtraction:</b> 5 + (−12) + 9.</div><div class="pb-step"><b>3. Left pair:</b> 5 + (−12) = −7 (stronger −12).</div><div class="pb-step"><b>4. Continue:</b> −7 + 9 = <b>2</b>. The morning feels cool, 2°C.</div>'} },
+{ type:"mix", emoji:"🥇", nums:[24,-4], answer:20,
+  id:{story:"Di olimpiade matematika, jawaban benar bernilai <b>+4</b> dan jawaban salah bernilai <b>−2</b>. Rara menjawab <b>6 soal dengan benar</b> (6 × 4 = 24) dan <b>2 soal salah</b> (2 × (−2) = −4).",
+      q:"Berapakah skor akhir Rara? (tulis hasil 24 + (−4))",
+      ex:'<div class="pb-step"><b>1. Hitung masing-masing:</b> benar: 6 × 4 = 24; salah: 2 × (−2) = −4.</div><div class="pb-step"><b>2. Tuliskan:</b> 24 + (−4).</div><div class="pb-step"><b>3. Tanda beda:</b> 24 − 4 = <b>20</b>. Skor akhir Rara <b>20</b>.</div>'},
+  en:{story:"In a maths olympiad a correct answer is worth <b>+4</b> and a wrong answer costs <b>−2</b>. Rara answers <b>6 questions correctly</b> (6 × 4 = 24) and <b>2 wrongly</b> (2 × (−2) = −4).",
+      q:"What is Rara's final score? (write the result of 24 + (−4))",
+      ex:'<div class="pb-step"><b>1. Compute each part:</b> correct: 6 × 4 = 24; wrong: 2 × (−2) = −4.</div><div class="pb-step"><b>2. Write it:</b> 24 + (−4).</div><div class="pb-step"><b>3. Different signs:</b> 24 − 4 = <b>20</b>. Rara’s final score is <b>20</b>.</div>'} },
+{ type:"mix", emoji:"🚢", nums:[-120,45,-60], answer:-135,
+  id:{story:"Kapal selam riset berada di <b>−120 m</b>. Ia <b>naik 45 m</b> mengambil sampel air, lalu <b>turun 60 m</b> menuju dasar laut.",
+      q:"Di kedalaman berapa kapal selam itu sekarang? (tulis hasil −120 + 45 − 60)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −120 + 45 − 60.</div><div class="pb-step"><b>2. Ubah pengurangan:</b> −120 + 45 + (−60).</div><div class="pb-step"><b>3. Pasangan kiri:</b> −120 + 45 = −75 (terkuat −120).</div><div class="pb-step"><b>4. Lanjut:</b> −75 + (−60) = <b>−135</b> (tanda sama). Kedalaman 135 m.</div>'},
+  en:{story:"A research submarine sits at <b>−120 m</b>. It <b>rises 45 m</b> to take a water sample, then <b>dives 60 m</b> toward the seabed.",
+      q:"At what depth is the submarine now? (write the result of −120 + 45 − 60)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −120 + 45 − 60.</div><div class="pb-step"><b>2. Rewrite the subtraction:</b> −120 + 45 + (−60).</div><div class="pb-step"><b>3. Left pair:</b> −120 + 45 = −75 (stronger −120).</div><div class="pb-step"><b>4. Continue:</b> −75 + (−60) = <b>−135</b> (same signs). Depth 135 m.</div>'} },
+{ type:"mix", emoji:"💳", nums:[-7500,10000,-4000], answer:-1500,
+  id:{story:"Saldo rekening Vino <b>−Rp7.500</b> (berutang). Ia memenangkan hadiah <b>Rp10.000</b>, lalu <b>membayar utang Rp4.000</b> kepada kakaknya.",
+      q:"Berapakah saldo Vino sekarang? (tulis satu bilangan, mis. -1500)",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> −7.500 + 10.000 + (−4.000).</div><div class="pb-step"><b>2. Pasangan kiri:</b> −7.500 + 10.000 = 2.500 (terkuat +10.000).</div><div class="pb-step"><b>3. Lanjut:</b> 2.500 + (−4.000) = <b>−1.500</b> (terkuat −4.000). Vino masih berutang Rp1.500.</div>'},
+  en:{story:"Vino's account balance is <b>−Rp7,500</b> (in debt). He wins a <b>Rp10,000 prize</b>, then <b>pays back Rp4,000</b> of debt to his older sibling.",
+      q:"What is Vino's balance now? (type one number, e.g. -1500)",
+      ex:'<div class="pb-step"><b>1. Write it:</b> −7,500 + 10,000 + (−4,000).</div><div class="pb-step"><b>2. Left pair:</b> −7,500 + 10,000 = 2,500 (stronger +10,000).</div><div class="pb-step"><b>3. Continue:</b> 2,500 + (−4,000) = <b>−1,500</b> (stronger −4,000). Vino still owes Rp1,500.</div>'} },
+{ type:"mix", emoji:"🏆", nums:[20,-5,-8], answer:7,
+  id:{story:"Skor tim olimpiade setelah ronde pertama <b>20</b>. Pada ronde kedua skor mereka <b>−5</b> dan pada ronde ketiga <b>−8</b>.",
+      q:"Berapakah skor akhir tim itu? (tulis hasil 20 + (−5) + (−8))",
+      ex:'<div class="pb-step"><b>1. Tuliskan:</b> 20 + (−5) + (−8).</div><div class="pb-step"><b>2. Pasangan kiri:</b> 20 + (−5) = 15 (terkuat +20).</div><div class="pb-step"><b>3. Lanjut:</b> 15 + (−8) = <b>7</b> (terkuat +15). Tim masih unggul dengan skor 7!</div>'},
+  en:{story:"An olympiad team scores <b>20</b> after round one. In round two they score <b>−5</b> and in round three <b>−8</b>.",
+      q:"What is the team's final score? (write the result of 20 + (−5) + (−8))",
+      ex:'<div class="pb-step"><b>1. Write it:</b> 20 + (−5) + (−8).</div><div class="pb-step"><b>2. Left pair:</b> 20 + (−5) = 15 (stronger +20).</div><div class="pb-step"><b>3. Continue:</b> 15 + (−8) = <b>7</b> (stronger +15). The team still leads with a score of 7!</div>'} }
+];
+
+/* =====================================================
+   i18n: swap every static data-en/data-id text
+   ===================================================== */
+function applyI18n() {
+  $$("[data-en]").forEach(el => {
+    const v = lang === "en" ? el.getAttribute("data-en") : el.getAttribute("data-id");
+    if (v !== null) el.innerHTML = v;
+  });
+  document.documentElement.lang = lang;
+  document.title = t("docTitle");
+  $$("#langPill button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+  try { localStorage.setItem("addsub-lang", lang); } catch (e) {}
+}
+
+/* =====================================================
+   Slide engine
+   ===================================================== */
+let slides = [], cur = 0;
+function refreshSlideList() { slides = $$("#deck > section.slide"); }
+function quizStartIndex() {
+  for (let k = 0; k < slides.length; k++) if (slides[k].classList.contains("quiz-slide")) return k;
+  return slides.length - QUESTIONS.length;
+}
+function go(i) {
+  if (i < 0 || i >= slides.length) return;
+  cur = i;
+  slides.forEach((s, k) => s.classList.toggle("active", k === i));
+  $("#counter").textContent = (i + 1) + " / " + slides.length;
+  $("#progFill").style.width = ((i + 1) / slides.length * 100) + "%";
+  $("#prevBtn").disabled = (i === 0);
+  $("#nextBtn").disabled = (i === slides.length - 1);
+  if (slides[i].classList.contains("quiz-slide")) renderQuestion(i);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  buildMenu();
+}
+function buildMenu() {
+  const grid = $("#menuGrid");
+  grid.innerHTML = "";
+  slides.forEach((s, k) => {
+    const b = document.createElement("button");
+    if (k === cur) b.classList.add("cur");
+    const num = document.createElement("span");
+    num.className = "mn"; num.textContent = k + 1;
+    const label = document.createElement("span");
+    label.textContent = (lang === "en" ? s.getAttribute("data-title-en") : s.getAttribute("data-title-id")) || ("Slide " + (k + 1));
+    b.appendChild(num); b.appendChild(label);
+    b.addEventListener("click", () => { closeMenu(); go(k); });
+    grid.appendChild(b);
+  });
+}
+function openMenu() { buildMenu(); $("#menuOv").classList.remove("hidden"); }
+function closeMenu() { $("#menuOv").classList.add("hidden"); }
+
+/* =====================================================
+   Widget A — rule explorer (slide 5)
+   ===================================================== */
+let rxA = 3, rxB = 5;
+function rxUpdate() {
+  $("#rxA").textContent = (rxA > 0 ? "+" : "−") + Math.abs(rxA);
+  $("#rxB").textContent = (rxB > 0 ? "+" : "−") + Math.abs(rxB);
+  const sum = rxA + rxB;
+  const el = $("#rxSum");
+  el.textContent = (sum > 0 ? "+" : sum < 0 ? "−" : "0") + Math.abs(sum);
+  el.style.borderColor = sum > 0 || (sum === 0 && rxA >= 0) ? "#22c55e" : "#ef4444";
+  el.style.color = sum > 0 || (sum === 0 && rxA >= 0) ? "var(--green)" : "var(--red)";
+  const same = (rxA > 0) === (rxB > 0);
+  const rule = $("#rxRule"), eq = $("#rxEq"), why = $("#rxWhy");
+  eq.textContent = sfmt(rxA) + " + " + par(sfmt(rxB)) + " = " + sfmt(sum);
+  if (same) {
+    rule.textContent = t("rxR1");
+    why.textContent = rxA > 0 ? t("rxW1p") : t("rxW1n");
+  } else {
+    rule.textContent = t("rxR2");
+    why.textContent = Math.abs(rxA) > Math.abs(rxB) ? t("rxW2a") : t("rxW2b");
+  }
+}
+function par(s) { return s.startsWith("−") ? "(" + s + ")" : s; }
+function sfmt(n) { return n < 0 ? "−" + Math.abs(n) : String(Math.abs(n)); }
+
+/* =====================================================
+   Widget B — number line hop machine (slide 6)
+   ===================================================== */
+let hopVal = 0, hopTimer = null;
+function buildHopTrack() {
+  const track = $("#hopTrack");
+  track.querySelectorAll(".tick").forEach(x => x.remove());
+  for (let v = -10; v <= 10; v++) {
+    const b = document.createElement("button");
+    b.className = "tick" + (v === 0 ? " zero" : "");
+    b.style.left = ((v + 10) / 20 * 100) + "%";
+    b.innerHTML = '<span class="tick-line"></span><span class="tick-num">' + sfmt(v) + "</span>";
+    track.appendChild(b);
+  }
+}
+function hopStop() { if (hopTimer) { clearInterval(hopTimer); hopTimer = null; } }
+function hopPlay(a, b) {
+  hopStop();
+  const trace = $("#hopTrace");
+  trace.innerHTML = "";
+  hopVal = a;
+  setMarker(a);
+  const dir = b >= 0 ? t("hopRight") : t("hopLeft");
+  const line1 = document.createElement("div");
+  line1.textContent = t("hopStart", { a: sfmt(a), b: Math.abs(b), d: dir });
+  trace.appendChild(line1);
+  const mk = $("#hopMarker");
+  let step = 0;
+  hopTimer = setInterval(() => {
+    if (step < Math.abs(b)) {
+      hopVal += (b >= 0 ? 1 : -1);
+      step++;
+      setMarker(hopVal);
+      mk.classList.remove("hop"); void mk.offsetWidth; mk.classList.add("hop");
+    } else {
+      hopStop();
+      const line2 = document.createElement("div");
+      line2.innerHTML = t("hopEq", { a: sfmt(a), b: sfmt(b), r: sfmt(a + b) }) + " " + (b >= 0 ? "➡" : "⬅");
+      trace.appendChild(line2);
+    }
+  }, 220);
+}
+function setMarker(v) {
+  hopVal = v;
+  $("#hopMarker").style.left = ((v + 10) / 20 * 100) + "%";
+  $("#hopRead").innerHTML = t("hopEq", { a: sfmt(hopStartV), b: sfmt(hopBv), r: sfmt(v) });
+}
+let hopStartV = -4, hopBv = 9;
+
+/* =====================================================
+   Widget C — opposite machine (slide 7)
+   ===================================================== */
+let omMode = "sub", omA = 5, omB = 3, omStep = 0;
+function omRender() {
+  const stage = $("#omStage");
+  omStep = 0;
+  $("#omBVal").textContent = omB;
+  if (omMode === "sub") {
+    stage.innerHTML = '<div class="om-box">' + sfmt(omA) + '</div><div class="om-box">−</div><div class="om-box">' + omB + '</div>';
+  } else {
+    stage.innerHTML = '<div class="om-box">' + sfmt(omA) + '</div><div class="om-box">−</div><div class="om-box">(−' + omB + ')</div>';
+  }
+  $("#omResult").textContent = "";
+  $$("#omStage .om-box").forEach(b => b.classList.remove("flip"));
+}
+function omTransform() {
+  const stage = $("#omStage");
+  const boxes = stage.querySelectorAll(".om-box");
+  if (omMode === "sub") {
+    boxes[1].textContent = "+"; boxes[1].classList.add("flip");
+    boxes[2].textContent = "(−" + omB + ")"; boxes[2].classList.add("flip");
+    $("#omResult").textContent = t("omSubTo", { a: sfmt(omA), b: omB });
+  } else {
+    boxes[1].textContent = "+"; boxes[1].classList.add("flip");
+    boxes[2].textContent = "(" + omB + ")"; boxes[2].classList.add("flip");
+    boxes[2].style.color = "var(--green)";
+    $("#omResult").textContent = t("omStarTo", { a: sfmt(omA), b: omB });
+  }
+}
+function omSolve() {
+  const res = omMode === "sub" ? omA - omB : omA + omB;
+  const eq = omMode === "sub" ? sfmt(omA) + " + (−" + omB + ")" : sfmt(omA) + " + " + omB;
+  const out = $("#omResult");
+  out.textContent = t("omAnswer", { e: eq, r: sfmt(res) });
+  out.style.color = res >= 0 ? "var(--green)" : "var(--red)";
+}
+
+/* =====================================================
+   Widget D — star slider + flip + mini quiz (slide 8)
+   ===================================================== */
+function starUpdate() {
+  const a = parseInt($("#starAIn").value, 10), b = parseInt($("#starBIn").value, 10);
+  $("#starA").textContent = a; $("#starA2").textContent = a;
+  $("#starMid").textContent = "− (−" + b + ")";
+  $("#starB2").textContent = b;
+  $("#starOut").textContent = a + b;
+}
+function initFlips() {
+  $$(".flipcard").forEach(c => c.addEventListener("click", () => c.classList.toggle("flipped")));
+  $$("#starQuiz button").forEach(b => b.addEventListener("click", () => {
+    const msg = $("#starQuizMsg");
+    if (b.dataset.v === "10") {
+      b.classList.remove("bad"); b.classList.add("good");
+      msg.textContent = t("starOk"); msg.style.color = "var(--green)";
+    } else {
+      b.classList.remove("bad"); void b.offsetWidth; b.classList.add("bad");
+      msg.textContent = t("starNo"); msg.style.color = "var(--red)";
+    }
+  }));
+}
+
+/* =====================================================
+   Widget E — temperature story (slide 10)
+   ===================================================== */
+let stVal = -4, stSteps = 0;
+function stRender(line) {
+  const trace = $("#stTrace");
+  if (line) { const d = document.createElement("div"); d.textContent = line; trace.appendChild(d); }
+  const fill = $("#stThFill"), read = $("#stThRead");
+  fill.style.height = ((stVal + 20) / 60 * 100) + "%";
+  fill.style.background = stVal < 0 ? "linear-gradient(180deg,#60a5fa,#1d4ed8)" : stVal === 0 ? "linear-gradient(180deg,#fbbf24,#d97706)" : "linear-gradient(180deg,#f97316,#ef4444)";
+  read.textContent = t("thC", { v: sfmt(stVal) }) + " " + (stVal < 0 ? t("thNeg") : stVal === 0 ? t("thZero") : t("thPos"));
+  read.style.color = stVal < 0 ? "#1d4ed8" : stVal === 0 ? "#d97706" : "#dc2626";
+}
+function stReset() {
+  stVal = -4; stSteps = 0;
+  $("#stTrace").innerHTML = "";
+  stRender(t("stTrace0"));
+}
+
+/* =====================================================
+   Widget F — sea story (slide 11)
+   ===================================================== */
+function seaUpdate() {
+  const p = parseInt($("#seaPlaneSel").value, 10), s = parseInt($("#seaSubSel").value, 10);
+  const pTop = p === 6000 ? 14 : p === 9000 ? 8 : 4;
+  const sTop = s === -60 ? 80 : s === -120 ? 88 : 94;
+  $("#seaPlane").style.top = pTop + "%";
+  $("#seaSub").style.top = sTop + "%";
+  $("#seaRead").innerHTML = t("seaRead", { p: group(p), s: s });
+  $("#seaTrace").innerHTML = "";
+}
+function seaShow() {
+  const p = parseInt($("#seaPlaneSel").value, 10), s = Math.abs(parseInt($("#seaSubSel").value, 10));
+  const trace = $("#seaTrace");
+  trace.innerHTML = "";
+  const l1 = document.createElement("div");
+  l1.innerHTML = "Jarak = " + group(p) + " − (−" + s + ")";
+  const l2 = document.createElement("div");
+  l2.innerHTML = "⭐ = " + group(p) + " + " + s + " = <b>" + group(p + s) + " m</b>";
+  trace.appendChild(l1); trace.appendChild(l2);
+}
+function group(n) { try { return n.toLocaleString(lang === "id" ? "id-ID" : "en-US"); } catch (e) { return String(n); } }
+
+/* =====================================================
+   Widget G — olympiad story (slide 12)
+   ===================================================== */
+let olyScore = 0, olyN = 0;
+function olyRender() {
+  $("#olyScore").textContent = olyScore;
+  $("#olyScore").style.color = olyScore < 0 ? "var(--red)" : olyScore > 0 ? "var(--green)" : "var(--amber)";
+  const pct = (olyScore + 10) / 24 * 100;
+  $("#olyMarker").style.bottom = pct + "%";
+}
+function olyStep(ok) {
+  olyN++;
+  const d = ok ? 4 : -2, prev = olyScore;
+  olyScore += d;
+  const log = $("#olyLog");
+  const line = document.createElement("div");
+  line.textContent = t("olyLine", { n: olyN, res: t(ok ? "olyOK" : "olyNO"), a: sfmt(prev), d: (d > 0 ? "+4" : "−2"), t: sfmt(olyScore) });
+  log.appendChild(line);
+  if (olyScore < 0) {
+    const warn = document.createElement("div");
+    warn.textContent = t("olyBelow");
+    log.appendChild(warn);
+  }
+  olyRender();
+}
+function olyReset() { olyScore = 0; olyN = 0; $("#olyLog").innerHTML = ""; olyRender(); }
+
+/* =====================================================
+   Quiz engine — 30 story problems
+   ===================================================== */
+const answers = new Array(QUESTIONS.length).fill(null);
+const results = new Array(QUESTIONS.length).fill(null);
+function buildQuizSlides() {
+  const end = document.querySelector('#deck > section[data-title-id="Kesimpulan"]');
+  QUESTIONS.forEach((q, i) => {
+    const sec = document.createElement("section");
+    sec.className = "slide quiz-slide";
+    sec.dataset.qi = i;
+    sec.dataset.titleEn = "Challenge " + (i + 1);
+    sec.dataset.titleId = "Soal " + (i + 1);
+    end.parentNode.insertBefore(sec, end);
+  });
+}
+function qTypeLabel(q) { return t(q.type === "add" ? "tAdd" : q.type === "sub" ? "tSub" : "tMix"); }
+function renderQuestion(i) {
+  const sec = slides[i];
+  const qi = parseInt(sec.dataset.qi, 10);
+  const q = QUESTIONS[qi];
+  const n = qi + 1;
+  sec.innerHTML = "";
+  const head = document.createElement("div");
+  head.className = "q-head";
+  const c1 = document.createElement("span"); c1.className = "chip";
+  c1.textContent = t("challenge", { n: n });
+  const c2 = document.createElement("span"); c2.className = "chip q-type";
+  c2.textContent = qTypeLabel(q);
+  head.appendChild(c1); head.appendChild(c2);
+  sec.appendChild(head);
+  const story = document.createElement("div");
+  story.className = "story";
+  const emo = document.createElement("span"); emo.className = "story-emoji"; emo.textContent = q.emoji;
+  const st = document.createElement("div"); st.innerHTML = q[lang].story;
+  story.appendChild(emo); story.appendChild(st);
+  sec.appendChild(story);
+  const qt = document.createElement("div");
+  qt.className = "q-text"; qt.innerHTML = q[lang].q;
+  sec.appendChild(qt);
+  const area = document.createElement("div");
+  area.className = "ans-row";
+  const inp = document.createElement("input");
+  inp.type = "text"; inp.className = "ans-input";
+  inp.placeholder = t("phA");
+  inp.value = answers[qi] || "";
+  inp.setAttribute("aria-label", "answer");
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(i); });
+  area.appendChild(inp);
+  const btn = document.createElement("button");
+  btn.className = "check-btn"; btn.textContent = t("check");
+  btn.addEventListener("click", () => checkAnswer(i));
+  area.appendChild(btn);
+  sec.appendChild(area);
+  const fb = document.createElement("div");
+  fb.className = "q-feedback";
+  sec.appendChild(fb);
+  if (results[qi]) fillFeedback(fb, qi);
+}
+function fillFeedback(fb, qi) {
+  const q = QUESTIONS[qi];
+  const r = results[qi];
+  fb.innerHTML = "";
+  const line = document.createElement("div");
+  line.className = "fb " + (r.ok ? "ok" : "no");
+  line.textContent = r.ok ? t("ok") : t("no");
+  fb.appendChild(line);
+  const mine = document.createElement("div");
+  mine.className = "fb info";
+  mine.textContent = t("your", { v: r.given });
+  fb.appendChild(mine);
+  if (!r.ok) {
+    const ca = document.createElement("div");
+    ca.className = "fb ok";
+    ca.textContent = t("right", { v: sfmt(q.answer) });
+    fb.appendChild(ca);
+  }
+  const pb = document.createElement("div");
+  pb.className = "pembahasan";
+  pb.innerHTML = '<div class="pb-title">' + t("pbTitle") + "</div>" + q[lang].ex;
+  fb.appendChild(pb);
+}
+function parseNumInput(s) {
+  if (!s) return NaN;
+  s = String(s).trim().replace(/[\u2212\u2013\u2014]/g, "-");
+  s = s.replace(/^minus\s*/i, "-").replace(/^negatif\s*/i, "-").replace(/^\+/, "");
+  s = s.replace(/[^\d-]/g, "");
+  if (!/^-?\d+$/.test(s)) return NaN;
+  return parseInt(s, 10);
+}
+function checkAnswer(i) {
+  const qi = parseInt(slides[i].dataset.qi, 10);
+  const q = QUESTIONS[qi];
+  const sec = slides[i];
+  const raw = sec.querySelector(".ans-input").value;
+  answers[qi] = raw;
+  const val = parseNumInput(raw);
+  const fb = sec.querySelector(".q-feedback");
+  if (isNaN(val)) {
+    fb.innerHTML = "";
+    const line = document.createElement("div");
+    line.className = "fb no"; line.textContent = t("invalidA");
+    fb.appendChild(line);
+    results[qi] = null;
+    updateDashboard();
+    return;
+  }
+  results[qi] = { ok: val === q.answer, given: sfmt(val) };
+  fillFeedback(fb, qi);
+  updateDashboard();
+  buildMenu();
+}
+function updateDashboard() {
+  const grid = $("#dashGrid");
+  const qs = quizStartIndex();
+  if (grid.children.length !== QUESTIONS.length) {
+    grid.innerHTML = "";
+    QUESTIONS.forEach((q, i) => {
+      const b = document.createElement("button");
+      b.textContent = i + 1;
+      b.addEventListener("click", () => go(qs + i));
+      grid.appendChild(b);
+    });
+  }
+  Array.from(grid.children).forEach((b, i) => {
+    b.classList.toggle("ok", !!(results[i] && results[i].ok));
+    b.classList.toggle("no", !!(results[i] && !results[i].ok));
+    b.classList.toggle("cur", cur === qs + i);
+  });
+  const done = results.filter(Boolean).length;
+  const good = results.filter(Boolean).filter(r => r.ok).length;
+  $("#dashScore").textContent = t("scoreLine", { a: done, c: good });
+}
+function resetQuiz() {
+  answers.fill(null); results.fill(null);
+  updateDashboard();
+  if (slides[cur].classList.contains("quiz-slide")) renderQuestion(cur);
+}
+
+/* =====================================================
+   Wiring & init
+   ===================================================== */
+function refreshDynamic() {
+  rxUpdate(); omRender(); starUpdate(); stReset(); seaUpdate(); olyReset();
+  updateDashboard();
+  if (slides[cur] && slides[cur].classList.contains("quiz-slide")) renderQuestion(cur);
+  buildMenu();
+}
+function setLang(l) { lang = l; applyI18n(); refreshDynamic(); }
+function init() {
+  buildQuizSlides();
+  refreshSlideList();
+  buildHopTrack();
+  rxUpdate();
+  omRender();
+  starUpdate();
+  stReset();
+  seaUpdate();
+  olyReset();
+  updateDashboard();
+  applyI18n();
+  buildMenu();
+  go(0);
+
+  $("#startBtn").addEventListener("click", () => go(1));
+  $("#backStartBtn").addEventListener("click", () => go(0));
+  $("#prevBtn").addEventListener("click", () => go(cur - 1));
+  $("#nextBtn").addEventListener("click", () => go(cur + 1));
+  $("#menuBtn").addEventListener("click", openMenu);
+  $("#menuClose").addEventListener("click", closeMenu);
+  $("#menuOv").addEventListener("click", e => { if (e.target === $("#menuOv")) closeMenu(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeMenu();
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT")) return;
+    if (e.key === "ArrowRight") go(cur + 1);
+    if (e.key === "ArrowLeft") go(cur - 1);
+  });
+  $$("#langPill button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  $("#fsBtn").addEventListener("click", () => {
+    if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+    else { document.exitFullscreen && document.exitFullscreen(); }
+  });
+  $("#warmBtn").addEventListener("click", () => $("#warmAns").classList.toggle("hidden"));
+  $$("#rxSignsA button, #rxSignsB button").forEach(b => b.addEventListener("click", () => {
+    const side = b.closest(".rx-signs").id;
+    $$("#" + side + " button").forEach(x => x.classList.remove("sel"));
+    b.classList.add("sel");
+    const v = parseInt(b.dataset.base, 10) * parseInt(b.dataset.s, 10);
+    if (side === "rxSignsA") rxA = v; else rxB = v;
+    rxUpdate();
+  }));
+  $("#rxSignsA button").classList.add("sel"); $("#rxSignsA button:nth-child(1)").classList.add("sel");
+  $("#rxSignsB button").classList.add("sel");
+  $("#hopPlay").addEventListener("click", () => hopPlay(hopStartV, hopBv));
+  $$("#hopPresets button").forEach(b => b.addEventListener("click", () => {
+    hopStartV = parseInt(b.dataset.a, 10); hopBv = parseInt(b.dataset.b, 10);
+    hopPlay(hopStartV, hopBv);
+  }));
+  $("#omModeSub").addEventListener("click", () => { omMode = "sub"; $("#omModeSub").classList.add("on"); $("#omModeStar").classList.remove("on"); omRender(); });
+  $("#omModeStar").addEventListener("click", () => { omMode = "star"; $("#omModeStar").classList.add("on"); $("#omModeSub").classList.remove("on"); omRender(); });
+  $("#omB").addEventListener("input", () => { omB = parseInt($("#omB").value, 10); omRender(); });
+  $$("#omSignsA button").forEach(b => b.addEventListener("click", () => {
+    $$("#omSignsA button").forEach(x => x.classList.remove("sel"));
+    b.classList.add("sel");
+    omA = parseInt(b.dataset.base, 10) * parseInt(b.dataset.s, 10);
+    omRender();
+  }));
+  $("#omTransform").addEventListener("click", omTransform);
+  $("#omSolve").addEventListener("click", omSolve);
+  $("#starAIn").addEventListener("input", starUpdate);
+  $("#starBIn").addEventListener("input", starUpdate);
+  initFlips();
+  $("#stUp").addEventListener("click", () => { stVal += 9; stSteps++; stRender(t("stTraceUp")); });
+  $("#stDown").addEventListener("click", () => { stVal -= 5; stSteps++; stRender(t("stTraceDn")); });
+  $("#stReset").addEventListener("click", stReset);
+  $("#seaPlaneSel").addEventListener("change", seaUpdate);
+  $("#seaSubSel").addEventListener("change", seaUpdate);
+  $("#seaShow").addEventListener("click", seaShow);
+  $("#olyOk").addEventListener("click", () => olyStep(true));
+  $("#olyNo").addEventListener("click", () => olyStep(false));
+  $("#olyReset").addEventListener("click", olyReset);
+  $("#dashReset").addEventListener("click", resetQuiz);
+  $$(".conf-btn").forEach(b => b.addEventListener("click", () => {
+    $$(".conf-btn").forEach(x => x.classList.remove("sel"));
+    b.classList.add("sel");
+    const box = $("#confMsg");
+    box.classList.remove("hidden");
+    box.textContent = t("conf" + b.dataset.conf);
+  }));
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
